@@ -1,6 +1,6 @@
 import { mongooseQuery, raList } from '../types';
 /*
-queryTransform => Convert REST query to MONGOOSE query:
+#queryTransform => Convert REST query to MONGOOSE query:
 from: http://localhost:3000/postjobs?filter={}&range=[0,24]&sort=["date","desc"]
 to:    {
       filter: { employerId: '634ad27f251be52f6e7fcefb' },
@@ -8,7 +8,8 @@ to:    {
       skip: 0,
       limit: 25
     }
-formatRaList => Format LIST data to send to client that match RA LIST:
+
+#formatRaList => Format LIST data to send to client that match RA LIST:
   header Content-Range:
   {  'Content-Range': result.count,
     'Access-Control-Expose-Headers': 'Content-Range'};

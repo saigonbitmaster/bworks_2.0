@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { SkillModule } from './skill/module';
 import { CurrencyModule } from './currency/module';
 import { JobBidModule } from './jobbid/module';
+import { ToolModule } from './tool/module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { JobBidModule } from './jobbid/module';
     SkillModule,
     CurrencyModule,
     JobBidModule,
+    ToolModule,
   ],
 })
 export class AppModule {}

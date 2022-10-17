@@ -19,6 +19,18 @@ let ToolController = class ToolController {
     constructor(service) {
         this.service = service;
     }
+    async getGitLanguages(gitLink) {
+        return await this.service.getGitHubLanguages(gitLink);
+    }
+    async checkWallet(res, query) {
+        const address = query.address ? JSON.parse(query.address) : null;
+        const amount = query.amount ? JSON.parse(query.amount) : null;
+        if (!address || !amount) {
+            return res.json({});
+        }
+        const response = await this.service.checkWallet(address, amount);
+        return res.json(response);
+    }
     async getUtxos(res, query) {
         const range = query.range ? JSON.parse(query.range) : [0, 10];
         const [rangeStart, rangeEnd] = [...range];
@@ -83,6 +95,21 @@ let ToolController = class ToolController {
         }
     }
 };
+__decorate([
+    (0, common_1.Post)('getGitLanguages'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ToolController.prototype, "getGitLanguages", null);
+__decorate([
+    (0, common_1.Get)('checkWallet'),
+    __param(0, (0, common_1.Response)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ToolController.prototype, "checkWallet", null);
 __decorate([
     (0, common_1.Get)('utxos'),
     __param(0, (0, common_1.Response)()),

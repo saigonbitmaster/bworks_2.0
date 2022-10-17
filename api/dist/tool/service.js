@@ -8,6 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ToolService = void 0;
 const common_1 = require("@nestjs/common");
@@ -17,6 +24,41 @@ const core_1 = require("@octokit/core");
 let ToolService = class ToolService {
     constructor(httpService) {
         this.httpService = httpService;
+    }
+    async getGitHubLanguages(gitLink) {
+        var e_1, _a;
+        const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+        const result = {};
+        const languages = [];
+        const gitUrl = gitLink.gitUrl;
+        const [owner] = gitUrl.split('github.com/').length > 1
+            ? gitUrl.split('github.com/')[1].split('/')
+            : null;
+        const octokit = new core_1.Octokit({
+            auth: GITHUB_TOKEN,
+        });
+        const repos = await octokit.request(`GET /users/${owner}/repos`, {
+            org: owner,
+        });
+        try {
+            for (var _b = __asyncValues(repos.data), _c; _c = await _b.next(), !_c.done;) {
+                const item = _c.value;
+                const repoLanguages = await octokit.request(`GET /repos/${owner}/${item.name}/languages`, {
+                    owner: owner,
+                    repo: item.name,
+                });
+                result[item.name] = repoLanguages.data;
+                languages.push(...Object.keys(repoLanguages.data));
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_c && !_c.done && (_a = _b.return)) await _a.call(_b);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        return { details: result, languages: [...new Set(languages)] };
     }
     getAddressUtxo(address) {
         const project_id = process.env.BLOCKFROST_PROJECT_ID;
@@ -41,6 +83,27 @@ let ToolService = class ToolService {
         })
             .pipe((0, operators_1.map)((resp) => resp.data))
             .toPromise();
+    }
+    checkWallet(address, amount) {
+        const project_id = process.env.BLOCKFROST_PROJECT_ID;
+        const blockfrost_url = process.env.BLOCKFROST_URL;
+        const result = { amount: 0, isEnough: false };
+        return this.httpService
+            .get(`${blockfrost_url}/addresses/${address}`, {
+            headers: {
+                project_id: project_id,
+            },
+        })
+            .pipe((0, operators_1.map)((resp) => resp.data))
+            .toPromise()
+            .then((data) => {
+            result.amount =
+                data.amount.map((item) => (item.unit == 'lovelace' ? item : null))[0]
+                    .quantity / 1000000;
+            result.isEnough = result.amount >= amount;
+            return result;
+        })
+            .catch((err) => err);
     }
     async getRepoCommits(gitLink) {
         const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -94,6 +157,12 @@ let ToolService = class ToolService {
         return result;
     }
 };
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ToolService.prototype, "getGitHubLanguages", null);
 ToolService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [axios_1.HttpService])

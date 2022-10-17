@@ -16,6 +16,7 @@ const config_1 = require("@nestjs/config");
 const module_2 = require("./skill/module");
 const module_3 = require("./currency/module");
 const module_4 = require("./jobbid/module");
+const module_5 = require("./tool/module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -31,6 +32,7 @@ AppModule = __decorate([
             module_2.SkillModule,
             module_3.CurrencyModule,
             module_4.JobBidModule,
+            module_5.ToolModule,
         ],
     })
 ], AppModule);

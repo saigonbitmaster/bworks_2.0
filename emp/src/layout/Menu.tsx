@@ -9,12 +9,9 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";
 import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumberedOutlined";
 import GradingOutlinedIcon from "@mui/icons-material/GradingOutlined";
-import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
-import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 import ConstructionIcon from "@mui/icons-material/Construction";
 import {
   useTranslate,
@@ -26,7 +23,7 @@ import {
 
 import SubMenu from "./SubMenu";
 
-type MenuName = "postJobs" | "manageFund" | "reports" | "settings";
+type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
 
 const Menu = ({ dense = false }: MenuProps) => {
   const [state, setState] = useState({
@@ -34,6 +31,7 @@ const Menu = ({ dense = false }: MenuProps) => {
     manageFund: true,
     reports: true,
     settings: true,
+    tools: true,
   });
   const translate = useTranslate();
   const [open] = useSidebarState();
@@ -101,7 +99,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/fetchCardano"
+          to="/wallets"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.wallets.name`, {
             smart_count: 2,
@@ -110,9 +108,18 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/fetchGithub"
+          to="/withdraws"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.withdraws.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FormatListBulletedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/smartContract"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.smartContracts.name`, {
             smart_count: 2,
           })}
           leftIcon={<FormatListBulletedIcon />}
@@ -151,6 +158,32 @@ const Menu = ({ dense = false }: MenuProps) => {
             smart_count: 2,
           })}
           leftIcon={<AttachMoneyIcon />}
+          dense={dense}
+        />
+      </SubMenu>
+      <SubMenu
+        handleToggle={() => handleToggle("tools")}
+        isOpen={state.tools}
+        name="pos.menu.tools"
+        icon={<DeselectIcon />}
+        dense={dense}
+      >
+        <MenuItemLink
+          to="/fetchCardano"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.cardanos.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<NotesIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/fetchGithub"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.gits.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<BlurOnIcon />}
           dense={dense}
         />
       </SubMenu>

@@ -34,3 +34,11 @@ export interface mongooseQuery {
   skip: number;
   limit: number;
 }
+
+export interface checkWalletType {
+  amount: number;
+  enough: boolean;
+}
+export interface GitLink {
+  gitUrl: string;
+}

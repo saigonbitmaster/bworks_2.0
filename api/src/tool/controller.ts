@@ -1,9 +1,30 @@
-import { Controller, Get, Response, Query } from '@nestjs/common';
+import { Controller, Get, Response, Query, Post, Body } from '@nestjs/common';
 import { ToolService } from './service';
-
+import { GitLink } from '../flatworks/types';
 @Controller('tools')
 export class ToolController {
   constructor(private readonly service: ToolService) {}
+
+  //get all languages of a git account
+  @Post('getGitLanguages')
+  async getGitLanguages(@Body() gitLink: GitLink) {
+    return await this.service.getGitHubLanguages(gitLink);
+  }
+
+  //check if an address has enough ADA
+  @Get('checkWallet')
+  async checkWallet(@Response() res: any, @Query() query) {
+    const address = query.address ? JSON.parse(query.address) : null;
+    const amount = query.amount ? JSON.parse(query.amount) : null;
+
+    if (!address || !amount) {
+      return res.json({});
+    }
+
+    const response = await this.service.checkWallet(address, amount);
+    return res.json(response);
+  }
+
   @Get('utxos')
   async getUtxos(@Response() res: any, @Query() query) {
     const range = query.range ? JSON.parse(query.range) : [0, 10];

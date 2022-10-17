@@ -1,12 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { Get, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs/operators';
 import { addressUtxo } from '../flatworks/types';
 import { Octokit } from '@octokit/core';
+import { checkWalletType, GitLink } from '../flatworks/types';
 
 @Injectable()
 export class ToolService {
   constructor(private readonly httpService: HttpService) {}
+
+  @Get()
+  async getGitHubLanguages(gitLink: GitLink) {
+    //git link: https://github.com/saigonbitmaster/bWorksPublic
+    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+    const result = {};
+    const languages = [];
+    const gitUrl = gitLink.gitUrl;
+    const [owner] =
+      gitUrl.split('github.com/').length > 1
+        ? gitUrl.split('github.com/')[1].split('/')
+        : null;
+
+    const octokit = new Octokit({
+      auth: GITHUB_TOKEN,
+    });
+    const repos = await octokit.request(`GET /users/${owner}/repos`, {
+      org: owner,
+    });
+
+    for await (const item of repos.data) {
+      const repoLanguages = await octokit.request(
+        `GET /repos/${owner}/${item.name}/languages`,
+        {
+          owner: owner,
+          repo: item.name,
+        },
+      );
+
+      result[item.name] = repoLanguages.data;
+      languages.push(...Object.keys(repoLanguages.data));
+    }
+
+    return { details: result, languages: [...new Set(languages)] };
+  }
+
   getAddressUtxo(address: string): Promise<addressUtxo[]> {
     const project_id = process.env.BLOCKFROST_PROJECT_ID;
     const blockfrost_url = process.env.BLOCKFROST_URL;
@@ -33,6 +70,29 @@ export class ToolService {
       })
       .pipe(map((resp) => resp.data))
       .toPromise();
+  }
+
+  checkWallet(address: string, amount: number): Promise<checkWalletType> {
+    const project_id = process.env.BLOCKFROST_PROJECT_ID;
+    const blockfrost_url = process.env.BLOCKFROST_URL;
+    const result = { amount: 0, isEnough: false };
+
+    return this.httpService
+      .get(`${blockfrost_url}/addresses/${address}`, {
+        headers: {
+          project_id: project_id,
+        },
+      })
+      .pipe(map((resp) => resp.data))
+      .toPromise()
+      .then((data) => {
+        result.amount =
+          data.amount.map((item) => (item.unit == 'lovelace' ? item : null))[0]
+            .quantity / 1000000;
+        result.isEnough = result.amount >= amount;
+        return result;
+      })
+      .catch((err) => err);
   }
 
   async getRepoCommits(gitLink: string): Promise<any> {

@@ -36,11 +36,67 @@ const customEnglishMessages: TranslationMessages = {
       postJobs: "Job post",
       reports: "Reports",
       manageFund: "Manage fund",
+      tools: "Tools",
     },
   },
   resources: {
     reports: {
       import: "Import excels",
+    },
+    smartContracts: {
+      name: "Smart contract |||| Smart contracts",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    cardanos: {
+      name: "Fetch Cardano |||| Fetch Cardano",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    gits: {
+      reportName: "Git commits",
+      name: "Query github |||| Query github",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
     },
     proposals: {
       name: "Proposal |||| Proposals",
