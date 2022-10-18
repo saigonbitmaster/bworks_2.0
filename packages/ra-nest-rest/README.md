@@ -125,26 +125,8 @@ The solution is to use another http header to return the number of collection's 
 Access-Control-Expose-Headers: X-Total-Count
 ```
 
-* Use the third parameter of `simpleRestProvider` to specify the name of the header to use :
-  
-```jsx
-// in src/App.js
-import * as React from "react";
-import { Admin, Resource } from 'react-admin';
-import { fetchUtils } from 'ra-core';
-import simpleRestProvider from 'ra-data-simple-rest';
-
-import { PostList } from './posts';
-
-const App = () => (
-    <Admin dataProvider={simpleRestProvider('http://path.to.my.api/', fetchUtils.fetchJson, 'X-Total-Count')}>
-        <Resource name="posts" list={PostList} />
-    </Admin>
-);
-
-export default App;
 ```
 
 ## License
 
-This data provider is licensed under the MIT License, and sponsored by [marmelab](https://marmelab.com).
+This data provider is licensed under the MIT License
