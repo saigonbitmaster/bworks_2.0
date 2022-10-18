@@ -9,18 +9,19 @@ interface myProps extends NumberFieldProps {
 const ColoredNumberField = (props: myProps) => {
   const record = useRecordContext(props);
   const threshold = props.threshold || 50000;
-  const { data: fund, isLoading, error } = useGetOne('funds', { id: record.fundId });
+  const { data: currency, isLoading, error } = useGetOne('currencies', { id: record.currencyId });
 
+  console.log(threshold, record[props.source])
   //currency must be ADA, USD or Ada, usd 
-  const currency = error? null : isLoading ? null : fund.currency
+  const currencyName = error? null : isLoading ? null : currency.name
 
   if (!record || !props.source) {
     return null;
   }
   return record[props.source] > threshold ? (
-    <NumberField {...props} sx={{ color: "red" }} options={currency? {style: "currency", currency: currency} : null}/>
+    <NumberField {...props} sx={{ color: "red" }} options={currencyName? {style: "currency", currency: currencyName} : {}}/>
   ) : (
-    <NumberField {...props} options={currency? {style: "currency", currency: currency} : null}/>
+    <NumberField {...props} options={currencyName? {style: "currency",  currency: currencyName} : {}}/>
   );
 };
 

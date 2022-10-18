@@ -1,4 +1,4 @@
-# NestJs REST Data Provider For React-Admin
+# NestJs REST Data Provider For BWORKs frontend Apps
 
 ## Installation
 
@@ -8,7 +8,7 @@ yarn add ra-nest-rest
 
 ## REST Dialect
 
-This Data Provider fits REST APIs using simple GET parameters for filters and sorting. This is the dialect used for instance in [FakeRest](https://github.com/marmelab/FakeRest).
+This Data Provider fits REST APIs using simple GET parameters for filters and sorting
 
 | Method             | API calls                                                                               |
 | ------------------ | --------------------------------------------------------------------------------------- |
@@ -52,19 +52,38 @@ Access-Control-Expose-Headers: Content-Range
 
 ```jsx
 // in src/App.js
-import * as React from "react";
-import { Admin, Resource } from 'react-admin';
-import simpleRestProvider from 'ra-data-simple-rest';
+import { authProvider } from "ra-nest-rest";
+import dataProvider from "ra-nest-rest";
 
-import { PostList } from './posts';
+const loginUrl = process.env.REACT_APP_LOGIN_URL;
+const apiUrl = process.env.REACT_APP_API_URL;
 
-const App = () => (
-    <Admin dataProvider={simpleRestProvider('http://path.to.my.api/')}>
-        <Resource name="posts" list={PostList} />
+const token = localStorage.getItem("access_token");
+const restProvider = dataProvider(apiUrl, token);
+const i18nProvider = polyglotI18nProvider((locale) => {
+  if (locale === "fr") {
+    return import("./i18n/fr").then((messages) => messages.default);
+  }
+  // Always fallback on english
+  return englishMessages;
+}, "en");
+
+const _authProvider = authProvider(loginUrl);
+const App = () => {
+  return (
+    <Admin
+      title="bworks"
+      dataProvider={restProvider}
+      authProvider={_authProvider}
+      ...
+    >
+     
     </Admin>
-);
+  );
+};
 
 export default App;
+
 ```
 
 ### Adding Custom Headers
@@ -74,8 +93,6 @@ The provider function accepts an HTTP client function as second argument. By def
 That means that if you need to add custom headers to your requests, you just need to *wrap* the `fetchJson()` call inside your own function:
 
 ```jsx
-import { fetchUtils, Admin, Resource } from 'react-admin';
-import simpleRestProvider from 'ra-data-simple-rest';
 
 const httpClient = (url, options = {}) => {
     if (!options.headers) {
@@ -85,14 +102,6 @@ const httpClient = (url, options = {}) => {
     options.headers.set('X-Custom-Header', 'foobar');
     return fetchUtils.fetchJson(url, options);
 };
-const dataProvider = simpleRestProvider('http://localhost:3000', httpClient);
-
-render(
-    <Admin dataProvider={dataProvider} title="Example Admin">
-       ...
-    </Admin>,
-    document.getElementById('root')
-);
 ```
 
 Now all the requests to the REST API will contain the `X-Custom-Header: foobar` header.

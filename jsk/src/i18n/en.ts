@@ -33,73 +33,18 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     menu: {
-      Members: "Members",
-      bLearns: "Quiz",
-      proposals: "Proposals",
-      tools: "Tools",
+      postJobs: "Job post",
       reports: "Reports",
+      manageFund: "Manage fund",
+      tools: "Tools",
     },
   },
   resources: {
     reports: {
       import: "Import excels",
     },
-    proposals: {
-      name: "Proposal |||| Proposals",
-      fields: {
-        commands: "Orders",
-      },
-      filters: {
-        last_visited: "Last visited",
-        today: "Today",
-      },
-      fieldGroups: {},
-      page: {
-        delete: "Delete Customer",
-      },
-      errors: {
-        password_mismatch:
-          "The password confirmation is not the same as the password.",
-      },
-    },
-    proposers: {
-      name: "Proposer |||| Proposers",
-      fields: {
-        commands: "Orders",
-      },
-      filters: {
-        last_visited: "Last visited",
-        today: "Today",
-      },
-      fieldGroups: {},
-      page: {
-        delete: "Delete Customer",
-      },
-      errors: {
-        password_mismatch:
-          "The password confirmation is not the same as the password.",
-      },
-    },
-    proposalKpis: {
-      name: "Proposal KPI |||| Proposal KPIs",
-      fields: {
-        commands: "Orders",
-      },
-      filters: {
-        last_visited: "Last visited",
-        today: "Today",
-      },
-      fieldGroups: {},
-      page: {
-        delete: "Delete Customer",
-      },
-      errors: {
-        password_mismatch:
-          "The password confirmation is not the same as the password.",
-      },
-    },
-    fundDeliveries: {
-      name: "Fund delivery |||| Fund deliveries",
+    smartContracts: {
+      name: "Smart contract |||| Smart contracts",
       fields: {
         commands: "Orders",
       },
@@ -153,8 +98,8 @@ const customEnglishMessages: TranslationMessages = {
           "The password confirmation is not the same as the password.",
       },
     },
-    funds: {
-      name: "Fund |||| Funds",
+    proposals: {
+      name: "Proposal |||| Proposals",
       fields: {
         commands: "Orders",
       },
@@ -171,8 +116,8 @@ const customEnglishMessages: TranslationMessages = {
           "The password confirmation is not the same as the password.",
       },
     },
-    challenges: {
-      name: "Challenge |||| Challenges",
+    postJobs: {
+      name: "Post Job |||| Post jobs",
       fields: {
         commands: "Orders",
       },
@@ -189,8 +134,116 @@ const customEnglishMessages: TranslationMessages = {
           "The password confirmation is not the same as the password.",
       },
     },
-    members: {
-      name: "Member |||| Members",
+    jobBids: {
+      name: "Job bid |||| Job bids",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    contractedJobs: {
+      name: "Contracted job |||| Contracted jobs",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    wallets: {
+      name: "Your wallet |||| Your wallets",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    withdraws: {
+      name: "Withdraw |||| Withdraws",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    postJobReports: {
+      name: "Posted job |||| Posted jobs",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    walletReports: {
+      name: "Wallet UTXO |||| Wallet UTXOs",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    smartContractReports: {
+      name: "Smart contract |||| Smart contracts",
       fields: {
         commands: "Orders",
         first_seen: "First seen",
@@ -232,11 +285,8 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
 
-    reviews: {
-      name: "Review |||| Reviews",
-      amount: "1 review |||| %{smart_count} reviews",
-      relative_to_poster: "Review on poster",
-      detail: "Review detail",
+    settings: {
+      name: "Setting |||| Settings",
       fields: {
         customer_id: "Customer",
         command_id: "Order",
@@ -250,69 +300,6 @@ const customEnglishMessages: TranslationMessages = {
       action: {
         accept: "Accept",
         reject: "Reject",
-      },
-      notification: {
-        approved_success: "Review approved",
-        approved_error: "Error: Review not approved",
-        rejected_success: "Review rejected",
-        rejected_error: "Error: Review not rejected",
-      },
-    },
-
-    payouts: {
-      name: "Payouts |||| Payouts",
-      amount: "1 review |||| %{smart_count} reviews",
-      relative_to_poster: "Review on poster",
-      detail: "Review detail",
-      fields: {
-        customer_id: "Customer",
-        command_id: "Order",
-        product_id: "Product",
-        date_gte: "Posted since",
-        date_lte: "Posted before",
-        date: "Date",
-        comment: "Comment",
-        rating: "Rating",
-      },
-      action: {
-        accept: "Accept",
-        reject: "Reject",
-      },
-      notification: {
-        approved_success: "Review approved",
-        approved_error: "Error: Review not approved",
-        rejected_success: "Review rejected",
-        rejected_error: "Error: Review not rejected",
-      },
-    },
-    segments: {
-      name: "Role |||| Roles",
-      fields: {
-        name: "Name",
-        members: "Members",
-        description: "Description",
-      },
-      data: {
-        compulsive: "Compulsive",
-        collector: "Collector",
-        ordered_once: "Ordered once",
-        regular: "Regular",
-        returns: "Returns",
-        reviewer: "Reviewer",
-      },
-    },
-    quizSets: {
-      name: "Quiz set |||| Quiz sets",
-      fields: {
-        customers: "Customers",
-        name: "Name",
-      },
-    },
-    quizzes: {
-      name: "Quizzes |||| Quizzes",
-      fields: {
-        customers: "Customers",
-        name: "Name",
       },
     },
   },
