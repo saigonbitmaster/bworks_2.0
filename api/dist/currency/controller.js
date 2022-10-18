@@ -17,28 +17,15 @@ const common_1 = require("@nestjs/common");
 const create_dto_1 = require("./dto/create.dto");
 const update_dto_1 = require("./dto/update.dto");
 const service_1 = require("./service");
+const getlist_1 = require("../flatworks/utils/getlist");
 let CurrencyController = class CurrencyController {
     constructor(service) {
         this.service = service;
     }
     async index(res, query) {
-        const sort = {};
-        query.sort
-            ? (sort[JSON.parse(query.sort)[0]] =
-                JSON.parse(query.sort)[1] === 'ASC' ? 1 : -1)
-            : null;
-        const range = query.range ? JSON.parse(query.range) : [0, 10];
-        const [rangeStart, rangeEnd] = [...range];
-        const limit = rangeEnd - rangeStart + 1;
-        const skip = rangeStart;
-        const filter = query.filter ? JSON.parse(query.filter) : {};
-        const result = await this.service.findAll(filter, sort, skip, limit);
-        return res
-            .set({
-            'Content-Range': result.count,
-            'Access-Control-Expose-Headers': 'Content-Range',
-        })
-            .json(result.data);
+        const mongooseQuery = (0, getlist_1.queryTransform)(query);
+        const result = await this.service.findAll(mongooseQuery);
+        return (0, getlist_1.formatRaList)(res, result);
     }
     async find(id) {
         return await this.service.findOne(id);

@@ -57,6 +57,7 @@ export declare class JobBid {
     bidDate: Date;
     completeDate: Date;
     bidValue: number;
+    rate?: number;
     description: string;
     completedAt?: Date;
     createdAt?: Date;

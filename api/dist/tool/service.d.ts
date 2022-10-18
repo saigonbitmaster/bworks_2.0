@@ -1,16 +1,15 @@
 import { HttpService } from '@nestjs/axios';
-import { addressUtxo } from '../flatworks/types';
-import { checkWalletType, GitLink } from '../flatworks/types';
+import { CheckWalletType, GitLink, AddressUtxoType } from '../flatworks/types/types';
 export declare class ToolService {
     private readonly httpService;
     constructor(httpService: HttpService);
-    getGitHubLanguages(gitLink: GitLink): Promise<{
+    accountLanguages(gitLink: GitLink): Promise<{
         details: {};
         languages: any[];
     }>;
-    getAddressUtxo(address: string): Promise<addressUtxo[]>;
-    getTxsUtxo(tx_hash: string): Promise<any[]>;
-    checkWallet(address: string, amount: number): Promise<checkWalletType>;
-    getRepoCommits(gitLink: string): Promise<any>;
+    repoCommits(gitLink: string): Promise<any>;
+    addressUtxo(address: string): Promise<AddressUtxoType[]>;
+    txsUtxo(txHash: string): Promise<any[]>;
+    checkWallet(address: string, amount: number): Promise<CheckWalletType>;
     repoCodeScan(gitLink: string): Promise<any>;
 }

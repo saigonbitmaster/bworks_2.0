@@ -8,7 +8,7 @@ import {
   NumberField,
   ReferenceField,
 } from "react-admin";
-
+import RateField from '../components/RateField'
 const ListScreen = () => {
   return (
     <List
@@ -24,8 +24,14 @@ const ListScreen = () => {
         <ReferenceField reference="postJobs" source="jobId">
           <TextField source="name" />
         </ReferenceField>
-        <NumberField source="bidValue" />
 
+
+        <ReferenceField reference="users" source="jobSeekerId">
+          <TextField source="fullName" />
+        </ReferenceField>
+
+        <NumberField source="bidValue" />
+        <RateField source="rate" />
         <ReferenceField reference="postJobs" source="jobId" label="Currency">
           <ReferenceField reference="currencies" source="currencyId">
             <TextField source="name" />

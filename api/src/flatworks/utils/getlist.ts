@@ -1,4 +1,4 @@
-import { mongooseQuery, raList } from '../types';
+import { MongooseQuery, RaList } from '../types/types';
 /*
 #queryTransform => Convert REST query to MONGOOSE query:
 from: http://localhost:3000/postjobs?filter={}&range=[0,24]&sort=["date","desc"]
@@ -16,7 +16,7 @@ to:    {
   data: [{_id: '', field: ''}]
 */
 
-const queryTransform = (query): mongooseQuery => {
+const queryTransform = (query): MongooseQuery => {
   const sort = {};
   query.sort
     ? (sort[JSON.parse(query.sort)[0]] =
@@ -30,7 +30,7 @@ const queryTransform = (query): mongooseQuery => {
   return { filter, sort, skip, limit };
 };
 
-const formatRaList = (res, result: raList) => {
+const formatRaList = (res, result: RaList) => {
   return res
     .set({
       'Content-Range': result.count,

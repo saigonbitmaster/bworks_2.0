@@ -7,7 +7,7 @@ import { JobBid, JobBidDocument } from './schemas/schema';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { PostJob, PostJobDocument } from '../postjob/schemas/schema';
 
-import { raList, mongooseQuery } from '../flatworks/types';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
 
 @Injectable()
 export class JobBidService {
@@ -18,7 +18,7 @@ export class JobBidService {
     private readonly postJobModel: Model<PostJobDocument>,
   ) {}
 
-  async findAll(query: mongooseQuery): Promise<raList> {
+  async findAll(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
       .find(query.filter)
@@ -27,7 +27,13 @@ export class JobBidService {
       .limit(query.limit)
       .exec();
 
-    return { count: count, data: data };
+    return {
+      count: count,
+      data: data.map((item) => {
+        item.rate = 4;
+        return item;
+      }),
+    };
   }
 
   async findOne(id: string): Promise<JobBid> {
@@ -38,11 +44,9 @@ export class JobBidService {
     createJobBidDto: CreateJobBidDto,
     jobSeekerId: string,
   ): Promise<JobBid> {
-    console.log(createJobBidDto.jobId);
     const postJob = await this.postJobModel
       .findById(createJobBidDto.jobId)
       .exec();
-    console.log(createJobBidDto);
 
     return await new this.model({
       ...createJobBidDto,

@@ -15,12 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ToolController = void 0;
 const common_1 = require("@nestjs/common");
 const service_1 = require("./service");
+const getlist_1 = require("../flatworks/utils/getlist");
 let ToolController = class ToolController {
     constructor(service) {
         this.service = service;
     }
-    async getGitLanguages(gitLink) {
-        return await this.service.getGitHubLanguages(gitLink);
+    async accountLanguages(gitLink) {
+        return await this.service.accountLanguages(gitLink);
     }
     async checkWallet(res, query) {
         const address = query.address ? JSON.parse(query.address) : null;
@@ -31,67 +32,33 @@ let ToolController = class ToolController {
         const response = await this.service.checkWallet(address, amount);
         return res.json(response);
     }
-    async getUtxos(res, query) {
-        const range = query.range ? JSON.parse(query.range) : [0, 10];
-        const [rangeStart, rangeEnd] = [...range];
-        const filter = query.filter ? JSON.parse(query.filter) : null;
-        if (!filter.queryType || !filter.value) {
-            return res
-                .set({
-                'Content-Range': 0,
-                'Access-Control-Expose-Headers': 'Content-Range',
-            })
-                .json([]);
+    async txsUtxo(res, query) {
+        const transformQuery = (0, getlist_1.queryTransform)(query);
+        if (!transformQuery.filter.queryType || !transformQuery.filter.value) {
+            return (0, getlist_1.formatRaList)(res, { count: 0, data: [] });
         }
-        if (filter.queryType === 'utx') {
-            const response = await this.service.getTxsUtxo(filter.value);
-            return res
-                .set({
-                'Content-Range': 1,
-                'Access-Control-Expose-Headers': 'Content-Range',
-            })
-                .json([response]);
+        if (transformQuery.filter.queryType === 'utx') {
+            const response = await this.service.txsUtxo(transformQuery.filter.value);
+            return (0, getlist_1.formatRaList)(res, { count: 1, data: [response] });
         }
-        const response = await this.service.getAddressUtxo(filter.value);
-        const data = response.slice(rangeStart, rangeEnd + 1);
-        return res
-            .set({
-            'Content-Range': response.length,
-            'Access-Control-Expose-Headers': 'Content-Range',
-        })
-            .json(data);
+        const response = await this.service.addressUtxo(transformQuery.filter.value);
+        const data = response.slice(transformQuery.skip, transformQuery.limit + transformQuery.skip);
+        return (0, getlist_1.formatRaList)(res, { count: response.length, data: data });
     }
     async getCommits(res, query) {
-        const range = query.range ? JSON.parse(query.range) : [0, 10];
-        const [rangeStart, rangeEnd] = [...range];
-        const filter = query.filter ? JSON.parse(query.filter) : null;
-        if (!filter.queryType || !filter.value) {
-            return res
-                .set({
-                'Content-Range': 0,
-                'Access-Control-Expose-Headers': 'Content-Range',
-            })
-                .json([]);
+        const transformQuery = (0, getlist_1.queryTransform)(query);
+        if (!transformQuery.filter.queryType || !transformQuery.filter.value) {
+            return (0, getlist_1.formatRaList)(res, { count: 0, data: [] });
         }
-        if (filter.queryType === 'commit') {
-            const response = await this.service.getRepoCommits(filter.value);
-            const data = response.slice(rangeStart, rangeEnd + 1);
-            return res
-                .set({
-                'Content-Range': response.length,
-                'Access-Control-Expose-Headers': 'Content-Range',
-            })
-                .json(data);
+        if (transformQuery.filter.queryType === 'commit') {
+            const response = await this.service.repoCommits(transformQuery.filter.value);
+            const data = response.slice(transformQuery.skip, transformQuery.limit + transformQuery.skip);
+            return (0, getlist_1.formatRaList)(res, { count: response.length, data: data });
         }
-        if (filter.queryType === 'codescan') {
-            const response = await this.service.repoCodeScan(filter.value);
-            const data = response.slice(rangeStart, rangeEnd + 1);
-            return res
-                .set({
-                'Content-Range': response.length,
-                'Access-Control-Expose-Headers': 'Content-Range',
-            })
-                .json(data);
+        if (transformQuery.filter.queryType === 'codescan') {
+            const response = await this.service.repoCodeScan(transformQuery.filter.value);
+            const data = response.slice(transformQuery.skip, transformQuery.skip + transformQuery.limit);
+            return (0, getlist_1.formatRaList)(res, { count: response.length, data: data });
         }
     }
 };
@@ -101,7 +68,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ToolController.prototype, "getGitLanguages", null);
+], ToolController.prototype, "accountLanguages", null);
 __decorate([
     (0, common_1.Get)('checkWallet'),
     __param(0, (0, common_1.Response)()),
@@ -117,7 +84,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], ToolController.prototype, "getUtxos", null);
+], ToolController.prototype, "txsUtxo", null);
 __decorate([
     (0, common_1.Get)('commits'),
     __param(0, (0, common_1.Response)()),

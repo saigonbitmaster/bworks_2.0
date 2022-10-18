@@ -13,11 +13,11 @@ import {
 import { CreatePostJobDto } from './dto/create.dto';
 import { UpdatePostJobDto } from './dto/update.dto';
 import { PostJobService } from './service';
-import getToken from '../flatworks/utils/getToken';
+import getToken from '../flatworks/utils/token';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { userJwtPayload } from '../flatworks/types';
-import { queryTransform, formatRaList } from '../flatworks/utils/getListUtils';
+import { userJwtPayload } from '../flatworks/types/types';
+import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
 @Controller('postjobs')
 export class PostJobController {

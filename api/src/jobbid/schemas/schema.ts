@@ -9,7 +9,7 @@ export class JobBid {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   jobId: string;
 
   @Prop({ required: true })
@@ -26,6 +26,9 @@ export class JobBid {
 
   @Prop({ required: true })
   bidValue: number;
+
+  @Prop()
+  rate?: number;
 
   @Prop()
   description: string;

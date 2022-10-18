@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateCurrencyDto } from './dto/create.dto';
 import { UpdateCurrencyDto } from './dto/update.dto';
 import { Currency, CurrencyDocument } from './schemas/schema';
-import { raList } from '../flatworks/types';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
 
 @Injectable()
 export class CurrencyService {
@@ -12,16 +12,16 @@ export class CurrencyService {
     @InjectModel(Currency.name) private readonly model: Model<CurrencyDocument>,
   ) {}
 
-  async findAll(filter, sort, skip, limit): Promise<raList> {
-    const count = await this.model.find(filter).count().exec();
+  async findAll(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
-      .find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
       .exec();
-    const result = { count: count, data: data };
-    return result;
+
+    return { count: count, data: data };
   }
 
   async findOne(id: string): Promise<Currency> {
@@ -38,7 +38,10 @@ export class CurrencyService {
     }).save();
   }
 
-  async update(id: string, updateCurrencyDto: UpdateCurrencyDto): Promise<Currency> {
+  async update(
+    id: string,
+    updateCurrencyDto: UpdateCurrencyDto,
+  ): Promise<Currency> {
     return await this.model.findByIdAndUpdate(id, updateCurrencyDto).exec();
   }
 

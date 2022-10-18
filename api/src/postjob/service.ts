@@ -5,7 +5,7 @@ import { CreatePostJobDto } from './dto/create.dto';
 import { UpdatePostJobDto } from './dto/update.dto';
 import { PostJob, PostJobDocument } from './schemas/schema';
 import { User, UserDocument } from '../user/schemas/user.schema';
-import { raList, mongooseQuery } from '../flatworks/types';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
 
 @Injectable()
 export class PostJobService {
@@ -14,7 +14,7 @@ export class PostJobService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async findAll(query: mongooseQuery): Promise<raList> {
+  async findAll(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
       .find(query.filter)

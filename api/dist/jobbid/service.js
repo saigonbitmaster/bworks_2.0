@@ -33,17 +33,21 @@ let JobBidService = class JobBidService {
             .skip(query.skip)
             .limit(query.limit)
             .exec();
-        return { count: count, data: data };
+        return {
+            count: count,
+            data: data.map((item) => {
+                item.rate = 4;
+                return item;
+            }),
+        };
     }
     async findOne(id) {
         return await this.model.findById(id).exec();
     }
     async create(createJobBidDto, jobSeekerId) {
-        console.log(createJobBidDto.jobId);
         const postJob = await this.postJobModel
             .findById(createJobBidDto.jobId)
             .exec();
-        console.log(createJobBidDto);
         return await new this.model(Object.assign(Object.assign({}, createJobBidDto), { createdAt: new Date(), jobSeekerId: jobSeekerId, employerId: postJob.employerId })).save();
     }
     async update(id, updateJobBidDto, userId) {

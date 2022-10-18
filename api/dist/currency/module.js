@@ -19,7 +19,9 @@ CurrencyModule = __decorate([
         providers: [service_1.CurrencyService],
         controllers: [controller_1.CurrencyController],
         imports: [
-            mongoose_1.MongooseModule.forFeature([{ name: schema_1.Currency.name, schema: schema_1.CurrencySchema }]),
+            mongoose_1.MongooseModule.forFeature([
+                { name: schema_1.Currency.name, schema: schema_1.CurrencySchema },
+            ]),
         ],
     })
 ], CurrencyModule);

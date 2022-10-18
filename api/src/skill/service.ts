@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateSkillDto } from './dto/create.dto';
 import { UpdateSkillDto } from './dto/update.dto';
 import { Skill, SkillDocument } from './schemas/schema';
-import { raList } from '../flatworks/types';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
 
 @Injectable()
 export class SkillService {
@@ -12,16 +12,16 @@ export class SkillService {
     @InjectModel(Skill.name) private readonly model: Model<SkillDocument>,
   ) {}
 
-  async findAll(filter, sort, skip, limit): Promise<raList> {
-    const count = await this.model.find(filter).count().exec();
+  async findAll(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
-      .find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
       .exec();
-    const result = { count: count, data: data };
-    return result;
+
+    return { count: count, data: data };
   }
 
   async findOne(id: string): Promise<Skill> {

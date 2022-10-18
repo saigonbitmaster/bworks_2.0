@@ -13,11 +13,11 @@ import {
 import { CreateJobBidDto } from './dto/create.dto';
 import { UpdateJobBidDto } from './dto/update.dto';
 import { JobBidService } from './service';
-import getToken from '../flatworks/utils/getToken';
+import getToken from '../flatworks/utils/token';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { userJwtPayload } from '../flatworks/types';
-import { queryTransform, formatRaList } from '../flatworks/utils/getListUtils';
+import { userJwtPayload } from '../flatworks/types/types';
+import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
 @Controller('jobbids')
 export class JobBidController {

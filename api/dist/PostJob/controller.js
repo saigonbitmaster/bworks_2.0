@@ -17,39 +17,39 @@ const common_1 = require("@nestjs/common");
 const create_dto_1 = require("./dto/create.dto");
 const update_dto_1 = require("./dto/update.dto");
 const service_1 = require("./service");
-const getToken_1 = require("../flatworks/utils/getToken");
+const token_1 = require("../flatworks/utils/token");
 const jwt_1 = require("@nestjs/jwt");
-const getListUtils_1 = require("../flatworks/utils/getListUtils");
+const getlist_1 = require("../flatworks/utils/getlist");
 let PostJobController = class PostJobController {
     constructor(service, jwtService) {
         this.service = service;
         this.jwtService = jwtService;
     }
     async index(res, query, request) {
-        const token = (0, getToken_1.default)(request);
+        const token = (0, token_1.default)(request);
         const user = (await this.jwtService.decode(token));
-        const mongooseQuery = (0, getListUtils_1.queryTransform)(query);
+        const mongooseQuery = (0, getlist_1.queryTransform)(query);
         mongooseQuery.filter.queryType == 'employer'
             ? (mongooseQuery.filter.employerId = user.userId)
             : null;
         const result = await this.service.findAll(mongooseQuery);
-        return (0, getListUtils_1.formatRaList)(res, result);
+        return (0, getlist_1.formatRaList)(res, result);
     }
     async find(id) {
         return await this.service.findOne(id);
     }
     async create(createPostJobDto, request) {
-        const token = (0, getToken_1.default)(request);
+        const token = (0, token_1.default)(request);
         const user = (await this.jwtService.decode(token));
         return await this.service.create(createPostJobDto, user.userId);
     }
     async update(id, updatePostJobDto, request) {
-        const token = (0, getToken_1.default)(request);
+        const token = (0, token_1.default)(request);
         const user = (await this.jwtService.decode(token));
         return await this.service.update(id, updatePostJobDto, user.userId);
     }
     async delete(id, request) {
-        const token = (0, getToken_1.default)(request);
+        const token = (0, token_1.default)(request);
         const user = (await this.jwtService.decode(token));
         return await this.service.delete(id, user.userId);
     }

@@ -21,16 +21,15 @@ let CurrencyService = class CurrencyService {
     constructor(model) {
         this.model = model;
     }
-    async findAll(filter, sort, skip, limit) {
-        const count = await this.model.find(filter).count().exec();
+    async findAll(query) {
+        const count = await this.model.find(query.filter).count().exec();
         const data = await this.model
-            .find(filter)
-            .sort(sort)
-            .skip(skip)
-            .limit(limit)
+            .find(query.filter)
+            .sort(query.sort)
+            .skip(query.skip)
+            .limit(query.limit)
             .exec();
-        const result = { count: count, data: data };
-        return result;
+        return { count: count, data: data };
     }
     async findOne(id) {
         return await this.model.findById(id).exec();

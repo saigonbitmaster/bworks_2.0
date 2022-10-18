@@ -1,41 +1,41 @@
-export interface gitCommit {
+export interface GitCommit {
   id: string;
   message: string;
   url: string;
   date: Date;
 }
 
-export interface fundTransaction {
+export interface FundTransaction {
   hash: string;
   amount: number;
   date: Date;
 }
 
-export interface raList {
+export interface RaList {
   count: number;
   data: any[];
 }
 
-export interface addressUtxo {
-  tx_hash: string;
+export interface AddressUtxoType {
+  txHash: string;
   block: string;
   amount: { unit: string; quantity: number }[];
 }
 
-export type projectStatus = 'pending' | 'complete' | 'stopped';
+export type ProjectStatus = 'pending' | 'complete' | 'stopped';
 export interface userJwtPayload {
   userId: string;
   username: string;
 }
 
-export interface mongooseQuery {
+export interface MongooseQuery {
   filter: { [key: string]: any };
   sort: { [key: string]: any };
   skip: number;
   limit: number;
 }
 
-export interface checkWalletType {
+export interface CheckWalletType {
   amount: number;
   enough: boolean;
 }
