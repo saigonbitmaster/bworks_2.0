@@ -13,6 +13,8 @@ import postjobs from "./postjobs";
 import jobbids from "./jobbids";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
+import Wallet from "./wallet/wallet";
+
 import ImportExcels from "./tools/importExcels";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
@@ -46,6 +48,7 @@ const App = () => {
         <Route path="/configuration" element={<Configuration />} />
         <Route path="/fetchCardano" element={<FetchCardano />} />
         <Route path="/fetchGithub" element={<FetchGithub />} />
+        <Route path="/wallets" element={<Wallet />} />
       </CustomRoutes>
       <Resource name="postjobs" {...postjobs} />
       <Resource name="jobbids" {...jobbids} />

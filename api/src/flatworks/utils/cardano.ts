@@ -7,13 +7,12 @@ const AddressUtxo = (
   address: string,
   httpService: HttpService,
 ): Promise<AddressUtxoType[]> => {
-  const projectId = process.env.BLOCKFROST_projectId;
-  const blockfrostUrl = process.env.blockfrostUrl;
-
+  const projectId = process.env.BLOCKFROST_PROJECT_ID;
+  const blockfrostUrl = process.env.BLOCKFROST_URL;
   return httpService
     .get(`${blockfrostUrl}/addresses/${address}/utxos`, {
       headers: {
-        projectId: projectId,
+        project_id: projectId,
       },
     })
     .pipe(map((resp) => resp.data))
@@ -21,13 +20,13 @@ const AddressUtxo = (
 };
 
 const TxsUtxo = (txHash: string, httpService: HttpService): Promise<any[]> => {
-  const projectId = process.env.BLOCKFROST_projectId;
-  const blockfrostUrl = process.env.blockfrostUrl;
+  const projectId = process.env.BLOCKFROST_PROJECT_ID;
+  const blockfrostUrl = process.env.BLOCKFROST_URL;
 
   return httpService
     .get(`${blockfrostUrl}/txs/${txHash}/utxos`, {
       headers: {
-        projectId: projectId,
+        project_id: projectId,
       },
     })
     .pipe(map((resp) => resp.data))
@@ -39,14 +38,14 @@ const CheckWallet = (
   amount: number,
   httpService: HttpService,
 ): Promise<CheckWalletType> => {
-  const projectId = process.env.BLOCKFROST_projectId;
-  const blockfrostUrl = process.env.blockfrostUrl;
+  const projectId = process.env.BLOCKFROST_PROJECT_ID;
+  const blockfrostUrl = process.env.BLOCKFROST_URL;
   const result = { amount: 0, isEnough: false };
 
   return httpService
     .get(`${blockfrostUrl}/addresses/${address}`, {
       headers: {
-        projectId: projectId,
+        project_id: projectId,
       },
     })
     .pipe(map((resp) => resp.data))

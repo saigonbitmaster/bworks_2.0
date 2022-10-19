@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { CheckWalletType, GitLink, AddressUtxoType } from '../flatworks/types/types';
+import {
+  CheckWalletType,
+  GitLink,
+  AddressUtxoType,
+} from '../flatworks/types/types';
 import {
   AccountLanguages,
   RepoCommits,
   RepoCodeScan,
 } from '../flatworks/utils/github';
-import {
-  AddressUtxo,
-  TxsUtxo,
-  CheckWallet,
-} from '../flatworks/utils/cardano';
+import { AddressUtxo, TxsUtxo, CheckWallet } from '../flatworks/utils/cardano';
 
 @Injectable()
 export class ToolService {

@@ -14,7 +14,7 @@ import { UpdateSkillDto } from './dto/update.dto';
 import { SkillService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
-@Controller('Skills')
+@Controller('skills')
 export class SkillController {
   constructor(private readonly service: SkillService) {}
 

@@ -21,7 +21,7 @@ import { filterTransform } from "./utils";
  *
  * import * as React from "react";
  * import { Admin, Resource } from 'react-admin';
- * import simpleRestProvider from 'ra-data-simple-rest';
+ * import {dataProvider} from 'ra-nest-rest';
  *
  * import { PostList } from './posts';
  *

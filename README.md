@@ -4,6 +4,7 @@
 git clone https://github.com/saigonbitmaster/bworks_2.0
 add local host dns record /etc/hosts: 127.0.0.1  bworks.bworks.app
 
+cd bworks_2.0
 add .env file for frontend Apps:
 REACT_APP_LOGIN_URL=http://localhost:3000/auth/login
 REACT_APP_API_URL=http://localhost:3000

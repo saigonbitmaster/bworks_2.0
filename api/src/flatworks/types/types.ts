@@ -17,7 +17,7 @@ export interface RaList {
 }
 
 export interface AddressUtxoType {
-  txHash: string;
+  tx_hash: string;
   block: string;
   amount: { unit: string; quantity: number }[];
 }

@@ -8,6 +8,7 @@ import { SkillModule } from './skill/module';
 import { CurrencyModule } from './currency/module';
 import { JobBidModule } from './jobbid/module';
 import { ToolModule } from './tool/module';
+import { WalletModule } from './wallet/module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ToolModule } from './tool/module';
     CurrencyModule,
     JobBidModule,
     ToolModule,
+    WalletModule,
   ],
 })
 export class AppModule {}

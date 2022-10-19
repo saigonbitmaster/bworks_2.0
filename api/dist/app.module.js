@@ -17,6 +17,7 @@ const module_2 = require("./skill/module");
 const module_3 = require("./currency/module");
 const module_4 = require("./jobbid/module");
 const module_5 = require("./tool/module");
+const module_6 = require("./wallet/module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -33,6 +34,7 @@ AppModule = __decorate([
             module_3.CurrencyModule,
             module_4.JobBidModule,
             module_5.ToolModule,
+            module_6.WalletModule,
         ],
     })
 ], AppModule);
