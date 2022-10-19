@@ -9,12 +9,24 @@ import { CurrencyModule } from './currency/module';
 import { JobBidModule } from './jobbid/module';
 import { ToolModule } from './tool/module';
 import { WalletModule } from './wallet/module';
+import { QueueModule } from './queue/queue.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
     MongooseModule.forRoot(
       'mongodb://admin:123456@localhost:27017/bworks2?authSource=admin&readPreference=primary',
     ),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+      limiter: {
+        max: 50,
+        duration: 1000,
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -26,6 +38,7 @@ import { WalletModule } from './wallet/module';
     JobBidModule,
     ToolModule,
     WalletModule,
+    QueueModule,
   ],
 })
 export class AppModule {}

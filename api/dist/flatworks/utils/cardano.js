@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CheckWallet = exports.TxsUtxo = exports.AddressUtxo = void 0;
+exports.CreateWallet = exports.CheckWallet = exports.TxsUtxo = exports.AddressUtxo = void 0;
 const operators_1 = require("rxjs/operators");
 const AddressUtxo = (address, httpService) => {
     const projectId = process.env.BLOCKFROST_PROJECT_ID;
@@ -50,4 +50,6 @@ const CheckWallet = (address, amount, httpService) => {
         .catch((err) => err);
 };
 exports.CheckWallet = CheckWallet;
+const CreateWallet = (userId) => { };
+exports.CreateWallet = CreateWallet;
 //# sourceMappingURL=cardano.js.map

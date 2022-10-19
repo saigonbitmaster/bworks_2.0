@@ -60,4 +60,5 @@ const CheckWallet = (
     .catch((err) => err);
 };
 
-export { AddressUtxo, TxsUtxo, CheckWallet };
+const CreateWallet = (userId: string) => {};
+export { AddressUtxo, TxsUtxo, CheckWallet, CreateWallet };

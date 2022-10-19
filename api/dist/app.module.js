@@ -18,12 +18,24 @@ const module_3 = require("./currency/module");
 const module_4 = require("./jobbid/module");
 const module_5 = require("./tool/module");
 const module_6 = require("./wallet/module");
+const queue_module_1 = require("./queue/queue.module");
+const bull_1 = require("@nestjs/bull");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forRoot('mongodb://admin:123456@localhost:27017/bworks2?authSource=admin&readPreference=primary'),
+            bull_1.BullModule.forRoot({
+                redis: {
+                    host: 'localhost',
+                    port: 6379,
+                },
+                limiter: {
+                    max: 50,
+                    duration: 1000,
+                },
+            }),
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
             }),
@@ -35,6 +47,7 @@ AppModule = __decorate([
             module_4.JobBidModule,
             module_5.ToolModule,
             module_6.WalletModule,
+            queue_module_1.QueueModule,
         ],
     })
 ], AppModule);

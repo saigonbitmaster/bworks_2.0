@@ -102,4 +102,38 @@ const RepoCodeScan = async (gitLink: string): Promise<any> => {
   return result;
 };
 
-export { AccountLanguages, RepoCommits, RepoCodeScan };
+const AccountLanguagesForUser = async (gitLink: GitLink, userId: string) => {
+  //git link: https://github.com/saigonbitmaster/bWorksPublic
+  const gitToken = process.env.GITHUB_TOKEN;
+  const result = {};
+  const languages = [];
+  const gitUrl = gitLink.gitUrl;
+  const [owner] =
+    gitUrl.split('github.com/').length > 1
+      ? gitUrl.split('github.com/')[1].split('/')
+      : null;
+
+  const octokit = new Octokit({
+    auth: gitToken,
+  });
+  const repos = await octokit.request(`GET /users/${owner}/repos`, {
+    org: owner,
+  });
+
+  for await (const item of repos.data) {
+    const repoLanguages = await octokit.request(
+      `GET /repos/${owner}/${item.name}/languages`,
+      {
+        owner: owner,
+        repo: item.name,
+      },
+    );
+
+    result[item.name] = repoLanguages.data;
+    languages.push(...Object.keys(repoLanguages.data));
+  }
+  //insert result into mongo
+  return null;
+};
+
+export { AccountLanguages, RepoCommits, RepoCodeScan, AccountLanguagesForUser };

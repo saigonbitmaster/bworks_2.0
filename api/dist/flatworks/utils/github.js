@@ -7,7 +7,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RepoCodeScan = exports.RepoCommits = exports.AccountLanguages = void 0;
+exports.AccountLanguagesForUser = exports.RepoCodeScan = exports.RepoCommits = exports.AccountLanguages = void 0;
 const core_1 = require("@octokit/core");
 const AccountLanguages = async (gitLink) => {
     var e_1, _a;
@@ -98,4 +98,40 @@ const RepoCodeScan = async (gitLink) => {
     return result;
 };
 exports.RepoCodeScan = RepoCodeScan;
+const AccountLanguagesForUser = async (gitLink, userId) => {
+    var e_2, _a;
+    const gitToken = process.env.GITHUB_TOKEN;
+    const result = {};
+    const languages = [];
+    const gitUrl = gitLink.gitUrl;
+    const [owner] = gitUrl.split('github.com/').length > 1
+        ? gitUrl.split('github.com/')[1].split('/')
+        : null;
+    const octokit = new core_1.Octokit({
+        auth: gitToken,
+    });
+    const repos = await octokit.request(`GET /users/${owner}/repos`, {
+        org: owner,
+    });
+    try {
+        for (var _b = __asyncValues(repos.data), _c; _c = await _b.next(), !_c.done;) {
+            const item = _c.value;
+            const repoLanguages = await octokit.request(`GET /repos/${owner}/${item.name}/languages`, {
+                owner: owner,
+                repo: item.name,
+            });
+            result[item.name] = repoLanguages.data;
+            languages.push(...Object.keys(repoLanguages.data));
+        }
+    }
+    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+    finally {
+        try {
+            if (_c && !_c.done && (_a = _b.return)) await _a.call(_b);
+        }
+        finally { if (e_2) throw e_2.error; }
+    }
+    return null;
+};
+exports.AccountLanguagesForUser = AccountLanguagesForUser;
 //# sourceMappingURL=github.js.map

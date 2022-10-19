@@ -5,4 +5,5 @@ declare const AccountLanguages: (gitLink: GitLink) => Promise<{
 }>;
 declare const RepoCommits: (gitLink: string) => Promise<any>;
 declare const RepoCodeScan: (gitLink: string) => Promise<any>;
-export { AccountLanguages, RepoCommits, RepoCodeScan };
+declare const AccountLanguagesForUser: (gitLink: GitLink, userId: string) => Promise<any>;
+export { AccountLanguages, RepoCommits, RepoCodeScan, AccountLanguagesForUser };
