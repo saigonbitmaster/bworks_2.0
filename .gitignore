@@ -9,5 +9,5 @@ test.ts
 test.js
 #packages/*
 #**/flatworks
-emp/src/tools
-jsk/src/tools
+#emp/src/tools
+#jsk/src/tools
