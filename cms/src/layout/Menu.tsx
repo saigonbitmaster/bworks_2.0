@@ -13,6 +13,7 @@ import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import FormatIndentIncreaseIcon from '@mui/icons-material/FormatIndentIncrease';
 import {
   useTranslate,
   DashboardMenuItem,
@@ -58,7 +59,7 @@ const Menu = ({ dense = false }: MenuProps) => {
       <SubMenu
         handleToggle={() => handleToggle("postJobs")}
         isOpen={state.postJobs}
-        name="pos.menu.postJobs"
+        name="pos.menu.manageJobs"
         icon={<DoneAllOutlinedIcon />}
         dense={dense}
       >
@@ -158,6 +159,15 @@ const Menu = ({ dense = false }: MenuProps) => {
             smart_count: 2,
           })}
           leftIcon={<AttachMoneyIcon />}
+          dense={dense}
+        />
+         <MenuItemLink
+          to="/queues"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.jobQueues.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FormatIndentIncreaseIcon />}
           dense={dense}
         />
       </SubMenu>

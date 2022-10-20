@@ -8,6 +8,7 @@ import {
   SingleFieldList,
   ChipField,
   ReferenceArrayField,
+  ReferenceField
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 
@@ -20,7 +21,9 @@ const ListScreen = () => {
         <TextField source="name" />
         <LinkBidField />
         <CurrencyNumberField source="budget" threshold={10000} />
-
+        <ReferenceField reference="users" source="employerId">
+          <TextField source="fullName" />
+        </ReferenceField>
         <ReferenceArrayField reference="skills" source="skills">
           <SingleFieldList>
             <ChipField source="name" />

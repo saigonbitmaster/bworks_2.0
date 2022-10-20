@@ -33,7 +33,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     menu: {
-      postJobs: "Job post",
+      manageJobs: "Manage jobs",
       reports: "Reports",
       manageFund: "Manage fund",
       tools: "Tools",
@@ -45,6 +45,25 @@ const customEnglishMessages: TranslationMessages = {
     },
     smartContracts: {
       name: "Smart contract |||| Smart contracts",
+      fields: {
+        commands: "Orders",
+      },
+      filters: {
+        last_visited: "Last visited",
+        today: "Today",
+      },
+      fieldGroups: {},
+      page: {
+        delete: "Delete Customer",
+      },
+      errors: {
+        password_mismatch:
+          "The password confirmation is not the same as the password.",
+      },
+    },
+    
+    jobQueues: {
+      name: "Job queue, |||| Job queues",
       fields: {
         commands: "Orders",
       },

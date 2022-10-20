@@ -39,6 +39,12 @@ export class PostJobController {
     return formatRaList(res, result);
   }
 
+  @Get('reference/all')
+  async indexRef(@Response() res: any) {
+    const result = await this.service.findRefAll();
+    return formatRaList(res, result);
+  }
+
   @Get(':id')
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);

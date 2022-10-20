@@ -5,7 +5,7 @@ import { stringify } from "query-string";
 const LinkBidField = (props) => {
   const record = useRecordContext(props);
   const { data, total, isLoading, error } = useGetList("jobbids", {
-    filter: { jobId: record.id },
+    filter: { jobId: record.id, queryType: "jobSeeker" },
   });
   if (isLoading) {
     return <p>Loading...</p>;

@@ -13,7 +13,7 @@ import postjobs from "./postjobs";
 import jobbids from "./jobbids";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
-import ImportExcels from "./tools/importExcels";
+import queues from './queues';
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -49,6 +49,7 @@ const App = () => {
       </CustomRoutes>
       <Resource name="postjobs" {...postjobs} />
       <Resource name="jobbids" {...jobbids} />
+      <Resource name="queues" {...queues} />
     </Admin>
   );
 };

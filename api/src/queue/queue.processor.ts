@@ -9,6 +9,7 @@ import { Job } from 'bull';
 import { exec } from 'child_process';
 import { CreateWallet } from '../flatworks/utils/cardano';
 import { AccountLanguagesForUser } from '../flatworks/utils/github';
+import { ScamFilter } from '../flatworks/utils/filter.scammer';
 
 @Processor('queue')
 export class QueueProcessor {
@@ -17,7 +18,7 @@ export class QueueProcessor {
   @OnQueueActive()
   onActive(job: Job) {
     console.log(
-      `Processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+      `Processing job ${job.id} of type ${job.name} with data ${JSON.stringify(job.data)}...`,
     );
   }
 
@@ -33,14 +34,19 @@ export class QueueProcessor {
     CreateWallet(job.data.userId);
   }
 
+  @Process('scamFilter')
+  scamFilter(job: Job) {
+    ScamFilter(job.data.userId);
+  }
+
   @Process('analyzeGit')
   analyzeGit(job: Job) {
-    AccountLanguagesForUser(job.data.gitLink, job.data.userId);
+    AccountLanguagesForUser(job.data.key, job.data.userId);
   }
 
   @Process('execShell')
   execShell(job: Job) {
-    exec('ls', (err, stdout, stderr) => {
+    exec('createWallet.sh', (err, stdout, stderr) => {
       if (err) {
         console.error(err, job);
       } else {

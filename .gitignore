@@ -1,11 +1,11 @@
 node_modules
-/*/*/node_modules
-/*/node_modules
-/*/build
-/*/*/dist
+**/node_modules
+*/build
+**/dist
 .env
-/*/.env
-/*/*/.env
+**/.env
 note.txt
 test.ts
 test.js
+packages/*
+**/flatworks

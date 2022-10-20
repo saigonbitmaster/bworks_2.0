@@ -22,8 +22,12 @@ export class PostJobService {
       .skip(query.skip)
       .limit(query.limit)
       .exec();
-
     return { count: count, data: data };
+  }
+
+  async findRefAll(): Promise<RaList> {
+    const data = await this.model.find().exec();
+    return { count: 0, data: data };
   }
 
   async findOne(id: string): Promise<PostJob> {

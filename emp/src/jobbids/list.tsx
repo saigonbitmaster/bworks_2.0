@@ -14,14 +14,14 @@ const ListScreen = () => {
     <List
       perPage={25}
       sort={{ field: "date", order: "desc" }}
-      hasCreate
+      hasCreate={false}
       resource="jobbids"
       filter={{ queryType: "employer" }}
     >
       <Datagrid>
         <TextField source="name" />
 
-        <ReferenceField reference="postJobs" source="jobId">
+        <ReferenceField reference="postJobs/reference/all" source="jobId">
           <TextField source="name" />
         </ReferenceField>
 
@@ -29,22 +29,22 @@ const ListScreen = () => {
         <ReferenceField reference="users" source="jobSeekerId">
           <TextField source="fullName" />
         </ReferenceField>
-
+        <ReferenceField reference="users" source="employerId">
+          <TextField source="fullName" />
+        </ReferenceField>
         <NumberField source="bidValue" />
-        <RateField source="rate" />
-        <ReferenceField reference="postJobs" source="jobId" label="Currency">
+        <ReferenceField reference="postJobs/reference/all" source="jobId">
           <ReferenceField reference="currencies" source="currencyId">
             <TextField source="name" />
           </ReferenceField>
         </ReferenceField>
+        <RateField source="rate" />
+       
 
         <DateField source="completeDate" showTime label="Your deadline" />
 
-        <ReferenceField
-          reference="postJobs"
-          source="jobId"
-          label="Job deadline"
-        >
+        <ReferenceField reference="postJobs/reference/all" source="jobId"   label="Job deadline">
+         
           <DateField source="expectDate" showTime />
         </ReferenceField>
 

@@ -21,15 +21,42 @@ export class QueueController {
     });
   }
 
+  @Post('execShell')
+  async execShell(@Body() postBody: any) {
+    await this.QueueQueue.add('execShell', {
+      userId: postBody.userId,
+    });
+  }
+
+  @Post('scamFilter')
+  async scamFilter(@Body() postBody: any) {
+    await this.QueueQueue.add('scamFilter', {
+      userId: postBody.userId,
+    });
+  }
+
   @Get()
   async getJobs(@Response() res: any, @Query() query) {
-    const jobQuery = queryTransform(query);
+    const transformQuery = queryTransform(query);
     const jobStatus =
-      jobQuery.filter && jobQuery.filter.jobStatus
-        ? jobQuery.filter.jobStatus
+      transformQuery.filter && transformQuery.filter.jobStatus
+        ? transformQuery.filter.jobStatus
         : ['waiting', 'active', 'completed', 'failed', 'delayed'];
     const jobs = await this.QueueQueue.getJobs(jobStatus);
-    console.log('all jobs status job ', jobs);
-    return formatRaList(res, { count: 0, data: jobs });
+
+    const _data = jobs.slice(
+      transformQuery.skip,
+      transformQuery.limit + transformQuery.skip,
+    );
+    //trick to remove converting circular structure to JSON error.
+    const data = _data.map((item) => {
+      const _item: any = JSON.parse(JSON.stringify(item));
+      _item._id = item.id;
+      return _item;
+    });
+    return formatRaList(res, {
+      count: jobs.length,
+      data: data,
+    });
   }
 }
