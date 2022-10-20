@@ -7,5 +7,5 @@ node_modules
 note.txt
 test.ts
 test.js
-packages/*
+#packages/*
 **/flatworks
