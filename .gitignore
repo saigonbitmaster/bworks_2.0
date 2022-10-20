@@ -9,4 +9,4 @@ test.ts
 test.js
 #packages/*
 #**/flatworks
-emp/src/wallet
+#emp/src/wallet
