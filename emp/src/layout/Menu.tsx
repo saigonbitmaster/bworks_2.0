@@ -81,7 +81,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/quizSets"
+          to="/contractedjobs"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.contractedJobs.name`, {
             smart_count: 2,
@@ -117,7 +117,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/smartContract"
+          to="/smartcontract"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.smartContracts.name`, {
             smart_count: 2,
@@ -134,7 +134,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/proposals"
+          to="/jobreports"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.postJobReports.name`, {
             smart_count: 2,
@@ -143,7 +143,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/challenges"
+          to="/walletreports"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.walletReports.name`, {
             smart_count: 2,
@@ -152,7 +152,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/funds"
+          to="/contractreports"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.smartContractReports.name`, {
             smart_count: 2,
@@ -188,7 +188,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         />
       </SubMenu>
       <MenuItemLink
-        to="/funds"
+        to="/settings"
         state={{ _scrollToTop: true }}
         primaryText={translate(`resources.settings.name`, {
           smart_count: 2,

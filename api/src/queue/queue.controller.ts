@@ -21,14 +21,14 @@ export class QueueController {
     });
   }
 
-  @Post('execShell')
+  @Post('execshell')
   async execShell(@Body() postBody: any) {
     await this.QueueQueue.add('execShell', {
       userId: postBody.userId,
     });
   }
 
-  @Post('scamFilter')
+  @Post('scamfilter')
   async scamFilter(@Body() postBody: any) {
     await this.QueueQueue.add('scamFilter', {
       userId: postBody.userId,
