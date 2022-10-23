@@ -42,3 +42,8 @@ export interface CheckWalletType {
 export interface GitLink {
   gitUrl: string;
 }
+
+export interface RequestUser {
+  username: string;
+  userId: string;
+}

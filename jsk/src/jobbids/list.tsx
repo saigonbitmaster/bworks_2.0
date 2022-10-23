@@ -21,7 +21,7 @@ const ListScreen = () => {
       <Datagrid>
         <TextField source="name" />
 
-        <ReferenceField reference="postJobs/reference/all" source="jobId">
+        <ReferenceField reference="postJobs" source="jobId">
           <TextField source="name" />
         </ReferenceField>
 
@@ -32,7 +32,7 @@ const ListScreen = () => {
           <TextField source="fullName" />
         </ReferenceField>
         <NumberField source="bidValue" />
-        <ReferenceField reference="postJobs/reference/all" source="jobId" label="Currency">
+        <ReferenceField reference="postJobs" source="jobId" label="Currency">
           <ReferenceField reference="currencies" source="currencyId">
             <TextField source="name" />
           </ReferenceField>
@@ -42,7 +42,7 @@ const ListScreen = () => {
         <DateField source="completeDate" showTime label="Your deadline" />
 
         <ReferenceField
-          reference="postJobs/reference/all"
+          reference="postJobs"
           source="jobId"
           label="Job deadline"
         >

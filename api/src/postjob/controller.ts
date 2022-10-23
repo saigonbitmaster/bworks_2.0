@@ -9,39 +9,26 @@ import {
   Response,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CreatePostJobDto } from './dto/create.dto';
 import { UpdatePostJobDto } from './dto/update.dto';
 import { PostJobService } from './service';
-import getToken from '../flatworks/utils/token';
-import { Request } from 'express';
-import { JwtService } from '@nestjs/jwt';
-import { userJwtPayload } from '../flatworks/types/types';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('postjobs')
 export class PostJobController {
-  constructor(
-    private readonly service: PostJobService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly service: PostJobService) {}
 
   @Get()
-  async index(@Response() res: any, @Query() query, @Req() request: Request) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-
+  async index(@Response() res: any, @Query() query, @Req() request) {
     const mongooseQuery = queryTransform(query);
     mongooseQuery.filter.queryType == 'employer'
-      ? (mongooseQuery.filter.employerId = user.userId)
+      ? (mongooseQuery.filter.employerId = request.user.userId)
       : null;
     const result = await this.service.findAll(mongooseQuery);
-    return formatRaList(res, result);
-  }
-
-  @Get('reference/all')
-  async indexRef(@Response() res: any) {
-    const result = await this.service.findRefAll();
     return formatRaList(res, result);
   }
 
@@ -51,30 +38,21 @@ export class PostJobController {
   }
 
   @Post()
-  async create(
-    @Body() createPostJobDto: CreatePostJobDto,
-    @Req() request: Request,
-  ) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-    return await this.service.create(createPostJobDto, user.userId);
+  async create(@Body() createPostJobDto: CreatePostJobDto, @Req() request) {
+    return await this.service.create(createPostJobDto, request.user.userId);
   }
 
   @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updatePostJobDto: UpdatePostJobDto,
-    @Req() request: Request,
+    @Req() request,
   ) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-    return await this.service.update(id, updatePostJobDto, user.userId);
+    return await this.service.update(id, updatePostJobDto, request.user.userId);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @Req() request: Request) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-    return await this.service.delete(id, user.userId);
+  async delete(@Param('id') id: string, @Req() request) {
+    return await this.service.delete(id, request.user.userId);
   }
 }

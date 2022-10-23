@@ -33,7 +33,7 @@ const ListScreen = () => {
           <TextField source="fullName" />
         </ReferenceField>
         <NumberField source="bidValue" />
-        <ReferenceField reference="postJobs/reference/all" source="jobId">
+        <ReferenceField reference="postJobs" source="jobId">
           <ReferenceField reference="currencies" source="currencyId">
             <TextField source="name" />
           </ReferenceField>
@@ -43,7 +43,7 @@ const ListScreen = () => {
 
         <DateField source="completeDate" showTime label="Your deadline" />
 
-        <ReferenceField reference="postJobs/reference/all" source="jobId"   label="Job deadline">
+        <ReferenceField reference="postJobs" source="jobId"   label="Job deadline">
          
           <DateField source="expectDate" showTime />
         </ReferenceField>

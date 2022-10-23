@@ -9,36 +9,26 @@ import {
   Response,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateJobBidDto } from './dto/create.dto';
 import { UpdateJobBidDto } from './dto/update.dto';
 import { JobBidService } from './service';
-import getToken from '../flatworks/utils/token';
-import { Request } from 'express';
-import { JwtService } from '@nestjs/jwt';
-import { userJwtPayload } from '../flatworks/types/types';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('jobbids')
 export class JobBidController {
-  constructor(
-    private readonly service: JobBidService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly service: JobBidService) {}
 
   @Get()
-  async getByEmployer(
-    @Response() res: any,
-    @Query() query,
-    @Req() request: Request,
-  ) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
+  async getByEmployer(@Response() res: any, @Query() query, @Req() request) {
     const mongooseQuery = queryTransform(query);
     mongooseQuery.filter.queryType == 'employer'
-      ? (mongooseQuery.filter.employerId = user.userId)
+      ? (mongooseQuery.filter.employerId = request.user.userId)
       : mongooseQuery.filter.queryType == 'jobSeeker'
-      ? (mongooseQuery.filter.jobSeekerId = user.userId)
+      ? (mongooseQuery.filter.jobSeekerId = request.user.userId)
       : (mongooseQuery.filter._id = null);
 
     const result = await this.service.findAll(mongooseQuery);
@@ -51,30 +41,21 @@ export class JobBidController {
   }
 
   @Post()
-  async create(
-    @Body() createJobBidDto: CreateJobBidDto,
-    @Req() request: Request,
-  ) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-    return await this.service.create(createJobBidDto, user.userId);
+  async create(@Body() createJobBidDto: CreateJobBidDto, @Req() request) {
+    return await this.service.create(createJobBidDto, request.user.userId);
   }
 
   @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updateJobBidDto: UpdateJobBidDto,
-    @Req() request: Request,
+    @Req() request,
   ) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-    return await this.service.update(id, updateJobBidDto, user.userId);
+    return await this.service.update(id, updateJobBidDto, request.user.userId);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @Req() request: Request) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-    return await this.service.delete(id, user.userId);
+  async delete(@Param('id') id: string, @Req() request) {
+    return await this.service.delete(id, request.user.userId);
   }
 }
