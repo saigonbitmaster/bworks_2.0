@@ -21,7 +21,7 @@ const ListScreen = () => {
       <Datagrid>
         <TextField source="name" />
 
-        <ReferenceField reference="postJobs/reference/all" source="jobId">
+        <ReferenceField reference="postJobs" source="jobId">
           <TextField source="name" />
         </ReferenceField>
 

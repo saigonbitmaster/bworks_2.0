@@ -2,7 +2,7 @@ import { stringify } from "query-string";
 import { fetchUtils, DataProvider } from "ra-core";
 import { filterTransform } from "./utils";
 /**
- * Maps react-admin queries to a simple REST API
+ * Maps react-admin queries to a REST API
  *
  * This REST dialect is similar to the one of FakeRest
  *
@@ -94,7 +94,7 @@ export default (
 
   getMany: (resource, params) => {
     const query = {
-      filter: JSON.stringify({ id: params.ids }),
+      filter: JSON.stringify({ _id: params.ids }),
     };
     const options = {
       headers: new Headers({
