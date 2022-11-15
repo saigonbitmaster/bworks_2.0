@@ -11,7 +11,6 @@ const ColoredNumberField = (props: myProps) => {
   const threshold = props.threshold || 50000;
   const { data: currency, isLoading, error } = useGetOne('currencies', { id: record.currencyId });
 
-  console.log(threshold, record[props.source])
   //currency must be ADA, USD or Ada, usd 
   const currencyName = error? null : isLoading ? null : currency.name
 

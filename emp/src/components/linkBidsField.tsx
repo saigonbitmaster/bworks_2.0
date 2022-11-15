@@ -14,7 +14,6 @@ const LinkBidField = (props) => {
     return <p style={{ color: "red" }}>Error!</p>;
   }
 
-console.log(data);
 
   return record ? (
     <Link

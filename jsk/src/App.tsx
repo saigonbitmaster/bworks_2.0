@@ -32,7 +32,7 @@ const _authProvider = authProvider(loginUrl);
 const App = () => {
   return (
     <Admin
-      title="cReport"
+      title="bWorks"
       dataProvider={restProvider}
       authProvider={_authProvider}
       dashboard={Dashboard}

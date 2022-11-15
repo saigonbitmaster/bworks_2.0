@@ -16,6 +16,7 @@ import { UpdateJobBidDto } from './dto/update.dto';
 import { JobBidService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import * as lodash from 'lodash';
 
 @UseGuards(JwtAuthGuard)
 @Controller('jobbids')
@@ -26,9 +27,17 @@ export class JobBidController {
   async getByEmployer(@Response() res: any, @Query() query, @Req() request) {
     const mongooseQuery = queryTransform(query);
     mongooseQuery.filter.queryType == 'employer'
-      ? (mongooseQuery.filter.employerId = request.user.userId)
+      ? (mongooseQuery.filter.employerId = lodash.get(
+          request,
+          'user.userId',
+          null,
+        ))
       : mongooseQuery.filter.queryType == 'jobSeeker'
-      ? (mongooseQuery.filter.jobSeekerId = request.user.userId)
+      ? (mongooseQuery.filter.jobSeekerId = lodash.get(
+          request,
+          'user.userId',
+          null,
+        ))
       : (mongooseQuery.filter._id = null);
 
     const result = await this.service.findAll(mongooseQuery);
@@ -42,7 +51,10 @@ export class JobBidController {
 
   @Post()
   async create(@Body() createJobBidDto: CreateJobBidDto, @Req() request) {
-    return await this.service.create(createJobBidDto, request.user.userId);
+    return await this.service.create(
+      createJobBidDto,
+      lodash.get(request, 'user.userId', null),
+    );
   }
 
   @Put(':id')
@@ -51,11 +63,18 @@ export class JobBidController {
     @Body() updateJobBidDto: UpdateJobBidDto,
     @Req() request,
   ) {
-    return await this.service.update(id, updateJobBidDto, request.user.userId);
+    return await this.service.update(
+      id,
+      updateJobBidDto,
+      lodash.get(request, 'user.userId', null),
+    );
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string, @Req() request) {
-    return await this.service.delete(id, request.user.userId);
+    return await this.service.delete(
+      id,
+      lodash.get(request, 'user.userId', null),
+    );
   }
 }

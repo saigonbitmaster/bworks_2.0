@@ -34,9 +34,9 @@ The API response when called by `getList` should look like this:
 ]
 ```
 
-An `id` field is required. You can also set [custom identifier or primary key for your resources](https://marmelab.com/react-admin/FAQ.html#can-i-have-custom-identifiersprimary-keys-for-my-resources)
+An `id` field is required.
 
-**Note**: The simple REST data provider expects the API to include a `Content-Range` header in the response to `getList` calls. The value must be the total number of resources in the collection. This allows react-admin to know how many pages of resources there are in total, and build the pagination controls.
+**Note**: `Content-Range` header in the response to `getList` calls is required. it is total number of resources in the collection to build the pagination controls.
 
 ```txt
 Content-Range: posts 0-24/319
@@ -77,7 +77,7 @@ const App = () => {
       authProvider={_authProvider}
       ...
     >
-     
+
     </Admin>
   );
 };
@@ -88,19 +88,16 @@ export default App;
 
 ### Adding Custom Headers
 
-The provider function accepts an HTTP client function as second argument. By default, they use react-admin's `fetchUtils.fetchJson()` as HTTP client. It's similar to HTML5 `fetch()`, except it handles JSON decoding and HTTP error codes automatically.
-
-That means that if you need to add custom headers to your requests, you just need to *wrap* the `fetchJson()` call inside your own function:
+if you need to add custom headers to your requests, you just need to _wrap_ the `fetchJson()` call inside your own function:
 
 ```jsx
-
 const httpClient = (url, options = {}) => {
-    if (!options.headers) {
-        options.headers = new Headers({ Accept: 'application/json' });
-    }
-    // add your own headers here
-    options.headers.set('X-Custom-Header', 'foobar');
-    return fetchUtils.fetchJson(url, options);
+  if (!options.headers) {
+    options.headers = new Headers({ Accept: "application/json" });
+  }
+  // add your own headers here
+  options.headers.set("X-Custom-Header", "foobar");
+  return fetchUtils.fetchJson(url, options);
 };
 ```
 
@@ -110,11 +107,11 @@ Now all the requests to the REST API will contain the `X-Custom-Header: foobar` 
 
 ```js
 const httpClient = (url, options = {}) => {
-    options.user = {
-        authenticated: true,
-        token: 'SRTRDFVESGNJYTUKTYTHRG'
-    };
-    return fetchUtils.fetchJson(url, options);
+  options.user = {
+    authenticated: true,
+    token: "SRTRDFVESGNJYTUKTYTHRG",
+  };
+  return fetchUtils.fetchJson(url, options);
 };
 ```
 
@@ -122,13 +119,9 @@ Now all the requests to the REST API will contain the `Authorization: SRTRDFVESG
 
 ## Note about Content-Range
 
-Historically, Simple REST Data Provider uses the http `Content-Range` header to retrieve the number of items in a collection. But this is a *hack* of the [primary role of this header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range).
+The solution for API which delete `Content-Range` header is to use another http header to return the number of collection's items. The other header commonly used for this is `X-Total-Count`. So if you use `X-Total-Count`, you will have to :
 
-However this can be problematic, for example within an infrastructure using a Varnish that may use, modify or delete this header. We also have feedback indicating that using this header is problematic when you host your application on [Vercel](https://vercel.com/).
-
-The solution is to use another http header to return the number of collection's items. The other header commonly used for this is `X-Total-Count`. So if you use `X-Total-Count`, you will have to :
-
-* Whitelist this header with an `Access-Control-Expose-Headers` [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) header.
+- Whitelist this header with an `Access-Control-Expose-Headers` [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) header.
 
 ```
 Access-Control-Expose-Headers: X-Total-Count
@@ -139,3 +132,4 @@ Access-Control-Expose-Headers: X-Total-Count
 ## License
 
 This data provider is licensed under the MIT License
+```
