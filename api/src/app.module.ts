@@ -9,6 +9,7 @@ import { CurrencyModule } from './currency/module';
 import { JobBidModule } from './jobbid/module';
 import { ToolModule } from './tool/module';
 import { WalletModule } from './wallet/module';
+import { ContractModule } from './contract/module';
 import { QueueModule } from './queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 
@@ -39,6 +40,7 @@ import { BullModule } from '@nestjs/bull';
     ToolModule,
     WalletModule,
     QueueModule,
+    ContractModule,
   ],
 })
 export class AppModule {}

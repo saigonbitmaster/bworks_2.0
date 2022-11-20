@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 
 export default function SmartContract(props) {
   const [value, setValue] = React.useState("1");
@@ -19,8 +19,9 @@ export default function SmartContract(props) {
   };
 
   const handleSmartContractChange = props.handleContractChange;
-  const contract = props.contract.selected;
-
+  const selectedContract = props.contract?.selected;
+  const contracts = props.contract?.contracts;
+  console.log(selectedContract, contracts);
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
@@ -45,6 +46,7 @@ export default function SmartContract(props) {
               paddingLeft: 0,
               display: "flex",
               flexDirection: "column",
+              justifyContent: "space-between",
             }}
           >
             <FormControl variant="standard" sx={{ minWidth: 120 }}>
@@ -55,19 +57,23 @@ export default function SmartContract(props) {
                 sx={{ width: 240 }}
                 labelId="simple-select-standard-label"
                 id="demo-simple-select-standard"
-                value={contract}
+                value={selectedContract}
                 onChange={handleSmartContractChange}
                 label="contract"
               >
-                <MenuItem value={10}>Job with deadLine</MenuItem>
-                <MenuItem value={20}>Job without deadLine</MenuItem>
+                {contracts.map((item) => (
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <TextField
-              sx={{ width: 480 }}
+              sx={{ width: 500 }}
               id="standard-basic"
-              label="Script address"
               variant="standard"
+              disabled
+              value={
+                contracts.find((item) => item.id === selectedContract).address
+              }
             />
             <TextField
               sx={{ width: 480 }}
@@ -105,12 +111,13 @@ export default function SmartContract(props) {
                 sx={{ width: 240 }}
                 labelId="simple-select-standard-label"
                 id="demo-simple-select-standard"
-                value={contract}
+                value={selectedContract}
                 onChange={handleSmartContractChange}
                 label="contract"
               >
-                <MenuItem value={10}>Job with deadLine</MenuItem>
-                <MenuItem value={20}>Job without deadLine</MenuItem>
+                {contracts.map((item) => (
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <TextField
@@ -118,46 +125,72 @@ export default function SmartContract(props) {
               id="standard-basic"
               label="Contract address"
               variant="standard"
+              disabled
+              value={
+                contracts.find((item) => item.id === selectedContract).address
+              }
             />
             <TextField
-              sx={{ width: 480 }}
+              sx={{ width: 480, fontSize: "small" }}
               id="standard-basic"
               label="Contract CborHex"
+              disabled
               variant="standard"
+              value={
+                contracts.find((item) => item.id === selectedContract).cborhex
+              }
             />
-            <TextField
-              sx={{ width: 480 }}
-              id="standard-basic"
-              label="UTXO where ADA is locked"
-              variant="standard"
-            />
-            <TextField
-              sx={{ width: 480 }}
-              id="standard-basic"
-              label="Transaction index"
-              variant="standard"
-              type="number"
-            />
-            <TextField
-              sx={{ width: 480 }}
-              id="standard-basic"
-              label="Value (ADA)"
-              variant="standard"
-              type="number"
-            />
-            <TextField
-              sx={{ width: 480 }}
-              id="standard-basic"
-              label="Datum to unlock"
-              variant="standard"
-            />
-            <TextField
-              sx={{ width: 480 }}
-              id="standard-basic"
-              label="Fee"
-              variant="standard"
-              type="number"
-            />
+            <Box
+              sx={{
+                paddingTop: 0,
+                paddingLeft: 0,
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <TextField
+                sx={{ width: 480, fontSize: "small" }}
+                id="standard-basic"
+                label="UTXO where ADA is locked"
+                variant="standard"
+              />
+              <TextField
+                sx={{ width: 150, m: 1 }}
+                id="standard-basic"
+                label="Transaction index"
+                variant="standard"
+                type="number"
+              />
+            </Box>
+            <Box
+              sx={{
+                paddingTop: 0,
+                paddingLeft: 0,
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <TextField
+                sx={{ width: 225, m: 1 }}
+                id="standard-basic"
+                label="Value (ADA)"
+                variant="standard"
+                type="number"
+              />
+              <TextField
+                sx={{ width: 225, m: 1 }}
+                id="standard-basic"
+                label="Datum to unlock"
+                variant="standard"
+              />
+              <TextField
+                sx={{ width: 150, m: 1 }}
+                id="standard-basic"
+                label="Fee"
+                variant="standard"
+                type="number"
+              />
+            </Box>
             <Button variant="text" sx={{ width: 20, marginTop: 3 }}>
               Submit
             </Button>

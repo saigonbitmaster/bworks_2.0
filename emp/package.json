@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.19",
+    "@emurgo/cardano-serialization-lib-asmjs": "^11.1.0",
     "@mui/icons-material": "^5.0.1",
     "@mui/lab": "^5.0.0-alpha.104",
     "@mui/material": "^5.0.2",

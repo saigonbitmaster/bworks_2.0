@@ -1,10 +1,9 @@
 import React from "react";
-import "../node_modules/@blueprintjs/core/lib/css/blueprint.css";
-import "../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
-import "../node_modules/normalize.css/normalize.css";
 import { Address, Value } from "@emurgo/cardano-serialization-lib-asmjs";
-import "./App.css";
-import Wallet from "./wallet";
+import Wallet from "../components/wallet";
+import SmartContract from "../components/smartContract";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { useGetList } from "react-admin";
 
 let Buffer = require("buffer/").Buffer;
 
@@ -36,11 +35,33 @@ const WalletExplorer = () => {
     });
   };
 
+  const initContract = {
+    selected: "",
+    contracts: [{ address: "", name: "", cborhex: "", id: "" }],
+  };
+
+  const { data, total, isLoading, error } = useGetList("contracts", {
+    pagination: { page: 1, perPage: 10 },
+    sort: { field: "createdDate", order: "DESC" },
+  });
+
+  const [contract, setContract] = React.useState(initContract);
+  React.useEffect(() => {
+    if (!isLoading && !error) {
+      const selected = data[0].id;
+      setContract({ selected, contracts: data });
+    }
+  }, [data]);
+
+  const handleContractChange = (event: SelectChangeEvent) => {
+    setContract({ ...contract, selected: event.target.value });
+  };
+
   const getWallets = (count = 0) => {
     const wallets = [];
-    for (const key in window.cardano) {
+    for (const key in (window as any).cardano) {
       if (
-        window.cardano[key].enable &&
+        (window as any).cardano[key].enable &&
         wallets.filter((item) => item.name === key).length === 0
       ) {
         wallets.push({ name: key, selected: false });
@@ -59,7 +80,7 @@ const WalletExplorer = () => {
     setState({
       ...state,
       wallets,
-      selectedWallet: wallets.filter((item) => item.selected === true).name,
+      selectedWallet: wallets.find((item) => item.selected === true).name,
     });
   };
 
@@ -78,11 +99,11 @@ const WalletExplorer = () => {
       return;
     }
 
-    const walletFound = !!window?.cardano?.[walletKey];
+    const walletFound = !!(window as any)?.cardano?.[walletKey];
     if (!walletFound) {
       return;
     }
-    API = await window.cardano[walletKey].enable();
+    API = await (window as any).cardano[walletKey].enable();
 
     const networkId = await API.getNetworkId();
     const balanceCBORHex = await API.getBalance();
@@ -121,7 +142,7 @@ const WalletExplorer = () => {
   }, [state.selectedWallet]);
 
   return (
-    <div style={{ margin: "20px" }}>
+    <div>
       <Wallet
         wallets={state.wallets}
         handleChange={handleChangeWallet}
@@ -132,6 +153,10 @@ const WalletExplorer = () => {
         refresh={refresh}
         walletIsEnabled={state.walletIsEnabled}
       ></Wallet>
+      <SmartContract
+        handleContractChange={handleContractChange}
+        contract={contract}
+      ></SmartContract>
     </div>
   );
 };

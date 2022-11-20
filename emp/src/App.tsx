@@ -16,7 +16,7 @@ import FetchCardano from "./tools/fetchCardano";
 import Wallet from "./wallet/wallet";
 
 import ImportExcels from "./tools/importExcels";
-
+import SmartContracts from "./smartcontracts/smartContracts";
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -49,6 +49,7 @@ const App = () => {
         <Route path="/fetchCardano" element={<FetchCardano />} />
         <Route path="/fetchGithub" element={<FetchGithub />} />
         <Route path="/wallets" element={<Wallet />} />
+        <Route path="/smartContract" element={<SmartContracts />} />
       </CustomRoutes>
       <Resource name="postjobs" {...postjobs} />
       <Resource name="jobbids" {...jobbids} />

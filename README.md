@@ -34,6 +34,7 @@ yarn web
 ```
 git clone https://github.com/saigonbitmaster/bworks_2.0
 cd bworks_2.0
+export NODE_OPTIONS="--max-old-space-size=8192"
 yarn 
 yarn build-lib
 yarn build-api

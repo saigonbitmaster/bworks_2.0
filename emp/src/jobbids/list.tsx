@@ -8,7 +8,7 @@ import {
   NumberField,
   ReferenceField,
 } from "react-admin";
-import RateField from '../components/RateField'
+import RateField from '../components/rateField'
 const ListScreen = () => {
   return (
     <List
