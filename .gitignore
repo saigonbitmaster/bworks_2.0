@@ -7,7 +7,7 @@ node_modules
 note.txt
 test.ts
 test.js
-jsk/src/jobtasks
+#jsk/src/jobtasks
 #api/src/jobtask
 #packages/*
 #**/flatworks
