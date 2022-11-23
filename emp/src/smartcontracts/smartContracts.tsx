@@ -37,7 +37,7 @@ const WalletExplorer = () => {
 
   const initContract = {
     selected: "",
-    contracts: [{ address: "", name: "", cborhex: "", id: "" }],
+    contracts: [],
   };
 
   const { data, total, isLoading, error } = useGetList("contracts", {

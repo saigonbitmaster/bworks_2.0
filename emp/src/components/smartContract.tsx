@@ -10,6 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Typography from '@mui/material/Typography';
 
 export default function SmartContract(props) {
   const [value, setValue] = React.useState("1");
@@ -21,7 +22,11 @@ export default function SmartContract(props) {
   const handleSmartContractChange = props.handleContractChange;
   const selectedContract = props.contract?.selected;
   const contracts = props.contract?.contracts;
-  console.log(selectedContract, contracts);
+  
+  if (!contracts || contracts.length === 0) {
+    return  <Typography variant="subtitle1" gutterBottom> No smart contract</Typography>
+  }
+
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
@@ -69,6 +74,7 @@ export default function SmartContract(props) {
             <TextField
               sx={{ width: 500 }}
               id="standard-basic"
+              label="Contract address"
               variant="standard"
               disabled
               value={

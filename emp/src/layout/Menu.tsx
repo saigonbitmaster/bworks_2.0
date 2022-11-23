@@ -13,6 +13,7 @@ import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
 import ConstructionIcon from "@mui/icons-material/Construction";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import {
   useTranslate,
   DashboardMenuItem,
@@ -87,6 +88,15 @@ const Menu = ({ dense = false }: MenuProps) => {
             smart_count: 2,
           })}
           leftIcon={<QrCodeOutlinedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/jobtasks"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.jobtasks.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<ListAltOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>

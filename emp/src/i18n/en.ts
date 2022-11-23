@@ -40,6 +40,9 @@ const customEnglishMessages: TranslationMessages = {
     },
   },
   resources: {
+    jobtasks: {
+      name: "Job tasks",
+    },
     reports: {
       import: "Import excels",
     },

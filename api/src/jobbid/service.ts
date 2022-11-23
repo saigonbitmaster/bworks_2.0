@@ -35,6 +35,9 @@ export class JobBidService {
       }),
     };
   }
+  async findAllRaw(query): Promise<any> {
+    return await this.model.find(query);
+  }
 
   async findOne(id: string): Promise<JobBid> {
     return await this.model.findById(id).exec();

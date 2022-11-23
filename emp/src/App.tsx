@@ -14,6 +14,7 @@ import jobbids from "./jobbids";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
 import Wallet from "./wallet/wallet";
+import jobtasks from "./jobtasks";
 
 import ImportExcels from "./tools/importExcels";
 import SmartContracts from "./smartcontracts/smartContracts";
@@ -53,6 +54,8 @@ const App = () => {
       </CustomRoutes>
       <Resource name="postjobs" {...postjobs} />
       <Resource name="jobbids" {...jobbids} />
+      <Resource name="jobtasks" {...jobtasks} />
+
     </Admin>
   );
 };

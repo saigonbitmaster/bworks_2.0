@@ -1,13 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { JobBidService } from './service';
 import { JobBidController } from './controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JobBid, JobBidSchema } from './schemas/schema';
-
 import { JwtService } from '@nestjs/jwt';
 import { User, UserSchema } from '../user/schemas/user.schema';
 import { PostJob, PostJobSchema } from '../postjob/schemas/schema';
-
+@Global()
 @Module({
   providers: [JobBidService, JwtService],
   controllers: [JobBidController],
@@ -16,5 +15,6 @@ import { PostJob, PostJobSchema } from '../postjob/schemas/schema';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: PostJob.name, schema: PostJobSchema }]),
   ],
+  exports: [JobBidService],
 })
 export class JobBidModule {}

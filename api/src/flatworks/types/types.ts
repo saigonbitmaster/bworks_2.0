@@ -47,3 +47,9 @@ export interface RequestUser {
   username: string;
   userId: string;
 }
+
+export enum taskStatus {
+  completed = 'completed',
+  inProgress = 'inProgress',
+  todo = 'todo',
+}

@@ -43,6 +43,9 @@ const customEnglishMessages: TranslationMessages = {
     reports: {
       import: "Import excels",
     },
+    jobtasks: {
+      name: "Job tasks",
+    },
     smartContracts: {
       name: "Smart contract |||| Smart contracts",
       fields: {

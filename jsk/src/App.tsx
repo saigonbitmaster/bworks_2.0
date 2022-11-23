@@ -11,6 +11,7 @@ import Configuration from "./configuration/Configuration";
 import dataProvider from "ra-nest-rest";
 import postjobs from "./postjobs";
 import jobbids from "./jobbids";
+import jobtasks from "./jobtasks";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
 import ImportExcels from "./tools/importExcels";
@@ -49,6 +50,7 @@ const App = () => {
       </CustomRoutes>
       <Resource name="postjobs" {...postjobs} />
       <Resource name="jobbids" {...jobbids} />
+      <Resource name="jobtasks" {...jobtasks} />
     </Admin>
   );
 };

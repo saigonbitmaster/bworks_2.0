@@ -80,3 +80,9 @@ export interface Payout extends RaRecord {
   amount: number;
   detail: any[];
 }
+
+export enum taskStatus {
+  completed = "completed",
+  inProgress = "inProgress",
+  todo = "todo",
+}

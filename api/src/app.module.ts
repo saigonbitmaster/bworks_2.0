@@ -12,6 +12,7 @@ import { WalletModule } from './wallet/module';
 import { ContractModule } from './contract/module';
 import { QueueModule } from './queue/queue.module';
 import { BullModule } from '@nestjs/bull';
+import { JobTaskModule } from './jobtask/module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { BullModule } from '@nestjs/bull';
     WalletModule,
     QueueModule,
     ContractModule,
+    JobTaskModule,
   ],
 })
 export class AppModule {}
