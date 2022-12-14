@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Typography from '@mui/material/Typography';
 
 export default function SmartContract(props) {
@@ -20,9 +20,17 @@ export default function SmartContract(props) {
   };
 
   const handleSmartContractChange = props.handleContractChange;
-  const selectedContract = props.contract?.selected;
-  const contracts = props.contract?.contracts;
+  const selectedContract = props.contract?.selected || null;
+  const contracts = props.contract?.contracts || [];
+
+  const sendAdaToPlutus = props.sendAdaToPlutus || null;
+  const redeemAdaValues = props.redeemAdaValues || null;
+  const handleChangeLockAda = props.handleChangeLockAda || null;
+  const handleChangRedeemAda = props.handleChangRedeemAda || null;
+  const redeemAdaFromPlutus = props.redeemAdaFromPlutus || null;
+  const lockAdaValues = props.lockAdaValues || {};
   
+
   if (!contracts || contracts.length === 0) {
     return  <Typography variant="subtitle1" gutterBottom> No smart contract</Typography>
   }
@@ -74,11 +82,11 @@ export default function SmartContract(props) {
             <TextField
               sx={{ width: 500 }}
               id="standard-basic"
-              label="Contract address"
               variant="standard"
               disabled
               value={
-                contracts.find((item) => item.id === selectedContract).address
+                contracts.find((item) => item.id === selectedContract)
+                  .address
               }
             />
             <TextField
@@ -87,14 +95,22 @@ export default function SmartContract(props) {
               label="Value (ADA)"
               variant="standard"
               type="number"
+              value={lockAdaValues.amountToLock}
+              onChange={handleChangeLockAda("amountToLock")}
             />
             <TextField
               sx={{ width: 480 }}
               id="standard-basic"
               label="Datum to lock"
               variant="standard"
+              value={lockAdaValues.datumToLock}
+              onChange={handleChangeLockAda("datumToLock")}
             />
-            <Button variant="text" sx={{ width: 20, marginTop: 3 }}>
+            <Button
+              variant="text"
+              sx={{ width: 20, marginTop: 3 }}
+              onClick={sendAdaToPlutus}
+            >
               Submit
             </Button>
           </Box>
@@ -133,7 +149,8 @@ export default function SmartContract(props) {
               variant="standard"
               disabled
               value={
-                contracts.find((item) => item.id === selectedContract).address
+                contracts.find((item) => item.id === selectedContract)
+                  .address
               }
             />
             <TextField
@@ -143,61 +160,59 @@ export default function SmartContract(props) {
               disabled
               variant="standard"
               value={
-                contracts.find((item) => item.id === selectedContract).cborhex
+                contracts.find((item) => item.id === selectedContract)
+                  .cborhex
               }
             />
-            <Box
-              sx={{
-                paddingTop: 0,
-                paddingLeft: 0,
-                display: "flex",
-                flexDirection: "row",
-              }}
+
+            <TextField
+              sx={{ width: 480, fontSize: "small" }}
+              id="standard-basic"
+              label="UTXO where ADA is locked"
+              value={redeemAdaValues.transactionIdLocked}
+              onChange={handleChangRedeemAda("transactionIdLocked")}
+              variant="standard"
+            />
+            <TextField
+              sx={{ width: 480 }}
+              id="standard-basic"
+              label="Transaction index"
+              variant="standard"
+              type="number"
+              value={redeemAdaValues.transactionIndxLocked}
+              onChange={handleChangRedeemAda("transactionIndxLocked")}
+            />
+            <TextField
+              sx={{ width: 480 }}
+              id="standard-basic"
+              label="Value (ADA)"
+              variant="standard"
+              value={redeemAdaValues.amountToRedeem}
+              onChange={handleChangRedeemAda("amountToRedeem")}
+              type="number"
+            />
+            <TextField
+              sx={{ width: 480 }}
+              id="standard-basic"
+              label="Datum to unlock"
+              variant="standard"
+              value={redeemAdaValues.datumToRedeem}
+              onChange={handleChangRedeemAda("datumToRedeem")}
+            />
+            <TextField
+              sx={{ width: 480 }}
+              id="standard-basic"
+              label="Fee"
+              variant="standard"
+              type="number"
+              value={redeemAdaValues.manualFee}
+              onChange={handleChangRedeemAda("manualFee")}
+            />
+            <Button
+              variant="text"
+              sx={{ width: 20, marginTop: 3 }}
+              onClick={redeemAdaFromPlutus}
             >
-              <TextField
-                sx={{ width: 480, fontSize: "small" }}
-                id="standard-basic"
-                label="UTXO where ADA is locked"
-                variant="standard"
-              />
-              <TextField
-                sx={{ width: 150, m: 1 }}
-                id="standard-basic"
-                label="Transaction index"
-                variant="standard"
-                type="number"
-              />
-            </Box>
-            <Box
-              sx={{
-                paddingTop: 0,
-                paddingLeft: 0,
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <TextField
-                sx={{ width: 225, m: 1 }}
-                id="standard-basic"
-                label="Value (ADA)"
-                variant="standard"
-                type="number"
-              />
-              <TextField
-                sx={{ width: 225, m: 1 }}
-                id="standard-basic"
-                label="Datum to unlock"
-                variant="standard"
-              />
-              <TextField
-                sx={{ width: 150, m: 1 }}
-                id="standard-basic"
-                label="Fee"
-                variant="standard"
-                type="number"
-              />
-            </Box>
-            <Button variant="text" sx={{ width: 20, marginTop: 3 }}>
               Submit
             </Button>
           </Box>
