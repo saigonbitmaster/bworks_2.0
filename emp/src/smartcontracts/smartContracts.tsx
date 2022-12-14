@@ -89,10 +89,10 @@ const WalletExplorer = () => {
     if (walletKey === "bworks") {
       setState({
         ...state,
-        balance: 0,
+        balance: 2332.710075,
         networkId: 0,
-        usedAddress: "bworks",
-        changeAddress: "bworks",
+        usedAddress: "addr_test1qrsyt5qv7pvdcqf9thpmjyv6kukpqv4nmr3tqjy6k6tm6705dl4czkn5ap78f35r0q8yudwazghgqdcad4sx2srew9vqe7c7lv",
+        changeAddress: "addr_test1qrsyt5qv7pvdcqf9thpmjyv6kukpqv4nmr3tqjy6k6tm6705dl4czkn5ap78f35r0q8yudwazghgqdcad4sx2srew9vqe7c7lv",
         walletFound: true,
         walletIsEnabled: true,
       });

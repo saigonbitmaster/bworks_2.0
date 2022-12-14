@@ -9,6 +9,15 @@ export class Contract {
   @Prop({ required: true, unique: true })
   name: string;
 
+  @Prop({ required: true, unique: true })
+  address: string;
+
+  @Prop({ required: true, unique: true })
+  cborhex: string;
+
+  @Prop({ required: true, unique: true })
+  description: string;
+
   @Prop()
   completedAt?: Date;
 

@@ -118,7 +118,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/smartContracts"
+          to="/contracts"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.smartContracts.name`, {
             smart_count: 2,
