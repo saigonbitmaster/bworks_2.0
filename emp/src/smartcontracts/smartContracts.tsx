@@ -32,7 +32,7 @@ import {
 } from "@emurgo/cardano-serialization-lib-asmjs";
 
 import Wallet from "../components/wallet";
-import SmartContract from "../components/smartContract";
+import SmartContractJob from "../components/smartContractJob";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetList } from "react-admin";
 import {
@@ -71,6 +71,40 @@ const SmartContracts = () => {
     pagination: { page: 1, perPage: 10 },
     sort: { field: "createdDate", order: "DESC" },
   });
+
+  const initJobBids = {
+    selected: "0",
+    jobBids: [],
+  };
+  const [jobBids, setJobBids] = React.useState(initJobBids);
+
+  //{ data, total, isLoading, error } =  useGetList("jobbids",{})
+  const jobBidReturn = useGetList("jobbids", {
+    pagination: { page: 1, perPage: 10 },
+    sort: { field: "createdDate", order: "DESC" },
+    filter: { queryType: "employer" },
+  });
+
+  React.useEffect(() => {
+    if (
+      !jobBidReturn.isLoading &&
+      !jobBidReturn.error &&
+      jobBidReturn.data.length > 0
+    ) {
+      const selected = jobBidReturn.data[0].id;
+      setJobBids({ selected, jobBids: jobBidReturn.data });
+    }
+  }, [jobBidReturn.data]);
+
+  React.useEffect(() => {
+    const amountToLock =
+      jobBids.jobBids.find((item) => item.id === jobBids.selected)?.bidValue ||
+      0;
+    setLockAdaValues({
+      ...lockAdaValues,
+      amountToLock: amountToLock.toString(),
+    });
+  }, [jobBids.selected]);
 
   React.useEffect(() => {
     if (!isLoading && !error) {
@@ -361,6 +395,10 @@ const SmartContracts = () => {
     setContract({ ...contract, selected: event.target.value });
   };
 
+  const handleJobBidChange = (event: SelectChangeEvent) => {
+    setJobBids({ ...jobBids, selected: event.target.value });
+  };
+
   const getWallets = (count = 0) => {
     const wallets = [];
     for (const key in (window as any).cardano) {
@@ -498,16 +536,18 @@ const SmartContracts = () => {
         refresh={refresh}
         walletIsEnabled={state.walletIsEnabled}
       ></Wallet>
-      <SmartContract
+      <SmartContractJob
         handleContractChange={handleContractChange}
+        handleJobBidChange={handleJobBidChange}
+        contract={contract}
+        jobBids={jobBids}
         sendAdaToPlutus={sendAdaToPlutus}
         redeemAdaFromPlutus={redeemAdaFromPlutus}
-        contract={contract}
         handleChangeLockAda={handleChangeLockAda}
         handleChangRedeemAda={handleChangRedeemAda}
         lockAdaValues={lockAdaValues}
         redeemAdaValues={redeemAdaValues}
-      ></SmartContract>
+      ></SmartContractJob>
     </div>
   );
 };
