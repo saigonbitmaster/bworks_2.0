@@ -13,3 +13,8 @@ test.js
 #**/flatworks
 #emp/src/tools
 #jsk/src/tools
+
+# ignore database & certificates
+docker-config/dbdata
+docker-config/mongobackups
+docker-config/certbot
