@@ -16,9 +16,16 @@ import { JobTaskModule } from './jobtask/module';
 
 @Module({
   imports: [
+/*
     MongooseModule.forRoot(
       'mongodb://admin:123456@localhost:27017/bworks2?authSource=admin&readPreference=primary',
     ),
+*/
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.CONNECTION_STRING,
+      }),
+    }),
     BullModule.forRoot({
       redis: {
         host: 'localhost',
