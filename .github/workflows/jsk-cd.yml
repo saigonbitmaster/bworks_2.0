@@ -71,7 +71,7 @@ jobs:
             TARGET: /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/jsk
 
   restart-nginx-service:
-    needs: build-jsk
+    needs: deploy-jsk
     runs-on: ubuntu-latest
     steps:
       - name: Restart nginx service

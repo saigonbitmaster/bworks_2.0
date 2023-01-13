@@ -72,7 +72,7 @@ jobs:
             TARGET: /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/emp
 
   restart-nginx-service:
-    needs: build-emp
+    needs: deploy-emp
     runs-on: ubuntu-latest
     steps:
       - name: Restart nginx service

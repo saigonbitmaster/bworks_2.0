@@ -16,9 +16,9 @@
 ## These workflows require following Actions secrets to run (Settings --> Actions --> Secrets):
 - REMOTE_HOST=your AWS VM instance public IP
 - REMOTE_USER=your ec2-user
-- SSH_PRIVATE_KEY= your ec2-user ssh private key
-- REACT_APP_LOGIN_URL
-- REACT_APP_API_URL
+- SSH_PRIVATE_KEY=your ec2-user ssh private key
+- REACT_APP_LOGIN_URL=https://bworks.app/api/auth/login
+- REACT_APP_API_URL=https://bworks.app/api
 - ENV_MONGO_INITDB_ROOT_USERNAME=admin
 - ENV_MONGO_INITDB_ROOT_PASSWORD=***
 - ENV_CONNECTION_STRING=mongodb://admin:***@mongo:27017/bworks2?authSource=admin&readPreference=primary

@@ -71,7 +71,7 @@ jobs:
             TARGET: /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/cms
 
   restart-nginx-service:
-    needs: build-cms
+    needs: deploy-cms
     runs-on: ubuntu-latest
     steps:
       - name: Restart nginx service
