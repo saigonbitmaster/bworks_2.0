@@ -68,7 +68,7 @@ jobs:
             SOURCE: "cms/build"
             REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
             REMOTE_USER: ${{ secrets.REMOTE_USER }}
-            TARGET: /home/${{ secrets.REMOTE_USER }}/chuong/bworks_2.0/cms
+            TARGET: /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/cms
 
   restart-nginx-service:
     needs: build-cms
@@ -81,6 +81,6 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/${{ secrets.REMOTE_USER }}/chuong/bworks_2.0/docker-config
+            cd /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/docker-config
             docker-compose -f compose.yaml restart nginx
       - run: echo "🍏 This job's status is ${{ job.status }}."
