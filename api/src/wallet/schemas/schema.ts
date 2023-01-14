@@ -13,6 +13,12 @@ export class Wallet {
   userId: string;
 
   @Prop()
+  pKeyHash?: string;
+
+  @Prop()
+  pKeyHashBech32?: string;
+
+  @Prop()
   completedAt?: Date;
 
   @Prop()

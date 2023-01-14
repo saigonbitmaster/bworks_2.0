@@ -41,11 +41,15 @@ export class ToolController {
     const response = await this.service.addressUtxo(
       transformQuery.filter.value,
     );
-    const data = response.slice(
-      transformQuery.skip,
-      transformQuery.limit + transformQuery.skip,
-    );
-    return formatRaList(res, { count: response.length, data: data });
+
+    const data = Array.isArray(response)
+      ? response.slice(
+          transformQuery.skip,
+          transformQuery.limit + transformQuery.skip,
+        )
+      : [];
+
+    return formatRaList(res, { count: data.length, data: data });
   }
 
   @Get('commits')
