@@ -1,6 +1,6 @@
 # These are instructions to run/deploy bworks on AWS VM instance or any Linux self hosted (with docker & node 16 installed), you will need:
 
-## Nginx service - proxy for CMS and WEB app
+## Nginx service - proxy for CMS , EMP , JSK app
 ## Certbot service for free Let's encrypt certificate - if you want to use https
 
 Edit nginx/conf/custom.conf to reflect the production domains
