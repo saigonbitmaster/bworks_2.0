@@ -5,6 +5,7 @@ import { CreateWalletDto } from './dto/create.dto';
 import { UpdateWalletDto } from './dto/update.dto';
 import { Wallet, WalletDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { inspectAddress } from 'cardano-addresses';
 
 @Injectable()
 export class WalletService {
@@ -34,10 +35,15 @@ export class WalletService {
 
   async create(createWalletDto: CreateWalletDto): Promise<Wallet> {
     const employeeId = '634160d80609134ad2fa5efa';
+    const address = createWalletDto.address;
+    console.log(address);
 
+    const info = (await inspectAddress(address)) as any;
     return await new this.model({
       ...createWalletDto,
       createdAt: new Date(),
+      pKeyHash: info.spending_key_hash,
+      pKeyHashBech32: info.spending_key_hash_bech32,
       employeeId: employeeId,
     }).save();
   }
