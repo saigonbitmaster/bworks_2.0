@@ -14,6 +14,9 @@ to:    {
   {  'Content-Range': result.count,
     'Access-Control-Expose-Headers': 'Content-Range'};
   data: [{_id: '', field: ''}]
+
+fullText search: filter: { textSearch: 'text' } -> filter: $text: { $search: 'text' }
+
 */
 
 const queryTransform = (query): MongooseQuery => {
@@ -27,6 +30,8 @@ const queryTransform = (query): MongooseQuery => {
   const limit = rangeEnd - rangeStart + 1;
   const skip = rangeStart;
   const filter = query.filter ? JSON.parse(query.filter) : {};
+  //need to add text search for reference collections
+  filter.textSearch ? (filter.$text = { $search: filter.textSearch }) : null;
   return { filter, sort, skip, limit };
 };
 

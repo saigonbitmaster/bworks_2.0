@@ -42,5 +42,6 @@ export class JobBid {
 
 const JobBidSchema = SchemaFactory.createForClass(JobBid);
 JobBidSchema.plugin(uniqueValidator);
+JobBidSchema.index({ name: 'text' });
 
 export { JobBidSchema };

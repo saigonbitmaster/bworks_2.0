@@ -23,5 +23,7 @@ export class User {
   @Prop()
   deletedAt?: Date;
 }
+const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.index({ name: 'text', fullName: 'text' });
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export { UserSchema };

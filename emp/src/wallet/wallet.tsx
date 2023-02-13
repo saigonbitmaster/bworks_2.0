@@ -181,6 +181,9 @@ const Wallet = (props) => {
   const [walletState, setWalletState] = React.useState({
     hasWallet: false,
     address: "",
+    pKeyHash: "",
+    pKeyHashBech32: ""
+
   });
 
   const { data, total, isLoading, error } = useGetList("wallets", {
@@ -199,6 +202,8 @@ const Wallet = (props) => {
       setWalletState({
         hasWallet: true,
         address: wallet.address,
+        pKeyHash: wallet.pKeyHash,
+        pKeyHashBech32: wallet.pKeyHashBech32
       });
   }, [wallet]);
 
@@ -221,7 +226,7 @@ const Wallet = (props) => {
   const handleClick = () => {
     createWallet("wallets", { data: walletData });
   };
-
+console.log(walletState)
   return (
     <Box>
       <Grid
@@ -233,10 +238,11 @@ const Wallet = (props) => {
           {walletState.hasWallet ? (
             <>
               <Typography variant="body1">Your wallet</Typography>
-              <Typography variant="body1">{walletState.address}</Typography>
-              <Typography variant="body2" sx={{ color: "red" }}>
+              <Typography variant="body1">Address: {walletState.address}</Typography>
+              <Typography variant="body1">PublicKey hash Bench32: {walletState.pKeyHashBech32}</Typography>
+             {/*  <Typography variant="body2" sx={{ color: "red" }}>
                 {"$ADA 10000"}
-              </Typography>
+              </Typography> */}
             </>
           ) : !create ? (
             <Typography variant="body1">No registered wallet</Typography>

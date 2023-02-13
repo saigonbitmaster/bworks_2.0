@@ -48,5 +48,6 @@ export class JobTask {
 
 const JobTaskSchema = SchemaFactory.createForClass(JobTask);
 JobTaskSchema.plugin(uniqueValidator);
+JobTaskSchema.index({ name: 'text' });
 
 export { JobTaskSchema };
