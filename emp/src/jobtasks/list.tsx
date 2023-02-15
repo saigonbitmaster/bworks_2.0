@@ -9,6 +9,7 @@ import {
   ReferenceField,
   ReferenceInput,
   SelectInput,
+  TextInput
 } from "react-admin";
 const statusChoices: any[] = [
   { id: "inProgress", name: "In progress" },
@@ -17,11 +18,13 @@ const statusChoices: any[] = [
 ];
 
 const jobFilters = [
+  <TextInput label="Search" source="textSearch" alwaysOn />,
   <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
     <SelectInput optionText="name" fullWidth />
   </ReferenceInput>,
   <SelectInput source="status" choices={statusChoices} alwaysOn/>
 ];
+
 
 const ListScreen = () => {
   return (

@@ -238,8 +238,9 @@ console.log(walletState)
           {walletState.hasWallet ? (
             <>
               <Typography variant="body1">Your wallet</Typography>
-              <Typography variant="body1">Address: {walletState.address}</Typography>
-              <Typography variant="body1">PublicKey hash Bench32: {walletState.pKeyHashBech32}</Typography>
+              <Typography variant="caption" display="block">Address: {walletState.address}</Typography>
+              <Typography variant="caption" display="block">PublicKey hash Bench32: {walletState.pKeyHashBech32}</Typography>
+              <Typography variant="caption" display="block">PublicKey hash: {walletState.pKeyHash}</Typography>
              {/*  <Typography variant="body2" sx={{ color: "red" }}>
                 {"$ADA 10000"}
               </Typography> */}

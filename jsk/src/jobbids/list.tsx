@@ -7,8 +7,16 @@ import {
   DateField,
   NumberField,
   ReferenceField,
+  TextInput
 } from "react-admin";
 import RateField from "../components/RateField";
+
+
+const filters = [
+  <TextInput label="Search" source="textSearch" alwaysOn />
+];
+
+
 const ListScreen = () => {
   return (
     <List
@@ -17,6 +25,7 @@ const ListScreen = () => {
       hasCreate
       resource="jobbids"
       filter={{ queryType: "jobSeeker" }}
+      filters={filters}
     >
       <Datagrid>
         <TextField source="name" />

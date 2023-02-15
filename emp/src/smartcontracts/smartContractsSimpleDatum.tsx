@@ -32,7 +32,7 @@ import {
 } from "@emurgo/cardano-serialization-lib-asmjs";
 
 import Wallet from "../components/wallet";
-import SmartContractJob from "../components/smartContractJob";
+import SmartContractJob from "../components/smartContractJobSimpleDatum";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetList } from "react-admin";
 import {
@@ -42,6 +42,8 @@ import {
 } from "../cardano/walletParams";
 let Buffer = require("buffer/").Buffer;
 
+
+//component for alonzo era with simple data
 const SmartContracts = () => {
   const initState = {
     selectedWallet: null,
