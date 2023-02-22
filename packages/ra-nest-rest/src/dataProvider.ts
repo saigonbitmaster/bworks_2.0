@@ -32,6 +32,23 @@ import { filterTransform } from "./utils";
  * );
  *
  * export default App;
+ * 
+ * 
+ * //custom method for raw post, get
+ * import {useDataProvider} from 'react-admin';
+ * const Comp = () => {
+  const dataProvider = useDataProvider();
+
+ * dataProvider
+    .customMethod("todos", { filter: { title: "title" } }, "GET")
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+
+ * dataProvider
+    .customMethod("todos", { data: { title: "title01" } }, "POST")
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+
  */
 export default (
   apiUrl: string,
@@ -223,5 +240,26 @@ export default (
     ).then((responses) => ({
       data: responses.map(({ json }) => json.id),
     }));
+  },
+  //custom method for raw get, post
+  customMethod: (resource, params, method) => {
+    const options = {
+      headers: new Headers({ Authorization: `Bearer ${token}` }),
+    };
+    if (method === "GET") {
+      const query = {
+        filter: JSON.stringify(filterTransform(params.filter)),
+      };
+      const url = `${apiUrl}/${resource}?${stringify(query)}`;
+      return httpClient(url, options).then(({ json }) => ({
+        data: json,
+      }));
+    } else if (method === "POST") {
+      return httpClient(`${apiUrl}/${resource}`, {
+        method: "POST",
+        body: JSON.stringify(params.data),
+        ...options,
+      }).then(({ json }) => ({ data: params.data }));
+    } else return Promise.reject("Method is not supported");
   },
 });
