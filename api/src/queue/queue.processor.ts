@@ -18,7 +18,9 @@ export class QueueProcessor {
   @OnQueueActive()
   onActive(job: Job) {
     console.log(
-      `Processing job ${job.id} of type ${job.name} with data ${JSON.stringify(job.data)}...`,
+      `Processing job ${job.id} of type ${job.name} with data ${JSON.stringify(
+        job.data,
+      )}...`,
     );
   }
 
@@ -46,7 +48,8 @@ export class QueueProcessor {
 
   @Process('execShell')
   execShell(job: Job) {
-    exec('createWallet.sh', (err, stdout, stderr) => {
+    const arg = '-1';
+    exec(`ls ${arg}`, (err, stdout, stderr) => {
       if (err) {
         console.error(err, job);
       } else {

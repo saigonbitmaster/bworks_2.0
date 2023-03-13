@@ -5,6 +5,8 @@
   "dependencies": {
     "@apollo/client": "^3.3.19",
     "@emurgo/cardano-serialization-lib-asmjs": "^11.1.0",
+    "@meshsdk/core": "^1.5.1",
+    "@meshsdk/react": "^1.1.6",
     "@mui/icons-material": "^5.0.1",
     "@mui/lab": "^5.0.0-alpha.104",
     "@mui/material": "^5.0.2",
@@ -17,6 +19,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/recharts": "^1.8.10",
+    "buffer": "^6.0.3",
     "cardano-addresses": "^3.12.0",
     "clsx": "^1.1.1",
     "data-generator-retail": "^4.0.0",
@@ -41,11 +44,12 @@
     "react-router-dom": "^6.1.0",
     "react-scripts": "^5.0.0",
     "recharts": "^2.1.5",
+    "stream": "^0.0.2",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "PORT=3002 react-scripts start",
+    "start": "PORT=3002 craco start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -69,6 +73,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@types/fetch-mock": "^7.3.2",
     "@types/jest": "^26.0.19",
     "@types/node": "^12.12.14",

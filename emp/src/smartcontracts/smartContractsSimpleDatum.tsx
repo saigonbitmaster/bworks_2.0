@@ -223,6 +223,7 @@ const SmartContracts = () => {
     txBuilder.add_output(txOutput);
 
     const txUnspentOutputs = await getTxUnspentOutputs(Utxos);
+    //The options are 0 for LargestFirst, 1 for RandomImprove, 2 for LargestFirstMultiAsset and 3 for RandomImproveMultiAsset
     txBuilder.add_inputs_from(txUnspentOutputs, 2);
     txBuilder.add_change_if_needed(shelleyChangeAddress);
     const txBody = txBuilder.build();
