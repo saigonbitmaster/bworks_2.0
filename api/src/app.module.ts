@@ -13,6 +13,7 @@ import { ContractModule } from './contract/module';
 import { QueueModule } from './queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 import { JobTaskModule } from './jobtask/module';
+import { AdminWalletModule } from './adminwallet/module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { JobTaskModule } from './jobtask/module';
     QueueModule,
     ContractModule,
     JobTaskModule,
+    AdminWalletModule,
   ],
 })
 export class AppModule {}

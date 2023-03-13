@@ -38,9 +38,11 @@ export default function SmartContract(props) {
   const handleChangeLockAda = props.handleChangeLockAda || null;
   const handleChangRedeemAda = props.handleChangRedeemAda || null;
   const redeemAdaFromPlutus = props.redeemAdaFromPlutus || null;
-  const lockAdaValues = props.lockAdaValues || {};
+  const amountToLock = props.amountToLock || {};
   const datum = props.datum || {};
-
+  const handleChangeUnlockPartner = props.handleChangeUnlockPartner || null;
+  const unlockPartner = props.unlockPartner || "bworks";
+  const handleChangePublicKeyHash = props.handleChangePublicKeyHash || null;
   if (!contracts || contracts.length === 0) {
     return (
       <Typography variant="subtitle1" gutterBottom>
@@ -72,7 +74,6 @@ export default function SmartContract(props) {
             sx={{
               paddingTop: 0,
               paddingLeft: 0,
-
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -140,21 +141,39 @@ export default function SmartContract(props) {
               label="Value (ADA)"
               variant="standard"
               type="number"
-              value={lockAdaValues.amountToLock}
-              onChange={handleChangeLockAda("amountToLock")}
+              value={amountToLock}
+              onChange={handleChangeLockAda}
             />
+            <FormControl variant="standard" sx={{ minWidth: 120 }}>
+              <InputLabel id="unlockPartner">Select unlock partner</InputLabel>
+              <Select
+                labelId="unlockPartner"
+                id="unlockPartner"
+                value={unlockPartner}
+                onChange={handleChangeUnlockPartner}
+                label="Select unlock partner"
+                sx={{ width: 240 }}
+              >
+                <MenuItem value={"bworks"}>By bWorks</MenuItem>
+                <MenuItem value={"employer"}>By employer</MenuItem>
+                <MenuItem value={"other"}>By other</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               sx={{ width: 500 }}
               id="standard-basic"
               label="Datum PublicKeyHash"
               variant="standard"
               value={datum.publicKeyHash}
-              onChange={handleChangeLockAda("datumToLock")}
+              onChange={handleChangePublicKeyHash}
+              disabled={
+                unlockPartner === "bworks" || unlockPartner === "employer"
+              }
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 label="Datum Deadline"
-                value={props.dateValue}
+                value={datum.deadline}
                 onChange={props.handleChangeDate}
                 renderInput={(params) => (
                   <TextField {...params} sx={{ width: 500, p: 0 }} />
