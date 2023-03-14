@@ -24,7 +24,7 @@ const SmartContracts = () => {
     contracts: [],
   };
   const [contract, setContract] = React.useState(initContract);
-  const [unlockPartner, setUnlockPartner] = React.useState("bworks");
+  const [unlockPartner, setUnlockPartner] = React.useState("");
 
   const [notification, setNotification] = React.useState({
     error: false,
@@ -62,7 +62,6 @@ const SmartContracts = () => {
 
   //admin pkh
   const [adminPKH, setAdminPKH] = React.useState("");
-
   const adminWallets = useGetList("adminwallets", {
     pagination: { page: 1, perPage: 10 },
     sort: { field: "createdDate", order: "DESC" },
@@ -76,6 +75,7 @@ const SmartContracts = () => {
     ) {
       const pKeyHash = adminWallets.data[0].pKeyHash;
       setAdminPKH(pKeyHash);
+      setDatum({ ...datum, publicKeyHash: pKeyHash });
     }
   }, [adminWallets.data]);
 
@@ -105,7 +105,6 @@ const SmartContracts = () => {
     setAmountToLock(jobBidValue);
   }, [jobBids]);
 
-  //datumToLock
   React.useEffect(() => {
     if (!contracts.isLoading && !contracts.error) {
       const selected = contracts.data[0].id;
@@ -144,10 +143,7 @@ const SmartContracts = () => {
     setDatum({ ...datum, publicKeyHash: publicKeyHash });
   };
 
-  //lockAda data
-
-  //datum
-
+  //lock datum
   const currentDate = dayjs();
   const [datum, setDatum] = React.useState({
     publicKeyHash: "",
@@ -158,12 +154,11 @@ const SmartContracts = () => {
     setAmountToLock(parseInt(event.target.value));
   };
 
-
-  const handleChangePublicKeyHash = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDatum({...datum, publicKeyHash: event.target.value});
+  const handleChangePublicKeyHash = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDatum({ ...datum, publicKeyHash: event.target.value });
   };
-
-
 
   const handleChangeDate = (newValue: any | null) => {
     //validate datum: deadline must be minimum 1 week
@@ -181,19 +176,18 @@ const SmartContracts = () => {
     (prop) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setRedeemAdaValues({ ...redeemAdaValues, [prop]: event.target.value });
     };
-console.log(datum.deadline.unix())
+
   const sendAdaToPlutus = async () => {
     //public keyhash must be a valid bworks wallet address if unlock transaction signed by bworks.
-
+    const scriptAddr = contract.contracts.find(
+      (item) => item.id === contract.selected
+    ).address;
+    const d: Data = {
+      alternative: 0,
+      fields: [datum.publicKeyHash, datum.deadline.unix()],
+    };
+    const amountToLockLoveLace = (amountToLock * 1000000).toString();
     if (wallet) {
-      const d: Data = {
-        alternative: 0,
-        fields: [
-          datum.publicKeyHash,
-          datum.deadline.unix(),
-        ],
-      };
-
       const tx = new Transaction({ initiator: wallet });
 
       tx.sendLovelace(
@@ -203,12 +197,13 @@ console.log(datum.deadline.unix())
             value: d,
           },
         },
-        (amountToLock * 1000000).toString()
+        amountToLockLoveLace
       );
       const unsignedTx = await tx.build();
       const signedTx = await wallet.signTx(unsignedTx);
       const txHash = await wallet.submitTx(signedTx);
-      console.log("txHash", txHash)
+
+      console.log("txHash", txHash);
     }
   };
   return (

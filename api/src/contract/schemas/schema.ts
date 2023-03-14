@@ -15,7 +15,10 @@ export class Contract {
   @Prop({ required: true, unique: true })
   cborhex: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop()
+  version: string;
+
+  @Prop()
   description: string;
 
   @Prop()

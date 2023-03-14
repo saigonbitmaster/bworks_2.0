@@ -28,6 +28,14 @@ export class QueueController {
     });
   }
 
+  @Post('unlock')
+  async unlock(@Body() postBody: any) {
+    await this.QueueQueue.add('unlock', {
+      receiveWalletAddress: postBody.receiveWalletAddress,
+      scriptTxHash: postBody.scriptTxHash,
+    });
+  }
+
   @Post('scamfilter')
   async scamFilter(@Body() postBody: any) {
     await this.QueueQueue.add('scamFilter', {

@@ -58,4 +58,25 @@ export class QueueProcessor {
       }
     });
   }
+
+  @Process('unlock')
+  unlock(job: Job) {
+    const scriptName = 'bworksV2';
+    const redeemerJsonFile = 'secret.json';
+    const payCollatelWalletName = 'wallet01';
+    const receiveWalletAddress = job.data.receiveWalletAddress;
+    const scriptTxHash = job.data.scriptTxHash;
+
+    exec(
+      `zsh ./src/flatworks/shellscripts/getFromScriptV2AutoSelectUtxo.sh ${scriptName} ${redeemerJsonFile} ${payCollatelWalletName} ${receiveWalletAddress} ${scriptTxHash} `,
+      (err, stdout, stderr) => {
+        if (err) {
+          console.error('error:', err, job);
+        } else {
+          console.log(`stdout: ${stdout}`);
+          console.log(`stderr: ${stderr}`);
+        }
+      },
+    );
+  }
 }

@@ -3,4 +3,5 @@ export class BaseContractDto {
   address: string;
   cborhex: string;
   description: string;
+  version: string;
 }
