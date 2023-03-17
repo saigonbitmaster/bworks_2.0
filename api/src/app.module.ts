@@ -10,6 +10,7 @@ import { JobBidModule } from './jobbid/module';
 import { ToolModule } from './tool/module';
 import { WalletModule } from './wallet/module';
 import { ContractModule } from './contract/module';
+import { PlutusTxModule } from './plutustx/module';
 import { QueueModule } from './queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 import { JobTaskModule } from './jobtask/module';
@@ -43,6 +44,7 @@ import { AdminWalletModule } from './adminwallet/module';
     WalletModule,
     QueueModule,
     ContractModule,
+    PlutusTxModule,
     JobTaskModule,
     AdminWalletModule,
   ],

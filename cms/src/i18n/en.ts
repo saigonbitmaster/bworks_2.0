@@ -35,7 +35,7 @@ const customEnglishMessages: TranslationMessages = {
     menu: {
       manageJobs: "Manage jobs",
       reports: "Reports",
-      manageFund: "Manage fund",
+      manageFund: "Cardano",
       tools: "Tools",
     },
   },
@@ -190,7 +190,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     wallets: {
-      name: "Your wallet |||| Your wallets",
+      name: "Admin wallet |||| Admin wallets",
       fields: {
         commands: "Orders",
       },
@@ -207,8 +207,8 @@ const customEnglishMessages: TranslationMessages = {
           "The password confirmation is not the same as the password.",
       },
     },
-    withdraws: {
-      name: "Withdraw |||| Withdraws",
+    plutusTxs: {
+      name: "Plutus TXs |||| Plutus TXs",
       fields: {
         commands: "Orders",
       },

@@ -109,9 +109,9 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/withdraws"
+          to="/plutustxs"
           state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.withdraws.name`, {
+          primaryText={translate(`resources.plutusTxs.name`, {
             smart_count: 2,
           })}
           leftIcon={<FormatListBulletedIcon />}
