@@ -1,3 +1,4 @@
+import { UserService } from './../user/user.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,6 +12,7 @@ import { inspectAddress } from 'cardano-addresses';
 export class WalletService {
   constructor(
     @InjectModel(Wallet.name) private readonly model: Model<WalletDocument>,
+    private readonly userService: UserService,
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
@@ -34,17 +36,17 @@ export class WalletService {
   }
 
   async create(createWalletDto: CreateWalletDto): Promise<Wallet> {
-    const employeeId = '634160d80609134ad2fa5efa';
     const address = createWalletDto.address;
-    console.log(address);
-
+    const user = (await this.userService.findOne(
+      createWalletDto.username,
+    )) as any;
     const info = (await inspectAddress(address)) as any;
     return await new this.model({
       ...createWalletDto,
       createdAt: new Date(),
       pKeyHash: info.spending_key_hash,
       pKeyHashBech32: info.spending_key_hash_bech32,
-      employeeId: employeeId,
+      userId: user._id,
     }).save();
   }
 

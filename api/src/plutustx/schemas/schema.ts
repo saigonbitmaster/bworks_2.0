@@ -13,9 +13,6 @@ export class PlutusTx {
   jobBidId: string;
 
   @Prop({ required: true })
-  jobSeekerId: string;
-
-  @Prop({ required: true })
   assetName: string;
 
   @Prop({ required: true })
@@ -23,6 +20,9 @@ export class PlutusTx {
 
   @Prop()
   lockedTxHash: string;
+
+  @Prop()
+  isUnlocked: boolean;
 
   @Prop()
   unlockedTxHash: string;

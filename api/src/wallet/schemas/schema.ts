@@ -12,6 +12,9 @@ export class Wallet {
   @Prop({ required: true, unique: true })
   userId: string;
 
+  @Prop({ required: true, unique: true })
+  username: string;
+
   @Prop()
   pKeyHash?: string;
 

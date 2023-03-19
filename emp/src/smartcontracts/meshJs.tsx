@@ -186,6 +186,7 @@ const SmartContracts = () => {
       alternative: 0,
       fields: [datum.publicKeyHash, datum.deadline.unix()],
     };
+    console.log(d)
     const amountToLockLoveLace = (amountToLock * 1000000).toString();
     if (wallet) {
       const tx = new Transaction({ initiator: wallet });

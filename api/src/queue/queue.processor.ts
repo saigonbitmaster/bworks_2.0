@@ -10,10 +10,16 @@ import { exec } from 'child_process';
 import { CreateWallet } from '../flatworks/utils/cardano';
 import { AccountLanguagesForUser } from '../flatworks/utils/github';
 import { ScamFilter } from '../flatworks/utils/filter.scammer';
+import { JobBidService } from '../jobbid/service';
+import { WalletService } from '../wallet/service';
 
 @Processor('queue')
 export class QueueProcessor {
   private readonly logger = new Logger(QueueProcessor.name);
+  constructor(
+    private readonly jobBidService: JobBidService,
+    private readonly walletService: WalletService,
+  ) {}
 
   @OnQueueActive()
   onActive(job: Job) {
@@ -60,21 +66,27 @@ export class QueueProcessor {
   }
 
   @Process('unlock')
-  unlock(job: Job) {
+  async unlock(job: Job) {
     const scriptName = 'bworksV2';
     const redeemerJsonFile = 'secret.json';
     const payCollatelWalletName = 'wallet01';
-    const receiveWalletAddress = job.data.receiveWalletAddress;
+    const jobBid = await this.jobBidService.findOne(job.data.jobBidId);
+    const jobSeekerWallet = await this.walletService.findByUser(
+      jobBid.jobSeekerId,
+    );
+    const receiveWalletAddress = jobSeekerWallet.address;
     const scriptTxHash = job.data.scriptTxHash;
-
+    const unlockScript = process.env.UNLOCK_SHELL_SCRIPT;
     exec(
-      `zsh ./src/flatworks/shellscripts/getFromScriptV2AutoSelectUtxo.sh ${scriptName} ${redeemerJsonFile} ${payCollatelWalletName} ${receiveWalletAddress} ${scriptTxHash} `,
+      `zsh ./src/flatworks/shellscripts/${unlockScript} ${scriptName} ${redeemerJsonFile} ${payCollatelWalletName} ${receiveWalletAddress} ${scriptTxHash} `,
       (err, stdout, stderr) => {
         if (err) {
           console.error('error:', err, job);
+        }
+        if (stderr) {
+          console.log(`stderr: ${stderr}`);
         } else {
           console.log(`stdout: ${stdout}`);
-          console.log(`stderr: ${stderr}`);
         }
       },
     );

@@ -38,8 +38,8 @@ export class JobBidController {
           'user.userId',
           null,
         ))
-      : (mongooseQuery.filter._id = null);
-
+      : //  : (mongooseQuery.filter._id = null);
+        null;
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);
   }

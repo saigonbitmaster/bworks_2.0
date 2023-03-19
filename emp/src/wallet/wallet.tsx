@@ -176,7 +176,7 @@ const Wallet = (props) => {
     data: wallet,
     isLoading: userLoading,
     error: userError,
-  } = useGetOne("wallets/user", { id: "userId" }, { retry: 1 });
+  } = useGetOne("wallets/user", { id: "username" }, { retry: 1 });
  */
   const [walletState, setWalletState] = React.useState({
     hasWallet: false,
@@ -188,7 +188,7 @@ const Wallet = (props) => {
 
   const { data, total, isLoading, error } = useGetList("wallets", {
     pagination: { page: 1, perPage: 10 },
-    filter: { userId: localStorage.getItem("username") },
+    filter: { username: localStorage.getItem("username") },
   });
   let wallet;
   if (!isLoading && !error) {
@@ -214,11 +214,11 @@ const Wallet = (props) => {
     queryType: "address",
     value: walletState.address,
   };
-  //change to userId when update ra-nest-rest to save userId to localStorage
+  //change to username when update ra-nest-rest to save username to localStorage
 
   let walletData = {
     address: state.usedAddress,
-    userId: localStorage.getItem("username"),
+    username: localStorage.getItem("username"),
   };
   const [createWallet, { isLoading: createIsLoading, error: createError }] =
     useCreate();

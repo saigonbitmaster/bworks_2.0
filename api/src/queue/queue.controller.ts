@@ -31,7 +31,7 @@ export class QueueController {
   @Post('unlock')
   async unlock(@Body() postBody: any) {
     await this.QueueQueue.add('unlock', {
-      receiveWalletAddress: postBody.receiveWalletAddress,
+      jobBidId: postBody.jobBidId,
       scriptTxHash: postBody.scriptTxHash,
     });
   }

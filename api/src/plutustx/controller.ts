@@ -14,7 +14,7 @@ import { UpdatePlutusTxDto } from './dto/update.dto';
 import { PlutusTxService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
-@Controller('plutustuxs')
+@Controller('plutustxs')
 export class PlutusTxController {
   constructor(private readonly service: PlutusTxService) {}
 

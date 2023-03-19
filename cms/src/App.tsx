@@ -13,8 +13,10 @@ import postjobs from "./postjobs";
 import jobbids from "./jobbids";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
-import queues from './queues';
-import contracts from './contracts'
+import queues from "./queues";
+import contracts from "./contracts";
+import plutustxs from "./plutustx";
+
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -49,6 +51,8 @@ const App = () => {
       </CustomRoutes>
       <Resource name="postjobs" {...postjobs} />
       <Resource name="contracts" {...contracts} />
+      <Resource name="plutustxs" {...plutustxs} />
+
       <Resource name="jobbids" {...jobbids} />
       <Resource name="queues" {...queues} />
     </Admin>

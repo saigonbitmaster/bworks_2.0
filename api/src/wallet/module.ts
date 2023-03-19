@@ -1,3 +1,4 @@
+import { UserModule } from './../user/user.module';
 import { Module } from '@nestjs/common';
 import { WalletService } from './service';
 import { WalletController } from './controller';
@@ -10,6 +11,8 @@ import { JwtService } from '@nestjs/jwt';
   controllers: [WalletController],
   imports: [
     MongooseModule.forFeature([{ name: Wallet.name, schema: WalletSchema }]),
+    UserModule,
   ],
+  exports: [WalletService],
 })
 export class WalletModule {}
