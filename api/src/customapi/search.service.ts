@@ -1,0 +1,112 @@
+import { PostJobService } from '../postjob/service';
+import { JobBidService } from '../jobbid/service';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+
+@Injectable()
+export class SearchService {
+  constructor(
+    private readonly postJobService: PostJobService,
+    private readonly jobBidService: JobBidService,
+  ) {}
+
+  async findAll(filter): Promise<any> {
+    const config = {
+      baseUrl: 'http://localhost:3001/#',
+      priority: [
+        {
+          priority: 1,
+          collection: 'postjobs',
+          serviceName: 'postJobService',
+          totalRecords: 0,
+          limit: 0,
+          skip: 0,
+        },
+        {
+          priority: 2,
+          collection: 'jobbids',
+          serviceName: 'jobBidService',
+          totalRecords: 0,
+          limit: 0,
+          skip: 0,
+        },
+      ],
+    };
+
+    const text = filter.text;
+    let _limit = filter.limit;
+    let _skip = filter.skip;
+    const _searchCols = await Promise.all(
+      config.priority.map(async (item, index) => {
+        const _ = await this[item.serviceName].findAll({
+          $text: {
+            $search: text,
+          },
+        });
+        const totalRecords = _.count;
+        return { ...item, totalRecords: totalRecords };
+      }),
+    );
+
+    const searchCols = _searchCols.map((item, index) => {
+      _limit == 0
+        ? null
+        : item.totalRecords - _skip > _limit
+        ? ((item.limit = _limit), (_limit = 0), (item.skip = _skip))
+        : item.totalRecords < _skip
+        ? ((item.skip = item.totalRecords),
+          (item.limit = 0),
+          (_limit = _limit),
+          (_skip = _skip - item.totalRecords))
+        : ((item.skip = _skip),
+          (item.limit = item.totalRecords - _skip),
+          (_limit = _limit - item.totalRecords - _skip),
+          (_skip = 0));
+
+      return item;
+    });
+
+    const results = await Promise.all(
+      searchCols.map(async (item, index) => {
+        let result;
+        try {
+          result = await this[item.serviceName].findAll(
+            {
+              $text: {
+                $search: text,
+              },
+            },
+            {},
+            item.skip,
+            item.limit,
+          );
+        } catch (error) {
+          console.log(error);
+        }
+        return {
+          count: result.count,
+          data: result.data.map((record) => ({
+            ...record._doc,
+            collectionName: item.collection,
+          })),
+        };
+      }),
+    );
+    let data = [];
+    let count = 0;
+
+    results.forEach((item) => {
+      const _data = item.data.map((item) => ({
+        text: item.name || item.username || item.title,
+        link: `${config.baseUrl}/${item.collectionName}/${item._id}/show`,
+        _id: item._id,
+      }));
+      data = [...data, ..._data];
+      count = (count + item.count) as number;
+    });
+
+    return {
+      data,
+      count,
+    };
+  }
+}

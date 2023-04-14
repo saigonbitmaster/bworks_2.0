@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PublicController } from './controller';
+import { PublicController } from './public.controller';
 
 describe('PublicController', () => {
   let controller: PublicController;

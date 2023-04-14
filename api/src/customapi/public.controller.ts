@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreateTokenReceiverDto } from './dto/create.token-receiver.dto';
 import { UpdateTokenReceiverDto } from './dto/update.token-receiver.dto';
-import { PublicService } from './service';
+import { PublicService } from './public.service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
 import { CreateCampaignDto } from './dto/create.campaign.dto';

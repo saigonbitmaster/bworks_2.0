@@ -15,7 +15,7 @@ import { QueueModule } from './queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 import { JobTaskModule } from './jobtask/module';
 import { AdminWalletModule } from './adminwallet/module';
-import { PublicModule } from './public/module';
+import { PublicModule } from './customapi/module';
 
 @Module({
   imports: [

@@ -13,5 +13,6 @@ import { User, UserSchema } from '../user/schemas/user.schema';
     MongooseModule.forFeature([{ name: PostJob.name, schema: PostJobSchema }]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
+  exports: [PostJobService],
 })
 export class PostJobModule {}
