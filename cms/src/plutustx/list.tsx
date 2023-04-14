@@ -33,7 +33,7 @@ const ListScreen = () => {
     };
 
     return (
-      <Button variant="text" disabled={false} onClick={handleClick}>
+      <Button variant="text" disabled={record.isUnlocked} onClick={handleClick}>
         UNLOCK
       </Button>
     );
@@ -52,31 +52,14 @@ const ListScreen = () => {
         <ReferenceField source="jobBidId" reference="jobbids">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceOneField
-          label="Employer"
-          reference="jobbids"
-          target="jobBidId"
-        >
-          <ReferenceField source="employerId" reference="users">
-            <TextField source="fullName" />
-          </ReferenceField>
-        </ReferenceOneField>
-        <ReferenceOneField
-          label="Job seeker"
-          reference="jobbids"
-          target="jobBidId"
-        >
-          <ReferenceField source="jobSeekerId" reference="users">
-            <TextField source="fullName" />
-          </ReferenceField>
-        </ReferenceOneField>
+
         <TextField source="lockedTxHash" />
-        <TextField source="unlockedTxHash" />
         <DateField source="lockDate" showTime />
+        <TextField source="unlockedTxHash" />
+
         <DateField source="unlockDate" showTime />
         <UnlockButton />
         <EditButton label="edit tx note" />
-      
       </Datagrid>
     </List>
   );

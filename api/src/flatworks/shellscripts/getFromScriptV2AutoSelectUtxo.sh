@@ -61,3 +61,9 @@ $CARDANO_CLI transaction sign \
 --out-file ${BASEDIR}/tx.signed \
 
 $CARDANO_CLI transaction submit --tx-file ${BASEDIR}/tx.signed --testnet-magic ${TESTNET_MAGIC_NUM}
+
+
+#print txHash
+TX_HASH=$($CARDANO_CLI transaction txid --tx-file ${BASEDIR}/tx.signed) 
+DATE=$(date)
+echo "Summited TxHash:" ${TX_HASH} "Date:" ${DATE}

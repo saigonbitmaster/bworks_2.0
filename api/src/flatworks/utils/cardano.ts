@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs/operators';
 import { AddressUtxoType } from '../types/types';
 import { CheckWalletType } from '../types/types';
+import { inspectAddress } from 'cardano-addresses';
 
 const AddressUtxo = (
   address: string,
@@ -61,4 +62,17 @@ const CheckWallet = (
 };
 
 const CreateWallet = (userId: string) => {};
-export { AddressUtxo, TxsUtxo, CheckWallet, CreateWallet };
+
+//validate if a string is a cardano address
+const validateAddress = async (address: string) => {
+  let isAddress = false;
+  try {
+    isAddress = !!(await inspectAddress(address));
+  } catch (err) {
+    console.log('validate address: not validate Cardano address');
+  }
+
+  return isAddress;
+};
+
+export { AddressUtxo, TxsUtxo, CheckWallet, CreateWallet, validateAddress };

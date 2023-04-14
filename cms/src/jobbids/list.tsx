@@ -8,23 +8,21 @@ import {
   NumberField,
   ReferenceField,
 } from "react-admin";
-import RateField from '../components/RateField'
+import RateField from "../components/RateField";
 const ListScreen = () => {
   return (
     <List
       perPage={25}
       sort={{ field: "date", order: "desc" }}
-      hasCreate
       resource="jobbids"
-      filter={{ queryType: "employer" }}
+      filter={{}}
     >
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
 
         <ReferenceField reference="postJobs" source="jobId">
           <TextField source="name" />
         </ReferenceField>
-
 
         <ReferenceField reference="users" source="jobSeekerId">
           <TextField source="fullName" />

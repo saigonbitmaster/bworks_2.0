@@ -100,7 +100,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/wallets"
+          to="/adminWallets"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.wallets.name`, {
             smart_count: 2,

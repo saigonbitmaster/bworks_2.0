@@ -184,7 +184,7 @@ const SmartContracts = () => {
     ).address;
     const d: Data = {
       alternative: 0,
-      fields: [datum.publicKeyHash, datum.deadline.unix()],
+      fields: [datum.publicKeyHash, 10],
     };
     console.log(d)
     const amountToLockLoveLace = (amountToLock * 1000000).toString();
@@ -204,7 +204,7 @@ const SmartContracts = () => {
       const signedTx = await wallet.signTx(unsignedTx);
       const txHash = await wallet.submitTx(signedTx);
 
-      console.log("txHash", txHash);
+      console.log("txHash", txHash, new Date());
     }
   };
   return (

@@ -16,6 +16,7 @@ import FetchCardano from "./tools/fetchCardano";
 import queues from "./queues";
 import contracts from "./contracts";
 import plutustxs from "./plutustx";
+import adminWallets from './wallet/'
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -52,9 +53,9 @@ const App = () => {
       <Resource name="postjobs" {...postjobs} />
       <Resource name="contracts" {...contracts} />
       <Resource name="plutustxs" {...plutustxs} />
-
       <Resource name="jobbids" {...jobbids} />
       <Resource name="queues" {...queues} />
+      <Resource name="adminWallets" {...adminWallets} />
     </Admin>
   );
 };

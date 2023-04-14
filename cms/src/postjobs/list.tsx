@@ -15,7 +15,7 @@ import LinkBidField from "../components/linkBidsField";
 
 const ListScreen = () => {
   return (
-    <List perPage={25} sort={{ field: "date", order: "desc" }} hasCreate >
+    <List perPage={25} sort={{ field: "date", order: "desc" }}  >
       <Datagrid>
         <TextField source="name" />
         <LinkBidField />

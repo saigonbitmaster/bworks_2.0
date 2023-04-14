@@ -15,11 +15,8 @@ import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
 import Wallet from "./wallet/wallet";
 import jobtasks from "./jobtasks";
-
-import ImportExcels from "./tools/importExcels";
 import SmartContracts from "./smartcontracts/meshJs";
 import { MeshProvider } from "@meshsdk/react";
-
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -38,29 +35,29 @@ const _authProvider = authProvider(loginUrl);
 const App = () => {
   return (
     <MeshProvider>
-    <Admin
-      title="bWorks"
-      dataProvider={restProvider}
-      authProvider={_authProvider}
-      dashboard={Dashboard}
-      loginPage={Login}
-      layout={Layout}
-      i18nProvider={i18nProvider}
-      disableTelemetry
-      theme={lightTheme}
-    >
-      <CustomRoutes>
-        <Route path="/configuration" element={<Configuration />} />
-        <Route path="/fetchCardano" element={<FetchCardano />} />
-        <Route path="/fetchGithub" element={<FetchGithub />} />
-        <Route path="/wallets" element={<Wallet />} />
-        <Route path="/smartContract" element={<SmartContracts />} />
-      </CustomRoutes>
-      <Resource name="postjobs" {...postjobs} />
-      <Resource name="jobbids" {...jobbids} />
-      <Resource name="jobtasks" {...jobtasks} />
-
-    </Admin>
+      <Admin
+        title="bWorks"
+        dataProvider={restProvider}
+        authProvider={_authProvider}
+        dashboard={Dashboard}
+        loginPage={Login}
+        layout={Layout}
+        i18nProvider={i18nProvider}
+        disableTelemetry
+        theme={lightTheme}
+      >
+        <CustomRoutes>
+          <Route path="/configuration" element={<Configuration />} />
+          <Route path="/fetchCardano" element={<FetchCardano />} />
+          <Route path="/fetchGithub" element={<FetchGithub />} />
+          <Route path="/wallets" element={<Wallet />} />
+          <Route path="/smartContract" element={<SmartContracts />} />
+        </CustomRoutes>
+        <Resource name="postjobs" {...postjobs} />
+        <Resource name="jobbids" {...jobbids} />
+        <Resource name="jobtasks" {...jobtasks} />
+     
+      </Admin>
     </MeshProvider>
   );
 };
