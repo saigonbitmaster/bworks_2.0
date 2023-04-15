@@ -8,18 +8,31 @@ import {
   Put,
   Response,
   Query,
+  Request,
 } from '@nestjs/common';
 import { SearchService } from './search.service';
-import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
+import { queryTransform } from '../flatworks/utils/getlist';
 
 @Controller('customapis')
 export class SearchController {
   constructor(private readonly service: SearchService) {}
 
-  @Get('searchall')
-  async indexTokenReceiver(@Response() res: any, @Query() query) {
+  @Get('searchemp')
+  async indexEmp(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
-    const result = await this.service.findAll(mongooseQuery);
-    return formatRaList(res, result);
+    const result: any = await this.service.findAllEmp(mongooseQuery.filter);
+    return res.json(result);
+  }
+
+  async indexJsk(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result: any = await this.service.findAllJsk(mongooseQuery.filter);
+    return res.json(result);
+  }
+
+  async indexCms(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result: any = await this.service.findAllCms(mongooseQuery.filter);
+    return res.json(result);
   }
 }

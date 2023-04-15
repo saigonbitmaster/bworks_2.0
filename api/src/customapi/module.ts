@@ -4,6 +4,8 @@ import { SearchService } from './search.service';
 import { SearchController } from './search.controller';
 import { PublicController } from './public.controller';
 import { MongooseModule } from '@nestjs/mongoose';
+import { SkillModule } from '../skill/module';
+
 import {
   TokenReceiver,
   TokenReceiverSchema,
@@ -11,6 +13,7 @@ import {
 import { Campaign, CampaignSchema } from './schemas/campaign.schema';
 import { PostJobModule } from '../postjob/module';
 import { JobBidModule } from '../jobbid/module';
+
 //apis for homepage & other public requests
 @Module({
   providers: [PublicService, SearchService],
@@ -22,6 +25,7 @@ import { JobBidModule } from '../jobbid/module';
     ]),
     JobBidModule,
     PostJobModule,
+    SkillModule,
   ],
   exports: [PublicService, SearchService],
 })

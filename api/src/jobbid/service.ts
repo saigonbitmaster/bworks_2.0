@@ -20,6 +20,13 @@ export class JobBidService {
 
   async findAll(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();
+    //fix return all when limit = 0
+    if (query.limit <= 0) {
+      return {
+        data: [],
+        count: count,
+      };
+    }
     const data = await this.model
       .find(query.filter)
       .sort(query.sort)
