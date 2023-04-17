@@ -17,6 +17,7 @@ import { PostJobService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import * as lodash from 'lodash';
+
 @UseGuards(JwtAuthGuard)
 @Controller('postjobs')
 export class PostJobController {

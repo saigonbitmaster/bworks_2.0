@@ -52,11 +52,11 @@ import { filterTransform } from "./utils";
  */
 export default (
   apiUrl: string,
-  token: string,
   httpClient = fetchUtils.fetchJson,
   countHeader: string = "Content-Range"
 ): DataProvider => ({
   getList: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     const { page, perPage } = params.pagination;
     let { field, order } = params.sort;
     field = field == "id" ? "_id" : field;
@@ -97,6 +97,7 @@ export default (
   },
 
   getOne: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -110,6 +111,7 @@ export default (
   },
 
   getMany: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     const query = {
       filter: JSON.stringify({ _id: params.ids }),
     };
@@ -125,6 +127,7 @@ export default (
   },
 
   getManyReference: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
 
@@ -172,6 +175,7 @@ export default (
   },
 
   update: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -186,6 +190,7 @@ export default (
 
   // simple-rest doesn't handle provide an updateMany route, so we fallback to calling update n times instead
   updateMany: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -203,6 +208,7 @@ export default (
   },
 
   create: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -216,6 +222,7 @@ export default (
   },
 
   delete: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "DELETE",
       headers: new Headers({
@@ -227,6 +234,7 @@ export default (
 
   // simple-rest doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
   deleteMany: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
     return Promise.all(
       params.ids.map((id) =>
         httpClient(`${apiUrl}/${resource}/${id}`, {
@@ -243,6 +251,7 @@ export default (
   },
   //custom method for raw get, post
   customMethod: (resource, params, method) => {
+    const token = localStorage.getItem("accessToken");
     const options = {
       headers: new Headers({ Authorization: `Bearer ${token}` }),
     };

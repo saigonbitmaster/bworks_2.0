@@ -16,6 +16,7 @@ import { BullModule } from '@nestjs/bull';
 import { JobTaskModule } from './jobtask/module';
 import { AdminWalletModule } from './adminwallet/module';
 import { PublicModule } from './customapi/module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { PublicModule } from './customapi/module';
     JobTaskModule,
     AdminWalletModule,
     PublicModule,
+    MailModule,
   ],
 })
 export class AppModule {}

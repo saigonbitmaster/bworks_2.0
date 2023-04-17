@@ -21,8 +21,7 @@ import { MeshProvider } from "@meshsdk/react";
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const token = localStorage.getItem("access_token");
-const restProvider = dataProvider(apiUrl, token);
+const restProvider = dataProvider(apiUrl);
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
     return import("./i18n/fr").then((messages) => messages.default);

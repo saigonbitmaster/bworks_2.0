@@ -1,5 +1,9 @@
 export class BaseUserDto {
   username: string;
-  password: string;
+  userId: string;
+  email: string;
   fullName: string;
+  refreshToken: string;
+  role: any[];
+  password: string;
 }
