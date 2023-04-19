@@ -2,6 +2,11 @@ import { SkillService } from '../skill/service';
 import { PostJobService } from '../postjob/service';
 import { JobBidService } from '../jobbid/service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  empSearchConfig,
+  jskSearchConfig,
+  cmsSearchConfig,
+} from '../flatworks/config/search';
 
 @Injectable()
 export class SearchService {
@@ -12,35 +17,7 @@ export class SearchService {
   ) {}
 
   async findAllEmp(filter): Promise<any> {
-    const config = {
-      baseUrl: 'http://localhost:3002/#',
-      priority: [
-        {
-          priority: 1,
-          collection: 'postjobs',
-          serviceName: 'postJobService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-        {
-          priority: 2,
-          collection: 'jobbids',
-          serviceName: 'jobBidService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-        {
-          priority: 3,
-          collection: 'skills',
-          serviceName: 'skillService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-      ],
-    };
+    const config = empSearchConfig;
 
     const text = filter.text;
     let _limit = filter.limit;
@@ -127,36 +104,7 @@ export class SearchService {
   }
 
   async findAllJsk(filter): Promise<any> {
-    const config = {
-      baseUrl: 'http://localhost:3003/#',
-      priority: [
-        {
-          priority: 1,
-          collection: 'postjobs',
-          serviceName: 'postJobService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-        {
-          priority: 2,
-          collection: 'jobbids',
-          serviceName: 'jobBidService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-        {
-          priority: 3,
-          collection: 'skills',
-          serviceName: 'skillService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-      ],
-    };
-
+    const config = jskSearchConfig;
     const text = filter.text;
     let _limit = filter.limit;
     let _skip = filter.skip;
@@ -242,36 +190,7 @@ export class SearchService {
   }
 
   async findAllCms(filter): Promise<any> {
-    const config = {
-      baseUrl: 'http://localhost:3001/#',
-      priority: [
-        {
-          priority: 1,
-          collection: 'postjobs',
-          serviceName: 'postJobService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-        {
-          priority: 2,
-          collection: 'jobbids',
-          serviceName: 'jobBidService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-        {
-          priority: 3,
-          collection: 'skills',
-          serviceName: 'skillService',
-          totalRecords: 0,
-          limit: 0,
-          skip: 0,
-        },
-      ],
-    };
-
+    const config = cmsSearchConfig;
     const text = filter.text;
     let _limit = filter.limit;
     let _skip = filter.skip;

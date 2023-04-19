@@ -17,9 +17,14 @@ import { JobTaskModule } from './jobtask/module';
 import { AdminWalletModule } from './adminwallet/module';
 import { PublicModule } from './customapi/module';
 import { MailModule } from './mail/mail.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+    }),
     MongooseModule.forRoot(
       'mongodb://admin:123456@localhost:27017/bworks2?authSource=admin&readPreference=primary',
     ),

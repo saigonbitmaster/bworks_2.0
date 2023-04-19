@@ -32,6 +32,7 @@ export class UserService {
     return user;
   }
   async create(createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto);
     const username = createUserDto.username.toLowerCase();
     const saltOrRounds = 10;
     const password = await bcrypt.hash(createUserDto.password, saltOrRounds);

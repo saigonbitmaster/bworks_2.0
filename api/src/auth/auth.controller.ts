@@ -4,6 +4,7 @@ import {
   Request,
   Controller,
   Get,
+  Response,
   ForbiddenException,
   Body,
 } from '@nestjs/common';
@@ -54,7 +55,14 @@ export class AuthController {
 
   @UseGuards(RegisterAuthGuard)
   @Get('verify')
-  async verify(@Request() req) {
-    return await this.authService.verify(req.user);
+  async verify(@Request() req, @Response() res) {
+    try {
+      await this.authService.verify(req.user);
+    } catch (error) {
+      res.redirect('/verifyFailed.html');
+      return;
+    }
+    res.redirect('/verifySucceed.html');
+    return;
   }
 }

@@ -9,6 +9,8 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
+import { validateEmail } from '../flatworks/utils/common';
+import { Role } from '../flatworks/utils/roles';
 
 @Injectable()
 export class AuthService {
@@ -103,7 +105,8 @@ export class AuthService {
   }
 
   async register(registerUser: any): Promise<any> {
-    //{username: abc, email: abc@gmail.com, password: ***}
+    //{username: abc, email: abc@gmail.com, password: ***, fullName: abc, walletAddress: abc}
+
     const _usernames = await this.userService.findAllRaw({
       username: registerUser.username,
     });
@@ -112,12 +115,13 @@ export class AuthService {
       email: registerUser.email,
     });
 
-    const errorMessage =
-      _usernames?.length > 0
-        ? 'Username is already existed'
-        : _emails?.length > 0
-        ? 'Email is already existed'
-        : null;
+    const errorMessage = !validateEmail(registerUser.email)
+      ? 'Not a valid email address'
+      : _usernames?.length > 0
+      ? 'Username is already existed'
+      : _emails?.length > 0
+      ? 'Email is already existed'
+      : null;
 
     if (errorMessage) {
       throw new BadRequestException({
@@ -127,6 +131,7 @@ export class AuthService {
       });
     }
     const payload = {
+      fullName: registerUser.fullName,
       username: registerUser.username,
       email: registerUser.email,
       password: registerUser.password,
@@ -137,6 +142,6 @@ export class AuthService {
   }
 
   async verify(user: any): Promise<any> {
-    return await this.userService.create(user);
+    return await this.userService.create({ ...user, roles: [Role.User] });
   }
 }

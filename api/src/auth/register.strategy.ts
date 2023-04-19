@@ -18,6 +18,7 @@ export class RegisterStrategy extends PassportStrategy(Strategy, 'register') {
       email: payload.email,
       username: payload.username,
       password: payload.password,
+      fullName: payload.fullName,
     };
   }
 }

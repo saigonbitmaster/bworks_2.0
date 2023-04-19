@@ -12,6 +12,7 @@ import {
 import { Campaign, CampaignDocument } from './schemas/campaign.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { validateAddress } from '../flatworks/utils/cardano';
+import { validateEmail } from '../flatworks/utils/common';
 
 @Injectable()
 export class PublicService {
@@ -44,6 +45,10 @@ export class PublicService {
     const activeCampaign = await this.findOneCampaign({ isActive: true });
 
     const isAddress = await validateAddress(createTokenReceiverDto.address);
+    const isEmail = validateEmail(createTokenReceiverDto.email);
+    if (!isEmail) {
+      throw new HttpException('Not a valid email', HttpStatus.NOT_ACCEPTABLE);
+    }
 
     if (!activeCampaign) {
       throw new HttpException('No active campaign', HttpStatus.NOT_FOUND);

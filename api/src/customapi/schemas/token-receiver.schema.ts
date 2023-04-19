@@ -8,7 +8,7 @@ export type TokenReceiverDocument = TokenReceiver & Document;
 })
 export class TokenReceiver {
   @Prop({ required: true })
-  name: string;
+  address: string;
 
   @Prop({ required: true })
   email!: string;
@@ -25,6 +25,9 @@ export class TokenReceiver {
 
 const TokenReceiverSchema = SchemaFactory.createForClass(TokenReceiver);
 TokenReceiverSchema.index({ email: 1, campaignId: 1 }, { unique: true });
-TokenReceiverSchema.index({ name: 'text' });
+
+TokenReceiverSchema.index({ campaignId: 1, address: 1 }, { unique: true });
+
+TokenReceiverSchema.index({ address: 'text', email: 'text' });
 
 export { TokenReceiverSchema };
