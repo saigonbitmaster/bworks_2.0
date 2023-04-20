@@ -63,4 +63,16 @@ const CheckWallet = (
 
 const CreateWallet = (userId: string) => {};
 
+//validate if a string is a cardano address
+const validateAddress = async (address: string) => {
+  let isAddress = false;
+  try {
+    isAddress = !!(await inspectAddress(address));
+  } catch (err) {
+    console.log('validate address: not validate Cardano address');
+  }
+
+  return isAddress;
+};
+
 export { AddressUtxo, TxsUtxo, CheckWallet, CreateWallet, validateAddress };
