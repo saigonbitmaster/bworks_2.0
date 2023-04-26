@@ -12,7 +12,7 @@ export class MailController {
         email: 'trnthang@gmail.com',
         name: 'test',
       },
-      '123456',
+      'test',
     );
   }
 }

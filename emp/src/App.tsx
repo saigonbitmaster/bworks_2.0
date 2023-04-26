@@ -20,6 +20,9 @@ import { MeshProvider } from "@meshsdk/react";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
+const renewTokenUrl = process.env.REACT_APP_RENEW_ACCESS_TOKEN_URL;
+const logoutUrl = process.env.REACT_APP_LOGOUT_URL
+const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
 
 const restProvider = dataProvider(apiUrl);
 const i18nProvider = polyglotI18nProvider((locale) => {
@@ -30,7 +33,6 @@ const i18nProvider = polyglotI18nProvider((locale) => {
   return englishMessages;
 }, "en");
 
-const _authProvider = authProvider(loginUrl);
 const App = () => {
   return (
     <MeshProvider>
