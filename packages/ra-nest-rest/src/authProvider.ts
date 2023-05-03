@@ -3,7 +3,7 @@ import { fetchUtils, AuthProvider } from "ra-core";
 import jwt_decode from "jwt-decode";
 import { localStorageManager } from "./utils";
 
-const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
+const authProvider = (loginUrl): AuthProvider => ({
   login: ({ username, password }) => {
     return fetchUtils
       .fetchJson(loginUrl, {
@@ -20,34 +20,8 @@ const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
       })
       .catch((err) => err);
   },
-  logout: async () => {
-    const accessToken = localStorageManager.getItem("accessToken");
+  logout: () => {
     localStorageManager.removeItems();
-
-    let decodedAccessToken, isExpiredAccessToken;
-    try {
-      decodedAccessToken = jwt_decode(accessToken) as any;
-      isExpiredAccessToken = Date.now() >= decodedAccessToken.exp * 1000;
-    } catch (err) {
-      return Promise.resolve();
-    }
-
-    if (!accessToken || isExpiredAccessToken) {
-      return Promise.resolve();
-    }
-
-    const options = {
-      headers: new Headers({
-        Authorization: `Bearer ${accessToken}`,
-      }),
-    };
-
-    try {
-      //remove user refreshToken
-      const data = await fetchUtils.fetchJson(logoutUrl, options);
-    } catch (error) {
-      console.log(error);
-    }
     return Promise.resolve();
   },
   checkError: (error) => {
@@ -85,7 +59,10 @@ const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
       };
 
       try {
-        const data = await fetchUtils.fetchJson(renewTokenUrl, options);
+        const data = await fetchUtils.fetchJson(
+          "http://localhost:3000/auth/refresh",
+          options
+        );
 
         if (!data) return Promise.reject();
 
