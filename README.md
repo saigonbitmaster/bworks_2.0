@@ -49,8 +49,3 @@ backend app after build can be run by: node main.js or pm2
 ```
 modify .env file variables reflect the login and API urls.
 ```
-
-## updated documents
-```
-https://docs.google.com/document/d/e/2PACX-1vRwkXj9E0jY0AZUaI7XfYbupl6sZWEmWoggVDMW1VwzG16DU4xL0a-wVwVxJzFM2P2rxOZrBlOh0nkY/pub
-```
