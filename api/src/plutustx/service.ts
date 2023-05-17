@@ -42,6 +42,15 @@ export class PlutusTxService {
     return await this.model.findByIdAndUpdate(id, updatePlutusTxDto).exec();
   }
 
+  async findByScriptTxHashAndUpdate(
+    scriptTxHash: string,
+    updatePlutusTxDto: UpdatePlutusTxDto,
+  ): Promise<PlutusTx> {
+    return await this.model
+      .findOneAndUpdate({ lockedTxHash: scriptTxHash }, updatePlutusTxDto)
+      .exec();
+  }
+
   async delete(id: string): Promise<PlutusTx> {
     return await this.model.findByIdAndDelete(id).exec();
   }

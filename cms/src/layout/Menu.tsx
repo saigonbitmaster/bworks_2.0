@@ -13,7 +13,7 @@ import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
 import ConstructionIcon from "@mui/icons-material/Construction";
-import FormatIndentIncreaseIcon from '@mui/icons-material/FormatIndentIncrease';
+import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
 import {
   useTranslate,
   DashboardMenuItem,
@@ -99,15 +99,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         icon={<AttachMoneyIcon />}
         dense={dense}
       >
-        <MenuItemLink
-          to="/adminWallets"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.wallets.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<FitbitIcon />}
-          dense={dense}
-        />
+      
         <MenuItemLink
           to="/plutustxs"
           state={{ _scrollToTop: true }}
@@ -117,15 +109,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-        <MenuItemLink
-          to="/contracts"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.smartContracts.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<FormatListBulletedIcon />}
-          dense={dense}
-        />
+      
       </SubMenu>
       <SubMenu
         handleToggle={() => handleToggle("reports")}
@@ -161,7 +145,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<AttachMoneyIcon />}
           dense={dense}
         />
-         <MenuItemLink
+        <MenuItemLink
           to="/queues"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.jobQueues.name`, {
@@ -197,15 +181,32 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
-      <MenuItemLink
-        to="/settings"
-        state={{ _scrollToTop: true }}
-        primaryText={translate(`resources.settings.name`, {
-          smart_count: 2,
-        })}
-        leftIcon={<ConstructionIcon />}
+      <SubMenu
+        handleToggle={() => handleToggle("tools")}
+        isOpen={state.tools}
+        name="pos.menu.settings"
+        icon={<ConstructionIcon />}
         dense={dense}
-      />
+      >
+        <MenuItemLink
+          to="/adminWallets"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.wallets.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FitbitIcon />}
+          dense={dense}
+        />
+         <MenuItemLink
+          to="/contracts"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.smartContracts.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FormatListBulletedIcon />}
+          dense={dense}
+        />
+      </SubMenu>
     </Box>
   );
 };

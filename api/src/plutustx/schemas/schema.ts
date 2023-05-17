@@ -28,6 +28,9 @@ export class PlutusTx {
   unlockedTxHash: string;
 
   @Prop()
+  txMessage: string;
+
+  @Prop()
   lockDate: Date;
 
   @Prop()

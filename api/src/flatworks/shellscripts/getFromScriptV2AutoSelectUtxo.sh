@@ -18,12 +18,12 @@ SCRIPT_TXHASH=${5}
 SCRIPT_ADDRESS=$(${CARDANO_CLI} address build --payment-script-file ${SCRIPT_FILE} --testnet-magic ${TESTNET_MAGIC_NUM})
 echo ${SCRIPT_ADDRESS} > ${BASEDIR}/wallets/${SCRIPT_NAME}.addr
 
-section "Get Script UTxO"
+# "Get Script UTxO"
 getScriptUtxo ${SCRIPT_NAME} ${SCRIPT_TXHASH} 
 SCRIPT_UTXO=${SELECTED_UTXO}
 LOCKED_ASSET_VALUE=${SELECTED_UTXO_LOVELACE}
 
-section "Select Collateral UTxO"
+# "Select Collateral UTxO"
 getCollatelUtxo wallet01
 COLLATERAL_TX=${SELECTED_UTXO}
 
@@ -64,6 +64,8 @@ $CARDANO_CLI transaction submit --tx-file ${BASEDIR}/tx.signed --testnet-magic $
 
 
 #print txHash
-TX_HASH=$($CARDANO_CLI transaction txid --tx-file ${BASEDIR}/tx.signed) 
+TX_HASH=$($CARDANO_CLI transaction txid --tx-file ${BASEDIR}/tx.signed)
 DATE=$(date)
 echo "Summited TxHash:" ${TX_HASH} "Date:" ${DATE}
+#get last line to parse TX_HASH
+echo ${TX_HASH}

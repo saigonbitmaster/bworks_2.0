@@ -12,6 +12,7 @@ import { AccountLanguagesForUser } from '../flatworks/utils/github';
 import { ScamFilter } from '../flatworks/utils/filter.scammer';
 import { JobBidService } from '../jobbid/service';
 import { WalletService } from '../wallet/service';
+import { PlutusTxService } from '../plutustx/service';
 
 @Processor('queue')
 export class QueueProcessor {
@@ -19,6 +20,7 @@ export class QueueProcessor {
   constructor(
     private readonly jobBidService: JobBidService,
     private readonly walletService: WalletService,
+    private readonly plutusTxService: PlutusTxService,
   ) {}
 
   @OnQueueActive()
@@ -80,12 +82,34 @@ export class QueueProcessor {
     exec(
       `zsh ./src/flatworks/shellscripts/${unlockScript} ${scriptName} ${redeemerJsonFile} ${payCollatelWalletName} ${receiveWalletAddress} ${scriptTxHash} `,
       (err, stdout, stderr) => {
+        //if shell script exec fail
         if (err) {
+          this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
+            txMessage: err.message,
+            completedAt: new Date(),
+          });
           console.error('error:', err, job);
         }
+        //if transaction sign failed
         if (stderr) {
+          this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
+            txMessage: stderr,
+            completedAt: new Date(),
+          });
           console.log(`stderr: ${stderr}`);
         } else {
+          //remove null line then get transaction hash at last line of stdout
+          const matches = stdout.split(/[\n\r]/g);
+          const unlockedTxHash = matches
+            .filter((item) => item !== '')
+            .slice(-1)[0];
+
+          console.log(unlockedTxHash);
+          this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
+            unlockedTxHash: unlockedTxHash,
+            txMessage: stdout,
+            completedAt: new Date(),
+          });
           console.log(`stdout: ${stdout}`);
         }
       },

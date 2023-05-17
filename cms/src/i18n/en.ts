@@ -37,6 +37,7 @@ const customEnglishMessages: TranslationMessages = {
       reports: "Reports",
       manageFund: "Cardano",
       tools: "Tools",
+      settings: "Settings",
     },
   },
   resources: {

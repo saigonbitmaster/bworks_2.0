@@ -7,6 +7,7 @@ import { PlutusTx, PlutusTxSchema } from './schemas/schema';
 @Module({
   providers: [PlutusTxService],
   controllers: [PlutusTxController],
+  exports: [PlutusTxService],
   imports: [
     MongooseModule.forFeature([
       { name: PlutusTx.name, schema: PlutusTxSchema },

@@ -15,12 +15,18 @@ import jobtasks from "./jobtasks";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
 import ImportExcels from "./tools/importExcels";
+import { MeshProvider } from "@meshsdk/react";
+
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
+const renewTokenUrl = process.env.REACT_APP_RENEW_ACCESS_TOKEN_URL;
+const logoutUrl = process.env.REACT_APP_LOGOUT_URL;
 
-const token = localStorage.getItem("access_token");
-const restProvider = dataProvider(apiUrl, token);
+const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
+const restProvider = dataProvider(apiUrl);
+
+
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
     return import("./i18n/fr").then((messages) => messages.default);
@@ -29,9 +35,9 @@ const i18nProvider = polyglotI18nProvider((locale) => {
   return englishMessages;
 }, "en");
 
-const _authProvider = authProvider(loginUrl);
 const App = () => {
   return (
+    <MeshProvider>
     <Admin
       title="bWorks"
       dataProvider={restProvider}
@@ -52,6 +58,7 @@ const App = () => {
       <Resource name="jobbids" {...jobbids} />
       <Resource name="jobtasks" {...jobtasks} />
     </Admin>
+    </MeshProvider>
   );
 };
 

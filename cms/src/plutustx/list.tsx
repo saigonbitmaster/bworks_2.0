@@ -56,7 +56,7 @@ const ListScreen = () => {
         <TextField source="lockedTxHash" />
         <DateField source="lockDate" showTime />
         <TextField source="unlockedTxHash" />
-
+        <TextField source="txMessage" />
         <DateField source="unlockDate" showTime />
         <UnlockButton />
         <EditButton label="edit tx note" />

@@ -7,5 +7,6 @@ export class BasePlutusTxDto {
   unlockedTxHash: string;
   lockDate: Date;
   unlockDate: Date;
+  txMessage: string;
   description: string;
 }

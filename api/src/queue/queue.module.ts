@@ -4,6 +4,7 @@ import { QueueController } from './queue.controller';
 import { QueueProcessor } from './queue.processor';
 import { JobBidModule } from '../jobbid/module';
 import { WalletModule } from '../wallet/module';
+import { PlutusTxModule } from '../plutustx/module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { WalletModule } from '../wallet/module';
     }),
     JobBidModule,
     WalletModule,
+    PlutusTxModule,
   ],
   controllers: [QueueController],
   providers: [QueueProcessor],
