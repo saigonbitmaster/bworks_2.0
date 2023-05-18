@@ -15,6 +15,7 @@ import {
   resolveDataHash,
   KoiosProvider,
 } from "@meshsdk/core";
+import { useCreate } from "react-admin";
 
 const SmartContracts = () => {
   const { wallet, connected, connecting } = useWallet();
@@ -177,6 +178,8 @@ const SmartContracts = () => {
       setRedeemAdaValues({ ...redeemAdaValues, [prop]: event.target.value });
     };
 
+  const [create, { isLoading, error }] = useCreate();
+
   const sendAdaToPlutus = async () => {
     //public keyhash must be a valid bworks wallet address if unlock transaction signed by bworks.
     const scriptAddr = contract.contracts.find(
@@ -186,9 +189,15 @@ const SmartContracts = () => {
       alternative: 0,
       fields: [datum.publicKeyHash, 10],
     };
-    console.log(d)
     const amountToLockLoveLace = (amountToLock * 1000000).toString();
-    if (wallet) {
+    if (
+      wallet &&
+      connected &&
+      amountToLock &&
+      jobBidsList?.data[0]?.id &&
+      jobBidsList?.data[0]?.jobId &&
+      datum.publicKeyHash
+    ) {
       const tx = new Transaction({ initiator: wallet });
 
       tx.sendLovelace(
@@ -200,13 +209,54 @@ const SmartContracts = () => {
         },
         amountToLockLoveLace
       );
-      const unsignedTx = await tx.build();
-      const signedTx = await wallet.signTx(unsignedTx);
-      const txHash = await wallet.submitTx(signedTx);
+
+      let txHash = "";
+      try {
+        const unsignedTx = await tx.build();
+        const signedTx = await wallet.signTx(unsignedTx);
+        txHash = await wallet.submitTx(signedTx);
+      } catch (e) {
+        create("plutustxs", {
+          data: {
+            name: "Plutus submit failed",
+            jobBidId: jobBidsList.data[0].id,
+            assetName: "Ada",
+            amount: amountToLock,
+            lockedTxHash: txHash,
+            lockDate: new Date(),
+            datumUnlockPublicKeyHash: datum.publicKeyHash,
+            scriptAddress: scriptAddr,
+            lockMessage: `submitted by ${localStorage.getItem(
+              "username"
+            )} failed`,
+          },
+        });
+      }
+
+      setNotification({
+        ...notification,
+        message: txHash ? `Transaction is submmited: ${txHash}` : null,
+      });
+      create("plutustxs", {
+        data: {
+          name: jobBidsList.data[0].jobId,
+          jobBidId: jobBidsList.data[0].id,
+          assetName: "Ada",
+          amount: amountToLock,
+          lockedTxHash: txHash,
+          datumUnlockPublicKeyHash: datum.publicKeyHash,
+          scriptAddress: scriptAddr,
+          lockDate: new Date(),
+          lockMessage: `submitted by ${localStorage.getItem(
+            "username"
+          )} is succeed`,
+        },
+      });
 
       console.log("txHash", txHash, new Date());
     }
   };
+
   return (
     <Box sx={{ m: 3, display: "flex", flex: 1, flexDirection: "column" }}>
       <Box sx={{ m: 3, display: "flex", flex: 1, flexDirection: "row" }}>

@@ -6,7 +6,7 @@ export type PlutusTxDocument = PlutusTx & Document;
 
 @Schema()
 export class PlutusTx {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
@@ -28,13 +28,22 @@ export class PlutusTx {
   unlockedTxHash: string;
 
   @Prop()
-  txMessage: string;
+  unlockMessage: string;
+
+  @Prop()
+  lockMessage: string;
 
   @Prop()
   lockDate: Date;
 
   @Prop()
   unlockDate: Date;
+
+  @Prop()
+  datumUnlockPublicKeyHash: string;
+
+  @Prop()
+  scriptAddress: string;
 
   @Prop()
   description: string;

@@ -48,16 +48,15 @@ const ListScreen = () => {
     >
       <Datagrid>
         <TextField source="name" />
-
         <ReferenceField source="jobBidId" reference="jobbids">
           <TextField source="name" />
         </ReferenceField>
-
         <TextField source="lockedTxHash" />
         <DateField source="lockDate" showTime />
+        <TextField source="lockMessage" />
         <TextField source="unlockedTxHash" />
-        <TextField source="txMessage" />
         <DateField source="unlockDate" showTime />
+        <TextField source="unlockMessage" />
         <UnlockButton />
         <EditButton label="edit tx note" />
       </Datagrid>

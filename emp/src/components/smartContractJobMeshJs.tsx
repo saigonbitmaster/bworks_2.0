@@ -21,6 +21,10 @@ export default function SmartContract(props) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    //temporary disabled unlock tab to unlock by admin. 
+    if (value === "1") {
+      return;
+    }
     setValue(newValue);
   };
 

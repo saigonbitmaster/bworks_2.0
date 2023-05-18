@@ -85,7 +85,7 @@ export class QueueProcessor {
         //if shell script exec fail
         if (err) {
           this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
-            txMessage: err.message,
+            unlockMessage: 'unlock plutus job failed',
             completedAt: new Date(),
           });
           console.error('error:', err, job);
@@ -93,7 +93,7 @@ export class QueueProcessor {
         //if transaction sign failed
         if (stderr) {
           this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
-            txMessage: stderr,
+            unlockMessage: 'unlock plutus transaction sign failed',
             completedAt: new Date(),
           });
           console.log(`stderr: ${stderr}`);
@@ -104,10 +104,9 @@ export class QueueProcessor {
             .filter((item) => item !== '')
             .slice(-1)[0];
 
-          console.log(unlockedTxHash);
           this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
             unlockedTxHash: unlockedTxHash,
-            txMessage: stdout,
+            unlockMessage: 'unlock plutus transaction is submitted',
             completedAt: new Date(),
           });
           console.log(`stdout: ${stdout}`);
