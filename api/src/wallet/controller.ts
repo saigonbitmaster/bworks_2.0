@@ -15,9 +15,9 @@ import { UpdateWalletDto } from './dto/update.dto';
 import { WalletService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import getToken from '../flatworks/utils/token';
-
 import { JwtService } from '@nestjs/jwt';
 import { userJwtPayload } from '../flatworks/types/types';
+import { AddressDto } from './dto/address.dto';
 
 @Controller('wallets')
 export class WalletController {
@@ -44,6 +44,11 @@ export class WalletController {
   @Get(':id')
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);
+  }
+
+  @Post('parseAddress')
+  async parseAddress(@Body() addressDto: AddressDto) {
+    return await this.service.parseAddress(addressDto.address);
   }
 
   @Post()

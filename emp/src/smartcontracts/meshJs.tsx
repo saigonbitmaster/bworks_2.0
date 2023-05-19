@@ -16,8 +16,13 @@ import {
   KoiosProvider,
 } from "@meshsdk/core";
 import { useCreate } from "react-admin";
+import queryString from "query-string";
+import { useSearchParams } from "react-router-dom";
 
 const SmartContracts = () => {
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("jobbidid");
+  const jobBidId = JSON.parse(search);
   const { wallet, connected, connecting } = useWallet();
 
   const initContract = {
@@ -56,7 +61,7 @@ const SmartContracts = () => {
       !jobBidsList.error &&
       jobBidsList.data.length > 0
     ) {
-      const selected = jobBidsList.data[0].id;
+      const selected = jobBidId ? jobBidId : jobBidsList.data[0].id;
       setJobBids({ selected, jobBids: jobBidsList.data });
     }
   }, [jobBidsList.data]);
@@ -226,7 +231,7 @@ const SmartContracts = () => {
             lockDate: new Date(),
             datumUnlockPublicKeyHash: datum.publicKeyHash,
             scriptAddress: scriptAddr,
-            lockMessage: `submitted by ${localStorage.getItem(
+            lockMessage: `lock plutus transaction signed by ${localStorage.getItem(
               "username"
             )} failed`,
           },
@@ -247,9 +252,9 @@ const SmartContracts = () => {
           datumUnlockPublicKeyHash: datum.publicKeyHash,
           scriptAddress: scriptAddr,
           lockDate: new Date(),
-          lockMessage: `submitted by ${localStorage.getItem(
+          lockMessage: `lock plutus transaction submitted by ${localStorage.getItem(
             "username"
-          )} is succeed`,
+          )}`,
         },
       });
 
@@ -258,8 +263,8 @@ const SmartContracts = () => {
   };
 
   return (
-    <Box sx={{ m: 3, display: "flex", flex: 1, flexDirection: "column" }}>
-      <Box sx={{ m: 3, display: "flex", flex: 1, flexDirection: "row" }}>
+    <Box sx={{ mt: 0, display: "flex", flex: 1, flexDirection: "column" }}>
+      <Box sx={{ mt: 0, display: "flex", flex: 1, flexDirection: "row" }}>
         <SmartContractJob
           handleContractChange={handleContractChange}
           handleJobBidChange={handleJobBidChange}

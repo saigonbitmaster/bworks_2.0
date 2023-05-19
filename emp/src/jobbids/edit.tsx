@@ -7,6 +7,7 @@ import {
   DateTimeInput,
   Edit,
   ReferenceInput,
+  BooleanInput
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
@@ -25,6 +26,11 @@ const EditScreen = () => (
         <Grid item xs={12} md={4} lg={3} xl={2}>
           <NumberInput source="bidValue"  required />
         </Grid>
+
+        <Grid item xs={12} md={4} lg={3} xl={2}>
+          <BooleanInput source="isSelected" fullWidth label="Select this bid" />
+        </Grid>
+
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
         <ReferenceInput source="jobId" reference="postjobs">
@@ -39,6 +45,7 @@ const EditScreen = () => (
           <DateTimeInput source="completeDate" fullWidth />
         </Grid>
         <Grid item md={12} />
+
         <Grid item xs={12} md={8} lg={6} xl={4}>
           <RichTextInput source="description" fullWidth />
         </Grid>

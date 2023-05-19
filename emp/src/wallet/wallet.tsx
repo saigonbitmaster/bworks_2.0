@@ -226,13 +226,12 @@ const Wallet = (props) => {
   const handleClick = () => {
     createWallet("wallets", { data: walletData });
   };
-console.log(walletState)
   return (
     <Box>
       <Grid
         container
-        spacing={2}
-        sx={{ marginBottom: "1em", marginTop: "0.5em", marginLeft: "0.5em" }}
+        spacing={0}
+        sx={{ marginBottom: 1, marginTop: 2, marginLeft: 0 }}
       >
         <Grid item xs={12} md={8}>
           {walletState.hasWallet ? (
@@ -269,7 +268,7 @@ console.log(walletState)
           <Button
             onClick={onClick}
             disabled={createIsLoading}
-            sx={{ alignSelf: "flex-start", marginRight: "3em" }}
+            sx={{ alignSelf: "flex-start", marginRight: 1 }}
             startIcon={
               create ? (
                 <CloseIcon />
@@ -298,7 +297,7 @@ console.log(walletState)
       {walletState.address !== state.usedAddress && (
         <Button
           variant="text"
-          sx={{ marginLeft: 3 }}
+          sx={{ marginLeft: 0 }}
           onClick={() => handleClick()}
         >
           Use this Wallet

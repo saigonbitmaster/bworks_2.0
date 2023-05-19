@@ -72,9 +72,15 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const record: JobBid = await this.model.findById(id).exec();
+    //emp has right to select the bid only
+    if (record.employerId === userId) {
+      const { isSelected = false } = updateJobBidDto;
+      return await this.model.findByIdAndUpdate(id, { isSelected }).exec();
+    }
     if (record.jobSeekerId !== userId) {
       throw new Error('This is not your record');
     }
+
     return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
   }
 

@@ -28,6 +28,9 @@ export class JobBid {
   bidValue: number;
 
   @Prop()
+  isSelected: boolean;
+
+  @Prop()
   rate?: number;
 
   @Prop()

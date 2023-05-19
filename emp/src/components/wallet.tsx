@@ -27,7 +27,7 @@ export default function ConnectWallet(props) {
   const walletIsEnabled = props.walletIsEnabled;
   const selected = wallets.find((item) => item.selected === true)?.name;
   return (
-    <Box sx={{ m: 3, display: "flex", flex: 1, flexDirection: "column" }}>
+    <Box sx={{ m: 3, ml: 0, display: "flex", flex: 1, flexDirection: "column" }}>
       <Typography
         variant="body2"
         color="text.secondary"

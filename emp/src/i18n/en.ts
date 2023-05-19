@@ -33,10 +33,11 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     menu: {
-      postJobs: "Job post",
+      postJobs: "Manage jobs",
       reports: "Reports",
       manageFund: "Manage fund",
       tools: "Tools",
+      settings: "Settings",
     },
   },
   resources: {
@@ -47,7 +48,7 @@ const customEnglishMessages: TranslationMessages = {
       import: "Import excels",
     },
     smartContracts: {
-      name: "Smart contract |||| Smart contracts",
+      name: "Pay a bid |||| Pay a bid",
       fields: {
         commands: "Orders",
       },
@@ -65,7 +66,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     cardanos: {
-      name: "Fetch Cardano |||| Fetch Cardano",
+      name: "Fetch cardano |||| Fetch cardano",
       fields: {
         commands: "Orders",
       },
@@ -81,6 +82,9 @@ const customEnglishMessages: TranslationMessages = {
         password_mismatch:
           "The password confirmation is not the same as the password.",
       },
+    },
+    parseAddress: {
+      name: "Parse address",
     },
     gits: {
       reportName: "Git commits",
@@ -156,7 +160,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     contractedJobs: {
-      name: "Contracted job |||| Contracted jobs",
+      name: "Plutus TX |||| Plutus TXs",
       fields: {
         commands: "Orders",
       },
@@ -174,7 +178,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     wallets: {
-      name: "Your wallet |||| Your wallets",
+      name: "Select wallet |||| Select wallet",
       fields: {
         commands: "Orders",
       },

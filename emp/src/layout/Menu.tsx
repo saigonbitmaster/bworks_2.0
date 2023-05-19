@@ -21,7 +21,8 @@ import {
   MenuProps,
   useSidebarState,
 } from "react-admin";
-
+import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import SubMenu from "./SubMenu";
 
 type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
@@ -81,15 +82,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListNumberedOutlinedIcon />}
           dense={dense}
         />
-        <MenuItemLink
-          to="/contractedjobs"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.contractedJobs.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<QrCodeOutlinedIcon />}
-          dense={dense}
-        />
+
         <MenuItemLink
           to="/jobtasks"
           state={{ _scrollToTop: true }}
@@ -109,23 +102,15 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/wallets"
+          to="/plutustxs"
           state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.wallets.name`, {
+          primaryText={translate(`resources.contractedJobs.name`, {
             smart_count: 2,
           })}
-          leftIcon={<FitbitIcon />}
+          leftIcon={<QrCodeOutlinedIcon />}
           dense={dense}
         />
-        <MenuItemLink
-          to="/withdraws"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.withdraws.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<FormatListBulletedIcon />}
-          dense={dense}
-        />
+
         <MenuItemLink
           to="/smartcontract"
           state={{ _scrollToTop: true }}
@@ -187,6 +172,15 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<NotesIcon />}
           dense={dense}
         />
+         <MenuItemLink
+          to="/parseAddress"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.parseAddress.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<DriveFileRenameOutlineOutlinedIcon />}
+          dense={dense}
+        />
         <MenuItemLink
           to="/fetchGithub"
           state={{ _scrollToTop: true }}
@@ -197,15 +191,23 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
-      <MenuItemLink
-        to="/settings"
-        state={{ _scrollToTop: true }}
-        primaryText={translate(`resources.settings.name`, {
-          smart_count: 2,
-        })}
-        leftIcon={<ConstructionIcon />}
+      <SubMenu
+        handleToggle={() => handleToggle("settings")}
+        isOpen={state.settings}
+        name="pos.menu.settings"
+        icon={<ConstructionIcon />}
         dense={dense}
-      />
+      >
+        <MenuItemLink
+          to="/wallets"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.wallets.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<AccountBalanceWalletOutlinedIcon />}
+          dense={dense}
+        />
+      </SubMenu>
     </Box>
   );
 };

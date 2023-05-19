@@ -35,7 +35,6 @@ export default function SmartContract(props) {
   const selectedJobBid = props.jobBids?.selected || null;
   const contracts = props.contract?.contracts || [];
   const jobBids = props.jobBids?.jobBids || [];
-  console.log(jobBids, selectedJobBid);
 
   const sendAdaToPlutus = props.sendAdaToPlutus || null;
   const redeemAdaValues = props.redeemAdaValues || null;
@@ -64,7 +63,7 @@ export default function SmartContract(props) {
             <Tab
               value="1"
               label="Submit smart contract"
-              sx={{ padding: 0, marginLeft: 3 }} //to make underline of tab equal to text
+              sx={{ padding: 0, marginLeft: 0 }} //to make underline of tab equal to text
             />
             <Tab
               value="2"
@@ -73,7 +72,7 @@ export default function SmartContract(props) {
             />
           </TabList>
         </Box>
-        <TabPanel value="1">
+        <TabPanel value="1" sx={{ padding: 0, marginLeft: 0 }}>
           <Box
             sx={{
               paddingTop: 0,
@@ -329,7 +328,7 @@ export default function SmartContract(props) {
       <Typography
         variant="subtitle1"
         sx={{
-          ml: 3,
+          ml: 0,
           color: "green",
           ...(props.notification?.error === true && { color: "red" }),
         }}

@@ -17,7 +17,8 @@ import Wallet from "./wallet/wallet";
 import jobtasks from "./jobtasks";
 import SmartContracts from "./smartcontracts/meshJs";
 import { MeshProvider } from "@meshsdk/react";
-
+import plutustxs from "./plutustxs";
+import ParseAddress from "./components/parseAddress";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -26,7 +27,6 @@ const logoutUrl = process.env.REACT_APP_LOGOUT_URL;
 
 const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
 const restProvider = dataProvider(apiUrl);
-
 
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
@@ -56,11 +56,14 @@ const App = () => {
           <Route path="/fetchGithub" element={<FetchGithub />} />
           <Route path="/wallets" element={<Wallet />} />
           <Route path="/smartContract" element={<SmartContracts />} />
+          <Route path="/ParseAddress" element={<ParseAddress />} />
+          ParseAddress
+
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobbids" {...jobbids} />
         <Resource name="jobtasks" {...jobtasks} />
-     
+        <Resource name="plutustxs" {...plutustxs} />
       </Admin>
     </MeshProvider>
   );

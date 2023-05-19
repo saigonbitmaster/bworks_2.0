@@ -1,6 +1,8 @@
 export class BasePlutusTxDto {
   name: string;
   jobBidId: string;
+  empId: string;
+  jskId: string;
   assetName: string;
   amount: number;
   lockedTxHash: string;

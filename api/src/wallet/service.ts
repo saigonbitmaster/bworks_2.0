@@ -1,5 +1,5 @@
 import { UserService } from './../user/user.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateWalletDto } from './dto/create.dto';
@@ -7,6 +7,8 @@ import { UpdateWalletDto } from './dto/update.dto';
 import { Wallet, WalletDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { inspectAddress } from 'cardano-addresses';
+import { AddressDto } from './dto/address.dto';
+import { validateAddress } from '../flatworks/utils/cardano';
 
 @Injectable()
 export class WalletService {
@@ -48,6 +50,19 @@ export class WalletService {
       pKeyHashBech32: info.spending_key_hash_bech32,
       userId: user._id,
     }).save();
+  }
+
+  async parseAddress(address: string): Promise<any> {
+    const isAddress = await validateAddress(address);
+    if (!isAddress) {
+      throw new BadRequestException('Invalid address');
+    }
+    const info = (await inspectAddress(address)) as any;
+    return {
+      pKeyHash: info.spending_key_hash,
+      pKeyHashBech32: info.spending_key_hash_bech32,
+      address: address,
+    };
   }
 
   async update(id: string, updateWalletDto: UpdateWalletDto): Promise<Wallet> {

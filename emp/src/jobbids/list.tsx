@@ -7,14 +7,63 @@ import {
   DateField,
   NumberField,
   ReferenceField,
-  TextInput
+  TextInput,
+  BooleanField,
+  useUpdate,
+  useRecordContext,
+  useRefresh,
 } from "react-admin";
-import RateField from '../components/rateField'
+import RateField from "../components/rateField";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import { stringify } from "query-string";
 
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
-const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />
-];
+const SelectButton = () => {
+  const record = useRecordContext();
+  const diff = { isSelected: !record.isSelected };
+  const refresh = useRefresh();
+  const [update, { isLoading, error }] = useUpdate("jobbids", {
+    id: record.id,
+    data: diff,
+    previousData: record,
+  });
+
+  const handleClick = () => {
+    update();
+  };
+
+  React.useEffect(() => {
+    refresh();
+  }, [isLoading, error]);
+
+  return (
+    <Button variant="text" disabled={record.isUnlocked} onClick={handleClick}>
+      {record.isSelected ? "deselect" : "select"}
+    </Button>
+  );
+};
+
+const SignButton = () => {
+  const record = useRecordContext();
+  return (
+    <Button
+      sx={{ borderRadius: 0 }}
+      component={Link}
+      to={{
+        pathname: "/smartcontract",
+        search: stringify({
+          jobbidid: JSON.stringify(record.id),
+        }),
+      }}
+      size="small"
+      color="primary"
+    >
+      Sign Plutus TX
+    </Button>
+  );
+};
 
 const ListScreen = () => {
   return (
@@ -26,13 +75,12 @@ const ListScreen = () => {
       filter={{ queryType: "employer" }}
       filters={filters}
     >
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
 
         <ReferenceField reference="postJobs" source="jobId">
           <TextField source="name" />
         </ReferenceField>
-
 
         <ReferenceField reference="users" source="jobSeekerId">
           <TextField source="fullName" />
@@ -41,22 +89,26 @@ const ListScreen = () => {
           <TextField source="fullName" />
         </ReferenceField>
         <NumberField source="bidValue" />
-        <ReferenceField reference="postJobs" source="jobId">
+        <ReferenceField reference="postJobs" source="jobId" label="Currency">
           <ReferenceField reference="currencies" source="currencyId">
             <TextField source="name" />
           </ReferenceField>
         </ReferenceField>
         <RateField source="rate" />
-       
 
+        <BooleanField source="isSelected" label="Selected" />
         <DateField source="completeDate" showTime label="Your deadline" />
 
-        <ReferenceField reference="postJobs" source="jobId"   label="Job deadline">
-         
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Job deadline"
+        >
           <DateField source="expectDate" showTime />
         </ReferenceField>
 
-        <EditButton />
+        <SelectButton />
+        <SignButton />
       </Datagrid>
     </List>
   );
