@@ -8,44 +8,50 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import MuiTextField from "@mui/material/TextField";
-import {
-  List,
-  Datagrid,
-  TextField,
-  NumberField,
-  ArrayField,
-  useGetList,
-} from "react-admin";
+import { useDataProvider } from "react-admin";
 import { Box } from "@mui/material";
 import ProcessBar from "../components/processBar";
 
 const ParseAddress = (props) => {
-  const [textFieldValue, setTextFieldValue] = React.useState("");
+  const [address, setAddress] = React.useState("");
 
   const [walletState, setWalletState] = React.useState({
     hasWallet: false,
+    message: "",
     address: "",
     pKeyHash: "",
     pKeyHashBech32: "",
   });
 
+  const dataProvider = useDataProvider();
 
-  const onClick = () => {};
+  const onClick = () => {
+    dataProvider
+      .customMethod("wallets/parseAddress", { data: { address } }, "POST")
+      .then((result) => setWalletState({ hasWallet: true, ...result.result }))
+      .catch((error) =>
+        setWalletState({
+          ...walletState,
+          hasWallet: false,
+          message: "Parse error",
+        })
+      );
+  };
 
   const handleTextFieldChange = (event) => {
-    setTextFieldValue(event.target.value);
+    setAddress(event.target.value);
   };
 
   return (
     <Box>
       <Grid container spacing={2} sx={{ marginBottom: "2em" }}>
-        <Grid item xs={12} md={8} lg={6} xl={4}>
+        <Grid item xs={12} md={8} lg={6} xl={6}>
           <MuiTextField
             id="standard-basic"
             label="Cardano address"
             variant="standard"
             fullWidth
-            value={textFieldValue}
+            value={address}
             onChange={handleTextFieldChange}
           />
         </Grid>
@@ -69,7 +75,14 @@ const ParseAddress = (props) => {
 
       <Grid item xs={12} md={8}>
         <>
-          <Typography variant="caption" display="block">
+          {!walletState.hasWallet && walletState.message && (
+            <Typography variant="caption" display="block" sx={{color: "red"}}>
+              Parse error, Invalid address
+            </Typography>
+          )}
+           {walletState.hasWallet && (
+               <>
+            <Typography variant="caption" display="block">
             Address: {walletState.address}
           </Typography>
           <Typography variant="caption" display="block">
@@ -78,6 +91,10 @@ const ParseAddress = (props) => {
           <Typography variant="caption" display="block">
             PublicKey hash: {walletState.pKeyHash}
           </Typography>
+          </>
+          )}
+
+         
         </>
       </Grid>
     </Box>

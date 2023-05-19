@@ -268,7 +268,7 @@ export default (
         method: "POST",
         body: JSON.stringify(params.data),
         ...options,
-      }).then(({ json }) => ({ data: params.data }));
+      }).then(({ json }) => ({ data: params.data, result: json }));
     } else return Promise.reject("Method is not supported");
   },
 });

@@ -53,6 +53,7 @@ export class WalletService {
   }
 
   async parseAddress(address: string): Promise<any> {
+    console.log(address);
     const isAddress = await validateAddress(address);
     if (!isAddress) {
       throw new BadRequestException('Invalid address');
