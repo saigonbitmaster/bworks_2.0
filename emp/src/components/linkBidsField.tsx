@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { stringify } from "query-string";
 
 const LinkBidField = (props) => {
-  const record = useRecordContext(props);
+  const record =  useRecordContext(props);
+  const jobId = props.record?.id || record.id
   const { data, total, isLoading, error } = useGetList("jobbids", {
-    filter: { jobId: record.id, queryType: "employer" },
+    filter: { jobId, queryType: "employer" },
   });
   if (isLoading) {
     return <p>Loading...</p>;
@@ -13,7 +14,6 @@ const LinkBidField = (props) => {
   if (error) {
     return <p style={{ color: "red" }}>Error!</p>;
   }
-
 
   return record ? (
     <Link

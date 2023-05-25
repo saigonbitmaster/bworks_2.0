@@ -137,19 +137,11 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<NotesIcon />}
           dense={dense}
         />
-        <MenuItemLink
-          to="/walletreports"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.walletReports.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<BlurOnIcon />}
-          dense={dense}
-        />
+        
         <MenuItemLink
           to="/contractreports"
           state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.smartContractReports.name`, {
+          primaryText={translate(`resources.paymentReport.name`, {
             smart_count: 2,
           })}
           leftIcon={<AttachMoneyIcon />}

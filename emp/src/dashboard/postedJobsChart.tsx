@@ -47,7 +47,7 @@ const OrderChart = (props: { orders?: any[] }) => {
 
   return (
     <Card>
-      <CardHeader title="Quiz post history" />
+      <CardHeader title="Posted jobs" />
       <CardContent>
         <div style={{ width: "100%", height: 300 }}>
           <ResponsiveContainer>

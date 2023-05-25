@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DollarIcon from '@mui/icons-material/AttachMoney';
 
-import CardWithIcon from './CardWithIcon';
+import CardWithIcon from './cardWithIcon';
 
 interface Props {
     value?: number;
@@ -11,10 +11,10 @@ const MonthlyPayout = (props: Props) => {
     const { value } = props;
     return (
         <CardWithIcon
-            to="/payouts"
+            to="/plutustxs"
             icon={DollarIcon}
-            title="Monthly pay out"
-            subtitle={`${value} Ada`}
+            title="Paid by plutus"
+            subtitle={`1000 jobs, ${value} Ada`}
         />
     );
 };

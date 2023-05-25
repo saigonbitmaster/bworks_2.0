@@ -1,12 +1,12 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
 
-import MonthlyPayout from "./MonthlyPayout";
-import NewQuizzes from "./NewQuizzes";
-import QuizPostHistory from "./QuizPostHistory";
-import PendingReviews from "./PendingReviews";
-import NewMembers from "./NewMembers";
-import PayoutHistory from "./PayoutHistory";
+import Payout from "./payout";
+import SmartContractTxs from "./smartContractTXs";
+import PostedJobsChart from "./postedJobsChart";
+import PostedJobs from "./postedJobs";
+import ActiveUsers from "./activeUsers";
+import PaymentChart from "./paymentChart";
 import { quizPostData, payoutData, monthlyRevenue, newQuiz } from "./data";
 
 const styles = {
@@ -29,26 +29,26 @@ const Dashboard = () => {
   return isXSmall ? (
     <div>
       <div style={styles.flexColumn as CSSProperties}>
-        <MonthlyPayout value={monthlyRevenue} />
+        <Payout value={monthlyRevenue} />
         <VerticalSpacer />
-        <NewQuizzes value={newQuiz} />
+        <SmartContractTxs value={newQuiz} />
         <VerticalSpacer />
-        <QuizPostHistory orders={quizPostData} />
+        <PostedJobsChart orders={quizPostData} />
       </div>
     </div>
   ) : isSmall ? (
     <div style={styles.flexColumn as CSSProperties}>
       <div style={styles.singleCol}></div>
       <div style={styles.flex}>
-        <MonthlyPayout value={monthlyRevenue} />
+        <Payout value={monthlyRevenue} />
         <Spacer />
-        <NewQuizzes value={newQuiz} />
+        <SmartContractTxs value={newQuiz} />
       </div>
       <div style={styles.singleCol}>
-        <PayoutHistory orders={payoutData} />
+        <PaymentChart orders={payoutData} />
       </div>
       <div style={styles.singleCol}>
-        <QuizPostHistory orders={quizPostData} />
+        <PostedJobsChart orders={quizPostData} />
       </div>
     </div>
   ) : (
@@ -56,22 +56,23 @@ const Dashboard = () => {
       <div style={styles.flex}>
         <div style={styles.leftCol}>
           <div style={styles.flex}>
-            <MonthlyPayout value={monthlyRevenue} />
+            <Payout value={monthlyRevenue} />
             <Spacer />
-            <NewQuizzes value={newQuiz} />
+            <ActiveUsers />
+            
           </div>
           <div style={styles.singleCol}>
-            <PayoutHistory orders={payoutData} />
+            <PaymentChart orders={payoutData} />
           </div>
           <div style={styles.singleCol}>
-            <QuizPostHistory orders={quizPostData} />
+            <PostedJobsChart orders={quizPostData} />
           </div>
         </div>
         <div style={styles.rightCol}>
           <div style={styles.flex}>
-            <PendingReviews />
+            <PostedJobs />
             <Spacer />
-            <NewMembers />
+            <SmartContractTxs value={newQuiz} />
           </div>
         </div>
       </div>

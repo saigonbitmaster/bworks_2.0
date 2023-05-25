@@ -40,13 +40,13 @@ const getRevenuePerDay = (orders: Order[]): TotalByDay[] => {
   }));
 };
 
-const OrderChart = (props: { orders?: any[] }) => {
+const PaymentChart = (props: { orders?: any[] }) => {
   const { orders } = props;
   if (!orders) return null;
 
   return (
     <Card>
-      <CardHeader title="Payout history ($Ada)" />
+      <CardHeader title="Plutus transactions ($Ada)" />
       <CardContent>
         <div style={{ width: "100%", height: 300 }}>
           <ResponsiveContainer>
@@ -92,4 +92,4 @@ interface TotalByDay {
   total: number;
 }
 
-export default OrderChart;
+export default PaymentChart;

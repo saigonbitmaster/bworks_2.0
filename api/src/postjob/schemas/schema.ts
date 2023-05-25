@@ -49,7 +49,7 @@ export class PostJob {
   deletedAt?: Date;
 
   @Prop()
-  createdDate?: Date;
+  createdAt?: Date;
 }
 
 const PostJobSchema = SchemaFactory.createForClass(PostJob);

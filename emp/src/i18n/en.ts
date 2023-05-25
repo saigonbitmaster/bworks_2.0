@@ -13,14 +13,19 @@ const customEnglishMessages: TranslationMessages = {
       dark: "Dark",
     },
     dashboard: {
+      postedJob: "Posted jobs",
       monthly_revenue: "Monthly Revenue",
       month_history: "30 Day Revenue History",
       new_orders: "New Orders",
       pending_reviews: "Pending Reviews",
       all_reviews: "See all reviews",
       new_customers: "New Customers",
+      submittedUsers: "Submitted users",
       all_customers: "See all customers",
+      allUsers: "See all users",
       pending_orders: "Pending Orders",
+      allPostedJobs: "See all Jobs",
+      allPlutusTxs: "See all plutus TXs",
       order: {
         items:
           "by %{customer_name}, one item |||| by %{customer_name}, %{nb_items} items",
@@ -43,6 +48,9 @@ const customEnglishMessages: TranslationMessages = {
   resources: {
     jobtasks: {
       name: "Job tasks",
+    },
+    paymentReport: {
+      name: "Payment",
     },
     reports: {
       import: "Import excels",
