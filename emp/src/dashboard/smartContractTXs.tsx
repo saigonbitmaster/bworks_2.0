@@ -12,8 +12,7 @@ import GradingIcon from "@mui/icons-material/Grading";
 import { subDays } from "date-fns";
 import { Link } from "react-router-dom";
 import ReorderIcon from "@mui/icons-material/Reorder";
-import Tooltip from '@mui/material/Tooltip';
-
+import Tooltip from "@mui/material/Tooltip";
 
 import {
   Avatar,
@@ -28,10 +27,13 @@ import {
 import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
 
 interface Props {
-  value?: number;
+  lockTxs: number;
+  unlockTxs: number;
 }
 
 const SmartContractTxs = (props: Props) => {
+  const { lockTxs = 0, unlockTxs = 0 } = props;
+
   const text = {
     color: "orange",
   };
@@ -53,25 +55,19 @@ const SmartContractTxs = (props: Props) => {
 
   const nb = plutustxs ? plutustxs.reduce((nb: number) => ++nb, 0) : 0;
 
-  const { value } = props;
   const translate = useTranslate();
   return (
     <CardWithIcon
       to="/plutustxs"
       icon={GradingIcon}
       title="Smart contract TXs"
-      subtitle="100 locked TXs, 100 unlocked TXs"
+      subtitle={`${lockTxs} locked TXs, ${unlockTxs} unlocked TXs`}
     >
       <List sx={{ display: isLoading ? "none" : "block" }}>
         {plutustxs
           ? plutustxs.map((record: any) => (
               <>
-                <ListItem
-                  button
-                  to={`/plutustxs/${record.id}`}
-                  component={Link}
-                  key={record.id}
-                >
+                <ListItem key={record.id}>
                   <ListItemAvatar>
                     <ReorderIcon></ReorderIcon>
                   </ListItemAvatar>
@@ -82,18 +78,8 @@ const SmartContractTxs = (props: Props) => {
                     link={false}
                   >
                     <FunctionField
-                      render={(customer: any) => (
-                        <ListItemText
-                          primary={customer.name}
-                          sx={{
-                            overflowY: "hidden",
-
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            paddingRight: 0,
-                          }}
-                        />
+                      render={(plutusTx: any) => (
+                        <TextField record={plutusTx} source="name" />
                       )}
                     />
                   </ReferenceField>
@@ -107,16 +93,15 @@ const SmartContractTxs = (props: Props) => {
                   })}`}
                   alignItems="center"
                 >
-                     <Tooltip title={record.lockedTxHash}>
-
-                  <ListItemText primaryTypographyProps={{ style: text }} >
-                    Lock Tx
-                  </ListItemText>
+                  <Tooltip title={record.lockedTxHash}>
+                    <ListItemText primaryTypographyProps={{ style: text }}>
+                      Lock Tx
+                    </ListItemText>
                   </Tooltip>
-                  <Tooltip title={record.unlockedTxHash || ''}>
-                  <ListItemText primaryTypographyProps={{ style: text }}>
-                    Unlock Tx
-                  </ListItemText>
+                  <Tooltip title={record.unlockedTxHash || ""}>
+                    <ListItemText primaryTypographyProps={{ style: text }}>
+                      {record.unlockedTxHash ? "Unlock Tx" : "UnPaid"}
+                    </ListItemText>
                   </Tooltip>
                   <Box>{record.amount} Ada</Box>
                 </ListItem>

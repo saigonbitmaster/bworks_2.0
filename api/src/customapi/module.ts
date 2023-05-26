@@ -5,7 +5,7 @@ import { SearchController } from './search.controller';
 import { PublicController } from './public.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SkillModule } from '../skill/module';
-
+import { PlutusTxModule } from '../plutustx/module';
 import {
   TokenReceiver,
   TokenReceiverSchema,
@@ -13,6 +13,7 @@ import {
 import { Campaign, CampaignSchema } from './schemas/campaign.schema';
 import { PostJobModule } from '../postjob/module';
 import { JobBidModule } from '../jobbid/module';
+import { UserModule } from '../user/user.module';
 
 //apis for homepage & other public requests
 @Module({
@@ -26,6 +27,8 @@ import { JobBidModule } from '../jobbid/module';
     JobBidModule,
     PostJobModule,
     SkillModule,
+    PlutusTxModule,
+    UserModule
   ],
   exports: [PublicService, SearchService],
 })

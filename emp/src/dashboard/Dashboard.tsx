@@ -1,13 +1,15 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
 
-import Payout from "./payout";
-import SmartContractTxs from "./smartContractTXs";
-import PostedJobsChart from "./postedJobsChart";
 import PostedJobs from "./postedJobs";
 import ActiveUsers from "./activeUsers";
+import SmartContractTxs from "./smartContractTXs";
+import PaidByPlutus from "./paidByPlutus";
+
+import PostedJobsChart from "./postedJobsChart";
 import PaymentChart from "./paymentChart";
 import { quizPostData, payoutData, monthlyRevenue, newQuiz } from "./data";
+import { useDataProvider } from "react-admin";
 
 const styles = {
   flex: { display: "flex" },
@@ -21,6 +23,27 @@ const Spacer = () => <span style={{ width: "1em" }} />;
 const VerticalSpacer = () => <span style={{ height: "1em" }} />;
 
 const Dashboard = () => {
+  const [dashBoardCardData, setDashBoardCardData] = React.useState({
+    paidByPlutus: {
+      numberOfJobs: 0,
+      totalAmount: 0,
+    },
+    activeUsers: {
+      jobSeekers: 0,
+      employers: 0,
+    },
+    postedJobs: { postedJobs: 0, bids: 0 },
+    plutusTxs: {
+      lockTxs: 0,
+      unlockTxs: 0,
+    },
+  });
+  const dataProvider = useDataProvider();
+  dataProvider
+    .customMethod("public/dashboardcards", { filter: {} }, "GET")
+    .then((result) => setDashBoardCardData(result.data))
+    .catch((error) => console.error(error));
+
   const isXSmall = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down("sm")
   );
@@ -29,9 +52,15 @@ const Dashboard = () => {
   return isXSmall ? (
     <div>
       <div style={styles.flexColumn as CSSProperties}>
-        <Payout value={monthlyRevenue} />
+        <PaidByPlutus
+          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
+        />
         <VerticalSpacer />
-        <SmartContractTxs value={newQuiz} />
+        <SmartContractTxs
+          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
+        />
         <VerticalSpacer />
         <PostedJobsChart orders={quizPostData} />
       </div>
@@ -40,9 +69,15 @@ const Dashboard = () => {
     <div style={styles.flexColumn as CSSProperties}>
       <div style={styles.singleCol}></div>
       <div style={styles.flex}>
-        <Payout value={monthlyRevenue} />
+        <PaidByPlutus
+          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
+        />
         <Spacer />
-        <SmartContractTxs value={newQuiz} />
+        <SmartContractTxs
+          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
+        />
       </div>
       <div style={styles.singleCol}>
         <PaymentChart orders={payoutData} />
@@ -56,10 +91,15 @@ const Dashboard = () => {
       <div style={styles.flex}>
         <div style={styles.leftCol}>
           <div style={styles.flex}>
-            <Payout value={monthlyRevenue} />
+            <PaidByPlutus
+              numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+              totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
+            />
             <Spacer />
-            <ActiveUsers />
-            
+            <ActiveUsers
+              jobSeekers={dashBoardCardData.activeUsers.jobSeekers}
+              employers={dashBoardCardData.activeUsers.employers}
+            />
           </div>
           <div style={styles.singleCol}>
             <PaymentChart orders={payoutData} />
@@ -70,9 +110,15 @@ const Dashboard = () => {
         </div>
         <div style={styles.rightCol}>
           <div style={styles.flex}>
-            <PostedJobs />
+            <PostedJobs
+              postedJobs={dashBoardCardData.postedJobs.postedJobs}
+              bids={dashBoardCardData.postedJobs.bids}
+            />
             <Spacer />
-            <SmartContractTxs value={newQuiz} />
+            <SmartContractTxs
+              lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+              unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
+            />
           </div>
         </div>
       </div>

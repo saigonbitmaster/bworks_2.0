@@ -26,14 +26,20 @@ import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsField";
 
 const text = {
-  color: "orange"
+  color: "orange",
 };
 
 const Spacer = () => <span style={{ width: "3em" }} />;
 
-const PostedJob = () => {
+const PostedJob = (props) => {
+  interface Props {
+    postedJobs: number;
+    bids: number;
+  }
+  const { postedJobs = 0, bids = 0 } = props;
+
   const translate = useTranslate();
-  const { data: reviews, total } = useGetList<any>("postjobs", {
+  const { data: postedjobs, total } = useGetList<any>("postjobs", {
     sort: { field: "createdAt", order: "DESC" },
     pagination: { page: 1, perPage: 10 },
   });
@@ -50,10 +56,10 @@ const PostedJob = () => {
       }}
       icon={DynamicFeedOutlinedIcon}
       title={translate("pos.dashboard.postedJob")}
-      subtitle={"1000 jobs, 2000 bids"}
+      subtitle={`${postedJobs} jobs, ${bids} bids`}
     >
       <List sx={{ display }}>
-        {reviews?.map((record: any) => (
+        {postedjobs?.map((record: any) => (
           <>
             <ListItem key={record.id} alignItems="center">
               <ListItemAvatar>
@@ -71,7 +77,9 @@ const PostedJob = () => {
               to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`}
               alignItems="flex-start"
             >
-              <ListItemText primaryTypographyProps={{ style: text }} >Current bids</ListItemText>
+              <ListItemText primaryTypographyProps={{ style: text }}>
+                Current bids
+              </ListItemText>
               <LinkBidField record={record} />
             </ListItem>
           </>

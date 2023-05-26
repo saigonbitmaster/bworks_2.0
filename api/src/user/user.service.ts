@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
 
 @Injectable()
 export class UserService {
@@ -15,6 +16,19 @@ export class UserService {
   async findAll(): Promise<any[]> {
     return this.model.find().exec();
   }
+
+  async findAllList(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
+    const data = await this.model
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
+      .exec();
+
+    return { count: count, data: data };
+  }
+
   /*  async findOne(id: string): Promise<User> {
     return await this.model.findById(id).exec();
   } */

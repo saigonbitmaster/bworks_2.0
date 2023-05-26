@@ -22,6 +22,25 @@ export interface AddressUtxoType {
   amount: { unit: string; quantity: number }[];
 }
 
+export interface DashboardCardData {
+  paidByPlutus: {
+    numberOfJobs: number;
+    totalAmount: number;
+  };
+  activeUsers: {
+    jobSeekers: number;
+    employers: number;
+  };
+  postedJobs: {
+    postedJobs: number;
+    bids: number;
+  };
+  plutusTxs: {
+    lockTxs: number;
+    unlockTxs: number;
+  };
+}
+
 export type ProjectStatus = 'pending' | 'complete' | 'stopped';
 export interface userJwtPayload {
   userId: string;

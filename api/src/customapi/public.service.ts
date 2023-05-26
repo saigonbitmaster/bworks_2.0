@@ -13,6 +13,11 @@ import { Campaign, CampaignDocument } from './schemas/campaign.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { validateAddress } from '../flatworks/utils/cardano';
 import { validateEmail } from '../flatworks/utils/common';
+import { DashboardCardData } from '../flatworks/types/types';
+import { PlutusTxService } from '../plutustx/service';
+import { PostJobService } from '../postjob/service';
+import { JobBidService } from '../jobbid/service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class PublicService {
@@ -21,7 +26,82 @@ export class PublicService {
     private readonly token: Model<TokenReceiverDocument>,
     @InjectModel(Campaign.name)
     private readonly campaign: Model<CampaignDocument>,
+    private readonly plutusTxService: PlutusTxService,
+    private readonly postJobService: PostJobService,
+    private readonly jobBidService: JobBidService,
+    private readonly userService: UserService,
   ) {}
+
+  async getDashboardData(): Promise<DashboardCardData> {
+    /*
+    {
+      paidByPlutus: {
+        numberOfJobs: 10,
+        totalAmount: 100
+      },
+      activeUsers: {
+        jobSeekers: 10,
+        employers: 10,
+      },
+      postedJobs: 
+     { postedJobs: 100,
+      bids: 1000}
+    },
+    plutusTxs: {
+      lockTxs: 100,
+      unlockTxs: 10
+    }
+  }
+    */
+    //limit 0, to get all records
+    const query = { filter: {}, sort: {}, skip: 0, limit: 0 };
+
+    const plutusTxs = await this.plutusTxService.findAll(query);
+    const paidAmount = plutusTxs?.data.reduce(
+      (acc, item) => acc + item.amount || 0,
+      0,
+    );
+
+    const hasUnlockTxs = plutusTxs.data.filter((item) => !!item.unlockedTxHash);
+    const jskQuery = {
+      filter: { isJobSeeker: true },
+      sort: {},
+      skip: 0,
+      limit: 0,
+    };
+    const empQuery = {
+      filter: { isEmployer: true },
+      sort: {},
+      skip: 0,
+      limit: 0,
+    };
+
+    const jobSeekers = await this.userService.findAllList(jskQuery);
+    const employers = await this.userService.findAllList(empQuery);
+
+    const postedJobs = await this.postJobService.findAll(query);
+    const jobBids = await this.jobBidService.findAll(query);
+
+    const data = {
+      paidByPlutus: {
+        numberOfJobs: plutusTxs.data.length || 0,
+        totalAmount: paidAmount,
+      },
+      activeUsers: {
+        jobSeekers: jobSeekers.count,
+        employers: employers.count,
+      },
+      postedJobs: {
+        postedJobs: postedJobs.count,
+        bids: jobBids.count,
+      },
+      plutusTxs: {
+        lockTxs: plutusTxs.count,
+        unlockTxs: hasUnlockTxs.length,
+      },
+    };
+    return data;
+  }
 
   async findAllTokenReceiver(query: MongooseQuery): Promise<RaList> {
     const count = await this.token.find(query.filter).count().exec();

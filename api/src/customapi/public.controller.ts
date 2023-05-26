@@ -13,7 +13,6 @@ import { CreateTokenReceiverDto } from './dto/create.token-receiver.dto';
 import { UpdateTokenReceiverDto } from './dto/update.token-receiver.dto';
 import { PublicService } from './public.service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
-
 import { CreateCampaignDto } from './dto/create.campaign.dto';
 import { UpdateCampaignDto } from './dto/update.campaign.dto';
 
@@ -21,6 +20,14 @@ import { UpdateCampaignDto } from './dto/update.campaign.dto';
 export class PublicController {
   constructor(private readonly service: PublicService) {}
 
+  //dashboard apis
+  @Get('dashboardcards')
+  async getDashboardData(@Response() res: any) {
+    const result = await this.service.getDashboardData();
+    return res.json(result);
+  }
+
+  //homepage queries
   @Get('tokenreceivers')
   async indexTokenReceiver(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);

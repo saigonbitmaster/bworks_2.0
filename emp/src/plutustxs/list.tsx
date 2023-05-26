@@ -9,11 +9,11 @@ import {
   useRecordContext,
   ReferenceOneField,
   useDataProvider,
-  FunctionField
+  FunctionField,
+  NumberField,
 } from "react-admin";
 import Button from "@mui/material/Button";
-import Checkbox from '@mui/material/Checkbox';
-
+import Checkbox from "@mui/material/Checkbox";
 
 const ListScreen = () => {
   const UnlockButton = () => {
@@ -42,26 +42,28 @@ const ListScreen = () => {
     );
   };
 
-
-
-
   return (
     <List
       perPage={25}
       sort={{ field: "date", order: "desc" }}
-      
       resource="plutustxs"
     >
       <Datagrid bulkActionButtons={false}>
-     
         <ReferenceField source="name" reference="postJobs" label="Job">
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField source="jobBidId" reference="jobbids">
           <TextField source="name" />
         </ReferenceField>
-        <FunctionField label="Paid" render={record =>  <Checkbox  disabled checked={!!record.unlockedTxHash} />} />
+
+        <FunctionField
+          label="Paid"
+          render={(record) => (
+            <Checkbox disabled checked={!!record.unlockedTxHash} />
+          )}
+        />
         <TextField source="lockedTxHash" />
+        <NumberField source="amount" label="Amount (Ada)" />
         <DateField source="lockDate" showTime />
         <TextField source="lockMessage" />
         <TextField source="unlockedTxHash" />
