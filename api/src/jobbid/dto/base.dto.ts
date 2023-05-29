@@ -7,5 +7,7 @@ export class BaseJobBidDto {
   completeDate: Date;
   bidValue: number;
   isSelected: boolean;
+  isPaid: boolean;
+  isCompleted: boolean;
   description: string;
 }

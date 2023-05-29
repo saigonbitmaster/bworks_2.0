@@ -72,7 +72,7 @@ export class QueueProcessor {
     const scriptName = 'bworksV2';
     const redeemerJsonFile = 'secret.json';
     const payCollatelWalletName = 'wallet01';
-    const jobBid = await this.jobBidService.findOne(job.data.jobBidId);
+    const jobBid = (await this.jobBidService.findOne(job.data.jobBidId)) as any;
     const jobSeekerWallet = await this.walletService.findByUser(
       jobBid.jobSeekerId,
     );
@@ -107,8 +107,16 @@ export class QueueProcessor {
           this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
             unlockedTxHash: unlockedTxHash,
             unlockMessage: 'unlock plutus transaction is submitted',
+            unlockDate: new Date(),
             completedAt: new Date(),
           });
+
+          console.log(jobBid);
+          this.jobBidService.updateByBackgroundJob(jobBid._id, {
+            isPaid: true,
+            completedAt: new Date(),
+          });
+
           console.log(`stdout: ${stdout}`);
         }
       },

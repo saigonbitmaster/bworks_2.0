@@ -27,8 +27,14 @@ export class JobBid {
   @Prop({ required: true })
   bidValue: number;
 
-  @Prop()
+  @Prop({ default: false })
   isSelected: boolean;
+
+  @Prop({ default: false })
+  isPaid: boolean;
+
+  @Prop({ default: false })
+  isCompleted: boolean;
 
   @Prop()
   rate?: number;

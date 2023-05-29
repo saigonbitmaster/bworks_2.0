@@ -80,10 +80,10 @@ const Dashboard = () => {
         />
       </div>
       <div style={styles.singleCol}>
-        <PaymentChart orders={payoutData} />
+        <PostedJobsChart orders={quizPostData} />
       </div>
       <div style={styles.singleCol}>
-        <PostedJobsChart orders={quizPostData} />
+        <PaymentChart orders={payoutData} />
       </div>
     </div>
   ) : (
@@ -102,10 +102,10 @@ const Dashboard = () => {
             />
           </div>
           <div style={styles.singleCol}>
-            <PaymentChart orders={payoutData} />
+            <PostedJobsChart orders={quizPostData} />
           </div>
           <div style={styles.singleCol}>
-            <PostedJobsChart orders={quizPostData} />
+            <PaymentChart orders={payoutData} />
           </div>
         </div>
         <div style={styles.rightCol}>

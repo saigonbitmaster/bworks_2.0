@@ -226,6 +226,8 @@ const SmartContracts = () => {
             name: "Plutus submit failed",
             jobBidId: jobBidsList.data[0].id,
             assetName: "Ada",
+            jskId: jobBidsList.data[0].jobSeekerId,
+            empId: jobBidsList.data[0].employerId,
             amount: amountToLock,
             lockedTxHash: txHash,
             lockDate: new Date(),
@@ -246,6 +248,8 @@ const SmartContracts = () => {
         data: {
           name: jobBidsList.data[0].jobId,
           jobBidId: jobBidsList.data[0].id,
+          jskId: jobBidsList.data[0].jobSeekerId,
+          empId: jobBidsList.data[0].employerId,
           assetName: "Ada",
           amount: amountToLock,
           lockedTxHash: txHash,

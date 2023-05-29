@@ -46,7 +46,7 @@ const PaymentChart = (props: { orders?: any[] }) => {
 
   return (
     <Card>
-      <CardHeader title="Plutus transactions ($Ada)" />
+      <CardHeader title="Plutus TXs ($Ada)" />
       <CardContent>
         <div style={{ width: "100%", height: 300 }}>
           <ResponsiveContainer>

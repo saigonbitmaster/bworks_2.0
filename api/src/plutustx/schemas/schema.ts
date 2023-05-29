@@ -12,10 +12,10 @@ export class PlutusTx {
   @Prop({ required: true })
   jobBidId: string;
 
-  @Prop({ required: true })
+  @Prop()
   empId: string;
 
-  @Prop({ required: true })
+  @Prop()
   jskId: string;
 
   @Prop({ required: true })

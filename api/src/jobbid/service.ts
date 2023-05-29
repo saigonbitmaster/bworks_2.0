@@ -84,6 +84,16 @@ export class JobBidService {
     return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
   }
 
+  async updateByBackgroundJob(
+    id: string,
+    updateJobBidDto: UpdateJobBidDto,
+  ): Promise<JobBid> {
+    console.log(id, updateJobBidDto);
+    let a = await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
+    console.log(a);
+    return a;
+  }
+
   async findOneUser(id: string): Promise<User> {
     return await this.userModel.findById(id).exec();
   }
