@@ -106,7 +106,7 @@ const jobDashboardScript = (fromDate: Date, toDate: Date) => {
             },
           },
         },
-        totaldBidsAmount: {
+        totalBidsAmount: {
           $sum: '$jobBids.bidValue',
         },
         selectedBidsAmount: {

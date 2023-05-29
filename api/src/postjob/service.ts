@@ -6,6 +6,7 @@ import { UpdatePostJobDto } from './dto/update.dto';
 import { PostJob, PostJobDocument } from './schemas/schema';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { jobDashboardScript } from '../flatworks/dbcripts/aggregate.scripts';
 
 @Injectable()
 export class PostJobService {
@@ -13,6 +14,11 @@ export class PostJobService {
     @InjectModel(PostJob.name) private readonly model: Model<PostJobDocument>,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
+
+  async getJobDashboard(fromDate: Date, toDate: Date): Promise<any> {
+    const aggregateScript = jobDashboardScript(fromDate, toDate);
+    return await this.model.aggregate(aggregateScript);
+  }
 
   async findAll(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();

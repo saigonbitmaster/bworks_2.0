@@ -28,7 +28,7 @@ import { UserModule } from '../user/user.module';
     PostJobModule,
     SkillModule,
     PlutusTxModule,
-    UserModule
+    UserModule,
   ],
   exports: [PublicService, SearchService],
 })

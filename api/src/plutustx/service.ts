@@ -5,12 +5,18 @@ import { CreatePlutusTxDto } from './dto/create.dto';
 import { UpdatePlutusTxDto } from './dto/update.dto';
 import { PlutusTx, PlutusTxDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { plutusDashboardScript } from '../flatworks/dbcripts/aggregate.scripts';
 
 @Injectable()
 export class PlutusTxService {
   constructor(
     @InjectModel(PlutusTx.name) private readonly model: Model<PlutusTxDocument>,
   ) {}
+
+  async getPlutusDashboard(fromDate: Date, toDate: Date): Promise<any> {
+    const aggregateScript = plutusDashboardScript(fromDate, toDate);
+    return await this.model.aggregate(aggregateScript);
+  }
 
   async findAll(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();

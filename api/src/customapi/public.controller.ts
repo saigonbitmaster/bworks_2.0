@@ -15,15 +15,45 @@ import { PublicService } from './public.service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { CreateCampaignDto } from './dto/create.campaign.dto';
 import { UpdateCampaignDto } from './dto/update.campaign.dto';
+import { PlutusTxService } from '../plutustx/service';
+import * as moment from 'moment';
+import { PostJobService } from '../postjob/service';
 
 @Controller('public')
 export class PublicController {
-  constructor(private readonly service: PublicService) {}
+  constructor(
+    private readonly service: PublicService,
+    private readonly plutusTxService: PlutusTxService,
+    private readonly postJobService: PostJobService,
+  ) {}
 
   //dashboard apis
   @Get('dashboardcards')
   async getDashboardData(@Response() res: any) {
     const result = await this.service.getDashboardData();
+    return res.json(result);
+  }
+
+  //plutus dashboard chart
+  @Get('dashboardplutus')
+  async getDashboardPlutus(@Response() res: any) {
+    const toDate = moment().toDate();
+    const fromDate = moment().subtract(1, 'year').toDate();
+
+    const result = await this.plutusTxService.getPlutusDashboard(
+      fromDate,
+      toDate,
+    );
+
+    return res.json(result);
+  }
+  @Get('jobDashboardScript')
+  async getDashboardJob(@Response() res: any) {
+    const toDate = moment().toDate();
+    const fromDate = moment().subtract(1, 'year').toDate();
+
+    const result = await this.postJobService.getJobDashboard(fromDate, toDate);
+
     return res.json(result);
   }
 
