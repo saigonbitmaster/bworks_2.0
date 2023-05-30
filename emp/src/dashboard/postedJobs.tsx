@@ -24,7 +24,7 @@ import ReorderIcon from "@mui/icons-material/Reorder";
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsField";
-
+import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 const text = {
   color: "orange",
 };
@@ -41,7 +41,7 @@ const PostedJob = (props) => {
   const translate = useTranslate();
   const { data: postedjobs, total } = useGetList<any>("postjobs", {
     sort: { field: "createdAt", order: "DESC" },
-    pagination: { page: 1, perPage: 10 },
+    pagination: { page: 1, perPage: 8 },
   });
 
   const display = "block";
@@ -63,7 +63,7 @@ const PostedJob = (props) => {
           <>
             <ListItem key={record.id} alignItems="center">
               <ListItemAvatar>
-                <ReorderIcon></ReorderIcon>
+                <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
               </ListItemAvatar>
               <TextField record={record} source="name"></TextField>
               <Spacer />

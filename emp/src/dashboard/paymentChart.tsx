@@ -9,74 +9,120 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import { format, subDays, addDays } from "date-fns";
 
-import { Order } from "../types";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { useDataProvider } from "react-admin";
+import moment from "moment";
 
-const lastDay = new Date();
-const lastMonthDays = Array.from({ length: 30 }, (_, i) => subDays(lastDay, i));
-const aMonthAgo = subDays(new Date(), 30);
+const months = [];
+for (let i = 0; i < 12; i++) {
+  const month = moment().subtract(i, "month").format("M-YYYY").toString();
+  const shortYear = moment().subtract(i, "month").format("MM-YY").toString();
+  const date = moment().subtract(i, "month").toDate();
+  months.push({ _id: month, shortYear, date });
+}
 
-const dateFormatter = (date: number): string =>
-  new Date(date).toLocaleDateString();
+const PaymentChart = () => {
+  const [checked, setChecked] = React.useState(true);
+  const [label, setLabel] = React.useState("Plutus TXs");
+  const [dataKeys, setDataKeys] = React.useState({
+    y1: "numberOfLockTxs",
+    y2: "numberOfUnlockedTxs",
+  });
 
-const aggregateOrdersByDay = (orders: Order[]): { [key: string]: number } =>
-  orders
-    .filter((order: Order) => order.status !== "cancelled")
-    .reduce((acc, curr) => {
-      const day = format(new Date(curr.date), "yyyy-MM-dd");
-      if (!acc[day]) {
-        acc[day] = 0;
-      }
-      acc[day] += curr.total;
-      return acc;
-    }, {} as { [key: string]: number });
+  const [data, setData] = React.useState(months.reverse());
+  const dataProvider = useDataProvider();
 
-const getRevenuePerDay = (orders: Order[]): TotalByDay[] => {
-  const daysWithRevenue = aggregateOrdersByDay(orders);
-  return lastMonthDays.map((date) => ({
-    date: date.getTime(),
-    total: daysWithRevenue[format(new Date(date), "yyyy-MM-dd")] || 0,
-  }));
-};
+  React.useEffect(() => {
+    dataProvider
+      .customMethod("public/dashboardplutus", { filter: {} }, "GET")
+      .then((result) => setData(result.data))
+      .catch((error) => console.error(error));
+  }, []);
 
-const PaymentChart = (props: { orders?: any[] }) => {
-  const { orders } = props;
-  if (!orders) return null;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  React.useEffect(() => {
+    if (checked) {
+      setLabel("Plutus TXs");
+      setDataKeys({
+        y1: "numberOfLockTxs",
+        y2: "numberOfUnlockedTxs",
+      });
+    } else {
+      setLabel("Plutus TX Amounts ($Ada)");
+      setDataKeys({
+        y1: "sumLockedAmounts",
+        y2: "sumUnlockedAmounts",
+      });
+    }
+  }, [checked]);
 
   return (
     <Card>
-      <CardHeader title="Plutus TXs ($Ada)" />
+      <CardHeader title="Plutus TXs" titleTypographyProps={{variant:'subtitle1' }}/>
+      <FormGroup sx={{ ml: 2 }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked
+              size="small"
+              checked={checked}
+              onChange={handleChange}
+            />
+          }
+          label={label}
+        />
+      </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 300 }}>
+        <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer>
-            <AreaChart data={getRevenuePerDay(orders)}>
+            <AreaChart
+              width={730}
+              height={280}
+              data={data}
+              margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
+            >
               <defs>
                 <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
                   <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
                 </linearGradient>
+                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
               </defs>
               <XAxis
-                dataKey="date"
-                name="Date"
-                type="number"
-                scale="time"
-                domain={[addDays(aMonthAgo, 1).getTime(), new Date().getTime()]}
-                tickFormatter={dateFormatter}
+                tick={{ fontSize: 15 }}
+                dataKey="shortYear"
+                tickSize={0}
+                interval="preserveStartEnd"
+                angle={-35}
+                textAnchor={"end"}
+                offset={5}
               />
-              <YAxis dataKey="total" name="Revenue" unit="" />
+
+              <YAxis tick={{ fontSize: 15 }} />
               <CartesianGrid strokeDasharray="3 3" />
-              <Tooltip
-                cursor={{ strokeDasharray: "3 3" }}
-                formatter={(value: any) => `${value} Ada`}
-                labelFormatter={(label: any) => dateFormatter(label)}
+              <Tooltip />
+
+              <Area
+                type="monotone"
+                dataKey={dataKeys.y1}
+                stroke="#82ca9d"
+                fillOpacity={1}
+                fill="url(#colorPv)"
               />
               <Area
                 type="monotone"
-                dataKey="total"
+                dataKey={dataKeys.y2}
                 stroke="#8884d8"
-                strokeWidth={2}
+                fillOpacity={1}
                 fill="url(#colorUv)"
               />
             </AreaChart>
@@ -86,10 +132,5 @@ const PaymentChart = (props: { orders?: any[] }) => {
     </Card>
   );
 };
-
-interface TotalByDay {
-  date: number;
-  total: number;
-}
 
 export default PaymentChart;

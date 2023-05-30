@@ -37,23 +37,13 @@ export class PublicController {
   //plutus dashboard chart
   @Get('dashboardplutus')
   async getDashboardPlutus(@Response() res: any) {
-    const toDate = moment().toDate();
-    const fromDate = moment().subtract(1, 'year').toDate();
-
-    const result = await this.plutusTxService.getPlutusDashboard(
-      fromDate,
-      toDate,
-    );
-
+    const result = await this.plutusTxService.getPlutusDashboard();
     return res.json(result);
   }
-  @Get('jobDashboardScript')
+  //job dashboard chart
+  @Get('jobdashboardscript')
   async getDashboardJob(@Response() res: any) {
-    const toDate = moment().toDate();
-    const fromDate = moment().subtract(1, 'year').toDate();
-
-    const result = await this.postJobService.getJobDashboard(fromDate, toDate);
-
+    const result = await this.postJobService.getJobDashboard();
     return res.json(result);
   }
 

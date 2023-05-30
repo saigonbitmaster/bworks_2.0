@@ -7,6 +7,7 @@ import { PostJob, PostJobDocument } from './schemas/schema';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { jobDashboardScript } from '../flatworks/dbcripts/aggregate.scripts';
+import * as moment from 'moment';
 
 @Injectable()
 export class PostJobService {
@@ -15,9 +16,44 @@ export class PostJobService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async getJobDashboard(fromDate: Date, toDate: Date): Promise<any> {
+  async getJobDashboard(): Promise<any> {
+    const toDate = moment().toDate();
+    const fromDate = moment().subtract(1, 'year').toDate();
+
+    const months = [];
+    for (let i = 0; i < 12; i++) {
+      const month = moment().subtract(i, 'month').format('M-YYYY').toString();
+      const shortYear = moment()
+        .subtract(i, 'month')
+        .format('MM-YY')
+        .toString();
+      const date = moment().subtract(i, 'month').toDate();
+      months.push({ _id: month, shortYear, date });
+    }
+
     const aggregateScript = jobDashboardScript(fromDate, toDate);
-    return await this.model.aggregate(aggregateScript);
+    const _result = await this.model.aggregate(aggregateScript);
+
+    const emptyRecord = {
+      _id: '',
+      date: '',
+      numberOfPostedJobs: 0,
+      numberOfBids: 0,
+      sumBidsAmounts: 0,
+      numberOfPaidJobs: 0,
+      numberOfCompletedJobs: 0,
+    };
+
+    const result = months.map((item) => {
+      const jobItem = _result.find((jobItem) => jobItem._id == item._id);
+      if (jobItem) {
+        return { ...jobItem, shortYear: item.shortYear };
+      }
+
+      return { ...emptyRecord, ...item };
+    });
+
+    return result.reverse();
   }
 
   async findAll(query: MongooseQuery): Promise<RaList> {

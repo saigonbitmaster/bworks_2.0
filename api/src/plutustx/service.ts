@@ -6,6 +6,7 @@ import { UpdatePlutusTxDto } from './dto/update.dto';
 import { PlutusTx, PlutusTxDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { plutusDashboardScript } from '../flatworks/dbcripts/aggregate.scripts';
+import * as moment from 'moment';
 
 @Injectable()
 export class PlutusTxService {
@@ -13,9 +14,41 @@ export class PlutusTxService {
     @InjectModel(PlutusTx.name) private readonly model: Model<PlutusTxDocument>,
   ) {}
 
-  async getPlutusDashboard(fromDate: Date, toDate: Date): Promise<any> {
+  async getPlutusDashboard(): Promise<any> {
+    const toDate = moment().toDate();
+    const fromDate = moment().subtract(1, 'year').toDate();
+
+    const months = [];
+    for (let i = 0; i < 12; i++) {
+      const month = moment().subtract(i, 'month').format('M-YYYY').toString();
+      const shortYear = moment()
+        .subtract(i, 'month')
+        .format('MM-YY')
+        .toString();
+      const date = moment().subtract(i, 'month').toDate();
+      months.push({ _id: month, shortYear, date });
+    }
     const aggregateScript = plutusDashboardScript(fromDate, toDate);
-    return await this.model.aggregate(aggregateScript);
+    const _result = await this.model.aggregate(aggregateScript);
+
+    const emptyRecord = {
+      _id: '',
+      date: '',
+      sumLockedAmounts: 0,
+      numberOfLockTxs: 0,
+      sumUnlockedAmounts: 0,
+      numberOfUnlockedTxs: 0,
+    };
+
+    const result = months.map((item) => {
+      const jobItem = _result.find((jobItem) => jobItem._id == item._id);
+      if (jobItem) {
+        return { ...jobItem, shortYear: item.shortYear };
+      }
+
+      return { ...emptyRecord, ...item };
+    });
+    return result.reverse();
   }
 
   async findAll(query: MongooseQuery): Promise<RaList> {

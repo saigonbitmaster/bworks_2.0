@@ -34,13 +34,16 @@ const plutusDashboardScript = (fromDate: Date, toDate: Date) => {
     {
       $group: {
         _id: {
-          month: { $month: '$lockDate' },
-          year: { $year: '$lockDate' },
+          $concat: [
+            { $toString: { $month: '$lockDate' } },
+            '-',
+            { $toString: { $year: '$lockDate' } },
+          ],
         },
-        lockDate: { $first: '$lockDate' },
-        lockedAmount: { $sum: '$amount' },
-        lockTxs: { $sum: 1 },
-        unlockedAmount: {
+        date: { $first: '$lockDate' },
+        sumLockedAmounts: { $sum: '$amount' },
+        numberOfLockTxs: { $sum: 1 },
+        sumUnlockedAmounts: {
           $sum: {
             $cond: {
               if: '$isUnlocked',
@@ -49,7 +52,7 @@ const plutusDashboardScript = (fromDate: Date, toDate: Date) => {
             },
           },
         },
-        unlockedTxs: {
+        numberOfUnlockedTxs: {
           $sum: {
             $cond: {
               if: '$isUnlocked',
@@ -141,13 +144,16 @@ const jobDashboardScript = (fromDate: Date, toDate: Date) => {
     {
       $group: {
         _id: {
-          month: { $month: '$createdAt' },
-          year: { $year: '$createdAt' },
+          $concat: [
+            { $toString: { $month: '$createdAt' } },
+            '-',
+            { $toString: { $year: '$createdAt' } },
+          ],
         },
-        createdAt: { $first: '$createdAt' },
-        postedJobs: { $sum: 1 },
-        Bids: { $sum: '$numberOfBids' },
-        totalBidsAmount: { $sum: '$totaldBidsAmount' },
+        date: { $first: '$createdAt' },
+        numberOfPostedJobs: { $sum: 1 },
+        numberOfBids: { $sum: '$numberOfBids' },
+        sumBidsAmounts: { $sum: '$totalBidsAmount' },
         numberOfPaidJobs: { $sum: '$numberOfPaidJobs' },
         numberOfCompletedJobs: { $sum: '$numberOfPaidJobs' },
       },

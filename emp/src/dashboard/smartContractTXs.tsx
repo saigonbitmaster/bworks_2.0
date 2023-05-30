@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 
 import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
-
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 interface Props {
   lockTxs: number;
   unlockTxs: number;
@@ -50,10 +50,9 @@ const SmartContractTxs = (props: Props) => {
       first_seen_gte: aMonthAgo.toISOString(),
     },
     sort: { field: "first_seen", order: "DESC" },
-    pagination: { page: 1, perPage: 18 },
+    pagination: { page: 1, perPage: 8 },
   });
 
-  const nb = plutustxs ? plutustxs.reduce((nb: number) => ++nb, 0) : 0;
 
   const translate = useTranslate();
   return (
@@ -69,7 +68,7 @@ const SmartContractTxs = (props: Props) => {
               <>
                 <ListItem key={record.id}>
                   <ListItemAvatar>
-                    <ReorderIcon></ReorderIcon>
+                    <PaymentsOutlinedIcon></PaymentsOutlinedIcon>
                   </ListItemAvatar>
                   <ReferenceField
                     record={record}

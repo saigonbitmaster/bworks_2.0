@@ -62,7 +62,7 @@ const Dashboard = () => {
           unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
         />
         <VerticalSpacer />
-        <PostedJobsChart orders={quizPostData} />
+        <PostedJobsChart />
       </div>
     </div>
   ) : isSmall ? (
@@ -80,10 +80,10 @@ const Dashboard = () => {
         />
       </div>
       <div style={styles.singleCol}>
-        <PostedJobsChart orders={quizPostData} />
+        <PostedJobsChart />
       </div>
       <div style={styles.singleCol}>
-        <PaymentChart orders={payoutData} />
+        <PaymentChart />
       </div>
     </div>
   ) : (
@@ -102,10 +102,10 @@ const Dashboard = () => {
             />
           </div>
           <div style={styles.singleCol}>
-            <PostedJobsChart orders={quizPostData} />
+            <PostedJobsChart  />
           </div>
           <div style={styles.singleCol}>
-            <PaymentChart orders={payoutData} />
+            <PaymentChart  />
           </div>
         </div>
         <div style={styles.rightCol}>
