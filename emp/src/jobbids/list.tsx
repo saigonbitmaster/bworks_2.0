@@ -12,6 +12,8 @@ import {
   useUpdate,
   useRecordContext,
   useRefresh,
+  FunctionField,
+  useGetList,
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
@@ -45,7 +47,7 @@ const SelectButton = () => {
   );
 };
 
-const SignButton = () => {
+const SignButton = (props) => {
   const record = useRecordContext();
   return (
     <Button
@@ -59,6 +61,7 @@ const SignButton = () => {
       }}
       size="small"
       color="primary"
+      disabled={props.disabled}
     >
       Sign Plutus TX
     </Button>
@@ -108,7 +111,10 @@ const ListScreen = () => {
         </ReferenceField>
 
         <SelectButton />
-        <SignButton />
+
+        <FunctionField
+          render={(record) => <SignButton disabled={record.isSignedTx} />}
+        />
       </Datagrid>
     </List>
   );

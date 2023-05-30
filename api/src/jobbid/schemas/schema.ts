@@ -34,6 +34,9 @@ export class JobBid {
   isPaid: boolean;
 
   @Prop({ default: false })
+  isSignedTx: boolean;
+
+  @Prop({ default: false })
   isCompleted: boolean;
 
   @Prop()

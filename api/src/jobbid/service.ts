@@ -71,11 +71,20 @@ export class JobBidService {
     updateJobBidDto: UpdateJobBidDto,
     userId: string,
   ): Promise<JobBid> {
+    console.log(id, updateJobBidDto);
     const record: JobBid = await this.model.findById(id).exec();
-    //emp has right to select the bid only
+    //emp has right to select & update sign tx for the bid only
     if (record.employerId === userId) {
-      const { isSelected = false } = updateJobBidDto;
-      return await this.model.findByIdAndUpdate(id, { isSelected }).exec();
+      const { isSelected, isSignedTx } = updateJobBidDto;
+      const updateData = {} as any;
+      isSelected !== undefined
+        ? (updateData.isSelected = isSelected)
+        : isSignedTx !== undefined
+        ? (updateData.isSignedTx = isSignedTx)
+        : null;
+      return await this.model
+        .findByIdAndUpdate(id, { isSelected, isSignedTx })
+        .exec();
     }
     if (record.jobSeekerId !== userId) {
       throw new Error('This is not your record');

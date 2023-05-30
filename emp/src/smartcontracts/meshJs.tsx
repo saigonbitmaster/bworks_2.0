@@ -18,8 +18,11 @@ import {
 import { useCreate } from "react-admin";
 import queryString from "query-string";
 import { useSearchParams } from "react-router-dom";
+import { useUpdate } from "react-admin";
 
 const SmartContracts = () => {
+  const [update, { isLoading: _isLoading, error: _error }] = useUpdate();
+
   const [searchParams] = useSearchParams();
   const search = searchParams.get("jobbidid");
   const jobBidId = JSON.parse(search);
@@ -138,6 +141,9 @@ const SmartContracts = () => {
     setJobBids({ ...jobBids, selected: event.target.value });
   };
 
+  const getJobBid = (bids: any[]) =>
+    bids.find((item) => item.id === jobBids.selected);
+
   const handleChangeUnlockPartner = (event: SelectChangeEvent) => {
     setUnlockPartner(event.target.value);
     const publicKeyHash =
@@ -186,7 +192,7 @@ const SmartContracts = () => {
   const [create, { isLoading, error }] = useCreate();
 
   const sendAdaToPlutus = async () => {
-    //public keyhash must be a valid bworks wallet address if unlock transaction signed by bworks.
+    //public keyhash must be a valid bworks wallet address if unlock transaction will be signed by bworks.
     const scriptAddr = contract.contracts.find(
       (item) => item.id === contract.selected
     ).address;
@@ -199,8 +205,8 @@ const SmartContracts = () => {
       wallet &&
       connected &&
       amountToLock &&
-      jobBidsList?.data[0]?.id &&
-      jobBidsList?.data[0]?.jobId &&
+      getJobBid(jobBids.jobBids).id &&
+      getJobBid(jobBids.jobBids).jobId &&
       datum.publicKeyHash
     ) {
       const tx = new Transaction({ initiator: wallet });
@@ -224,10 +230,10 @@ const SmartContracts = () => {
         create("plutustxs", {
           data: {
             name: "Plutus submit failed",
-            jobBidId: jobBidsList.data[0].id,
+            jobBidId: getJobBid(jobBids.jobBids).id,
             assetName: "Ada",
-            jskId: jobBidsList.data[0].jobSeekerId,
-            empId: jobBidsList.data[0].employerId,
+            jskId: getJobBid(jobBids.jobBids).jobSeekerId,
+            empId: getJobBid(jobBids.jobBids).employerId,
             amount: amountToLock,
             lockedTxHash: txHash,
             lockDate: new Date(),
@@ -246,10 +252,10 @@ const SmartContracts = () => {
       });
       create("plutustxs", {
         data: {
-          name: jobBidsList.data[0].jobId,
-          jobBidId: jobBidsList.data[0].id,
-          jskId: jobBidsList.data[0].jobSeekerId,
-          empId: jobBidsList.data[0].employerId,
+          name: getJobBid(jobBids.jobBids).jobId,
+          jobBidId: getJobBid(jobBids.jobBids).id,
+          jskId: getJobBid(jobBids.jobBids).jobSeekerId,
+          empId: getJobBid(jobBids.jobBids).employerId,
           assetName: "Ada",
           amount: amountToLock,
           lockedTxHash: txHash,
@@ -261,7 +267,11 @@ const SmartContracts = () => {
           )}`,
         },
       });
-
+      update("jobbids", {
+        id: getJobBid(jobBids.jobBids).id,
+        data: { isSignedTx: true },
+        previousData: { ...getJobBid(jobBids.jobBids) },
+      });
       console.log("txHash", txHash, new Date());
     }
   };

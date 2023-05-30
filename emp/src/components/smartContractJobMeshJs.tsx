@@ -240,7 +240,7 @@ export default function SmartContract(props) {
                   sx={{ width: 240 }}
                   labelId="simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  value={selectedContract}
+                  value={selectedJobBid}
                   onChange={handleJobBidChange}
                   label="contract"
                 >
