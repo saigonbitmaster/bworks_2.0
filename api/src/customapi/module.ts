@@ -14,11 +14,11 @@ import { Campaign, CampaignSchema } from './schemas/campaign.schema';
 import { PostJobModule } from '../postjob/module';
 import { JobBidModule } from '../jobbid/module';
 import { UserModule } from '../user/user.module';
-
+import { CustomController } from './custom.controller';
 //apis for homepage & other public requests
 @Module({
   providers: [PublicService, SearchService],
-  controllers: [PublicController, SearchController],
+  controllers: [PublicController, SearchController, CustomController],
   imports: [
     MongooseModule.forFeature([
       { name: TokenReceiver.name, schema: TokenReceiverSchema },

@@ -41,7 +41,7 @@ export class PublicController {
     return res.json(result);
   }
   //job dashboard chart
-  @Get('jobdashboardscript')
+  @Get('jobdashboard')
   async getDashboardJob(@Response() res: any) {
     const result = await this.postJobService.getJobDashboard();
     return res.json(result);

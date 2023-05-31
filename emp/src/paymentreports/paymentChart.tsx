@@ -10,6 +10,9 @@ import {
   Tooltip,
 } from "recharts";
 
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { useDataProvider } from "react-admin";
 import moment from "moment";
 
@@ -21,20 +24,60 @@ for (let i = 0; i < 12; i++) {
   months.push({ _id: month, shortYear, date });
 }
 
-const PostedJobChart = () => {
+const PaymentChart = () => {
+  const [checked, setChecked] = React.useState(true);
+  const [label, setLabel] = React.useState("Plutus TXs");
+  const [dataKeys, setDataKeys] = React.useState({
+    y1: "numberOfLockTxs",
+    y2: "numberOfUnlockedTxs",
+  });
+
   const [data, setData] = React.useState(months.reverse());
   const dataProvider = useDataProvider();
 
   React.useEffect(() => {
     dataProvider
-      .customMethod("public/jobdashboard", { filter: {} }, "GET")
+      .customMethod("public/dashboardplutus", { filter: {} }, "GET")
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  React.useEffect(() => {
+    if (checked) {
+      setLabel("Plutus TXs");
+      setDataKeys({
+        y1: "numberOfLockTxs",
+        y2: "numberOfUnlockedTxs",
+      });
+    } else {
+      setLabel("Plutus TX Amounts ($Ada)");
+      setDataKeys({
+        y1: "sumLockedAmounts",
+        y2: "sumUnlockedAmounts",
+      });
+    }
+  }, [checked]);
+
   return (
     <Card>
-      <CardHeader title="Posted jobs"  titleTypographyProps={{variant:'subtitle1' }}/>
+      <CardHeader title="Plutus TXs" titleTypographyProps={{variant:'subtitle1' }}/>
+      <FormGroup sx={{ ml: 2 }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked
+              size="small"
+              checked={checked}
+              onChange={handleChange}
+            />
+          }
+          label={label}
+        />
+      </FormGroup>
       <CardContent>
         <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer>
@@ -67,19 +110,20 @@ const PostedJobChart = () => {
               <YAxis tick={{ fontSize: 15 }} />
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
+
               <Area
                 type="monotone"
-                dataKey="numberOfPostedJobs"
-                stroke="#8884d8"
-                fillOpacity={1}
-                fill="url(#colorUv)"
-              />
-              <Area
-                type="monotone"
-                dataKey="numberOfBids"
+                dataKey={dataKeys.y1}
                 stroke="#82ca9d"
                 fillOpacity={1}
                 fill="url(#colorPv)"
+              />
+              <Area
+                type="monotone"
+                dataKey={dataKeys.y2}
+                stroke="#8884d8"
+                fillOpacity={1}
+                fill="url(#colorUv)"
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -89,4 +133,4 @@ const PostedJobChart = () => {
   );
 };
 
-export default PostedJobChart;
+export default PaymentChart;

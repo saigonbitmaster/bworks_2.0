@@ -71,7 +71,6 @@ export class JobBidService {
     updateJobBidDto: UpdateJobBidDto,
     userId: string,
   ): Promise<JobBid> {
-    console.log(id, updateJobBidDto);
     const record: JobBid = await this.model.findById(id).exec();
     //emp has right to select & update sign tx for the bid only
     if (record.employerId === userId) {

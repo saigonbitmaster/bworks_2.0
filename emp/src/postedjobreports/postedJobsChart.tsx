@@ -34,7 +34,7 @@ const PostedJobChart = () => {
 
   return (
     <Card>
-      <CardHeader title="Posted jobs"  titleTypographyProps={{variant:'subtitle1' }}/>
+      <CardHeader title="Posted jobs"  titleTypographyProps={{variant:'subtitle1' }} />
       <CardContent>
         <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer>
@@ -81,6 +81,7 @@ const PostedJobChart = () => {
                 fillOpacity={1}
                 fill="url(#colorPv)"
               />
+              
             </AreaChart>
           </ResponsiveContainer>
         </div>

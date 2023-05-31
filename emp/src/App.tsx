@@ -19,6 +19,8 @@ import SmartContracts from "./smartcontracts/meshJs";
 import { MeshProvider } from "@meshsdk/react";
 import plutustxs from "./plutustxs";
 import ParseAddress from "./components/parseAddress";
+import { PostedJobReport } from "./postedjobreports";
+import { PaymentReport } from "./paymentreports";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -52,13 +54,14 @@ const App = () => {
       >
         <CustomRoutes>
           <Route path="/configuration" element={<Configuration />} />
-          <Route path="/fetchCardano" element={<FetchCardano />} />
-          <Route path="/fetchGithub" element={<FetchGithub />} />
+          <Route path="/fetchcardano" element={<FetchCardano />} />
+          <Route path="/fetchgithub" element={<FetchGithub />} />
           <Route path="/wallets" element={<Wallet />} />
-          <Route path="/smartContract" element={<SmartContracts />} />
-          <Route path="/ParseAddress" element={<ParseAddress />} />
+          <Route path="/smartcontract" element={<SmartContracts />} />
+          <Route path="/parseaddress" element={<ParseAddress />} />
+          <Route path="/postedjobreport" element={<PostedJobReport />} />
+          <Route path="/paymentreport" element={<PaymentReport />} />
           ParseAddress
-
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobbids" {...jobbids} />

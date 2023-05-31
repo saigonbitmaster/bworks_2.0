@@ -129,7 +129,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/jobreports"
+          to="/postedjobreport"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.postJobReports.name`, {
             smart_count: 2,
@@ -139,7 +139,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         />
         
         <MenuItemLink
-          to="/contractreports"
+          to="/paymentreport"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.paymentReport.name`, {
             smart_count: 2,

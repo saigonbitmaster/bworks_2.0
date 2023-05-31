@@ -6,7 +6,10 @@ import { UpdatePostJobDto } from './dto/update.dto';
 import { PostJob, PostJobDocument } from './schemas/schema';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
-import { jobDashboardScript } from '../flatworks/dbcripts/aggregate.scripts';
+import {
+  jobScript,
+  jobDashboardScript,
+} from '../flatworks/dbcripts/aggregate.scripts';
 import * as moment from 'moment';
 
 @Injectable()
@@ -54,6 +57,16 @@ export class PostJobService {
     });
 
     return result.reverse();
+  }
+
+  async getJobReports(queryType: string, userId: string): Promise<any> {
+    const aggregateScript = jobScript(queryType, userId);
+    const result = await this.model.aggregate(aggregateScript);
+    if (result && result.length) {
+      return result[0];
+    }
+
+    return {};
   }
 
   async findAll(query: MongooseQuery): Promise<RaList> {

@@ -1,11 +1,14 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
+
 import PostedJobs from "./postedJobs";
 import ActiveUsers from "./activeUsers";
 import SmartContractTxs from "./smartContractTXs";
 import PaidByPlutus from "./paidByPlutus";
+
 import PostedJobsChart from "./postedJobsChart";
-import PaymentChart from "./paymentChart";
+import PaymentChart from "./pieChart";
+import { quizPostData, payoutData, monthlyRevenue, newQuiz } from "./data";
 import { useDataProvider } from "react-admin";
 
 const styles = {
@@ -36,7 +39,6 @@ const Dashboard = () => {
     },
   });
   const dataProvider = useDataProvider();
-
   React.useEffect(() => {
     dataProvider
       .customMethod("public/dashboardcards", { filter: {} }, "GET")
@@ -52,11 +54,6 @@ const Dashboard = () => {
   return isXSmall ? (
     <div>
       <div style={styles.flexColumn as CSSProperties}>
-        <PaidByPlutus
-          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
-          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
-        />
-        <VerticalSpacer />
         <SmartContractTxs
           lockTxs={dashBoardCardData.plutusTxs.lockTxs}
           unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}

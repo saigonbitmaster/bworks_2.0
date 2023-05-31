@@ -27,7 +27,7 @@ const PostedJobChart = () => {
 
   React.useEffect(() => {
     dataProvider
-      .customMethod("public/jobdashboard", { filter: {} }, "GET")
+      .customMethod("public/jobdashboardscript", { filter: {} }, "GET")
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
