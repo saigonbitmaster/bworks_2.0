@@ -8,6 +8,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
 } from "recharts";
 
 import FormGroup from "@mui/material/FormGroup";
@@ -30,6 +31,8 @@ const PaymentChart = () => {
   const [dataKeys, setDataKeys] = React.useState({
     y1: "numberOfLockTxs",
     y2: "numberOfUnlockedTxs",
+    y1Name: "Lock Txs",
+    y2Name: "Unlocked Txs",
   });
 
   const [data, setData] = React.useState(months.reverse());
@@ -52,19 +55,26 @@ const PaymentChart = () => {
       setDataKeys({
         y1: "numberOfLockTxs",
         y2: "numberOfUnlockedTxs",
+        y1Name: "Lock Txs",
+        y2Name: "Unlocked Txs",
       });
     } else {
       setLabel("Plutus TX Amounts ($Ada)");
       setDataKeys({
         y1: "sumLockedAmounts",
         y2: "sumUnlockedAmounts",
+        y1Name: "Locked amounts",
+        y2Name: "Unlocked amounts",
       });
     }
   }, [checked]);
 
   return (
     <Card>
-      <CardHeader title="Plutus TXs" titleTypographyProps={{variant:'subtitle1' }}/>
+      <CardHeader
+        title="Plutus TXs"
+        titleTypographyProps={{ variant: "subtitle1" }}
+      />
       <FormGroup sx={{ ml: 2 }}>
         <FormControlLabel
           control={
@@ -113,17 +123,22 @@ const PaymentChart = () => {
 
               <Area
                 type="monotone"
+                name={dataKeys.y1Name}
                 dataKey={dataKeys.y1}
-                stroke="#82ca9d"
+                stroke="#8884d8"
                 fillOpacity={1}
                 fill="url(#colorPv)"
               />
               <Area
                 type="monotone"
+                name={dataKeys.y2Name}
                 dataKey={dataKeys.y2}
-                stroke="#8884d8"
+                stroke="#82ca9d"
                 fillOpacity={1}
                 fill="url(#colorUv)"
+              />
+              <Legend
+                wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
               />
             </AreaChart>
           </ResponsiveContainer>

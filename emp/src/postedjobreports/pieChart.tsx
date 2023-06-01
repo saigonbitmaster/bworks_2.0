@@ -18,6 +18,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { useDataProvider } from "react-admin";
 import moment from "moment";
 import { PieChart, Pie, Sector, Cell } from "recharts";
+import Typography from "@mui/material/Typography";
 
 const PaymentChart = () => {
   const [data2, setData] = React.useState({
@@ -92,13 +93,17 @@ const PaymentChart = () => {
       <CardHeader
         title="Jobs statistic"
         titleTypographyProps={{ variant: "subtitle1" }}
-        subheader={`Posted jobs: ${data2.numberOfPostedJobs}, Attended bids: ${data2.numberOfBids}, Selected bids: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
+        subheader={
+          <Typography variant="subtitle2" gutterBottom>
+            {`Posted jobs: ${data2.numberOfPostedJobs}, Attended bids: ${data2.numberOfBids}, Selected bids: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
+          </Typography>
+        }
       />
       <CardContent>
         <div
           style={{
             width: "100%",
-            height: 280,
+            height: 295,
             display: "flex",
             flexDirection: "row",
           }}
@@ -140,7 +145,7 @@ const PaymentChart = () => {
                   />
                 ))}
               </Pie>
-
+              <Tooltip />
               <Legend />
             </PieChart>
           </ResponsiveContainer>

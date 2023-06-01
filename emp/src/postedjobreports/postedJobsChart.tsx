@@ -8,6 +8,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
 } from "recharts";
 
 import { useDataProvider } from "react-admin";
@@ -34,9 +35,12 @@ const PostedJobChart = () => {
 
   return (
     <Card>
-      <CardHeader title="Posted jobs"  titleTypographyProps={{variant:'subtitle1' }} />
+      <CardHeader
+        title="Posted jobs"
+        titleTypographyProps={{ variant: "subtitle1" }}
+      />
       <CardContent>
-        <div style={{ width: "100%", height: 280 }}>
+        <div style={{ width: "100%", height: 300 }}>
           <ResponsiveContainer>
             <AreaChart
               width={730}
@@ -69,6 +73,7 @@ const PostedJobChart = () => {
               <Tooltip />
               <Area
                 type="monotone"
+                name="Posted jobs"
                 dataKey="numberOfPostedJobs"
                 stroke="#8884d8"
                 fillOpacity={1}
@@ -76,12 +81,15 @@ const PostedJobChart = () => {
               />
               <Area
                 type="monotone"
+                name="Attended bids"
                 dataKey="numberOfBids"
                 stroke="#82ca9d"
                 fillOpacity={1}
                 fill="url(#colorPv)"
               />
-              
+              <Legend
+                wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>

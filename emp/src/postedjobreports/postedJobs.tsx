@@ -27,6 +27,7 @@ import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsField";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
+import Table from "../components/table";
 const text = {
   color: "orange",
 };
@@ -51,6 +52,14 @@ const PostedJob = (props) => {
 
   const translate = useTranslate();
   const display = "block";
+  const headers = [
+    { key: "_id", name: "Month" },
+    { key: "numberOfPostedJobs", name: "Posted jobs" },
+    { key: "numberOfBids", name: "Attended bids" },
+    { key: "sumBidsAmounts", name: "Sum bid amounts ($Ada)" },
+    { key: "numberOfPaidJobs", name: "Paid jobs" },
+    { key: "numberOfCompletedJobs", name: "Completed jobs" },
+  ];
   return (
     <CardWithIcon
       to={{
@@ -63,33 +72,7 @@ const PostedJob = (props) => {
       title={translate("pos.dashboard.postedJob")}
       subtitle={`Last 12 months posted jobs`}
     >
-      <List sx={{ display }}>
-        {postedJobs?.map((record: any) => (
-          <>
-            <ListItem key={record.id} alignItems="center">
-              <ListItemAvatar>
-                <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
-              </ListItemAvatar>
-              <NumberField record={record} source="numberOfPostedJobs"></NumberField>
-              <Spacer />
-              <TextField record={record} source="_id" label="abc"></TextField>
-            </ListItem>
-
-            <ListItem
-              key={record.id + 1}
-              button
-              component={Link}
-              to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`}
-              alignItems="flex-start"
-            >
-              <ListItemText primaryTypographyProps={{ style: text }}>
-                Current bids
-              </ListItemText>
-              <LinkBidField record={record} />
-            </ListItem>
-          </>
-        ))}
-      </List>
+      <Table headers={headers} data={postedJobs}></Table>
       <Box flexGrow={1}>&nbsp;</Box>
       <Button
         sx={{ borderRadius: 0 }}
