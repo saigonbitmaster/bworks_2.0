@@ -64,7 +64,7 @@ export class CustomController {
     return res.json(result);
   }
 
-  //job list report
+  //job list report by emp, jsk or cms(all)
   @Get('getmonthlyjobreport')
   async getMonthlyJobReport(
     @Response() res: any,
@@ -80,6 +80,28 @@ export class CustomController {
       return res.json({});
     }
     const result = await this.postJobService.getMonthlyJobReport(
+      queryType,
+      userId,
+    );
+    return res.json(result);
+  }
+
+  //job list report by emp, jsk or cms(all)
+  @Get('getmonthlyplutustxsreport')
+  async getMonthlyPlutusTxsReport(
+    @Response() res: any,
+    @Req() request,
+    @Query() query,
+  ) {
+    const userId = lodash.get(request, 'user.userId', null);
+    const mongooseQuery = queryTransform(query);
+    const queryType = mongooseQuery.filter.queryType;
+
+    //if queryType = emp return job data posted by emp, if queryType = jsk return job data bid by emp by jsk, if queryType = cms return all job data
+    if (!userId || !queryType) {
+      return res.json({});
+    }
+    const result = await this.plutusTxService.getMonthlyPlutusTxsReport(
       queryType,
       userId,
     );

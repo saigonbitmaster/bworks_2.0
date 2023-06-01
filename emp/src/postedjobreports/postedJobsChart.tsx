@@ -28,7 +28,7 @@ const PostedJobChart = () => {
 
   React.useEffect(() => {
     dataProvider
-      .customMethod("public/jobdashboard", { filter: {} }, "GET")
+      .customMethod("customapis/getmonthlyjobreport", { filter: {queryType: "emp"} }, "GET")
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);

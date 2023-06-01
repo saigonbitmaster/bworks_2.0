@@ -1,3 +1,3 @@
-import DashboardComponent from './Dashboard';
+import PaymentReports from './paymentReports';
 
-export const PaymentReport = DashboardComponent;
+export const PaymentReport = PaymentReports;

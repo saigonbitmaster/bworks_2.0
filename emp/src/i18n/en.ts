@@ -25,6 +25,7 @@ const customEnglishMessages: TranslationMessages = {
       allUsers: "See all users",
       pending_orders: "Pending Orders",
       allPostedJobs: "See all Jobs",
+      plutusTxs: "Plutus TXs",
       allPlutusTxs: "See all plutus TXs",
       order: {
         items:
