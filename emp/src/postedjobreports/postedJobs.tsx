@@ -18,13 +18,15 @@ import {
   useTranslate,
   TextField,
   DateField,
+  useDataProvider,
+  NumberField,
 } from "react-admin";
 
 import ReorderIcon from "@mui/icons-material/Reorder";
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsField";
-import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
+import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
 const text = {
   color: "orange",
 };
@@ -32,20 +34,23 @@ const text = {
 const Spacer = () => <span style={{ width: "3em" }} />;
 
 const PostedJob = (props) => {
-  interface Props {
-    postedJobs: number;
-    bids: number;
-  }
-  const { postedJobs = 0, bids = 0 } = props;
+  const dataProvider = useDataProvider();
+
+  const [postedJobs, setPostedJobs] = React.useState([]);
+
+  React.useEffect(() => {
+    dataProvider
+      .customMethod(
+        "customapis/getmonthlyjobreport",
+        { filter: { queryType: "emp" } },
+        "GET"
+      )
+      .then((result) => setPostedJobs(result.data.reverse()))
+      .catch((error) => console.error(error));
+  }, []);
 
   const translate = useTranslate();
-  const { data: postedjobs, total } = useGetList<any>("postjobs", {
-    sort: { field: "createdAt", order: "DESC" },
-    pagination: { page: 1, perPage: 8 },
-  });
-
   const display = "block";
-
   return (
     <CardWithIcon
       to={{
@@ -56,18 +61,18 @@ const PostedJob = (props) => {
       }}
       icon={DynamicFeedOutlinedIcon}
       title={translate("pos.dashboard.postedJob")}
-      subtitle={`${postedJobs} jobs, ${bids} bids`}
+      subtitle={`Last 12 months posted jobs`}
     >
       <List sx={{ display }}>
-        {postedjobs?.map((record: any) => (
+        {postedJobs?.map((record: any) => (
           <>
             <ListItem key={record.id} alignItems="center">
               <ListItemAvatar>
                 <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
               </ListItemAvatar>
-              <TextField record={record} source="name"></TextField>
+              <NumberField record={record} source="numberOfPostedJobs"></NumberField>
               <Spacer />
-              <DateField record={record} source="createdAt"></DateField>
+              <TextField record={record} source="_id" label="abc"></TextField>
             </ListItem>
 
             <ListItem

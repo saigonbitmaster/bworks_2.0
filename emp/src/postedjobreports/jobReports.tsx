@@ -1,14 +1,8 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
-
 import PostedJobs from "./postedJobs";
-import ActiveUsers from "./activeUsers";
-import SmartContractTxs from "./smartContractTXs";
-import PaidByPlutus from "./paidByPlutus";
-
 import PostedJobsChart from "./postedJobsChart";
-import PaymentChart from "./pieChart";
-import { quizPostData, payoutData, monthlyRevenue, newQuiz } from "./data";
+import PieChart from "./pieChart";
 import { useDataProvider } from "react-admin";
 
 const styles = {
@@ -54,55 +48,27 @@ const Dashboard = () => {
   return isXSmall ? (
     <div>
       <div style={styles.flexColumn as CSSProperties}>
-        <SmartContractTxs
-          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
-          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
-        />
-        <VerticalSpacer />
         <PostedJobsChart />
       </div>
     </div>
   ) : isSmall ? (
     <div style={styles.flexColumn as CSSProperties}>
-      <div style={styles.singleCol}></div>
-      <div style={styles.flex}>
-        <PaidByPlutus
-          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
-          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
-        />
-        <Spacer />
-        <SmartContractTxs
-          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
-          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
-        />
-      </div>
       <div style={styles.singleCol}>
         <PostedJobsChart />
       </div>
       <div style={styles.singleCol}>
-        <PaymentChart />
+        <PieChart />
       </div>
     </div>
   ) : (
     <>
       <div style={styles.flex}>
         <div style={styles.leftCol}>
-          <div style={styles.flex}>
-            <PaidByPlutus
-              numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
-              totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
-            />
-            <Spacer />
-            <ActiveUsers
-              jobSeekers={dashBoardCardData.activeUsers.jobSeekers}
-              employers={dashBoardCardData.activeUsers.employers}
-            />
-          </div>
           <div style={styles.singleCol}>
             <PostedJobsChart />
           </div>
           <div style={styles.singleCol}>
-            <PaymentChart />
+            <PieChart />
           </div>
         </div>
         <div style={styles.rightCol}>
@@ -110,11 +76,6 @@ const Dashboard = () => {
             <PostedJobs
               postedJobs={dashBoardCardData.postedJobs.postedJobs}
               bids={dashBoardCardData.postedJobs.bids}
-            />
-            <Spacer />
-            <SmartContractTxs
-              lockTxs={dashBoardCardData.plutusTxs.lockTxs}
-              unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
             />
           </div>
         </div>

@@ -136,7 +136,7 @@ const PaymentChart = () => {
                 {data.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={COLORS1[index % COLORS.length]}
+                    fill={COLORS1[index % COLORS1.length]}
                   />
                 ))}
               </Pie>
