@@ -3,51 +3,30 @@ import {
   List,
   Datagrid,
   TextField,
-  EditButton,
   DateField,
   ReferenceField,
-  useRecordContext,
-  ReferenceOneField,
-  useDataProvider,
   FunctionField,
   NumberField,
+  useDataProvider,
 } from "react-admin";
-import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-
 const ListScreen = () => {
-  const UnlockButton = () => {
-    const record = useRecordContext();
-    const dataProvider = useDataProvider();
-    const handleClick = () => {
-      dataProvider
-        .customMethod(
-          "queues/unlock",
-          {
-            data: {
-              jobBidId: record.jobBidId,
-              scriptTxHash: record.lockedTxHash,
-            },
-          },
-          "POST"
-        )
-        .then((result) => console.log(result))
-        .catch((error) => console.error(error));
-    };
-
-    return (
-      <Button variant="text" disabled={record.isUnlocked} onClick={handleClick}>
-        UNLOCK
-      </Button>
-    );
-  };
+  const dataProvider = useDataProvider();
+  const [userId, setUserId] = React.useState("");
+  //get userId from APi to filter
+  React.useEffect(() => {
+    dataProvider
+      .customMethod("customapis/userid", { filter: {} }, "GET")
+      .then((result) => setUserId(result.data))
+      .catch((error) => console.error(error));
+  }, []);
 
   return (
     <List
       perPage={25}
-      sort={{ field: "date", order: "DESC" }}
+      sort={{ field: "date", order: "desc" }}
       resource="plutustxs"
-      filter={{ queryType: "employer" }}
+      filter={{ queryType: "jobSeeker" }}
     >
       <Datagrid bulkActionButtons={false}>
         <ReferenceField source="name" reference="postJobs" label="Job">

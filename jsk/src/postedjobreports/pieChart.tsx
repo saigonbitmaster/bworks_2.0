@@ -21,7 +21,7 @@ const PaymentChart = () => {
     dataProvider
       .customMethod(
         "customapis/jobreports",
-        { filter: { queryType: "emp" } },
+        { filter: { queryType: "jsk" } },
         "GET"
       )
       .then((result) => setData(result.data))

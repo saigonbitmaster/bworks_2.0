@@ -13,12 +13,12 @@ import postjobs from "./postjobs";
 import jobbids from "./jobbids";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
+import ParseAddress from "./tools/parseAddress";
 import Wallet from "./wallet/wallet";
 import jobtasks from "./jobtasks";
 import SmartContracts from "./smartcontracts/meshJs";
 import { MeshProvider } from "@meshsdk/react";
 import plutustxs from "./plutustxs";
-import ParseAddress from "./components/parseAddress";
 import { PostedJobReport } from "./postedjobreports";
 import { PaymentReport } from "./paymentreports";
 
@@ -26,7 +26,6 @@ const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
 const renewTokenUrl = process.env.REACT_APP_RENEW_ACCESS_TOKEN_URL;
 const logoutUrl = process.env.REACT_APP_LOGOUT_URL;
-
 const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
 const restProvider = dataProvider(apiUrl);
 

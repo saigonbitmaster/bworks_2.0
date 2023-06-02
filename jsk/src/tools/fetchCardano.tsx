@@ -176,7 +176,7 @@ const FetchCardano = (props) => {
           </Grid>
         ) : (
           <Datagrid bulkActionButtons={false}>
-            <TextField source="txHash" />
+            <TextField source="tx_hash" />
             <TextField source="block" />
             <ArrayField source="amount">
               <Datagrid bulkActionButtons={false}>

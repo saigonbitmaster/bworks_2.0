@@ -27,6 +27,13 @@ export class CustomController {
     private readonly postJobService: PostJobService,
   ) {}
 
+  //get userId from access token
+  @Get('userid')
+  async getUserId(@Response() res: any, @Req() request) {
+    const userId = lodash.get(request, 'user.userId', null);
+    return res.json(userId);
+  }
+
   //plutus report
   @Get('plutusreports')
   async getDashboardPlutus(

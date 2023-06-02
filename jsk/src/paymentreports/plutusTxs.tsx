@@ -2,9 +2,7 @@ import * as React from "react";
 import { Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
-
-import { useTranslate, useDataProvider } from "react-admin";
-
+import { useDataProvider, useTranslate } from "react-admin";
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import Table from "../components/table";
@@ -17,46 +15,46 @@ const PostedJob = (props) => {
   React.useEffect(() => {
     dataProvider
       .customMethod(
-        "customapis/getmonthlyjobreport",
-        { filter: { queryType: "emp" } },
+        "customapis/getmonthlyplutustxsreport",
+        { filter: { queryType: "jsk" } },
         "GET"
       )
       .then((result) => setPostedJobs(result.data.reverse()))
       .catch((error) => console.error(error));
   }, []);
 
+
   const translate = useTranslate();
   const headers = [
     { key: "_id", name: "Month" },
-    { key: "numberOfPostedJobs", name: "Posted jobs" },
-    { key: "numberOfBids", name: "Attended bids" },
-    { key: "sumBidsAmounts", name: "Sum bid amounts ($Ada)" },
-    { key: "numberOfPaidJobs", name: "Paid jobs" },
-    { key: "numberOfCompletedJobs", name: "Completed jobs" },
+    { key: "numberOfLockTxs", name: "Locked TXs" },
+    { key: "numberOfUnlockedTxs", name: "Unlocked TXs" },
+    { key: "sumLockedAmounts", name: "Locked amounts ($Ada)" },
+    { key: "sumUnlockedAmounts", name: "Unlocked amount ($Ada)" },
   ];
   return (
     <CardWithIcon
       to={{
-        pathname: "/postjobs",
+        pathname: "/plutustxs",
         search: stringify({
           filter: JSON.stringify({ status: "active" }),
         }),
       }}
       icon={DynamicFeedOutlinedIcon}
-      title={translate("pos.dashboard.postedJob")}
-      subtitle={`Last 12 months posted jobs`}
+      title={translate("pos.dashboard.plutusTxs")}
+      subtitle={`Last 12 months plutus TXs`}
     >
       <Table headers={headers} data={postedJobs}></Table>
       <Box flexGrow={1}>&nbsp;</Box>
       <Button
         sx={{ borderRadius: 0 }}
         component={Link}
-        to="/postjobs"
+        to="/plutustxs"
         size="small"
         color="primary"
       >
         <Box p={1} sx={{ color: "primary.main" }}>
-          {translate("pos.dashboard.allPostedJobs")}
+          {translate("pos.dashboard.allPlutusTxs")}
         </Box>
       </Button>
     </CardWithIcon>

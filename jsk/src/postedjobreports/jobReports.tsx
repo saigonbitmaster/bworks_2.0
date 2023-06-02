@@ -3,7 +3,6 @@ import { useMediaQuery, Theme } from "@mui/material";
 import PostedJobs from "./postedJobs";
 import PostedJobsChart from "./postedJobsChart";
 import PieChart from "./pieChart";
-import { useDataProvider } from "react-admin";
 
 const styles = {
   flex: { display: "flex" },

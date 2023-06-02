@@ -84,7 +84,7 @@ const PaymentChart = () => {
         <div
           style={{
             width: "100%",
-            height: 295,
+            height: 275,
             display: "flex",
             flexDirection: "row",
           }}
@@ -100,8 +100,9 @@ const PaymentChart = () => {
                 outerRadius={120}
                 fill="#8884d8"
                 dataKey="value"
+                animationDuration={1000}
               >
-                {data.map((entry, index) => (
+                {data1.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

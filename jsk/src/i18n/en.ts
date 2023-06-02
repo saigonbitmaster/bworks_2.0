@@ -13,14 +13,20 @@ const customEnglishMessages: TranslationMessages = {
       dark: "Dark",
     },
     dashboard: {
+      postedJob: "Posted jobs",
       monthly_revenue: "Monthly Revenue",
       month_history: "30 Day Revenue History",
       new_orders: "New Orders",
       pending_reviews: "Pending Reviews",
       all_reviews: "See all reviews",
       new_customers: "New Customers",
+      submittedUsers: "Submitted users",
       all_customers: "See all customers",
+      allUsers: "See all users",
       pending_orders: "Pending Orders",
+      allPostedJobs: "See all Jobs",
+      plutusTxs: "Plutus TXs",
+      allPlutusTxs: "See all plutus TXs",
       order: {
         items:
           "by %{customer_name}, one item |||| by %{customer_name}, %{nb_items} items",
@@ -33,18 +39,23 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     menu: {
-      postJobs: "Job post",
+      postJobs: "Manage jobs",
       reports: "Reports",
-      manageFund: "Manage fund",
+      manageFund: "Payments",
       tools: "Tools",
+      settings: "Settings",
     },
   },
   resources: {
+    paymentReport: { name: "Payment" },
+    parseAddress: {
+      name: "Parse address",
+    },
     reports: {
       import: "Import excels",
     },
     jobtasks: {
-      name: "Job tasks",
+      name: "Your tasks",
     },
     smartContracts: {
       name: "Smart contract |||| Smart contracts",
@@ -120,7 +131,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     postJobs: {
-      name: "Post Job |||| Post jobs",
+      name: "Posted Job |||| Posted jobs",
       fields: {
         commands: "Orders",
       },
@@ -138,7 +149,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     jobBids: {
-      name: "Job bid |||| Job bids",
+      name: "Your bid |||| Your bids",
       fields: {
         commands: "Orders",
       },
@@ -156,7 +167,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     contractedJobs: {
-      name: "Contracted job |||| Contracted jobs",
+      name: "Plutus TX |||| Plutus TXs",
       fields: {
         commands: "Orders",
       },
@@ -210,7 +221,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     postJobReports: {
-      name: "Posted job |||| Posted jobs",
+      name: "Your  job |||| Your jobs",
       fields: {
         commands: "Orders",
       },

@@ -1,9 +1,8 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
-import PostedJobs from "./postedJobs";
-import PostedJobsChart from "./postedJobsChart";
+import PlutusTxs from "./plutusTxs";
+import PlutusTxsChart from "./plutusTxsChart";
 import PieChart from "./pieChart";
-import { useDataProvider } from "react-admin";
 
 const styles = {
   flex: { display: "flex" },
@@ -13,7 +12,7 @@ const styles = {
   singleCol: { marginTop: "1em", marginBottom: "1em" },
 };
 
-const JobReports = () => {
+const PaymentReports = () => {
   const isXSmall = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down("sm")
   );
@@ -22,13 +21,13 @@ const JobReports = () => {
   return isXSmall ? (
     <div>
       <div style={styles.flexColumn as CSSProperties}>
-        <PostedJobsChart />
+        <PlutusTxsChart />
       </div>
     </div>
   ) : isSmall ? (
     <div style={styles.flexColumn as CSSProperties}>
       <div style={styles.singleCol}>
-        <PostedJobsChart />
+        <PlutusTxsChart />
       </div>
       <div style={styles.singleCol}>
         <PieChart />
@@ -39,7 +38,7 @@ const JobReports = () => {
       <div style={styles.flex}>
         <div style={styles.leftCol}>
           <div style={styles.singleCol}>
-            <PostedJobsChart />
+            <PlutusTxsChart />
           </div>
           <div style={styles.singleCol}>
             <PieChart />
@@ -47,7 +46,7 @@ const JobReports = () => {
         </div>
         <div style={styles.rightCol}>
           <div style={styles.flex}>
-            <PostedJobs />
+            <PlutusTxs />
           </div>
         </div>
       </div>
@@ -55,4 +54,4 @@ const JobReports = () => {
   );
 };
 
-export default JobReports;
+export default PaymentReports;

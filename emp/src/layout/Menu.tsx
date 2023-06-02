@@ -3,7 +3,6 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import BlurOnIcon from "@mui/icons-material/BlurOn";
 import DeselectIcon from "@mui/icons-material/Deselect";
-import FitbitIcon from "@mui/icons-material/Fitbit";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";

@@ -30,7 +30,7 @@ const PostedJobChart = () => {
     dataProvider
       .customMethod(
         "customapis/getmonthlyjobreport",
-        { filter: { queryType: "emp" } },
+        { filter: { queryType: "jsk" } },
         "GET"
       )
       .then((result) => setData(result.data))

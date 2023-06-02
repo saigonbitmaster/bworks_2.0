@@ -18,7 +18,7 @@ const PostedJob = (props) => {
     dataProvider
       .customMethod(
         "customapis/getmonthlyjobreport",
-        { filter: { queryType: "emp" } },
+        { filter: { queryType: "jsk" } },
         "GET"
       )
       .then((result) => setPostedJobs(result.data.reverse()))

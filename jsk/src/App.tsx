@@ -14,9 +14,12 @@ import jobbids from "./jobbids";
 import jobtasks from "./jobtasks";
 import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
-import ImportExcels from "./tools/importExcels";
 import { MeshProvider } from "@meshsdk/react";
-
+import ParseAddress from "./tools/parseAddress";
+import plutustxs from "./plutustxs";
+import { PostedJobReport } from "./postedjobreports";
+import { PaymentReport } from "./paymentreports";
+import Wallet from "./wallet/wallet";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -25,7 +28,6 @@ const logoutUrl = process.env.REACT_APP_LOGOUT_URL;
 
 const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
 const restProvider = dataProvider(apiUrl);
-
 
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
@@ -38,26 +40,32 @@ const i18nProvider = polyglotI18nProvider((locale) => {
 const App = () => {
   return (
     <MeshProvider>
-    <Admin
-      title="bWorks"
-      dataProvider={restProvider}
-      authProvider={_authProvider}
-      dashboard={Dashboard}
-      loginPage={Login}
-      layout={Layout}
-      i18nProvider={i18nProvider}
-      disableTelemetry
-      theme={lightTheme}
-    >
-      <CustomRoutes>
-        <Route path="/configuration" element={<Configuration />} />
-        <Route path="/fetchCardano" element={<FetchCardano />} />
-        <Route path="/fetchGithub" element={<FetchGithub />} />
-      </CustomRoutes>
-      <Resource name="postjobs" {...postjobs} />
-      <Resource name="jobbids" {...jobbids} />
-      <Resource name="jobtasks" {...jobtasks} />
-    </Admin>
+      <Admin
+        title="bWorks"
+        dataProvider={restProvider}
+        authProvider={_authProvider}
+        dashboard={Dashboard}
+        loginPage={Login}
+        layout={Layout}
+        i18nProvider={i18nProvider}
+        disableTelemetry
+        theme={lightTheme}
+      >
+        <CustomRoutes>
+          <Route path="/configuration" element={<Configuration />} />
+          <Route path="/fetchCardano" element={<FetchCardano />} />
+          <Route path="/fetchGithub" element={<FetchGithub />} />
+          <Route path="/parseaddress" element={<ParseAddress />} />
+          <Route path="/postedjobreport" element={<PostedJobReport />} />
+          <Route path="/paymentreport" element={<PaymentReport />} />
+          <Route path="/wallets" element={<Wallet />} />
+
+        </CustomRoutes>
+        <Resource name="postjobs" {...postjobs} />
+        <Resource name="jobbids" {...jobbids} />
+        <Resource name="jobtasks" {...jobtasks} />
+        <Resource name="plutustxs" {...plutustxs} />
+      </Admin>
     </MeshProvider>
   );
 };

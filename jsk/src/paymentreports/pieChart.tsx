@@ -7,21 +7,18 @@ import Typography from "@mui/material/Typography";
 
 const PaymentChart = () => {
   const [data2, setData] = React.useState({
-    _id: "jobReport",
-    numberOfPostedJobs: 0,
-    numberOfBids: 0,
-    sumBidsAmounts: 0,
-    numberOfPaidJobs: 0,
-    numberOfCompletedJobs: 0,
-    numberOfSelectedBids: 0,
+    _id: "plutusReports",
+    numberOfLockTxs: 0,
+    numberOfUnlockedTxs: 0,
+    sumUnlockedAmounts: 0,
+    sumLockedAmounts: 0,
   });
   const dataProvider = useDataProvider();
-
   React.useEffect(() => {
     dataProvider
       .customMethod(
-        "customapis/jobreports",
-        { filter: { queryType: "emp" } },
+        "customapis/plutusreports",
+        { filter: { queryType: "jsk" } },
         "GET"
       )
       .then((result) => setData(result.data))
@@ -29,17 +26,17 @@ const PaymentChart = () => {
   }, []);
 
   const data1 = [
-    { name: "Complete jobs", value: data2.numberOfCompletedJobs },
+    { name: "Unlocked TXs", value: data2.numberOfUnlockedTxs },
     {
-      name: "Pending jobs",
-      value: data2.numberOfPostedJobs - data2.numberOfCompletedJobs,
+      name: "Pending TXs",
+      value: data2.numberOfLockTxs - data2.numberOfUnlockedTxs,
     },
   ];
   const data = [
-    { name: "Selected bids", value: data2.numberOfSelectedBids },
+    { name: "Unlocked amounts", value: data2.sumUnlockedAmounts },
     {
-      name: "Unselected bids",
-      value: data2.numberOfBids - data2.numberOfSelectedBids,
+      name: "Pending amounts",
+      value: data2.sumLockedAmounts - data2.sumUnlockedAmounts,
     },
   ];
   const COLORS = ["#0088FE", "#FF8042"];
@@ -75,11 +72,11 @@ const PaymentChart = () => {
   return (
     <Card>
       <CardHeader
-        title="Jobs statistic"
+        title="Payment statistic"
         titleTypographyProps={{ variant: "subtitle1" }}
         subheader={
           <Typography variant="subtitle2" gutterBottom>
-            {`Posted jobs: ${data2.numberOfPostedJobs}, Attended bids: ${data2.numberOfBids}, Selected bids: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
+            {`Locked TXs: ${data2.numberOfLockTxs}, Unlocked TXs: ${data2.numberOfUnlockedTxs}, Locked amounts: ${data2.sumLockedAmounts}, Unlocked amounts: ${data2.sumUnlockedAmounts}`}
           </Typography>
         }
       />
@@ -87,7 +84,7 @@ const PaymentChart = () => {
         <div
           style={{
             width: "100%",
-            height: 295,
+            height: 275,
             display: "flex",
             flexDirection: "row",
           }}
@@ -103,7 +100,7 @@ const PaymentChart = () => {
                 outerRadius={120}
                 fill="#8884d8"
                 dataKey="value"
-                
+                animationDuration={1000}
               >
                 {data1.map((entry, index) => (
                   <Cell

@@ -11,11 +11,9 @@ import CardWithIcon from "./cardWithIcon";
 import GradingIcon from "@mui/icons-material/Grading";
 import { subDays } from "date-fns";
 import { Link } from "react-router-dom";
-import ReorderIcon from "@mui/icons-material/Reorder";
 import Tooltip from "@mui/material/Tooltip";
 
 import {
-  Avatar,
   Box,
   Button,
   List,
@@ -24,8 +22,7 @@ import {
   ListItemText,
 } from "@mui/material";
 
-import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
-import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 interface Props {
   lockTxs: number;
   unlockTxs: number;
@@ -37,22 +34,12 @@ const SmartContractTxs = (props: Props) => {
   const text = {
     color: "orange",
   };
-  const aMonthAgo = subDays(new Date(), 30);
-  aMonthAgo.setDate(aMonthAgo.getDate() - 30);
-  aMonthAgo.setHours(0);
-  aMonthAgo.setMinutes(0);
-  aMonthAgo.setSeconds(0);
-  aMonthAgo.setMilliseconds(0);
 
   const { isLoading, data: plutustxs } = useGetList<any>("plutustxs", {
-    filter: {
-      has_ordered: true,
-      first_seen_gte: aMonthAgo.toISOString(),
-    },
-    sort: { field: "first_seen", order: "DESC" },
+    filter: {},
+    sort: { field: "createdAt", order: "DESC" },
     pagination: { page: 1, perPage: 8 },
   });
-
 
   const translate = useTranslate();
   return (

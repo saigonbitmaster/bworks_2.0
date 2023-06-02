@@ -11,6 +11,9 @@ import {
   Legend,
 } from "recharts";
 
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import { useDataProvider } from "react-admin";
 import moment from "moment";
 
@@ -22,29 +25,70 @@ for (let i = 0; i < 12; i++) {
   months.push({ _id: month, shortYear, date });
 }
 
-const PostedJobChart = () => {
+const PaymentChart = () => {
+  const [checked, setChecked] = React.useState(true);
+  const [label, setLabel] = React.useState("Plutus TXs");
+  const [dataKeys, setDataKeys] = React.useState({
+    y1: "numberOfLockTxs",
+    y2: "numberOfUnlockedTxs",
+    y1Name: "Lock Txs",
+    y2Name: "Unlocked Txs",
+  });
+
   const [data, setData] = React.useState(months.reverse());
   const dataProvider = useDataProvider();
-
   React.useEffect(() => {
     dataProvider
-      .customMethod(
-        "customapis/getmonthlyjobreport",
-        { filter: { queryType: "emp" } },
-        "GET"
-      )
+      .customMethod("customapis/getmonthlyplutustxsreport", { filter: {queryType: "jsk"} }, "GET")
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  React.useEffect(() => {
+    if (checked) {
+      setLabel("Plutus TXs");
+      setDataKeys({
+        y1: "numberOfLockTxs",
+        y2: "numberOfUnlockedTxs",
+        y1Name: "Lock Txs",
+        y2Name: "Unlocked Txs",
+      });
+    } else {
+      setLabel("Plutus TX Amounts ($Ada)");
+      setDataKeys({
+        y1: "sumLockedAmounts",
+        y2: "sumUnlockedAmounts",
+        y1Name: "Locked amounts",
+        y2Name: "Unlocked amounts",
+      });
+    }
+  }, [checked]);
+
   return (
     <Card>
       <CardHeader
-        title="Posted jobs"
+        title="Plutus TXs"
         titleTypographyProps={{ variant: "subtitle1" }}
       />
+      <FormGroup sx={{ ml: 2 }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked
+              size="small"
+              checked={checked}
+              onChange={handleChange}
+            />
+          }
+          label={label}
+        />
+      </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 300 }}>
+        <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer>
             <AreaChart
               width={730}
@@ -75,21 +119,22 @@ const PostedJobChart = () => {
               <YAxis tick={{ fontSize: 15 }} />
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
+
               <Area
                 type="monotone"
-                name="Posted jobs"
-                dataKey="numberOfPostedJobs"
+                name={dataKeys.y1Name}
+                dataKey={dataKeys.y1}
                 stroke="#8884d8"
                 fillOpacity={1}
-                fill="url(#colorUv)"
+                fill="url(#colorPv)"
               />
               <Area
                 type="monotone"
-                name="Attended bids"
-                dataKey="numberOfBids"
+                name={dataKeys.y2Name}
+                dataKey={dataKeys.y2}
                 stroke="#82ca9d"
                 fillOpacity={1}
-                fill="url(#colorPv)"
+                fill="url(#colorUv)"
               />
               <Legend
                 wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
@@ -102,4 +147,4 @@ const PostedJobChart = () => {
   );
 };
 
-export default PostedJobChart;
+export default PaymentChart;
