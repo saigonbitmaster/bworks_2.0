@@ -41,14 +41,15 @@ const customEnglishMessages: TranslationMessages = {
     },
   },
   resources: {
+    paymentReport: {
+      name: "Payment",
+    },
     reports: {
       import: "Import excels",
     },
-    smartContracts: {
-      name: "Smart contract |||| Smart contracts",
-      fields: {
-        commands: "Orders",
-      },
+    jobtasks: {
+      name: "Job task |||| Job tasks",
+     
       filters: {
         last_visited: "Last visited",
         today: "Today",
@@ -62,7 +63,12 @@ const customEnglishMessages: TranslationMessages = {
           "The password confirmation is not the same as the password.",
       },
     },
-    
+    smartContracts: {
+      name: "Smart contracts",
+    },
+    parseAddress: {
+      name: "Parse address",
+    },
     jobQueues: {
       name: "Job queue, |||| Job queues",
       fields: {

@@ -1,13 +1,12 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
-
-import MonthlyPayout from "./MonthlyPayout";
-import NewQuizzes from "./NewQuizzes";
-import QuizPostHistory from "./QuizPostHistory";
-import PendingReviews from "./PendingReviews";
-import NewMembers from "./NewMembers";
-import PayoutHistory from "./PayoutHistory";
-import { quizPostData, payoutData, monthlyRevenue, newQuiz } from "./data";
+import PostedJobs from "./postedJobs";
+import ActiveUsers from "./activeUsers";
+import SmartContractTxs from "./smartContractTXs";
+import PaidByPlutus from "./paidByPlutus";
+import PostedJobsChart from "./postedJobsChart";
+import PaymentChart from "./paymentChart";
+import { useDataProvider } from "react-admin";
 
 const styles = {
   flex: { display: "flex" },
@@ -21,6 +20,30 @@ const Spacer = () => <span style={{ width: "1em" }} />;
 const VerticalSpacer = () => <span style={{ height: "1em" }} />;
 
 const Dashboard = () => {
+  const [dashBoardCardData, setDashBoardCardData] = React.useState({
+    paidByPlutus: {
+      numberOfJobs: 0,
+      totalAmount: 0,
+    },
+    activeUsers: {
+      jobSeekers: 0,
+      employers: 0,
+    },
+    postedJobs: { postedJobs: 0, bids: 0 },
+    plutusTxs: {
+      lockTxs: 0,
+      unlockTxs: 0,
+    },
+  });
+  const dataProvider = useDataProvider();
+
+  React.useEffect(() => {
+    dataProvider
+      .customMethod("public/dashboardcards", { filter: {} }, "GET")
+      .then((result) => setDashBoardCardData(result.data))
+      .catch((error) => console.error(error));
+  }, []);
+
   const isXSmall = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down("sm")
   );
@@ -29,26 +52,38 @@ const Dashboard = () => {
   return isXSmall ? (
     <div>
       <div style={styles.flexColumn as CSSProperties}>
-        <MonthlyPayout value={monthlyRevenue} />
+        <PaidByPlutus
+          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
+        />
         <VerticalSpacer />
-        <NewQuizzes value={newQuiz} />
+        <SmartContractTxs
+          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
+        />
         <VerticalSpacer />
-        <QuizPostHistory orders={quizPostData} />
+        <PostedJobsChart />
       </div>
     </div>
   ) : isSmall ? (
     <div style={styles.flexColumn as CSSProperties}>
       <div style={styles.singleCol}></div>
       <div style={styles.flex}>
-        <MonthlyPayout value={monthlyRevenue} />
+        <PaidByPlutus
+          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
+        />
         <Spacer />
-        <NewQuizzes value={newQuiz} />
+        <SmartContractTxs
+          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
+        />
       </div>
       <div style={styles.singleCol}>
-        <PayoutHistory orders={payoutData} />
+        <PostedJobsChart />
       </div>
       <div style={styles.singleCol}>
-        <QuizPostHistory orders={quizPostData} />
+        <PaymentChart />
       </div>
     </div>
   ) : (
@@ -56,22 +91,34 @@ const Dashboard = () => {
       <div style={styles.flex}>
         <div style={styles.leftCol}>
           <div style={styles.flex}>
-            <MonthlyPayout value={monthlyRevenue} />
+            <PaidByPlutus
+              numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+              totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
+            />
             <Spacer />
-            <NewQuizzes value={newQuiz} />
+            <ActiveUsers
+              jobSeekers={dashBoardCardData.activeUsers.jobSeekers}
+              employers={dashBoardCardData.activeUsers.employers}
+            />
           </div>
           <div style={styles.singleCol}>
-            <PayoutHistory orders={payoutData} />
+            <PostedJobsChart />
           </div>
           <div style={styles.singleCol}>
-            <QuizPostHistory orders={quizPostData} />
+            <PaymentChart />
           </div>
         </div>
         <div style={styles.rightCol}>
           <div style={styles.flex}>
-            <PendingReviews />
+            <PostedJobs
+              postedJobs={dashBoardCardData.postedJobs.postedJobs}
+              bids={dashBoardCardData.postedJobs.bids}
+            />
             <Spacer />
-            <NewMembers />
+            <SmartContractTxs
+              lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+              unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
+            />
           </div>
         </div>
       </div>

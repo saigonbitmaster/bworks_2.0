@@ -12,7 +12,7 @@ import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
 import ConstructionIcon from "@mui/icons-material/Construction";
-import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined"; 
 import {
   useTranslate,
   DashboardMenuItem,

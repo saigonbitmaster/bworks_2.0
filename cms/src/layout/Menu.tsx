@@ -21,8 +21,9 @@ import {
   MenuProps,
   useSidebarState,
 } from "react-admin";
-
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import SubMenu from "./SubMenu";
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 
 type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
 
@@ -81,13 +82,14 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListNumberedOutlinedIcon />}
           dense={dense}
         />
+
         <MenuItemLink
-          to="/contractedjobs"
+          to="/jobtasks"
           state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.contractedJobs.name`, {
+          primaryText={translate(`resources.jobtasks.name`, {
             smart_count: 2,
           })}
-          leftIcon={<QrCodeOutlinedIcon />}
+          leftIcon={<ListAltOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>
@@ -99,7 +101,6 @@ const Menu = ({ dense = false }: MenuProps) => {
         icon={<AttachMoneyIcon />}
         dense={dense}
       >
-      
         <MenuItemLink
           to="/plutustxs"
           state={{ _scrollToTop: true }}
@@ -109,7 +110,6 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-      
       </SubMenu>
       <SubMenu
         handleToggle={() => handleToggle("reports")}
@@ -119,7 +119,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/jobreports"
+          to="/postedjobreport"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.postJobReports.name`, {
             smart_count: 2,
@@ -127,24 +127,16 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<NotesIcon />}
           dense={dense}
         />
+        
         <MenuItemLink
-          to="/walletreports"
+          to="/paymentreport"
           state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.walletReports.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<BlurOnIcon />}
-          dense={dense}
-        />
-        <MenuItemLink
-          to="/contractreports"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.smartContractReports.name`, {
+          primaryText={translate(`resources.paymentReport.name`, {
             smart_count: 2,
           })}
           leftIcon={<AttachMoneyIcon />}
           dense={dense}
-        />
+          />  
         <MenuItemLink
           to="/queues"
           state={{ _scrollToTop: true }}
@@ -180,6 +172,15 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<BlurOnIcon />}
           dense={dense}
         />
+          <MenuItemLink
+          to="/parseAddress"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.parseAddress.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<DriveFileRenameOutlineOutlinedIcon />}
+          dense={dense}
+        />
       </SubMenu>
       <SubMenu
         handleToggle={() => handleToggle("tools")}
@@ -197,7 +198,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FitbitIcon />}
           dense={dense}
         />
-         <MenuItemLink
+        <MenuItemLink
           to="/contracts"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.smartContracts.name`, {

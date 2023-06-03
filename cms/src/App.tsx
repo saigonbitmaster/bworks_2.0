@@ -16,8 +16,11 @@ import FetchCardano from "./tools/fetchCardano";
 import queues from "./queues";
 import contracts from "./contracts";
 import plutustxs from "./plutustx";
-import adminWallets from './wallet/'
+import adminWallets from "./wallet/";
 import { MeshProvider } from "@meshsdk/react";
+import jobtasks from "./jobtasks";
+import { PostedJobReport } from "./postedjobreports";
+import { PaymentReport } from "./paymentreports";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -38,29 +41,32 @@ const i18nProvider = polyglotI18nProvider((locale) => {
 const App = () => {
   return (
     <MeshProvider>
-    <Admin
-      title="bWorks"
-      dataProvider={restProvider}
-      authProvider={_authProvider}
-      dashboard={Dashboard}
-      loginPage={Login}
-      layout={Layout}
-      i18nProvider={i18nProvider}
-      disableTelemetry
-      theme={lightTheme}
-    >
-      <CustomRoutes>
-        <Route path="/configuration" element={<Configuration />} />
-        <Route path="/fetchCardano" element={<FetchCardano />} />
-        <Route path="/fetchGithub" element={<FetchGithub />} />
-      </CustomRoutes>
-      <Resource name="postjobs" {...postjobs} />
-      <Resource name="contracts" {...contracts} />
-      <Resource name="plutustxs" {...plutustxs} />
-      <Resource name="jobbids" {...jobbids} />
-      <Resource name="queues" {...queues} />
-      <Resource name="adminWallets" {...adminWallets} />
-    </Admin>
+      <Admin
+        title="bWorks"
+        dataProvider={restProvider}
+        authProvider={_authProvider}
+        dashboard={Dashboard}
+        loginPage={Login}
+        layout={Layout}
+        i18nProvider={i18nProvider}
+        disableTelemetry
+        theme={lightTheme}
+      >
+        <CustomRoutes>
+          <Route path="/configuration" element={<Configuration />} />
+          <Route path="/fetchCardano" element={<FetchCardano />} />
+          <Route path="/fetchGithub" element={<FetchGithub />} />
+          <Route path="/postedjobreport" element={<PostedJobReport />} />
+          <Route path="/paymentreport" element={<PaymentReport />} />
+        </CustomRoutes>
+        <Resource name="postjobs" {...postjobs} />
+        <Resource name="jobtasks" {...jobtasks} />
+        <Resource name="contracts" {...contracts} />
+        <Resource name="plutustxs" {...plutustxs} />
+        <Resource name="jobbids" {...jobbids} />
+        <Resource name="queues" {...queues} />
+        <Resource name="adminWallets" {...adminWallets} />
+      </Admin>
     </MeshProvider>
   );
 };
