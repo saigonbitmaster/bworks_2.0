@@ -36,7 +36,7 @@ export class PostJob {
   @Prop()
   tasks: string[];
 
-  @Prop()
+  @Prop({ default: true })
   isApproved: boolean;
 
   @Prop()

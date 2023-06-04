@@ -3,19 +3,27 @@ import {
   List,
   Datagrid,
   TextField,
-  EditButton,
   DateField,
   NumberField,
   ReferenceField,
+  TextInput,
+  BooleanField,
 } from "react-admin";
-import RateField from "../components/RateField";
+import RateField from "../components/rateField";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import { stringify } from "query-string";
+
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+
 const ListScreen = () => {
   return (
     <List
       perPage={25}
       sort={{ field: "date", order: "desc" }}
+      hasCreate={false}
       resource="jobbids"
-      filter={{}}
+      filters={filters}
     >
       <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
@@ -27,14 +35,21 @@ const ListScreen = () => {
         <ReferenceField reference="users" source="jobSeekerId">
           <TextField source="fullName" />
         </ReferenceField>
-
+        <ReferenceField reference="users" source="employerId">
+          <TextField source="fullName" />
+        </ReferenceField>
         <NumberField source="bidValue" />
-        <RateField source="rate" />
         <ReferenceField reference="postJobs" source="jobId" label="Currency">
           <ReferenceField reference="currencies" source="currencyId">
             <TextField source="name" />
           </ReferenceField>
         </ReferenceField>
+        <RateField source="rate" />
+
+        <BooleanField source="isSelected" label="Selected" />
+        <BooleanField source="isCompleted" />
+
+        <BooleanField source="isPaid" />
 
         <DateField source="completeDate" showTime label="Your deadline" />
 
@@ -45,8 +60,6 @@ const ListScreen = () => {
         >
           <DateField source="expectDate" showTime />
         </ReferenceField>
-
-        <EditButton />
       </Datagrid>
     </List>
   );

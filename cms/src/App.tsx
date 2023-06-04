@@ -21,7 +21,7 @@ import { MeshProvider } from "@meshsdk/react";
 import jobtasks from "./jobtasks";
 import { PostedJobReport } from "./postedjobreports";
 import { PaymentReport } from "./paymentreports";
-
+import skills from "./skills";
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
 const renewTokenUrl = process.env.REACT_APP_RENEW_ACCESS_TOKEN_URL;
@@ -66,6 +66,7 @@ const App = () => {
         <Resource name="jobbids" {...jobbids} />
         <Resource name="queues" {...queues} />
         <Resource name="adminWallets" {...adminWallets} />
+        <Resource name="skills" {...skills} />
       </Admin>
     </MeshProvider>
   );

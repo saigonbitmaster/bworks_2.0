@@ -159,9 +159,17 @@ export class PostJobService {
     userId: string,
   ): Promise<PostJob> {
     const record: PostJob = await this.model.findById(id).exec();
+    console.log(userId);
     if (record.employerId !== userId) {
       throw new Error('This is not your record');
     }
+    return await this.model.findByIdAndUpdate(id, updatePostJobDto).exec();
+  }
+
+  async approve(
+    id: string,
+    updatePostJobDto: UpdatePostJobDto,
+  ): Promise<PostJob> {
     return await this.model.findByIdAndUpdate(id, updatePostJobDto).exec();
   }
 

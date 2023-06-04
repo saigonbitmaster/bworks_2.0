@@ -9,7 +9,7 @@ import {
   ReferenceField,
   ReferenceInput,
   SelectInput,
-  TextInput
+  TextInput,
 } from "react-admin";
 const statusChoices: any[] = [
   { id: "inProgress", name: "In progress" },
@@ -22,22 +22,20 @@ const jobFilters = [
   <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
     <SelectInput optionText="name" fullWidth />
   </ReferenceInput>,
-  <SelectInput source="status" choices={statusChoices} alwaysOn/>
+  <SelectInput source="status" choices={statusChoices} alwaysOn />,
 ];
-
 
 const ListScreen = () => {
   return (
     <List
       perPage={25}
       sort={{ field: "jobId", order: "desc" }}
-      hasCreate
+      hasCreate={false}
       resource="jobtasks"
       filter={{ queryType: "jobSeeker" }}
       filters={jobFilters}
-   
     >
-      <Datagrid>
+      <Datagrid empty={<> </>}>
         <TextField source="name" />
         <ReferenceField reference="postJobs" source="jobId">
           <TextField source="name" />

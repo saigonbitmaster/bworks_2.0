@@ -63,6 +63,17 @@ export class PostJobController {
     );
   }
 
+  //admin only
+  //@Role('admin)
+  @Put('/approve/:id')
+  async approve(
+    @Param('id') id: string,
+    @Body() updatePostJobDto: UpdatePostJobDto,
+    @Req() request,
+  ) {
+    return await this.service.approve(id, updatePostJobDto);
+  }
+
   @Delete(':id')
   async delete(@Param('id') id: string, @Req() request) {
     return await this.service.delete(

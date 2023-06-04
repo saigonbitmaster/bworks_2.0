@@ -9,19 +9,23 @@ import {
   ChipField,
   ReferenceArrayField,
   ReferenceField,
-  TextInput
+  TextInput,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 
 import LinkBidField from "../components/linkBidsField";
 
-const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />
-];
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
 const ListScreen = () => {
   return (
-    <List filters={filters} perPage={25} sort={{ field: "date", order: "desc" }}  hasCreate={false} filter={{queryType: "jobSeeker"}}>
+    <List
+      filters={filters}
+      perPage={25}
+      sort={{ field: "date", order: "desc" }}
+      hasCreate={false}
+      filter={{ queryType: "jobSeeker", isApproved: true }}
+    >
       <Datagrid>
         <TextField source="name" />
         <LinkBidField />
@@ -35,7 +39,7 @@ const ListScreen = () => {
           </SingleFieldList>
         </ReferenceArrayField>
         <DateField source="expireDate" showTime />
-        <EditButton disabled/>
+        <EditButton disabled />
       </Datagrid>
     </List>
   );

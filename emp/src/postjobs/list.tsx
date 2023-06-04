@@ -9,21 +9,25 @@ import {
   ChipField,
   ReferenceArrayField,
   ReferenceField,
-  TextInput
+  TextInput,
+  BooleanField
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 
 import LinkBidField from "../components/linkBidsField";
 
-const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />
-];
-
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
 const ListScreen = () => {
   return (
-    <List filters = {filters} perPage={25} sort={{ field: "date", order: "desc" }} hasCreate filter={{queryType: "employer"}}>
-      <Datagrid>
+    <List
+      filters={filters}
+      perPage={25}
+      sort={{ field: "date", order: "desc" }}
+      hasCreate
+      filter={{ queryType: "employer", isApproved: true }}
+    >
+      <Datagrid >
         <TextField source="name" />
         <LinkBidField />
         <CurrencyNumberField source="budget" threshold={10000} />
@@ -35,7 +39,11 @@ const ListScreen = () => {
             <ChipField source="name" />
           </SingleFieldList>
         </ReferenceArrayField>
+        <BooleanField source="isApproved"/>
+
         <DateField source="expireDate" showTime />
+        <DateField source="createdAt" showTime />
+
         <EditButton />
       </Datagrid>
     </List>

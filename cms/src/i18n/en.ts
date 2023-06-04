@@ -21,6 +21,8 @@ const customEnglishMessages: TranslationMessages = {
       new_customers: "New Customers",
       all_customers: "See all customers",
       pending_orders: "Pending Orders",
+      allPostedJobs: "See all Jobs",
+      allPlutusTxs: "See all plutus TXs",
       order: {
         items:
           "by %{customer_name}, one item |||| by %{customer_name}, %{nb_items} items",
@@ -44,12 +46,15 @@ const customEnglishMessages: TranslationMessages = {
     paymentReport: {
       name: "Payment",
     },
+    skills: {
+      name: "Job skills",
+    },
     reports: {
       import: "Import excels",
     },
     jobtasks: {
       name: "Job task |||| Job tasks",
-     
+
       filters: {
         last_visited: "Last visited",
         today: "Today",

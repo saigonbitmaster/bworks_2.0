@@ -67,6 +67,10 @@ export interface RequestUser {
   userId: string;
 }
 
+export interface TypeSkill {
+  name: string;
+}
+
 export enum taskStatus {
   completed = 'completed',
   inProgress = 'inProgress',

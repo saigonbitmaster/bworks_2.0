@@ -41,7 +41,7 @@ const SelectButton = () => {
   }, [isLoading, error]);
 
   return (
-    <Button variant="text" disabled={record.isUnlocked} onClick={handleClick}>
+    <Button variant="text" disabled={record.isUnlocked && record.isSelected} onClick={handleClick}>
       {record.isSelected ? "deselect" : "select"}
     </Button>
   );
@@ -113,7 +113,7 @@ const ListScreen = () => {
         <SelectButton />
 
         <FunctionField
-          render={(record) => <SignButton disabled={record.isSignedTx} />}
+          render={(record) => <SignButton disabled={record.isSignedTx || !record.isSelected} />}
         />
       </Datagrid>
     </List>

@@ -207,6 +207,15 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
+          <MenuItemLink
+          to="/skills"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.skills.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FormatListBulletedIcon />}
+          dense={dense}
+        />
       </SubMenu>
     </Box>
   );
