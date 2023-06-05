@@ -47,6 +47,9 @@ const customEnglishMessages: TranslationMessages = {
     },
   },
   resources: {
+    changePassword: {
+      name: "Change password",
+    },
     jobtasks: {
       name: "Job tasks",
     },

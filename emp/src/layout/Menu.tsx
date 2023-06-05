@@ -23,6 +23,7 @@ import {
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import SubMenu from "./SubMenu";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 
 type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
 
@@ -196,6 +197,15 @@ const Menu = ({ dense = false }: MenuProps) => {
             smart_count: 2,
           })}
           leftIcon={<AccountBalanceWalletOutlinedIcon />}
+          dense={dense}
+        />
+         <MenuItemLink
+          to="/changePassword"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.changePassword.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<PeopleOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>

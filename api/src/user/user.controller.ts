@@ -7,14 +7,27 @@ import {
   Post,
   Put,
   Response,
+  Request,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly service: UserService) {}
+
+  //post {password: abc}
+  @Post('changepassword')
+  //@Roles(Role.Admin)
+  async changePassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Request() req,
+  ) {
+    const id = req.user.userId;
+    return await this.service.update(id, changePasswordDto);
+  }
 
   @Get()
   async index(@Response() res: any) {

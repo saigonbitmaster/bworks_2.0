@@ -47,6 +47,9 @@ const customEnglishMessages: TranslationMessages = {
     },
   },
   resources: {
+    changePassword: {
+      name: "Change password",
+    },
     paymentReport: { name: "Payment" },
     parseAddress: {
       name: "Parse address",

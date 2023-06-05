@@ -22,6 +22,10 @@ import jobtasks from "./jobtasks";
 import { PostedJobReport } from "./postedjobreports";
 import { PaymentReport } from "./paymentreports";
 import skills from "./skills";
+import ParseAddress from "./tools/parseAddress";
+import ChangePassword from "./components/changePassword";
+
+
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
 const renewTokenUrl = process.env.REACT_APP_RENEW_ACCESS_TOKEN_URL;
@@ -58,6 +62,9 @@ const App = () => {
           <Route path="/fetchGithub" element={<FetchGithub />} />
           <Route path="/postedjobreport" element={<PostedJobReport />} />
           <Route path="/paymentreport" element={<PaymentReport />} />
+          <Route path="/parseaddress" element={<ParseAddress />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
+
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobtasks" {...jobtasks} />

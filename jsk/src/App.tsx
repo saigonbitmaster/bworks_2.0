@@ -20,6 +20,7 @@ import plutustxs from "./plutustxs";
 import { PostedJobReport } from "./postedjobreports";
 import { PaymentReport } from "./paymentreports";
 import Wallet from "./wallet/wallet";
+import ChangePassword from "./components/changePassword";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -59,7 +60,7 @@ const App = () => {
           <Route path="/postedjobreport" element={<PostedJobReport />} />
           <Route path="/paymentreport" element={<PaymentReport />} />
           <Route path="/wallets" element={<Wallet />} />
-
+          <Route path="/changepassword" element={<ChangePassword />} />
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobbids" {...jobbids} />

@@ -13,10 +13,13 @@ import {
   useRecordContext,
   useRefresh,
   useUpdate,
+  TextInput
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/linkBidsField";
 import Button from "@mui/material/Button";
+
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
 const ListScreen = () => {
   const SelectButton = (props) => {
@@ -44,7 +47,7 @@ const ListScreen = () => {
     );
   };
   return (
-    <List perPage={25} sort={{ field: "date", order: "desc" }}>
+    <List perPage={25} sort={{ field: "date", order: "desc" }} filters={filters}>
       <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
         <ReferenceField reference="users" source="employerId">
@@ -60,7 +63,6 @@ const ListScreen = () => {
         </ReferenceArrayField>
         <SelectButton source="isApproved" label="Approve" />
         <DateField source="expireDate" showTime />
-        <EditButton />
       </Datagrid>
     </List>
   );

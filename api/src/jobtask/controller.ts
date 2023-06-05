@@ -50,6 +50,14 @@ export class JobTaskController {
     return formatRaList(res, result);
   }
 
+  //role admin
+  @Get('/jobtasks/cms')
+  async getByAdmin(@Response() res: any, @Query() query, @Req() request) {
+    const mongooseQuery = queryTransform(query);
+    const result = await this.service.findAll(mongooseQuery);
+    return formatRaList(res, result);
+  }
+
   @Get(':id')
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);

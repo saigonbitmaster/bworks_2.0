@@ -23,7 +23,8 @@ import {
 } from "react-admin";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import SubMenu from "./SubMenu";
-import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
+import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 
 type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
 
@@ -127,7 +128,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<NotesIcon />}
           dense={dense}
         />
-        
+
         <MenuItemLink
           to="/paymentreport"
           state={{ _scrollToTop: true }}
@@ -136,7 +137,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           })}
           leftIcon={<AttachMoneyIcon />}
           dense={dense}
-          />  
+        />
         <MenuItemLink
           to="/queues"
           state={{ _scrollToTop: true }}
@@ -172,7 +173,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<BlurOnIcon />}
           dense={dense}
         />
-          <MenuItemLink
+        <MenuItemLink
           to="/parseAddress"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.parseAddress.name`, {
@@ -207,13 +208,22 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-          <MenuItemLink
+        <MenuItemLink
           to="/skills"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.skills.name`, {
             smart_count: 2,
           })}
           leftIcon={<FormatListBulletedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/changePassword"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.changePassword.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<PeopleOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>
