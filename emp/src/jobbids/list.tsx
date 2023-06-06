@@ -41,8 +41,41 @@ const SelectButton = () => {
   }, [isLoading, error]);
 
   return (
-    <Button variant="text" disabled={record.isUnlocked && record.isSelected} onClick={handleClick}>
+    <Button
+      variant="text"
+      disabled={record.isSignedTx || record.isPaid}
+      onClick={handleClick}
+    >
       {record.isSelected ? "deselect" : "select"}
+    </Button>
+  );
+};
+
+const CompletedButton = () => {
+  const record = useRecordContext();
+  const diff = { isCompleted: !record.isCompleted };
+  const refresh = useRefresh();
+  const [update, { isLoading, error }] = useUpdate("jobbids", {
+    id: record.id,
+    data: diff,
+    previousData: record,
+  });
+
+  const handleClick = () => {
+    update();
+  };
+
+  React.useEffect(() => {
+    refresh();
+  }, [isLoading, error]);
+
+  return (
+    <Button
+      variant="text"
+      disabled={record.isPaid || !record.isSelected}
+      onClick={handleClick}
+    >
+      {record.isCompleted ? "Jobs is completed" : "Job is not completed"}
     </Button>
   );
 };
@@ -113,8 +146,11 @@ const ListScreen = () => {
         <SelectButton />
 
         <FunctionField
-          render={(record) => <SignButton disabled={record.isSignedTx || !record.isSelected} />}
+          render={(record) => (
+            <SignButton disabled={record.isSignedTx || !record.isSelected} />
+          )}
         />
+        <CompletedButton />
       </Datagrid>
     </List>
   );

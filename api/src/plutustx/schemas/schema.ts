@@ -31,6 +31,9 @@ export class PlutusTx {
   isUnlocked: boolean;
 
   @Prop()
+  unlockType: string;
+
+  @Prop()
   unlockedTxHash: string;
 
   @Prop()

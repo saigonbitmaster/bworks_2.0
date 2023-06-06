@@ -11,6 +11,8 @@ export class BasePlutusTxDto {
   unlockDate: Date;
   lockMessage: string;
   unlockMessage: string;
+  isUnlocked: boolean;
+  unlockType: string;
   datumUnlockPublicKeyHash: string;
   scriptAddress: string;
   description: string;

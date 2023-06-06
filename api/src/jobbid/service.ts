@@ -72,17 +72,19 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const record: JobBid = await this.model.findById(id).exec();
-    //emp has right to select & update sign tx for the bid only
+    //emp has right to select, complete & update sign tx for the bid only
     if (record.employerId === userId) {
-      const { isSelected, isSignedTx } = updateJobBidDto;
+      const { isSelected, isSignedTx, isCompleted } = updateJobBidDto;
       const updateData = {} as any;
       isSelected !== undefined
         ? (updateData.isSelected = isSelected)
         : isSignedTx !== undefined
         ? (updateData.isSignedTx = isSignedTx)
+        : isCompleted !== undefined
+        ? (updateData.isCompleted = isCompleted)
         : null;
       return await this.model
-        .findByIdAndUpdate(id, { isSelected, isSignedTx })
+        .findByIdAndUpdate(id, { isSelected, isSignedTx, isCompleted })
         .exec();
     }
     if (record.jobSeekerId !== userId) {

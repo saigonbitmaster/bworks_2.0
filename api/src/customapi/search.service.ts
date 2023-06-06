@@ -17,7 +17,7 @@ export class SearchService {
   ) {}
 
   async findAllEmp(filter): Promise<any> {
-    const config = empSearchConfig;
+    const config = empSearchConfig();
 
     const text = filter.text;
     let _limit = filter.limit;
@@ -104,7 +104,7 @@ export class SearchService {
   }
 
   async findAllJsk(filter): Promise<any> {
-    const config = jskSearchConfig;
+    const config = jskSearchConfig();
     const text = filter.text;
     let _limit = filter.limit;
     let _skip = filter.skip;
@@ -190,7 +190,7 @@ export class SearchService {
   }
 
   async findAllCms(filter): Promise<any> {
-    const config = cmsSearchConfig;
+    const config = cmsSearchConfig();
     const text = filter.text;
     let _limit = filter.limit;
     let _skip = filter.skip;

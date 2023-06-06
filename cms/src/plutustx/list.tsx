@@ -9,12 +9,20 @@ import {
   useRecordContext,
   ReferenceOneField,
   useDataProvider,
+  useGetOne,
+  BooleanField,
 } from "react-admin";
 import Button from "@mui/material/Button";
 
 const ListScreen = () => {
   const UnlockButton = () => {
     const record = useRecordContext();
+    const {
+      data: jobBid,
+      isLoading,
+      error,
+    } = useGetOne("jobbids", { id: record.jobBidId });
+
     const dataProvider = useDataProvider();
     const handleClick = () => {
       dataProvider
@@ -34,7 +42,7 @@ const ListScreen = () => {
 
     return (
       <Button variant="text" disabled={record.isUnlocked} onClick={handleClick}>
-        UNLOCK
+        {jobBid?.isCompleted ? "Pay to jobSeeker" : "Return to employer"}
       </Button>
     );
   };
@@ -47,7 +55,10 @@ const ListScreen = () => {
       resource="plutustxs"
     >
       <Datagrid bulkActionButtons={false}>
-        <TextField source="name" />
+        <ReferenceField source="name" reference="postjobs">
+          <TextField source="name" />
+        </ReferenceField>
+
         <ReferenceField source="jobBidId" reference="jobbids">
           <TextField source="name" />
         </ReferenceField>
@@ -55,10 +66,13 @@ const ListScreen = () => {
         <DateField source="lockDate" showTime />
         <TextField source="lockMessage" />
         <TextField source="unlockedTxHash" />
+        <TextField source="unlockType" />
         <DateField source="unlockDate" showTime />
         <TextField source="unlockMessage" />
+        <ReferenceField source="jobBidId" reference="jobbids" label="Job completed">
+          <BooleanField source="isCompleted" />
+        </ReferenceField>
         <UnlockButton />
-       
       </Datagrid>
     </List>
   );

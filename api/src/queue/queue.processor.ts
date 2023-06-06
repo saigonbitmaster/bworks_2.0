@@ -76,7 +76,14 @@ export class QueueProcessor {
     const jobSeekerWallet = await this.walletService.findByUser(
       jobBid.jobSeekerId,
     );
-    const receiveWalletAddress = jobSeekerWallet.address;
+    const employerWallet = await this.walletService.findByUser(
+      jobBid.employerId,
+    );
+    //if job is complete pay to job seeker else return to employer
+    const unlockType = jobBid.isCompleted ? 'paid' : 'return';
+    const receiveWalletAddress = jobBid.isCompleted
+      ? jobSeekerWallet.address
+      : employerWallet.address;
     const scriptTxHash = job.data.scriptTxHash;
     const unlockScript = process.env.UNLOCK_SHELL_SCRIPT;
     exec(
@@ -106,6 +113,8 @@ export class QueueProcessor {
 
           this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
             unlockedTxHash: unlockedTxHash,
+            unlockType: unlockType,
+            isUnlocked: true,
             unlockMessage: 'unlock plutus transaction is submitted',
             unlockDate: new Date(),
             completedAt: new Date(),
