@@ -131,4 +131,70 @@ export class QueueProcessor {
       },
     );
   }
+
+  @Process('unlockMainnet')
+  async unlockMainnet(job: Job) {
+    const scriptName = 'bworksV2';
+    const redeemerJsonFile = 'secretMainnet.json';
+    const payCollatelWalletName = 'wallet01Mainnet';
+    const jobBid = (await this.jobBidService.findOne(job.data.jobBidId)) as any;
+    const jobSeekerWallet = await this.walletService.findByUser(
+      jobBid.jobSeekerId,
+    );
+    const employerWallet = await this.walletService.findByUser(
+      jobBid.employerId,
+    );
+    //if job is complete pay to job seeker else return to employer
+    const unlockType = jobBid.isCompleted ? 'paid' : 'return';
+    const receiveWalletAddress = jobBid.isCompleted
+      ? jobSeekerWallet.address
+      : employerWallet.address;
+    const scriptTxHash = job.data.scriptTxHash;
+    const unlockScript = process.env.UNLOCK_SHELL_SCRIPT_MAINNET;
+    console.log(receiveWalletAddress, unlockScript, scriptTxHash);
+    exec(
+      `zsh ./src/flatworks/shellscripts/${unlockScript} ${scriptName} ${redeemerJsonFile} ${payCollatelWalletName} ${receiveWalletAddress} ${scriptTxHash} `,
+      (err, stdout, stderr) => {
+        //if shell script exec fail
+        if (err) {
+          this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
+            unlockMessage: 'unlock plutus job failed',
+            completedAt: new Date(),
+          });
+          console.error('error:', err, job);
+        }
+        //if transaction sign failed
+        if (stderr) {
+          this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
+            unlockMessage: 'unlock plutus transaction sign failed',
+            completedAt: new Date(),
+          });
+          console.log(`stderr: ${stderr}`);
+        } else {
+          //remove null line then get transaction hash at last line of stdout
+          const matches = stdout.split(/[\n\r]/g);
+          const unlockedTxHash = matches
+            .filter((item) => item !== '')
+            .slice(-1)[0];
+
+          this.plutusTxService.findByScriptTxHashAndUpdate(scriptTxHash, {
+            unlockedTxHash: unlockedTxHash,
+            unlockType: unlockType,
+            isUnlocked: true,
+            unlockMessage: 'unlock plutus transaction is submitted',
+            unlockDate: new Date(),
+            completedAt: new Date(),
+          });
+
+          console.log(jobBid);
+          this.jobBidService.updateByBackgroundJob(jobBid._id, {
+            isPaid: true,
+            completedAt: new Date(),
+          });
+
+          console.log(`stdout: ${stdout}`);
+        }
+      },
+    );
+  }
 }

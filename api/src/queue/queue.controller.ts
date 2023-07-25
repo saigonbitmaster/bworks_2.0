@@ -36,6 +36,15 @@ export class QueueController {
     });
   }
 
+  @Post('unlockMainnet')
+  async unlockMainnet(@Body() postBody: any) {
+    console.log(postBody);
+    await this.QueueQueue.add('unlockMainnet', {
+      jobBidId: postBody.jobBidId,
+      scriptTxHash: postBody.scriptTxHash,
+    });
+  }
+
   @Post('scamfilter')
   async scamFilter(@Body() postBody: any) {
     await this.QueueQueue.add('scamFilter', {

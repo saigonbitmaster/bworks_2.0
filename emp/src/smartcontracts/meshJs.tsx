@@ -21,6 +21,8 @@ import { useSearchParams } from "react-router-dom";
 import { useUpdate } from "react-admin";
 
 const SmartContracts = () => {
+  const isMainnet = process.env.REACT_APP_IS_MAINNET;
+  console.log(isMainnet)
   const [update, { isLoading: _isLoading, error: _error }] = useUpdate();
 
   const [searchParams] = useSearchParams();
@@ -72,6 +74,7 @@ const SmartContracts = () => {
   //admin pkh
   const [adminPKH, setAdminPKH] = React.useState("");
   const adminWallets = useGetList("adminwallets", {
+    filter: {isMainnet: isMainnet},
     pagination: { page: 1, perPage: 10 },
     sort: { field: "createdDate", order: "DESC" },
   });
@@ -216,6 +219,7 @@ const SmartContracts = () => {
           address: scriptAddr,
           datum: {
             value: d,
+            inline: true,
           },
         },
         amountToLockLoveLace

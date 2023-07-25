@@ -12,7 +12,7 @@ export class Contract {
   @Prop({ required: true, unique: true })
   address: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   cborhex: string;
 
   @Prop()

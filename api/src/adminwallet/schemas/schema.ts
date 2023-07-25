@@ -10,6 +10,9 @@ export class AdminWallet {
   address: string;
 
   @Prop()
+  isMainnet?: boolean;
+
+  @Prop()
   pKeyHash?: string;
 
   @Prop()
