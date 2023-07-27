@@ -24,7 +24,7 @@ LOCKED_ASSET_VALUE=${SELECTED_UTXO_LOVELACE}
 getCollatelUtxo ${3}
 COLLATERAL_TX=${SELECTED_UTXO}
 
-$CARDANO_CLI query protocol-parameters --mainnet > ${BASEDIR}/paramsMainet.json
+$CARDANO_CLI query protocol-parameters --mainnet > ${BASEDIR}/paramsMainnet.json
 
 removeTxFiles
 
