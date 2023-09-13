@@ -13,6 +13,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
+
 
 @Controller('users')
 export class UserController {
@@ -46,6 +49,7 @@ export class UserController {
   }
 
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.service.create(createUserDto);
   }
@@ -56,6 +60,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   async delete(@Param('id') id: string) {
     return await this.service.delete(id);
   }

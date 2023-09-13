@@ -76,3 +76,8 @@ export enum taskStatus {
   inProgress = 'inProgress',
   todo = 'todo',
 }
+
+export enum Role {
+  Admin = 'admin',
+  User = 'user',
+}

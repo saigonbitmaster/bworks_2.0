@@ -45,9 +45,11 @@ export class UserService {
     const [user] = await this.model.find({ username: username }).exec();
     return user;
   }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
-    console.log(createUserDto);
     const username = createUserDto.username.toLowerCase();
+    //roles is always ['user'] as created time
+    const roles = ['user'];
     const saltOrRounds = 10;
     const password = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
@@ -55,12 +57,15 @@ export class UserService {
       ...createUserDto,
       username,
       password,
+      roles,
       createdAt: new Date(),
     }).save();
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     let _updateUserDto = updateUserDto;
+    //don't update roles
+    delete _updateUserDto['roles'];
     if (updateUserDto.password) {
       const saltOrRounds = 10;
       const password = await bcrypt.hash(updateUserDto.password, saltOrRounds);

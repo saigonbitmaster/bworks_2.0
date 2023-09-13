@@ -3,6 +3,9 @@ import { Controller, Post, Body, Get, Response, Query } from '@nestjs/common';
 import { Queue } from 'bull';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
+
 @Controller('queues')
 export class QueueController {
   constructor(@InjectQueue('queue') private readonly QueueQueue: Queue) {}
@@ -29,6 +32,7 @@ export class QueueController {
   }
 
   @Post('unlock')
+  @Roles(Role.Admin)
   async unlock(@Body() postBody: any) {
     await this.QueueQueue.add('unlock', {
       jobBidId: postBody.jobBidId,
@@ -37,6 +41,7 @@ export class QueueController {
   }
 
   @Post('unlockMainnet')
+  @Roles(Role.Admin)
   async unlockMainnet(@Body() postBody: any) {
     console.log(postBody);
     await this.QueueQueue.add('unlockMainnet', {
@@ -53,6 +58,7 @@ export class QueueController {
   }
 
   @Get()
+  @Roles(Role.Admin)
   async getJobs(@Response() res: any, @Query() query) {
     const transformQuery = queryTransform(query);
     const jobStatus =

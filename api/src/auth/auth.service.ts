@@ -34,7 +34,7 @@ export class AuthService {
   //generate token for register user
   async createToken(payload: any) {
     return this.jwtService.signAsync(payload, {
-      secret: process.env.JWT_TOKEN_SECRET,
+      secret: process.env.JWT_VERIFY_TOKEN_SECRET,
       expiresIn: process.env.JWT_TOKEN_EXPIRE,
     });
   }
@@ -138,6 +138,7 @@ export class AuthService {
     };
 
     const emailToken = await this.createToken(payload);
+    console.log(emailToken);
     return this.mailService.send(registerUser, emailToken);
   }
 
