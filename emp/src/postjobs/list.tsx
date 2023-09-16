@@ -16,7 +16,7 @@ import CurrencyNumberField from "../components/currencyNumberField";
 
 import LinkBidField from "../components/linkBidsField";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn />, ];
 
 const ListScreen = () => {
   return (

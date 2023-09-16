@@ -14,13 +14,17 @@ import {
   useRefresh,
   FunctionField,
   useGetList,
+  ReferenceInput,
+  SelectInput
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { stringify } from "query-string";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn />,  <ReferenceInput source="jobId" reference="postjobs"   alwaysOn >
+<SelectInput optionText="name" fullWidth/>
+</ReferenceInput>];
 
 const SelectButton = () => {
   const record = useRecordContext();

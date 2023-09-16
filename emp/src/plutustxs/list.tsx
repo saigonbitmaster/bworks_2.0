@@ -11,6 +11,9 @@ import {
   useDataProvider,
   FunctionField,
   NumberField,
+  TextInput,
+  ReferenceInput,
+  SelectInput,
 } from "react-admin";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -42,15 +45,25 @@ const ListScreen = () => {
     );
   };
 
+  const filters = [
+    <ReferenceInput source="name" reference="postjobs" alwaysOn>
+      <SelectInput optionText="name" fullWidth />
+    </ReferenceInput>,
+    <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
+      <SelectInput optionText="name" fullWidth />
+    </ReferenceInput>,
+  ];
+
   return (
     <List
       perPage={25}
       sort={{ field: "date", order: "DESC" }}
       resource="plutustxs"
       filter={{ queryType: "employer" }}
+      filters={filters}
     >
       <Datagrid bulkActionButtons={false}>
-        <ReferenceField source="name" reference="postJobs" label="Job">
+        <ReferenceField source="name" reference="postjobs" label="Job">
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField source="jobBidId" reference="jobbids">
