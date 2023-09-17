@@ -35,6 +35,7 @@ export class PostJobController {
         ))
       : null;
     const result = await this.service.findAll(mongooseQuery);
+    console.log(mongooseQuery, result);
     return formatRaList(res, result);
   }
 

@@ -22,13 +22,22 @@ import { useUpdate } from "react-admin";
 
 const SmartContracts = () => {
   const isMainnet = process.env.REACT_APP_IS_MAINNET;
-  console.log(isMainnet)
   const [update, { isLoading: _isLoading, error: _error }] = useUpdate();
 
   const [searchParams] = useSearchParams();
   const search = searchParams.get("jobbidid");
   const jobBidId = JSON.parse(search);
   const { wallet, connected, connecting } = useWallet();
+
+  React.useEffect(() => {
+    setNotification({
+      ...notification,
+      message:
+        wallet && connected
+          ? null
+          : "No connected wallet, please connect a wallet first",
+    });
+  }, [connected, wallet]);
 
   const initContract = {
     selected: "",
@@ -57,7 +66,7 @@ const SmartContracts = () => {
   const jobBidsList = useGetList("jobbids", {
     pagination: { page: 1, perPage: 10 },
     sort: { field: "createdDate", order: "DESC" },
-    filter: { queryType: "employer" },
+    filter: { queryType: "employer", isSelected: true, isSignedTx: false },
   });
 
   React.useEffect(() => {
@@ -74,7 +83,7 @@ const SmartContracts = () => {
   //admin pkh
   const [adminPKH, setAdminPKH] = React.useState("");
   const adminWallets = useGetList("adminwallets", {
-    filter: {isMainnet: isMainnet},
+    filter: { isMainnet: isMainnet },
     pagination: { page: 1, perPage: 10 },
     sort: { field: "createdDate", order: "DESC" },
   });
@@ -196,6 +205,7 @@ const SmartContracts = () => {
 
   const sendAdaToPlutus = async () => {
     //public keyhash must be a valid bworks wallet address if unlock transaction will be signed by bworks.
+
     const scriptAddr = contract.contracts.find(
       (item) => item.id === contract.selected
     ).address;

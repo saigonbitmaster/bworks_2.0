@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 
 const ListScreen = () => {
   const isMainnet = process.env.REACT_APP_IS_MAINNET;
-  const unlockUri = isMainnet? "queues/unlockMainnet" :"queues/unlock";
+  const unlockUri = isMainnet ? "queues/unlockMainnet" : "queues/unlock";
   console.log(unlockUri);
   const UnlockButton = () => {
     const record = useRecordContext();
@@ -30,7 +30,7 @@ const ListScreen = () => {
     const handleClick = () => {
       dataProvider
         .customMethod(
-          unlockUri ,
+          unlockUri,
           {
             data: {
               jobBidId: record.jobBidId,
@@ -58,7 +58,7 @@ const ListScreen = () => {
       resource="plutustxs"
     >
       <Datagrid bulkActionButtons={false}>
-        <ReferenceField source="name" reference="postjobs">
+        <ReferenceField source="name" reference="postjobs" label="Job Name">
           <TextField source="name" />
         </ReferenceField>
 
@@ -72,7 +72,11 @@ const ListScreen = () => {
         <TextField source="unlockType" />
         <DateField source="unlockDate" showTime />
         <TextField source="unlockMessage" />
-        <ReferenceField source="jobBidId" reference="jobbids" label="Job completed">
+        <ReferenceField
+          source="jobBidId"
+          reference="jobbids"
+          label="Job completed"
+        >
           <BooleanField source="isCompleted" />
         </ReferenceField>
         <UnlockButton />

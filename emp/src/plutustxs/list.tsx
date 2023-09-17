@@ -63,7 +63,7 @@ const ListScreen = () => {
       filters={filters}
     >
       <Datagrid bulkActionButtons={false}>
-        <ReferenceField source="name" reference="postjobs" label="Job">
+        <ReferenceField source="name" reference="postjobs" label="Job NameName">
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField source="jobBidId" reference="jobbids">
