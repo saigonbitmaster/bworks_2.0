@@ -29,10 +29,6 @@ export class UserService {
     return { count: count, data: data };
   }
 
-  /*  async findOne(id: string): Promise<User> {
-    return await this.model.findById(id).exec();
-  } */
-
   async findAllRaw(filter = {}): Promise<any[]> {
     return this.model.find(filter).exec();
   }
@@ -62,7 +58,10 @@ export class UserService {
     }).save();
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async updatePassword(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User> {
     let _updateUserDto = updateUserDto;
     //don't update roles
     delete _updateUserDto['roles'];
@@ -72,6 +71,14 @@ export class UserService {
       _updateUserDto = { ...updateUserDto, password };
     }
     return await this.model.findByIdAndUpdate(id, _updateUserDto).exec();
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    //don't update roles & password
+    delete updateUserDto['roles'];
+    delete updateUserDto['password'];
+
+    return await this.model.findByIdAndUpdate(id, updateUserDto).exec();
   }
 
   async delete(id: string): Promise<User> {

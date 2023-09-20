@@ -50,6 +50,10 @@ const customEnglishMessages: TranslationMessages = {
     changePassword: {
       name: "Change password",
     },
+
+    userSettings: {
+      name: "User settings",
+    },
     jobtasks: {
       name: "Job tasks",
     },

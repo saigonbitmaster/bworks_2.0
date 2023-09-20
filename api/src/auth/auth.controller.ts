@@ -41,13 +41,6 @@ export class AuthController {
     return req.user;
   }
 
-  @Get('profile1')
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin)
-  getProfile1(@Request() req) {
-    return req.user;
-  }
-
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   @Public()

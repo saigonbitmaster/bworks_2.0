@@ -28,6 +28,9 @@ export class User {
   roles: Role[];
 
   @Prop()
+  skills: any[];
+
+  @Prop()
   completedAt?: Date;
 
   @Prop({ required: true })

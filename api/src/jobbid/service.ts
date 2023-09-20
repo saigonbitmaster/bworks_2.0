@@ -98,9 +98,7 @@ export class JobBidService {
     id: string,
     updateJobBidDto: UpdateJobBidDto,
   ): Promise<JobBid> {
-    console.log(id, updateJobBidDto);
-    let a = await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
-    console.log(a);
+    const a = await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
     return a;
   }
 

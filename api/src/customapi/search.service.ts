@@ -72,7 +72,7 @@ export class SearchService {
         try {
           result = await this[item.serviceName].findAll(query);
         } catch (error) {
-          console.log(error);
+          console.log('search error:', error);
         }
 
         return {
@@ -158,7 +158,7 @@ export class SearchService {
         try {
           result = await this[item.serviceName].findAll(query);
         } catch (error) {
-          console.log(error);
+          console.log('search error:', error);
         }
 
         return {
