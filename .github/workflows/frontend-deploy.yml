@@ -1,0 +1,27 @@
+name: deploy frontend
+run-name: ${{ github.actor }} is deploying frontend 🚀
+on:
+ workflow_dispatch:
+jobs:
+  restart-api-service:
+    runs-on: ubuntu-latest
+    environment:
+      name: testnet
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: restart frontend
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/${{ secrets.REMOTE_USER }}/bworks_2.0_deploy/docker-configs
+            docker-compose -f docker-compose.yml stop nginx
+            docker-compose -f docker-compose.yml rm -f nginx
+            docker rmi -f 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet
+            #docker rmi -f jackchuong/itl:bworks-frontend-testnet
+            docker-compose -f docker-compose.yml up -d
+      - run: echo "🍏 This job's status is ${{ job.status }}."

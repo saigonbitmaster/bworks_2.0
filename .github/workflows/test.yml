@@ -1,0 +1,28 @@
+name: testing
+run-name: ${{ github.actor }} is testing 🚀
+on:
+ workflow_dispatch:
+jobs:
+  build-push-docker-image:
+    runs-on: ubuntu-latest
+    environment:
+      name: testnet
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Check out wallets repository code
+        uses: actions/checkout@v4
+        with:
+          repository: saigonbitmaster/wallets.git
+          ref: 'master'
+          token: ${{ secrets.PAT }}
+          path: './api/src/flatworks/shellscripts/'
+      - run: |
+          pwd
+          ls -lah
+          ls -lah ./api/src/flatworks/shellscripts/
+      #- run: echo "myname ${{ vars.MYNAME }}"
+      - run: echo "🍏 This job's status is ${{ job.status }}."
