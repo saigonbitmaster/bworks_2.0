@@ -28,9 +28,11 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
-    MongooseModule.forRoot(
-      'mongodb://admin:123456@localhost:27017/bworks2?authSource=admin&readPreference=primary',
-    ),
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.CONNECTION_STRING,
+      }),
+    }),
     BullModule.forRoot({
       redis: {
         host: 'localhost',
