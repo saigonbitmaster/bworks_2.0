@@ -17,7 +17,6 @@ test.js
 **/flatworks/shellscripts/wallets
 
 # ignore database & certificates
-docker-config/dbdata
-docker-config/mongobackups
-docker-config/certbot
-
+**/dbdata
+**/mongobackups
+**/certbot
