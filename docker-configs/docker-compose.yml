@@ -11,8 +11,8 @@ services:
     ports:
       - 27017:27017
     networks:
-      - cardano-node-net
-      #- bworksnet
+      #- cardano-node-net
+      - bworksnet
 
   redis:
     image: redis:6.2-alpine
@@ -21,8 +21,8 @@ services:
     ports:
       - 6379:6379
     networks:
-      - cardano-node-net
-      #- bworksnet
+      #- cardano-node-net
+      - bworksnet
 
   nginx:
     image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet
@@ -41,8 +41,8 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     command: "/bin/sh -c 'while :; do sleep 24h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
-      - cardano-node-net
-      #- bworksnet
+      #- cardano-node-net
+      - bworksnet
 
   homepage:
     image: jackchuong/itl:bworks-homepage-rundirect
@@ -52,8 +52,8 @@ services:
     #  - 8000:8000
     #command: "/bin/sh -c 'npm start'"
     networks:
-      - cardano-node-net
-      #- bworksnet
+      #- cardano-node-net
+      - bworksnet
 
   certbot:
     image: certbot/certbot:latest
@@ -63,8 +63,8 @@ services:
       - ./certbot/conf/:/etc/letsencrypt/:rw
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 24h & wait $${!}; done;'"
     networks:
-      - cardano-node-net
-      #- bworksnet
+      #- cardano-node-net
+      - bworksnet
 
   api:
     image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-testnet
@@ -84,15 +84,27 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/ec2-user/Run-cardano-node-on-docker/cardano-node-ipc:/ipc:ro
-      #- /home/ec2-user/bworks_2.0_deploy/docker-configs/cardano-node-ipc:/ipc
+      #- /home/ec2-user/Run-cardano-node-on-docker/cardano-node-ipc:/ipc:ro
+      - ./cardano-node-ipc:/ipc
       - /home/ec2-user/Run-cardano-node-on-docker/cardano-wallet:/cardano-wallet:ro
     command: "/bin/sh -c 'cd /app/api ; node dist/main'"
     networks:
-      - cardano-node-net
-      #- bworksnet
+      #- cardano-node-net
+      - bworksnet
+
+  socat-api:
+    image: alpine/socat
+    container_name: socat-api
+    volumes:
+      - ./cardano-node-ipc:/ipc
+    command: "UNIX-LISTEN:/ipc/node.socket,fork,reuseaddr,unlink-early, TCP:18.143.208.238:3001"
+    #ports:
+    #  - "3001:3001"
+    restart: unless-stopped
+    networks:
+      - bworksnet
 
 networks:
-  cardano-node-net:
-    external: true
-  #bworksnet:
+  #cardano-node-net:
+  #  external: true
+  bworksnet:
