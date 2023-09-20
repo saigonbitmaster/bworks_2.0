@@ -11,8 +11,8 @@ services:
     ports:
       - 27017:27017
     networks:
-      - bworksnet
-      #- appnet
+      - cardano-node-net
+      #- bworksnet
 
   redis:
     image: redis:6.2-alpine
@@ -21,8 +21,8 @@ services:
     ports:
       - 6379:6379
     networks:
-      - bworksnet
-      #- appnet
+      - cardano-node-net
+      #- bworksnet
 
   nginx:
     image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet
@@ -41,8 +41,8 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     command: "/bin/sh -c 'while :; do sleep 24h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
-      - bworksnet
-      #- appnet
+      - cardano-node-net
+      #- bworksnet
 
   homepage:
     image: jackchuong/itl:bworks-homepage-rundirect
@@ -52,8 +52,8 @@ services:
     #  - 8000:8000
     #command: "/bin/sh -c 'npm start'"
     networks:
-      - bworksnet
-      #- appnet
+      - cardano-node-net
+      #- bworksnet
 
   certbot:
     image: certbot/certbot:latest
@@ -63,8 +63,8 @@ services:
       - ./certbot/conf/:/etc/letsencrypt/:rw
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 24h & wait $${!}; done;'"
     networks:
-      - bworksnet
-      #- appnet
+      - cardano-node-net
+      #- bworksnet
 
   api:
     image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-testnet
@@ -89,10 +89,10 @@ services:
       - /home/ec2-user/Run-cardano-node-on-docker/cardano-wallet:/cardano-wallet:ro
     command: "/bin/sh -c 'cd /app/api ; node dist/main'"
     networks:
-      - bworksnet
-      #- appnet
+      - cardano-node-net
+      #- bworksnet
 
 networks:
-  bworksnet:
+  cardano-node-net:
     external: true
-  #appnet:
+  #bworksnet:
