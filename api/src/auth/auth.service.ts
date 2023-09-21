@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
 import { validateEmail } from '../flatworks/utils/common';
 import { Role } from '../flatworks/utils/roles';
+import { WalletService } from '../wallet/service';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,7 @@ export class AuthService {
     @Inject(forwardRef(() => UserService)) private userService: UserService,
     private jwtService: JwtService,
     private mailService: MailService,
+    private walletService: WalletService,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
@@ -135,6 +137,7 @@ export class AuthService {
       username: registerUser.username,
       email: registerUser.email,
       password: registerUser.password,
+      walletAddress: registerUser.walletAddress,
     };
 
     const emailToken = await this.createToken(payload);
@@ -143,6 +146,20 @@ export class AuthService {
   }
 
   async verify(user: any): Promise<any> {
-    return await this.userService.create({ ...user, roles: [Role.User] });
+    const insertedUser = (await this.userService.create({
+      ...user,
+      roles: [Role.User],
+    })) as any;
+    const { id: userId, username } = insertedUser;
+    const { walletAddress } = user;
+    const _wallet = await this.walletService.create(
+      {
+        username,
+        address: walletAddress,
+      },
+      userId,
+    );
+
+    return insertedUser;
   }
 }

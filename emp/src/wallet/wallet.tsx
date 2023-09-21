@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { useCreate } from "react-admin";
+import { useCreate, useUpdate } from "react-admin";
 import { Box } from "@mui/material";
 import { useGetOne } from "react-admin";
 import ProcessBar from "../components/processBar";
@@ -68,6 +68,14 @@ const Wallet = (props) => {
   let API = null;
 
   const [state, setState] = React.useState(initState);
+
+  const [manualChecked, setManualChecked] = React.useState(true);
+
+  const handleManualChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setManualChecked(event.target.checked);
+  };
+
+  const [manualAddress, setManualAddress] = React.useState("");
 
   const handleChangeWallet = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -212,15 +220,28 @@ const Wallet = (props) => {
   //change to username when update ra-nest-rest to save username to localStorage
 
   let walletData = {
-    address: state.usedAddress,
+    address: manualChecked ? manualAddress : state.usedAddress,
     username: localStorage.getItem("username"),
   };
   const [createWallet, { isLoading: createIsLoading, error: createError }] =
     useCreate();
 
+  const [
+    update,
+    { data: updateData, isLoading: updateIsLoading, error: updateError },
+  ] = useUpdate();
+
   const handleClick = () => {
-    createWallet("wallets", { data: walletData });
+    alert(wallet.id);
+    wallet.id
+      ? update("wallets", {
+          id: wallet.id,
+          data: walletData,
+          previousData: wallet,
+        })
+      : createWallet("wallets", { data: walletData });
   };
+
   return (
     <Box>
       <Grid
@@ -284,21 +305,30 @@ const Wallet = (props) => {
           </Button>
         </Grid>
       </Grid>
-      <Wallet1
-        wallets={state.wallets}
-        handleChange={handleChangeWallet}
-        balance={state.balance}
-        changeAddress={state.changeAddress}
-        usedAddress={state.usedAddress}
-        networkId={state.networkId}
-        refresh={refresh}
-        walletIsEnabled={state.walletIsEnabled}
-      ></Wallet1>
+      {!manualChecked && (
+        <Wallet1
+          wallets={state.wallets}
+          handleChange={handleChangeWallet}
+          balance={state.balance}
+          changeAddress={state.changeAddress}
+          usedAddress={state.usedAddress}
+          networkId={state.networkId}
+          refresh={refresh}
+          walletIsEnabled={state.walletIsEnabled}
+        ></Wallet1>
+      )}
+
       <Box
         sx={{ m: 3, ml: 0, display: "flex", flex: 1, flexDirection: "column" }}
       >
         <FormControlLabel
-          control={<Checkbox defaultChecked />}
+          control={
+            <Checkbox
+              defaultChecked
+              checked={manualChecked}
+              onChange={handleManualChange}
+            />
+          }
           label="Update wallet manually"
         />
         <TextField
@@ -306,6 +336,11 @@ const Wallet = (props) => {
           id="standard-basic"
           label="Enter wallet address"
           variant="standard"
+          disabled={!manualChecked}
+          value={manualAddress}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setManualAddress(event.target.value);
+          }}
         />
         {walletState.address !== state.usedAddress && (
           <Button

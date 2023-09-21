@@ -37,23 +37,23 @@ export class WalletService {
     return await this.model.findOne({ userId }).exec();
   }
 
-  async create(createWalletDto: CreateWalletDto): Promise<Wallet> {
+  async create(
+    createWalletDto: CreateWalletDto,
+    userId: string,
+  ): Promise<Wallet> {
+    console.log(createWalletDto, userId);
     const address = createWalletDto.address;
-    const user = (await this.userService.findOne(
-      createWalletDto.username,
-    )) as any;
     const info = (await inspectAddress(address)) as any;
     return await new this.model({
       ...createWalletDto,
       createdAt: new Date(),
       pKeyHash: info.spending_key_hash,
       pKeyHashBech32: info.spending_key_hash_bech32,
-      userId: user._id,
+      userId,
     }).save();
   }
 
   async parseAddress(address: string): Promise<any> {
-    console.log(address);
     const isAddress = await validateAddress(address);
     if (!isAddress) {
       throw new BadRequestException('Invalid address');
@@ -67,7 +67,14 @@ export class WalletService {
   }
 
   async update(id: string, updateWalletDto: UpdateWalletDto): Promise<Wallet> {
-    return await this.model.findByIdAndUpdate(id, updateWalletDto).exec();
+    const info = (await inspectAddress(updateWalletDto.address)) as any;
+    return await this.model
+      .findByIdAndUpdate(id, {
+        ...updateWalletDto,
+        pKeyHash: info.spending_key_hash,
+        pKeyHashBech32: info.spending_key_hash_bech32,
+      })
+      .exec();
   }
 
   async delete(id: string): Promise<Wallet> {
