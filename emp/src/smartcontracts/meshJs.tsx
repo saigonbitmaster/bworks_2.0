@@ -44,6 +44,25 @@ const SmartContracts = () => {
     contracts: [],
   };
   const [contract, setContract] = React.useState(initContract);
+
+  const initUnlockUsers = {
+    selected: "",
+    unlockUsers: [],
+  };
+  const [unlockUsers, setUnlockUsers] = React.useState(initUnlockUsers);
+
+  const users = useGetList("users", {
+    pagination: { page: 1, perPage: 1000 },
+    sort: { field: "createdDate", order: "DESC" },
+  });
+
+  React.useEffect(() => {
+    if (!users.isLoading && !users.error && users.data.length > 0) {
+      const selected = users.data[0].id;
+      setUnlockUsers({ selected, unlockUsers: users.data });
+    }
+  }, [users.data]);
+
   const [unlockPartner, setUnlockPartner] = React.useState("");
 
   const [notification, setNotification] = React.useState({
@@ -60,13 +79,27 @@ const SmartContracts = () => {
     selected: "0",
     jobBids: [],
   };
+
+  const initPlutusTxs = {
+    selected: "0",
+    plutusTxs: [],
+  };
+
   const [jobBids, setJobBids] = React.useState(initJobBids);
+
+  const [plutusTxs, setPlutusTxs] = React.useState(initPlutusTxs);
 
   //{ data, total, isLoading, error } =  useGetList("jobbids",{})
   const jobBidsList = useGetList("jobbids", {
-    pagination: { page: 1, perPage: 10 },
+    pagination: { page: 1, perPage: 1000 },
     sort: { field: "createdDate", order: "DESC" },
     filter: { queryType: "employer", isSelected: true, isSignedTx: false },
+  });
+
+  const plutusTxsList = useGetList("plutustxs", {
+    pagination: { page: 1, perPage: 100 },
+    sort: { field: "createdDate", order: "DESC" },
+    filter: {},
   });
 
   React.useEffect(() => {
@@ -79,6 +112,17 @@ const SmartContracts = () => {
       setJobBids({ selected, jobBids: jobBidsList.data });
     }
   }, [jobBidsList.data]);
+
+  React.useEffect(() => {
+    if (
+      !plutusTxsList.isLoading &&
+      !plutusTxsList.error &&
+      plutusTxsList.data.length > 0
+    ) {
+      const selected = plutusTxsList.data[0].id;
+      setPlutusTxs({ selected, plutusTxs: plutusTxsList.data });
+    }
+  }, [plutusTxsList.data]);
 
   //admin pkh
   const [adminPKH, setAdminPKH] = React.useState("");
@@ -104,8 +148,7 @@ const SmartContracts = () => {
   const [userPKH, setUserPKH] = React.useState("");
 
   const userWallets = useGetList("wallets", {
-    pagination: { page: 1, perPage: 10 },
-    filter: { userId: localStorage.getItem("username") },
+    pagination: { page: 1, perPage: 100 },
   });
 
   React.useEffect(() => {
@@ -114,10 +157,19 @@ const SmartContracts = () => {
       !userWallets.error &&
       userWallets.data.length > 0
     ) {
-      const pKeyHash = userWallets.data[0].pKeyHash;
+      const pKeyHash = userWallets.data.find(
+        (wallet) => wallet.userId === unlockUsers.selected
+      )?.pKeyHash;
+
       setUserPKH(pKeyHash);
     }
-  }, [userWallets.data]);
+  }, [userWallets, unlockUsers.selected]);
+
+  React.useEffect(() => {
+    setDatum({ ...datum, publicKeyHash: userPKH });
+  }, [userPKH]);
+
+  //setDatum({ ...datum, publicKeyHash: publicKeyHash });
 
   React.useEffect(() => {
     const jobBidValue =
@@ -136,14 +188,25 @@ const SmartContracts = () => {
   const [amountToLock, setAmountToLock] = React.useState(0);
 
   const [redeemAdaValues, setRedeemAdaValues] = React.useState({
-    amountToRedeem: "",
+    amountToRedeem: 0,
     datumToRedeem: "",
     transactionIdLocked: "",
-    transactionIndxLocked: "",
-    manualFee: "900000",
+    lockedTxHash: "",
+    transactionIndxLocked: 0,
+    manualFee: "NA",
   });
 
-  const redeemAdaFromPlutus = async () => {};
+  React.useEffect(() => {
+    const plutusTx = plutusTxs.plutusTxs.find(
+      (tx) => tx.id === plutusTxs.selected
+    );
+    if (!plutusTx) return;
+    setRedeemAdaValues({
+      ...redeemAdaValues,
+      amountToRedeem: plutusTx.amount || 0,
+      lockedTxHash: plutusTx.lockedTxHash || "",
+    });
+  }, [plutusTxs]);
 
   const handleContractChange = (event: SelectChangeEvent) => {
     setContract({ ...contract, selected: event.target.value });
@@ -151,6 +214,14 @@ const SmartContracts = () => {
 
   const handleJobBidChange = (event: SelectChangeEvent) => {
     setJobBids({ ...jobBids, selected: event.target.value });
+  };
+
+  const handleUnlockUserChange = (event: SelectChangeEvent) => {
+    setUnlockUsers({ ...unlockUsers, selected: event.target.value });
+  };
+
+  const handlePlutusTxChange = (event: SelectChangeEvent) => {
+    setPlutusTxs({ ...plutusTxs, selected: event.target.value });
   };
 
   const getJobBid = (bids: any[]) =>
@@ -161,12 +232,18 @@ const SmartContracts = () => {
     const publicKeyHash =
       event.target.value === "bworks"
         ? adminPKH
-        : event.target.value === "employer"
+        : event.target.value === "other"
         ? userPKH
         : "";
     setDatum({ ...datum, publicKeyHash: publicKeyHash });
+    if (event.target.value === "bworks") {
+      setUnlockUsers({
+        ...unlockUsers,
+        selected: users.data.find((user) => user.username === "cms").id,
+      });
+    }
   };
-
+  console.log(userPKH, unlockPartner, unlockUsers.selected);
   //lock datum
   const currentDate = dayjs();
   const [datum, setDatum] = React.useState({
@@ -243,9 +320,11 @@ const SmartContracts = () => {
       } catch (e) {
         create("plutustxs", {
           data: {
-            name: "Plutus submit failed",
+            name: getJobBid(jobBids.jobBids).jobId,
             jobBidId: getJobBid(jobBids.jobBids).id,
+            jobBidName: getJobBid(jobBids.jobBids).name,
             assetName: "Ada",
+            unlockUserId: unlockUsers.selected,
             jskId: getJobBid(jobBids.jobBids).jobSeekerId,
             empId: getJobBid(jobBids.jobBids).employerId,
             amount: amountToLock,
@@ -258,6 +337,11 @@ const SmartContracts = () => {
             )} failed`,
           },
         });
+        setNotification({
+          ...notification,
+          message: "Transaction is failed",
+        });
+        return;
       }
 
       setNotification({
@@ -268,10 +352,12 @@ const SmartContracts = () => {
         data: {
           name: getJobBid(jobBids.jobBids).jobId,
           jobBidId: getJobBid(jobBids.jobBids).id,
+          jobBidName: getJobBid(jobBids.jobBids).name,
           jskId: getJobBid(jobBids.jobBids).jobSeekerId,
           empId: getJobBid(jobBids.jobBids).employerId,
           assetName: "Ada",
           amount: amountToLock,
+          unlockUserId: unlockUsers.selected,
           lockedTxHash: txHash,
           datumUnlockPublicKeyHash: datum.publicKeyHash,
           scriptAddress: scriptAddr,
@@ -290,20 +376,79 @@ const SmartContracts = () => {
     }
   };
 
+  const redeemAdaFromPlutus = async () => {
+    async function _getAssetUtxo({ scriptAddress, asset, lockedTxHash }) {
+      const koios = new KoiosProvider("preprod");
+
+      const utxos = await koios.fetchAddressUTxOs(scriptAddr, asset);
+      let utxo = utxos.find((item) => item.input.txHash === lockedTxHash);
+
+      return utxo;
+    }
+
+    const currentContract = contract.contracts.find(
+      (item) => item.id === contract.selected
+    );
+
+    const scriptAddr = currentContract.address;
+
+    const lockedPlutusTx = plutusTxs.plutusTxs.find(
+      (item) => item.id === plutusTxs.selected
+    );
+
+    const utxo = await _getAssetUtxo({
+      scriptAddress: scriptAddr,
+      asset: "lovelace",
+      lockedTxHash: lockedPlutusTx.lockedTxHash,
+    });
+    console.log("utxo", utxo);
+
+    const address = await wallet.getChangeAddress();
+    const collateralUtxos = await wallet.getCollateral();
+    console.log("collateralUtxos", collateralUtxos, "address", address);
+    // create the unlock asset transaction
+    const tx = new Transaction({ initiator: wallet })
+      .redeemValue({
+        value: utxo,
+        script: {
+          code: currentContract.code,
+          version: currentContract.version,
+        },
+        datum: utxo,
+      })
+      .sendValue(
+        "addr_test1qpj6p90r4757zjgc80kkpamltm65qfl9r9kt22makl6ess76l0jqfmvf975syyp36903hacvjnddmhm9dxwsz0gs9g6qxklmrs",
+        utxo
+      ) // address is recipient address
+      .setCollateral(collateralUtxos) //this is option, we either set or not set still works
+      .setRequiredSigners([address]);
+
+    const unsignedTx = await tx.build();
+    // note that the partial sign is set to true
+    const signedTx = await wallet.signTx(unsignedTx, true);
+    const txHash = await wallet.submitTx(signedTx);
+
+    console.log("unlockTxHash", txHash);
+  };
+
   return (
     <Box sx={{ mt: 0, display: "flex", flex: 1, flexDirection: "column" }}>
       <Box sx={{ mt: 0, display: "flex", flex: 1, flexDirection: "row" }}>
         <SmartContractJob
           handleContractChange={handleContractChange}
           handleJobBidChange={handleJobBidChange}
-          contract={contract}
-          jobBids={jobBids}
-          sendAdaToPlutus={sendAdaToPlutus}
-          redeemAdaFromPlutus={redeemAdaFromPlutus}
+          handlePlutusTxChange={handlePlutusTxChange}
           handleChangeLockAda={handleChangeLockAda}
           handleChangRedeemAda={handleChangRedeemAda}
           handleChangeUnlockPartner={handleChangeUnlockPartner}
           handleChangePublicKeyHash={handleChangePublicKeyHash}
+          handleUnlockUserChange={handleUnlockUserChange}
+          contract={contract}
+          plutusTxs={plutusTxs}
+          jobBids={jobBids}
+          unlockUsers={unlockUsers}
+          sendAdaToPlutus={sendAdaToPlutus}
+          redeemAdaFromPlutus={redeemAdaFromPlutus}
           amountToLock={amountToLock}
           datum={datum}
           unlockPartner={unlockPartner}

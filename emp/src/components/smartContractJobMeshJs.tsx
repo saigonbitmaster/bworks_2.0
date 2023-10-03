@@ -21,21 +21,25 @@ export default function SmartContract(props) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    //temporary disabled unlock tab to unlock by admin. 
-    if (value === "1") {
+    //temporary disabled unlock tab to unlock by admin.
+    /*  if (value === "1") {
       return;
-    }
+    } */
     setValue(newValue);
   };
 
   const handleSmartContractChange = props.handleContractChange;
   const handleJobBidChange = props.handleJobBidChange;
-
+  const handleUnlockUserChange = props.handleUnlockUserChange;
   const selectedContract = props.contract?.selected || null;
   const selectedJobBid = props.jobBids?.selected || null;
+  const selectedUnlockUser = props.unlockUsers?.selected || null;
   const contracts = props.contract?.contracts || [];
   const jobBids = props.jobBids?.jobBids || [];
-
+  const unlockUsers = props.unlockUsers?.unlockUsers || [];
+  const plutusTxs = props.plutusTxs?.plutusTxs || [];
+  const handlePlutusTxChange = props.handlePlutusTxChange || null;
+  const selectedPlutusTx = props.plutusTxs?.selected || null;
   const sendAdaToPlutus = props.sendAdaToPlutus || null;
   const redeemAdaValues = props.redeemAdaValues || null;
   const handleChangeLockAda = props.handleChangeLockAda || null;
@@ -147,21 +151,51 @@ export default function SmartContract(props) {
               value={amountToLock}
               onChange={handleChangeLockAda}
             />
-            <FormControl variant="standard" sx={{ minWidth: 120 }}>
-              <InputLabel id="unlockPartner">Select unlock partner</InputLabel>
-              <Select
-                labelId="unlockPartner"
-                id="unlockPartner"
-                value={unlockPartner}
-                onChange={handleChangeUnlockPartner}
-                label="Select unlock partner"
-                sx={{ width: 240 }}
-              >
-                <MenuItem value={"bworks"}>By bWorks</MenuItem>
-                <MenuItem value={"employer"}>By employer</MenuItem>
-                <MenuItem value={"other"}>By other</MenuItem>
-              </Select>
-            </FormControl>
+            <Box
+              sx={{
+                paddingTop: 0,
+                paddingLeft: 0,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
+            >
+              <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                <InputLabel id="unlockPartner">
+                  Select unlock partner
+                </InputLabel>
+                <Select
+                  labelId="unlockPartner"
+                  id="unlockPartner"
+                  value={unlockPartner}
+                  onChange={handleChangeUnlockPartner}
+                  label="Select unlock partner"
+                  sx={{ width: 240, mr: 1 }}
+                >
+                  <MenuItem value={"bworks"}>By bWorks</MenuItem>
+                  <MenuItem value={"other"}>By other</MenuItem>
+                </Select>
+              </FormControl>
+              {unlockPartner === "other" && (
+                <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                  <InputLabel id="simple-select-standard-label">
+                    Select a user to unlock
+                  </InputLabel>
+                  <Select
+                    sx={{ width: 240 }}
+                    labelId="simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={selectedUnlockUser}
+                    onChange={handleUnlockUserChange}
+                    label="userToUnlock"
+                  >
+                    {unlockUsers.map((item) => (
+                      <MenuItem value={item.id}>{item.username}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+            </Box>
             <TextField
               sx={{ width: 500 }}
               id="standard-basic"
@@ -194,7 +228,7 @@ export default function SmartContract(props) {
           </Box>
         </TabPanel>
 
-        <TabPanel value="2">
+        <TabPanel value="2" sx={{ padding: 0 }}>
           <Box
             sx={{
               paddingTop: 0,
@@ -205,6 +239,7 @@ export default function SmartContract(props) {
           >
             <Box
               sx={{
+                marginLeft: 0,
                 paddingTop: 0,
                 paddingLeft: 0,
                 display: "flex",
@@ -232,20 +267,21 @@ export default function SmartContract(props) {
                   ))}
                 </Select>
               </FormControl>
+
               <FormControl variant="standard" sx={{ minWidth: 120 }}>
                 <InputLabel id="simple-select-standard-label">
-                  Select a job bid
+                  Select a locked TX
                 </InputLabel>
                 <Select
                   sx={{ width: 240 }}
                   labelId="simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  value={selectedJobBid}
-                  onChange={handleJobBidChange}
+                  value={selectedPlutusTx}
+                  onChange={handlePlutusTxChange}
                   label="contract"
                 >
-                  {jobBids.map((item) => (
-                    <MenuItem value={item.id}>{item.name}</MenuItem>
+                  {plutusTxs.map((item) => (
+                    <MenuItem value={item.id}>{item.jobBidName}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -274,19 +310,11 @@ export default function SmartContract(props) {
             <TextField
               sx={{ width: 480, fontSize: "small" }}
               id="standard-basic"
-              label="UTXO where ADA is locked"
-              value={redeemAdaValues.transactionIdLocked}
+              label="Locked Tx hash"
+              value={redeemAdaValues.lockedTxHash}
               onChange={handleChangRedeemAda("transactionIdLocked")}
               variant="standard"
-            />
-            <TextField
-              sx={{ width: 480 }}
-              id="standard-basic"
-              label="Transaction index"
-              variant="standard"
-              type="number"
-              value={redeemAdaValues.transactionIndxLocked}
-              onChange={handleChangRedeemAda("transactionIndxLocked")}
+              disabled
             />
             <TextField
               sx={{ width: 480 }}
@@ -296,23 +324,27 @@ export default function SmartContract(props) {
               value={redeemAdaValues.amountToRedeem}
               onChange={handleChangRedeemAda("amountToRedeem")}
               type="number"
+              disabled
             />
             <TextField
-              sx={{ width: 480 }}
+              sx={{ width: 240 }}
               id="standard-basic"
-              label="Datum to unlock"
+              label="Transaction index"
               variant="standard"
-              value={redeemAdaValues.datumToRedeem}
-              onChange={handleChangRedeemAda("datumToRedeem")}
+              type="number"
+              disabled
+              value={redeemAdaValues.transactionIndxLocked}
+              onChange={handleChangRedeemAda("transactionIndxLocked")}
             />
+
             <TextField
-              sx={{ width: 480 }}
+              sx={{ width: 240 }}
               id="standard-basic"
               label="Fee"
               variant="standard"
-              type="number"
               value={redeemAdaValues.manualFee}
               onChange={handleChangRedeemAda("manualFee")}
+              disabled
             />
             <Button
               variant="text"

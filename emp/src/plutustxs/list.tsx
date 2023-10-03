@@ -57,13 +57,13 @@ const ListScreen = () => {
   return (
     <List
       perPage={25}
-      sort={{ field: "date", order: "DESC" }}
+      sort={{ field: "lockDate", order: "DESC" }}
       resource="plutustxs"
       filter={{ queryType: "employer" }}
       filters={filters}
     >
       <Datagrid bulkActionButtons={false}>
-        <ReferenceField source="name" reference="postjobs" label="Job NameName">
+        <ReferenceField source="name" reference="postjobs" label="Job">
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField source="jobBidId" reference="jobbids">
