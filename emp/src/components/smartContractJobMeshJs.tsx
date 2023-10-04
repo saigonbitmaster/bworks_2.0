@@ -15,6 +15,9 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
 
 //Component for inline datum
 export default function SmartContract(props) {
@@ -50,6 +53,9 @@ export default function SmartContract(props) {
   const handleChangeUnlockPartner = props.handleChangeUnlockPartner || null;
   const unlockPartner = props.unlockPartner || "bworks";
   const handleChangePublicKeyHash = props.handleChangePublicKeyHash || null;
+  const receiveAddress = props.receiveAddress || {};
+  const handleReceiveAddressChange = props.handleReceiveAddressChange || null;
+
   if (!contracts || contracts.length === 0) {
     return (
       <Typography variant="subtitle1" gutterBottom>
@@ -324,6 +330,32 @@ export default function SmartContract(props) {
               value={redeemAdaValues.amountToRedeem}
               onChange={handleChangRedeemAda("amountToRedeem")}
               type="number"
+              disabled
+            />
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={receiveAddress.refund}
+                    onChange={handleReceiveAddressChange}
+                  />
+                }
+                label="Refund to employer"
+              />
+            </FormGroup>
+
+            <TextField
+              sx={{ width: 480 }}
+              id="standard-basic"
+              label={
+                receiveAddress.refund
+                  ? "Employer wallet address"
+                  : "Job seeker address"
+              }
+              variant="standard"
+              value={receiveAddress.address}
+              //   onChange={handleChangRedeemAda("amountToRedeem")}
+
               disabled
             />
             <TextField

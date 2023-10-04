@@ -15,12 +15,19 @@ import {
   resolveDataHash,
   KoiosProvider,
 } from "@meshsdk/core";
-import { useCreate } from "react-admin";
+import { useCreate, useDataProvider, useUpdate } from "react-admin";
 import queryString from "query-string";
 import { useSearchParams } from "react-router-dom";
-import { useUpdate } from "react-admin";
 
 const SmartContracts = () => {
+  //get current userId
+  const dataProvider = useDataProvider();
+  const [userId, setUserId] = React.useState(null);
+  dataProvider
+    .customMethod("customapis/userid", { filter: {} }, "GET")
+    .then((result) => setUserId(result.data))
+    .catch((error) => console.error(error));
+
   const isMainnet = process.env.REACT_APP_IS_MAINNET;
   const [update, { isLoading: _isLoading, error: _error }] = useUpdate();
 
@@ -99,7 +106,7 @@ const SmartContracts = () => {
   const plutusTxsList = useGetList("plutustxs", {
     pagination: { page: 1, perPage: 100 },
     sort: { field: "createdDate", order: "DESC" },
-    filter: {},
+    filter: { unlockUserId: userId, unlockedTxHash: { $eq: null }, lockedTxHash: { $ne: null}},
   });
 
   React.useEffect(() => {
@@ -148,7 +155,7 @@ const SmartContracts = () => {
   const [userPKH, setUserPKH] = React.useState("");
 
   const userWallets = useGetList("wallets", {
-    pagination: { page: 1, perPage: 100 },
+    pagination: { page: 1, perPage: 1000 },
   });
 
   React.useEffect(() => {
@@ -168,8 +175,6 @@ const SmartContracts = () => {
   React.useEffect(() => {
     setDatum({ ...datum, publicKeyHash: userPKH });
   }, [userPKH]);
-
-  //setDatum({ ...datum, publicKeyHash: publicKeyHash });
 
   React.useEffect(() => {
     const jobBidValue =
@@ -195,18 +200,35 @@ const SmartContracts = () => {
     transactionIndxLocked: 0,
     manualFee: "NA",
   });
+  //refund flag to pay to job seeker if true, refund to employer if false
+  const [receiveAddress, setReiveAddress] = React.useState({
+    refund: false,
+    address: "",
+  });
 
   React.useEffect(() => {
     const plutusTx = plutusTxs.plutusTxs.find(
       (tx) => tx.id === plutusTxs.selected
     );
-    if (!plutusTx) return;
+
+    const receiveUserId = receiveAddress.refund
+      ? plutusTx?.empId
+      : plutusTx?.jskId;
+
+    const receiveWallet = userWallets.data?.find(
+      (wallet) => wallet.userId === receiveUserId
+    );
+    console.log(receiveUserId, receiveWallet, plutusTx);
+
+    if (!plutusTx || !receiveWallet) return;
+
+    setReiveAddress({ ...receiveAddress, address: receiveWallet.address });
     setRedeemAdaValues({
       ...redeemAdaValues,
       amountToRedeem: plutusTx.amount || 0,
       lockedTxHash: plutusTx.lockedTxHash || "",
     });
-  }, [plutusTxs]);
+  }, [plutusTxs, receiveAddress.refund]);
 
   const handleContractChange = (event: SelectChangeEvent) => {
     setContract({ ...contract, selected: event.target.value });
@@ -222,6 +244,12 @@ const SmartContracts = () => {
 
   const handlePlutusTxChange = (event: SelectChangeEvent) => {
     setPlutusTxs({ ...plutusTxs, selected: event.target.value });
+  };
+
+  const handleReceiveAddressChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setReiveAddress({ ...receiveAddress, refund: event.target.checked });
   };
 
   const getJobBid = (bids: any[]) =>
@@ -401,32 +429,83 @@ const SmartContracts = () => {
       asset: "lovelace",
       lockedTxHash: lockedPlutusTx.lockedTxHash,
     });
-    console.log("utxo", utxo);
 
     const address = await wallet.getChangeAddress();
     const collateralUtxos = await wallet.getCollateral();
-    console.log("collateralUtxos", collateralUtxos, "address", address);
+    if (!utxo || !receiveAddress.address || !address) {
+      setNotification({
+        ...notification,
+        message: !utxo
+          ? "No UTXO to unlock"
+          : !receiveAddress.address
+          ? "No receiver address"
+          : !address
+          ? "No signer address"
+          : null,
+      });
+      return;
+    }
     // create the unlock asset transaction
-    const tx = new Transaction({ initiator: wallet })
-      .redeemValue({
-        value: utxo,
-        script: {
-          code: currentContract.code,
-          version: currentContract.version,
-        },
-        datum: utxo,
-      })
-      .sendValue(
-        "addr_test1qpj6p90r4757zjgc80kkpamltm65qfl9r9kt22makl6ess76l0jqfmvf975syyp36903hacvjnddmhm9dxwsz0gs9g6qxklmrs",
-        utxo
-      ) // address is recipient address
-      .setCollateral(collateralUtxos) //this is option, we either set or not set still works
-      .setRequiredSigners([address]);
+    let txHash;
+    try {
+      const tx = new Transaction({ initiator: wallet })
+        .redeemValue({
+          value: utxo,
+          script: {
+            code: currentContract.code,
+            version: currentContract.version,
+          },
+          datum: utxo,
+        })
+        .sendValue(receiveAddress.address, utxo) // address is recipient address
+        .setCollateral(collateralUtxos) //this is option, we either set or not set still works
+        .setRequiredSigners([address]);
 
-    const unsignedTx = await tx.build();
-    // note that the partial sign is set to true
-    const signedTx = await wallet.signTx(unsignedTx, true);
-    const txHash = await wallet.submitTx(signedTx);
+      const unsignedTx = await tx.build();
+      // note that the partial sign is set to true
+      const signedTx = await wallet.signTx(unsignedTx, true);
+      txHash = await wallet.submitTx(signedTx);
+    } catch (err) {
+      setNotification({ ...notification, message: "Submit error" });
+      update("plutustxs", {
+        id: lockedPlutusTx.id,
+        data: {
+          unlockMessage: `unlock by ${localStorage.getItem(
+            "username"
+          )} is failed`,
+          unlockDate: new Date(),
+          unlockUserId: userId,
+          unlockType: receiveAddress.refund ? "return" : "paid",
+        },
+        previousData: lockedPlutusTx,
+      });
+      return;
+    }
+    update("plutustxs", {
+      id: lockedPlutusTx.id,
+      data: {
+        unlockMessage: `unlock by ${localStorage.getItem(
+          "username"
+        )} is succeed`,
+        unlockDate: new Date(),
+        unlockUserId: userId,
+        unlockedTxHash: txHash,
+        unlockType: receiveAddress.refund ? "return" : "paid",
+      },
+      previousData: lockedPlutusTx,
+    });
+
+    console.log(lockedPlutusTx.jobBidId);
+
+    update("jobbids", {
+      id: lockedPlutusTx.jobBidId,
+      data: { isPaid: true },
+    });
+
+    setNotification({
+      ...notification,
+      message: `Transaction is submitted, TxHash: ${txHash}`,
+    });
 
     console.log("unlockTxHash", txHash);
   };
@@ -443,6 +522,7 @@ const SmartContracts = () => {
           handleChangeUnlockPartner={handleChangeUnlockPartner}
           handleChangePublicKeyHash={handleChangePublicKeyHash}
           handleUnlockUserChange={handleUnlockUserChange}
+          handleReceiveAddressChange={handleReceiveAddressChange}
           contract={contract}
           plutusTxs={plutusTxs}
           jobBids={jobBids}
@@ -454,6 +534,7 @@ const SmartContracts = () => {
           unlockPartner={unlockPartner}
           handleChangeDate={handleChangeDate}
           redeemAdaValues={redeemAdaValues}
+          receiveAddress={receiveAddress}
           notification={notification}
         ></SmartContractJob>
         <CardanoWallet />

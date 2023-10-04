@@ -5,10 +5,12 @@ import { CreatePlutusTxDto } from './dto/create.dto';
 import { UpdatePlutusTxDto } from './dto/update.dto';
 import { PlutusTx, PlutusTxDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { JobBidService } from '../jobbid/service';
+
 import {
   plutusDashboardScript,
   plutusScript,
-  plutusMonthlyScript
+  plutusMonthlyScript,
 } from '../flatworks/dbcripts/aggregate.scripts';
 import * as moment from 'moment';
 
@@ -16,6 +18,7 @@ import * as moment from 'moment';
 export class PlutusTxService {
   constructor(
     @InjectModel(PlutusTx.name) private readonly model: Model<PlutusTxDocument>,
+    private jobBidService: JobBidService,
   ) {}
 
   async getMonthlyPlutusTxsReport(queryType, userId): Promise<any> {
@@ -135,7 +138,19 @@ export class PlutusTxService {
   async update(
     id: string,
     updatePlutusTxDto: UpdatePlutusTxDto,
+    userId?: string,
   ): Promise<PlutusTx> {
+    //update jobBid isPaid if the transaction is signed by right unlockUserId from browser
+    const currentRecord = await this.findOne(id);
+    if (
+      updatePlutusTxDto.unlockedTxHash &&
+      userId === currentRecord.unlockUserId
+    ) {
+      this.jobBidService.updateByBackgroundJob(currentRecord.jobBidId, {
+        isPaid: true,
+        completedAt: new Date(),
+      });
+    }
     return await this.model.findByIdAndUpdate(id, updatePlutusTxDto).exec();
   }
 
