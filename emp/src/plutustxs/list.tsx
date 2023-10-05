@@ -70,16 +70,26 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
 
+        <TextField source="lockedTxHash" />
+
+        <NumberField source="amount" label="Amount (Ada)" />
+        <ReferenceField
+          source="unlockUserId"
+          reference="users"
+          label="User to unlock"
+        >
+          <TextField source="username" />
+        </ReferenceField>
+
+        <DateField source="lockDate" showTime />
+        <TextField source="lockMessage" />
         <FunctionField
-          label="Paid"
+          label="Unlocked"
           render={(record) => (
             <Checkbox disabled checked={!!record.unlockedTxHash} />
           )}
         />
-        <TextField source="lockedTxHash" />
-        <NumberField source="amount" label="Amount (Ada)" />
-        <DateField source="lockDate" showTime />
-        <TextField source="lockMessage" />
+        <TextField source="unlockType" />
         <TextField source="unlockedTxHash" />
         <DateField source="unlockDate" showTime />
         <TextField source="unlockMessage" />

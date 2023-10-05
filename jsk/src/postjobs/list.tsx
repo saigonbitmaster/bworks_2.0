@@ -22,7 +22,7 @@ const ListScreen = () => {
     <List
       filters={filters}
       perPage={25}
-      sort={{ field: "date", order: "desc" }}
+      sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
       filter={{ queryType: "jobSeeker", isApproved: true }}
     >

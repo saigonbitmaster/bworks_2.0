@@ -41,7 +41,7 @@ const customEnglishMessages: TranslationMessages = {
     menu: {
       postJobs: "Manage jobs",
       reports: "Reports",
-      manageFund: "Payments",
+      manageFund: "Payment",
       tools: "Tools",
       settings: "Settings",
     },
@@ -49,6 +49,9 @@ const customEnglishMessages: TranslationMessages = {
   resources: {
     changePassword: {
       name: "Change password",
+    },
+    userSettings: {
+      name: "User settings",
     },
     paymentReport: { name: "Payment" },
     parseAddress: {
@@ -58,7 +61,7 @@ const customEnglishMessages: TranslationMessages = {
       import: "Import excels",
     },
     jobtasks: {
-      name: "Your tasks",
+      name: "Task management",
     },
     smartContracts: {
       name: "Smart contract |||| Smart contracts",
@@ -152,7 +155,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     jobBids: {
-      name: "Your bid |||| Your bids",
+      name: "Your Application |||| Your Applications",
       fields: {
         commands: "Orders",
       },

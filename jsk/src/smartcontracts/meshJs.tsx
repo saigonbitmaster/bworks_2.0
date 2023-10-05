@@ -29,7 +29,6 @@ const SmartContracts = () => {
     .catch((error) => console.error(error));
 
   const isMainnet = process.env.REACT_APP_IS_MAINNET;
-  const cardanoNetwork = isMainnet ? "mainnet" : "preprod";
   const [update, { isLoading: _isLoading, error: _error }] = useUpdate();
 
   const [searchParams] = useSearchParams();
@@ -107,11 +106,7 @@ const SmartContracts = () => {
   const plutusTxsList = useGetList("plutustxs", {
     pagination: { page: 1, perPage: 100 },
     sort: { field: "createdAt", order: "DESC" },
-    filter: {
-      unlockUserId: userId,
-      unlockedTxHash: { $eq: null },
-      lockedTxHash: { $ne: null },
-    },
+    filter: { unlockUserId: userId, unlockedTxHash: { $eq: null }, lockedTxHash: { $ne: null}},
   });
 
   React.useEffect(() => {
@@ -411,7 +406,7 @@ const SmartContracts = () => {
 
   const redeemAdaFromPlutus = async () => {
     async function _getAssetUtxo({ scriptAddress, asset, lockedTxHash }) {
-      const koios = new KoiosProvider(cardanoNetwork);
+      const koios = new KoiosProvider("mainnet");
       const utxos = await koios.fetchAddressUTxOs(scriptAddr, asset);
       let utxo = utxos.find((item) => item.input.txHash === lockedTxHash);
 

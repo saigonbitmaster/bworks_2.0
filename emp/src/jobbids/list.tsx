@@ -79,7 +79,7 @@ const CompletedButton = () => {
       disabled={record.isPaid || !record.isSelected}
       onClick={handleClick}
     >
-      {record.isCompleted ? "Jobs is completed" : "Job is not completed"}
+      {record.isCompleted ? "Incomplete" : "Complete"}
     </Button>
   );
 };
@@ -109,7 +109,7 @@ const ListScreen = () => {
   return (
     <List
       perPage={25}
-      sort={{ field: "date", order: "desc" }}
+      sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
       resource="jobbids"
       filter={{ queryType: "employer" }}
