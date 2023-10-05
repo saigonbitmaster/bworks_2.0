@@ -155,6 +155,7 @@ const ListScreen = () => {
           )}
         />
         <CompletedButton />
+        <BooleanField source="isPaid" />
       </Datagrid>
     </List>
   );

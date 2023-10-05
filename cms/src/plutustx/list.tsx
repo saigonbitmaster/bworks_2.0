@@ -53,7 +53,7 @@ const ListScreen = () => {
   return (
     <List
       perPage={25}
-      sort={{ field: "date", order: "desc" }}
+      sort={{ field: "createdAt", order: "desc" }}
       hasCreate
       resource="plutustxs"
     >
@@ -66,6 +66,9 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
         <TextField source="lockedTxHash" />
+        <ReferenceField source="unlockUserId" reference="users">
+          <TextField source="username" />
+        </ReferenceField>
         <DateField source="lockDate" showTime />
         <TextField source="lockMessage" />
         <TextField source="unlockedTxHash" />
