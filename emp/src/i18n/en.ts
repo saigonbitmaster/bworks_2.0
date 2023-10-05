@@ -41,7 +41,7 @@ const customEnglishMessages: TranslationMessages = {
     menu: {
       postJobs: "Manage jobs",
       reports: "Reports",
-      manageFund: "Manage fund",
+      manageFund: "Payment",
       tools: "Tools",
       settings: "Settings",
     },
@@ -50,8 +50,12 @@ const customEnglishMessages: TranslationMessages = {
     changePassword: {
       name: "Change password",
     },
+
+    userSettings: {
+      name: "User settings",
+    },
     jobtasks: {
-      name: "Job tasks",
+      name: "Task management",
     },
     paymentReport: {
       name: "Payment",
@@ -60,7 +64,7 @@ const customEnglishMessages: TranslationMessages = {
       import: "Import excels",
     },
     smartContracts: {
-      name: "Pay a bid |||| Pay a bid",
+      name: "Smart contract |||| Smart contracts",
       fields: {
         commands: "Orders",
       },
@@ -136,7 +140,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     postJobs: {
-      name: "Post Job |||| Post jobs",
+      name: "Post Job |||| Post job",
       fields: {
         commands: "Orders",
       },
@@ -154,7 +158,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     jobBids: {
-      name: "Job bid |||| Job bids",
+      name: "Job Application |||| Job Applications",
       fields: {
         commands: "Orders",
       },

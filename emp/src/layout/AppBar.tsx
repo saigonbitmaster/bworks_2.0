@@ -32,7 +32,7 @@ const ConfigurationMenu = React.forwardRef((props, ref) => {
 });
 const CustomUserMenu = () => (
   <UserMenu>
-    <ConfigurationMenu />
+  {/*   <ConfigurationMenu /> */}
     <Logout />
   </UserMenu>
 );

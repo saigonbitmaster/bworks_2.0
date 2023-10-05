@@ -6,6 +6,7 @@ import { JobBid, JobBidSchema } from './schemas/schema';
 import { JwtService } from '@nestjs/jwt';
 import { User, UserSchema } from '../user/schemas/user.schema';
 import { PostJob, PostJobSchema } from '../postjob/schemas/schema';
+
 @Global()
 @Module({
   providers: [JobBidService, JwtService],

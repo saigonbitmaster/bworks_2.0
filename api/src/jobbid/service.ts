@@ -72,6 +72,7 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const record: JobBid = await this.model.findById(id).exec();
+    console.log(record)
     //emp has right to select, complete & update sign tx for the bid only
     if (record.employerId === userId) {
       const { isSelected, isSignedTx, isCompleted } = updateJobBidDto;
@@ -98,10 +99,7 @@ export class JobBidService {
     id: string,
     updateJobBidDto: UpdateJobBidDto,
   ): Promise<JobBid> {
-    console.log(id, updateJobBidDto);
-    let a = await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
-    console.log(a);
-    return a;
+    return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
   }
 
   async findOneUser(id: string): Promise<User> {

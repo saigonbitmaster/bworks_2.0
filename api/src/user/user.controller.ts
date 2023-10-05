@@ -16,7 +16,6 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
 
-
 @Controller('users')
 export class UserController {
   constructor(private readonly service: UserService) {}
@@ -29,7 +28,7 @@ export class UserController {
     @Request() req,
   ) {
     const id = req.user.userId;
-    return await this.service.update(id, changePasswordDto);
+    return await this.service.updatePassword(id, changePasswordDto);
   }
 
   @Get()
@@ -45,7 +44,7 @@ export class UserController {
 
   @Get(':id')
   async find(@Param('id') id: string) {
-    return await this.service.findOne(id);
+    return await this.service.findById(id);
   }
 
   @Post()

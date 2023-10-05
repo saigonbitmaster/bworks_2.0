@@ -9,6 +9,7 @@ import {
   Response,
   Query,
   Request,
+  Req,
 } from '@nestjs/common';
 import { CreateWalletDto } from './dto/create.dto';
 import { UpdateWalletDto } from './dto/update.dto';
@@ -18,6 +19,7 @@ import getToken from '../flatworks/utils/token';
 import { JwtService } from '@nestjs/jwt';
 import { userJwtPayload } from '../flatworks/types/types';
 import { AddressDto } from './dto/address.dto';
+import * as lodash from 'lodash';
 
 @Controller('wallets')
 export class WalletController {
@@ -34,11 +36,10 @@ export class WalletController {
   }
 
   @Get('user/userId')
-  async findByUser(@Request() request: any) {
-    const token = getToken(request);
-    const user = (await this.jwtService.decode(token)) as userJwtPayload;
-    if (!user || !user.userId) return null;
-    return await this.service.findByUser(user.userId);
+  async findByUser(@Req() request) {
+    const userId = lodash.get(request, 'user.userId', null);
+    if (!userId) return null;
+    return await this.service.findByUser(userId);
   }
 
   @Get(':id')
@@ -52,8 +53,9 @@ export class WalletController {
   }
 
   @Post()
-  async create(@Body() createWalletDto: CreateWalletDto) {
-    return await this.service.create(createWalletDto);
+  async create(@Body() createWalletDto: CreateWalletDto, @Req() request) {
+    const userId = lodash.get(request, 'user.userId', null);
+    return await this.service.create(createWalletDto, userId);
   }
 
   @Put(':id')

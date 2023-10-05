@@ -4,14 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import {
-  List,
-  Datagrid,
-  TextField,
-  NumberField,
-  ArrayField,
-  useCreate,
-} from "react-admin";
+import { useCreate, useUpdate } from "react-admin";
 import { Box } from "@mui/material";
 import { useGetOne } from "react-admin";
 import ProcessBar from "../components/processBar";
@@ -52,6 +45,9 @@ import {
 import Wallet1 from "../components/wallet";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetList } from "react-admin";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import TextField from "@mui/material/TextField";
 
 let Buffer = require("buffer/").Buffer;
 
@@ -72,6 +68,14 @@ const Wallet = (props) => {
   let API = null;
 
   const [state, setState] = React.useState(initState);
+
+  const [manualChecked, setManualChecked] = React.useState(true);
+
+  const handleManualChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setManualChecked(event.target.checked);
+  };
+
+  const [manualAddress, setManualAddress] = React.useState("");
 
   const handleChangeWallet = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -182,8 +186,7 @@ const Wallet = (props) => {
     hasWallet: false,
     address: "",
     pKeyHash: "",
-    pKeyHashBech32: ""
-
+    pKeyHashBech32: "",
   });
 
   const { data, total, isLoading, error } = useGetList("wallets", {
@@ -203,7 +206,7 @@ const Wallet = (props) => {
         hasWallet: true,
         address: wallet.address,
         pKeyHash: wallet.pKeyHash,
-        pKeyHashBech32: wallet.pKeyHashBech32
+        pKeyHashBech32: wallet.pKeyHashBech32,
       });
   }, [wallet]);
 
@@ -217,15 +220,28 @@ const Wallet = (props) => {
   //change to username when update ra-nest-rest to save username to localStorage
 
   let walletData = {
-    address: state.usedAddress,
+    address: manualChecked ? manualAddress : state.usedAddress,
     username: localStorage.getItem("username"),
   };
   const [createWallet, { isLoading: createIsLoading, error: createError }] =
     useCreate();
 
+  const [
+    update,
+    { data: updateData, isLoading: updateIsLoading, error: updateError },
+  ] = useUpdate();
+
   const handleClick = () => {
-    createWallet("wallets", { data: walletData });
+    alert(wallet.id);
+    wallet.id
+      ? update("wallets", {
+          id: wallet.id,
+          data: walletData,
+          previousData: wallet,
+        })
+      : createWallet("wallets", { data: walletData });
   };
+
   return (
     <Box>
       <Grid
@@ -237,10 +253,16 @@ const Wallet = (props) => {
           {walletState.hasWallet ? (
             <>
               <Typography variant="body1">Your wallet</Typography>
-              <Typography variant="caption" display="block">Address: {walletState.address}</Typography>
-              <Typography variant="caption" display="block">PublicKey hash Bench32: {walletState.pKeyHashBech32}</Typography>
-              <Typography variant="caption" display="block">PublicKey hash: {walletState.pKeyHash}</Typography>
-             {/*  <Typography variant="body2" sx={{ color: "red" }}>
+              <Typography variant="caption" display="block">
+                Address: {walletState.address}
+              </Typography>
+              <Typography variant="caption" display="block">
+                PublicKey hash Bench32: {walletState.pKeyHashBech32}
+              </Typography>
+              <Typography variant="caption" display="block">
+                PublicKey hash: {walletState.pKeyHash}
+              </Typography>
+              {/*  <Typography variant="body2" sx={{ color: "red" }}>
                 {"$ADA 10000"}
               </Typography> */}
             </>
@@ -283,48 +305,53 @@ const Wallet = (props) => {
           </Button>
         </Grid>
       </Grid>
-      <Wallet1
-        wallets={state.wallets}
-        handleChange={handleChangeWallet}
-        balance={state.balance}
-        changeAddress={state.changeAddress}
-        usedAddress={state.usedAddress}
-        networkId={state.networkId}
-        refresh={refresh}
-        walletIsEnabled={state.walletIsEnabled}
-      ></Wallet1>
+      {!manualChecked && (
+        <Wallet1
+          wallets={state.wallets}
+          handleChange={handleChangeWallet}
+          balance={state.balance}
+          changeAddress={state.changeAddress}
+          usedAddress={state.usedAddress}
+          networkId={state.networkId}
+          refresh={refresh}
+          walletIsEnabled={state.walletIsEnabled}
+        ></Wallet1>
+      )}
 
-      {walletState.address !== state.usedAddress && (
-        <Button
-          variant="text"
-          sx={{ marginLeft: 0 }}
-          onClick={() => handleClick()}
-        >
-          Use this Wallet
-        </Button>
-      )}
-      {walletState.hasWallet && (
-        <List
-          resource="tools/utxos"
-          perPage={25}
-          hasCreate={false}
-          actions={null}
-          sort={{ field: "date", order: "desc" }}
-          empty={<></>}
-          filter={filter}
-        >
-          <Datagrid bulkActionButtons={false}>
-            <TextField source="tx_hash" />
-            <TextField source="block" />
-            <ArrayField source="amount">
-              <Datagrid bulkActionButtons={false}>
-                <TextField source="unit" />
-                <NumberField source="quantity" />
-              </Datagrid>
-            </ArrayField>
-          </Datagrid>
-        </List>
-      )}
+      <Box
+        sx={{ m: 3, ml: 0, display: "flex", flex: 1, flexDirection: "column" }}
+      >
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked
+              checked={manualChecked}
+              onChange={handleManualChange}
+            />
+          }
+          label="Update wallet manually"
+        />
+        <TextField
+          sx={{ width: 500 }}
+          id="standard-basic"
+          label="Enter wallet address"
+          variant="standard"
+          disabled={!manualChecked}
+          value={manualAddress}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setManualAddress(event.target.value);
+          }}
+        />
+        {walletState.address !== state.usedAddress && (
+          <Button
+            variant="text"
+            sx={{ marginTop: 3, marginLeft: 0, width: 150 }}
+            onClick={() => handleClick()}
+          >
+            Use this Wallet
+          </Button>
+        )}
+      </Box>
     </Box>
   );
 };

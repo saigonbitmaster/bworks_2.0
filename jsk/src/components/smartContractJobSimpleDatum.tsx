@@ -11,12 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, { Dayjs } from "dayjs";
 
-//Component for inline datum
 export default function SmartContract(props) {
   const [value, setValue] = React.useState("1");
 
@@ -26,7 +21,7 @@ export default function SmartContract(props) {
 
   const handleSmartContractChange = props.handleContractChange;
   const handleJobBidChange = props.handleJobBidChange;
-
+ 
   const selectedContract = props.contract?.selected || null;
   const selectedJobBid = props.jobBids?.selected || null;
   const contracts = props.contract?.contracts || [];
@@ -39,7 +34,6 @@ export default function SmartContract(props) {
   const handleChangRedeemAda = props.handleChangRedeemAda || null;
   const redeemAdaFromPlutus = props.redeemAdaFromPlutus || null;
   const lockAdaValues = props.lockAdaValues || {};
-  const datum = props.datum || {};
 
   if (!contracts || contracts.length === 0) {
     return (
@@ -100,6 +94,7 @@ export default function SmartContract(props) {
                   id="demo-simple-select-standard"
                   value={selectedContract}
                   onChange={handleSmartContractChange}
+                 
                   label="contract"
                 >
                   {contracts.map((item) => (
@@ -135,7 +130,7 @@ export default function SmartContract(props) {
               }
             />
             <TextField
-              sx={{ width: 500 }}
+              sx={{ width: 480 }}
               id="standard-basic"
               label="Value (ADA)"
               variant="standard"
@@ -144,24 +139,13 @@ export default function SmartContract(props) {
               onChange={handleChangeLockAda("amountToLock")}
             />
             <TextField
-              sx={{ width: 500 }}
+              sx={{ width: 480 }}
               id="standard-basic"
-              label="Datum PublicKeyHash"
+              label="Datum to lock"
               variant="standard"
-              value={datum.publicKeyHash}
+              value={lockAdaValues.datumToLock}
               onChange={handleChangeLockAda("datumToLock")}
             />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                label="Datum Deadline"
-                value={props.valueDate}
-                onChange={props.handleChangeDate}
-                renderInput={(params) => (
-                  <TextField {...params} sx={{ width: 500, p: 0 }} />
-                )}
-              />
-            </LocalizationProvider>
-
             <Button
               variant="text"
               sx={{ width: 20, marginTop: 3 }}

@@ -13,10 +13,16 @@ export class PlutusTx {
   jobBidId: string;
 
   @Prop()
+  jobBidName: string;
+
+  @Prop()
   empId: string;
 
   @Prop()
   jskId: string;
+
+  @Prop()
+  unlockUserId: string;
 
   @Prop({ required: true })
   assetName: string;

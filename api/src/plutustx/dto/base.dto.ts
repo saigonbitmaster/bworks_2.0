@@ -1,6 +1,7 @@
 export class BasePlutusTxDto {
   name: string;
   jobBidId: string;
+  jobBidName: string;
   empId: string;
   jskId: string;
   assetName: string;
@@ -13,6 +14,7 @@ export class BasePlutusTxDto {
   unlockMessage: string;
   isUnlocked: boolean;
   unlockType: string;
+  unlockUserId: string;
   datumUnlockPublicKeyHash: string;
   scriptAddress: string;
   description: string;

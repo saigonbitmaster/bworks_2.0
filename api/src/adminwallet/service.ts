@@ -38,7 +38,6 @@ export class AdminWalletService {
     createAdminWalletDto: CreateAdminWalletDto,
   ): Promise<AdminWallet> {
     const address = createAdminWalletDto.address;
-    console.log(address);
 
     const info = (await inspectAddress(address)) as any;
     return await new this.model({

@@ -23,6 +23,8 @@ import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRen
 import SubMenu from "./SubMenu";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
 
 type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
 
@@ -44,7 +46,7 @@ const Menu = ({ dense = false }: MenuProps) => {
   return (
     <Box
       sx={{
-        width: open ? 200 : 50,
+        width: open ? 220 : 50,
         marginTop: 1,
         marginBottom: 1,
         transition: (theme) =>
@@ -107,6 +109,15 @@ const Menu = ({ dense = false }: MenuProps) => {
             smart_count: 2,
           })}
           leftIcon={<QrCodeOutlinedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/smartcontract"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.smartContracts.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
       </SubMenu>
@@ -188,13 +199,22 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<AccountBalanceWalletOutlinedIcon />}
           dense={dense}
         />
-          <MenuItemLink
+        <MenuItemLink
+          to="/userSettings"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.userSettings.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<PeopleOutlinedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
           to="/changePassword"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.changePassword.name`, {
             smart_count: 2,
           })}
-          leftIcon={<PeopleOutlinedIcon />}
+          leftIcon={<PasswordOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>

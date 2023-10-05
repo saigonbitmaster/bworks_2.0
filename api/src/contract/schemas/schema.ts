@@ -15,6 +15,11 @@ export class Contract {
   @Prop({ required: true })
   cborhex: string;
 
+  //code is field the same value as cborhex use in app wallet
+  @Prop({ required: true })
+  code: string;
+
+  //Plutus version V1, V2
   @Prop()
   version: string;
 

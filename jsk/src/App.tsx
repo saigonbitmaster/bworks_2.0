@@ -21,6 +21,9 @@ import { PostedJobReport } from "./postedjobreports";
 import { PaymentReport } from "./paymentreports";
 import Wallet from "./wallet/wallet";
 import ChangePassword from "./components/changePassword";
+import SmartContracts from "./smartcontracts/meshJs";
+import UserSettings from "./components/userSettings";
+
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -61,6 +64,8 @@ const App = () => {
           <Route path="/paymentreport" element={<PaymentReport />} />
           <Route path="/wallets" element={<Wallet />} />
           <Route path="/changepassword" element={<ChangePassword />} />
+          <Route path="/smartcontract" element={<SmartContracts />} />
+          <Route path="/userSettings" element={<UserSettings />} />
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobbids" {...jobbids} />

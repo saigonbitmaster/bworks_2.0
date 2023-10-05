@@ -47,12 +47,18 @@ export class PlutusTxController {
     return await this.service.create(createPlutusTxDto);
   }
 
+  //need secure the updater & the limit of update
   @Put(':id')
   async update(
     @Param('id') id: string,
+    @Req() request,
     @Body() updatePlutusTxDto: UpdatePlutusTxDto,
   ) {
-    return await this.service.update(id, updatePlutusTxDto);
+    return await this.service.update(
+      id,
+      updatePlutusTxDto,
+      lodash.get(request, 'user.userId', null),
+    );
   }
 
   @Delete(':id')

@@ -159,7 +159,6 @@ export class PostJobService {
     userId: string,
   ): Promise<PostJob> {
     const record: PostJob = await this.model.findById(id).exec();
-    console.log(userId);
     if (record.employerId !== userId) {
       throw new Error('This is not your record');
     }

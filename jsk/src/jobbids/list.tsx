@@ -7,15 +7,19 @@ import {
   DateField,
   NumberField,
   ReferenceField,
-  TextInput
+  TextInput,
+  BooleanField,
+  SelectInput,
+  ReferenceInput,
 } from "react-admin";
 import RateField from "../components/RateField";
 
-
 const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />
+  <TextInput label="Search" source="textSearch" alwaysOn />,
+  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
+    <SelectInput optionText="name" fullWidth />
+  </ReferenceInput>,
 ];
-
 
 const ListScreen = () => {
   return (
@@ -47,9 +51,9 @@ const ListScreen = () => {
           </ReferenceField>
         </ReferenceField>
         <RateField source="rate" />
-       
-        <DateField source="completeDate" showTime label="Your deadline" />
 
+        <DateField source="completeDate" showTime label="Your deadline" />
+        <BooleanField source="isSelected" label="Selected" />
         <ReferenceField
           reference="postJobs"
           source="jobId"
