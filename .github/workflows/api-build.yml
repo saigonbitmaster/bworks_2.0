@@ -11,7 +11,7 @@ jobs:
   build-push-docker-image:
     runs-on: ubuntu-latest
     environment:
-      name: testnet
+      name: mainnet
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ vars.API_TESTNET_TAG }}
+          tags: ${{ vars.API_MAINNET_TAG }}
           #tags: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-testnet
           #tags: jackchuong/itl:bworks-api-testnet
           context: .

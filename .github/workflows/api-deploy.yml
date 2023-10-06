@@ -6,7 +6,7 @@ jobs:
   restart-api-service:
     runs-on: ubuntu-latest
     environment:
-      name: testnet
+      name: mainnet
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -62,7 +62,7 @@ jobs:
             docker-compose -f docker-compose.yml stop api
             docker-compose -f docker-compose.yml rm -f api
             cat docker-compose.template.yml > docker-compose.yml
-            sed -i "s|API_TESTNET_TAG|${{ vars.API_TESTNET_TAG }}|g" docker-compose.yml
+            sed -i "s|API_MAINNET_TAG|${{ vars.API_MAINNET_TAG }}|g" docker-compose.yml
             #docker rmi -f 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-testnet
             #docker rmi -f jackchuong/itl:bworks-api-testnet
             aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks
