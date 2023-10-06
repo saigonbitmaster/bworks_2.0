@@ -50,7 +50,7 @@ const ListScreen = () => {
     <List perPage={25}  sort={{ field: "createdAt", order: "desc" }} filters={filters}>
       <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
-        <ReferenceField reference="users" source="employerId">
+        <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <DateField source="createdAt" showTime />

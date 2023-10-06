@@ -32,10 +32,10 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
 
-        <ReferenceField reference="users" source="jobSeekerId">
+        <ReferenceField reference="users" source="jobSeekerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
-        <ReferenceField reference="users" source="employerId">
+        <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <NumberField source="bidValue" />

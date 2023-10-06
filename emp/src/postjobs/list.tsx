@@ -31,11 +31,11 @@ const ListScreen = () => {
         <TextField source="name" />
         <LinkBidField />
         <CurrencyNumberField source="budget" threshold={10000} />
-        <ReferenceField reference="users" source="employerId">
+        <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <ReferenceArrayField reference="skills" source="skills">
-          <SingleFieldList>
+          <SingleFieldList >
             <ChipField source="name" />
           </SingleFieldList>
         </ReferenceArrayField>

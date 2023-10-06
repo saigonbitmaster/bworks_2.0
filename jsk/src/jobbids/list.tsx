@@ -38,15 +38,15 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
 
-        <ReferenceField reference="users" source="jobSeekerId">
+        <ReferenceField reference="users" source="jobSeekerId"  link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
-        <ReferenceField reference="users" source="employerId">
+        <ReferenceField reference="users" source="employerId"  link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <NumberField source="bidValue" />
-        <ReferenceField reference="postJobs" source="jobId" label="Currency">
-          <ReferenceField reference="currencies" source="currencyId">
+        <ReferenceField reference="postJobs" source="jobId" label="Currency" link={false}>
+          <ReferenceField reference="currencies" source="currencyId" link={false}>
             <TextField source="name" />
           </ReferenceField>
         </ReferenceField>
@@ -59,6 +59,7 @@ const ListScreen = () => {
           reference="postJobs"
           source="jobId"
           label="Job deadline"
+          link={false}
         >
           <DateField source="expectDate" showTime />
         </ReferenceField>

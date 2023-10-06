@@ -2,6 +2,7 @@ export class BaseUserDto {
   username: string;
   userId: string;
   email: string;
+  contact: string;
   fullName: string;
   refreshToken: string;
   role: any[];
@@ -9,4 +10,5 @@ export class BaseUserDto {
   isJobSeeker: boolean;
   isEmployer: boolean;
   password: string;
+  description: string;
 }

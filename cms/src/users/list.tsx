@@ -3,13 +3,13 @@ import {
   List,
   Datagrid,
   TextField,
-  EditButton,
   DateField,
   SingleFieldList,
   ChipField,
   ReferenceArrayField,
   ReferenceField,
   TextInput,
+  BooleanField,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 
@@ -23,22 +23,18 @@ const ListScreen = () => {
       filters={filters}
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
-      hasCreate={false}
-      filter={{ queryType: "jobSeeker", isApproved: true }}
+      hasCreate
     >
-      <Datagrid bulkActionButtons={false}>
-        <TextField source="name" />
-        <LinkBidField />
-        <CurrencyNumberField source="budget" threshold={10000} />
-        <ReferenceField reference="users" source="employerId" link={"show"}>
-          <TextField source="fullName" />
-        </ReferenceField>
+      <Datagrid>
+        <TextField source="username" />
+        <TextField source="email" />
+        <TextField source="contact" />
         <ReferenceArrayField reference="skills" source="skills">
           <SingleFieldList>
             <ChipField source="name" />
           </SingleFieldList>
         </ReferenceArrayField>
-        <DateField source="expireDate" showTime />
+        <DateField source="createdAt" showTime />
       </Datagrid>
     </List>
   );

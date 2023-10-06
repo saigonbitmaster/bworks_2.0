@@ -34,6 +34,14 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  //cms login
+  @UseGuards(LocalAuthGuard)
+  @Post('adminlogin')
+  @Public()
+  async adminLogin(@Request() req) {
+    return this.authService.adminLogin(req.user);
+  }
+
   @UseGuards(RefreshTokenGuard)
   @Get('profile')
   @Public()

@@ -25,6 +25,7 @@ import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import SubMenu from "./SubMenu";
 import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
 
 type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
 
@@ -208,6 +209,15 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
+          <MenuItemLink
+          to="/users"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.users.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<PeopleOutlinedIcon />}
+          dense={dense}
+        />
         <MenuItemLink
           to="/skills"
           state={{ _scrollToTop: true }}
@@ -223,7 +233,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           primaryText={translate(`resources.changePassword.name`, {
             smart_count: 2,
           })}
-          leftIcon={<PeopleOutlinedIcon />}
+          leftIcon={<PasswordOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>

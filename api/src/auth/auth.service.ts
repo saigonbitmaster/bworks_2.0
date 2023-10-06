@@ -55,6 +55,17 @@ export class AuthService {
     };
   }
 
+  async adminLogin(user: any) {
+    if (!user._doc.roles.includes(Role.Admin)) return;
+    const tokens = await this.getTokens(user);
+    await this.updateRefreshToken(user._doc._id, tokens.refreshToken);
+    return {
+      ...tokens,
+      fullName: user._doc.fullName,
+      username: user._doc.username,
+    };
+  }
+
   async getTokens(user) {
     const payload = {
       username: user._doc.username,

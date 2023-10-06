@@ -41,10 +41,10 @@ const ListScreen = () => {
         <ReferenceField reference="postJobs" source="jobId">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField reference="users" source="creator">
+        <ReferenceField reference="users" source="creator" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
-        <ReferenceField reference="users" source="updater">
+        <ReferenceField reference="users" source="updater" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <DateField source="startDate" showTime />
