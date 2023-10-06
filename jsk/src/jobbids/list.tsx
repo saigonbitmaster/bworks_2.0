@@ -54,6 +54,7 @@ const ListScreen = () => {
 
         <DateField source="completeDate" showTime label="Your deadline" />
         <BooleanField source="isSelected" label="Selected" />
+        <BooleanField source="isPaid" />
         <ReferenceField
           reference="postJobs"
           source="jobId"

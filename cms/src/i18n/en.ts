@@ -23,6 +23,7 @@ const customEnglishMessages: TranslationMessages = {
       pending_orders: "Pending Orders",
       allPostedJobs: "See all Jobs",
       allPlutusTxs: "See all plutus TXs",
+      postedJob: "Posted jobs",
       order: {
         items:
           "by %{customer_name}, one item |||| by %{customer_name}, %{nb_items} items",
@@ -56,7 +57,7 @@ const customEnglishMessages: TranslationMessages = {
       import: "Import excels",
     },
     jobtasks: {
-      name: "Job task |||| Job tasks",
+      name: "Task management|||| Task management",
 
       filters: {
         last_visited: "Last visited",
@@ -151,7 +152,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     postJobs: {
-      name: "Post Job |||| Post jobs",
+      name: "Posted Job |||| Posted jobs",
       fields: {
         commands: "Orders",
       },
@@ -169,7 +170,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     jobBids: {
-      name: "Job bid |||| Job bids",
+      name: "Job application |||| Job applications",
       fields: {
         commands: "Orders",
       },
