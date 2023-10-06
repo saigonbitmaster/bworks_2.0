@@ -72,6 +72,10 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const record: JobBid = await this.model.findById(id).exec();
+    //selected bid will not able to change the requested budget
+    if (record.isSelected) {
+      delete updateJobBidDto['bidValue'];
+    }
     //emp has right to select, complete & update sign tx for the bid only
     if (record.employerId === userId) {
       const { isSelected, isSignedTx, isCompleted } = updateJobBidDto;
