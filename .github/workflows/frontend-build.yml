@@ -53,7 +53,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet
+          tags: ${{ vars.FRONTEND_TESTNET_TAG }}
+          #tags: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet
           #tags: jackchuong/itl:bworks-frontend-testnet
           context: .
           file: ./docker-configs/Dockerfile-frontend

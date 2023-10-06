@@ -25,7 +25,8 @@ services:
       - bworksnet
 
   nginx:
-    image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet-1.0.0
+    image: FRONTEND_TESTNET_TAG
+    #image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet
     #image: jackchuong/itl:bworks-frontend-testnet
     container_name: nginx
     ports:
@@ -67,7 +68,8 @@ services:
       - bworksnet
 
   api:
-    image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-testnet-1.0.0
+    image: API_TESTNET_TAG
+    #image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-testnet
     #image: jackchuong/itl:bworks-api-testnet
     container_name: api
     ports:
