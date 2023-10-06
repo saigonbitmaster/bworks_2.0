@@ -72,7 +72,6 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const record: JobBid = await this.model.findById(id).exec();
-    console.log(record)
     //emp has right to select, complete & update sign tx for the bid only
     if (record.employerId === userId) {
       const { isSelected, isSignedTx, isCompleted } = updateJobBidDto;
@@ -110,6 +109,10 @@ export class JobBidService {
     if (record.jobSeekerId !== userId) {
       throw new Error('This is not your record');
     }
+    if (record.isSelected) {
+      throw new Error('Can not delete the selected application');
+    }
+
     return await this.model.findByIdAndDelete(id).exec();
   }
 }

@@ -24,6 +24,8 @@ import { PaymentReport } from "./paymentreports";
 import skills from "./skills";
 import ParseAddress from "./tools/parseAddress";
 import ChangePassword from "./components/changePassword";
+import users from "./users";
+import Typography from "@mui/material/Typography";
 
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
@@ -74,7 +76,16 @@ const App = () => {
         <Resource name="queues" {...queues} />
         <Resource name="adminWallets" {...adminWallets} />
         <Resource name="skills" {...skills} />
+        <Resource name="users" {...users} />
       </Admin>
+      <Typography
+        variant="subtitle2"
+        align="left"
+        color="orange"
+        sx={{ position: "fixed", right: 0, bottom: 10, left: 10, zIndex: 100 }}
+      >
+        @ {new Date().getFullYear()} Built on Cardano <br/>
+      </Typography>
     </MeshProvider>
   );
 };

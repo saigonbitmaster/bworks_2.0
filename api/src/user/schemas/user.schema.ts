@@ -12,6 +12,9 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
+  @Prop()
+  contact: string;
+
   @Prop({ required: true })
   password: string;
 
@@ -29,6 +32,9 @@ export class User {
 
   @Prop()
   skills: any[];
+
+  @Prop()
+  description: string;
 
   @Prop()
   completedAt?: Date;

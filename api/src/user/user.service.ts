@@ -62,6 +62,9 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
+    if (!updateUserDto.password) {
+      return;
+    }
     let _updateUserDto = updateUserDto;
     //don't update roles
     delete _updateUserDto['roles'];

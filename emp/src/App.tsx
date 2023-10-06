@@ -23,6 +23,8 @@ import { PostedJobReport } from "./postedjobreports";
 import { PaymentReport } from "./paymentreports";
 import ChangePassword from "./components/changePassword";
 import UserSettings from "./components/userSettings";
+import users from "./users";
+import Typography from "@mui/material/Typography";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -69,7 +71,16 @@ const App = () => {
         <Resource name="jobbids" {...jobbids} />
         <Resource name="jobtasks" {...jobtasks} />
         <Resource name="plutustxs" {...plutustxs} />
+        <Resource name="users" {...users} />
       </Admin>
+      <Typography
+        variant="subtitle2"
+        align="left"
+        color="orange"
+        sx={{ position: "fixed", right: 0, bottom: 10, left: 10, zIndex: 100 }}
+      >
+        @ {new Date().getFullYear()} Built on Cardano <br/>
+      </Typography>
     </MeshProvider>
   );
 };

@@ -15,16 +15,19 @@ import {
   FunctionField,
   useGetList,
   ReferenceInput,
-  SelectInput
+  SelectInput,
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { stringify } from "query-string";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />,  <ReferenceInput source="jobId" reference="postjobs"   alwaysOn >
-<SelectInput optionText="name" fullWidth/>
-</ReferenceInput>];
+const filters = [
+  <TextInput label="Search" source="textSearch" alwaysOn />,
+  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
+    <SelectInput optionText="name" fullWidth />
+  </ReferenceInput>,
+];
 
 const SelectButton = () => {
   const record = useRecordContext();
@@ -122,15 +125,24 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
 
-        <ReferenceField reference="users" source="jobSeekerId">
+        <ReferenceField reference="users" source="jobSeekerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
-        <ReferenceField reference="users" source="employerId">
+        <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <NumberField source="bidValue" />
-        <ReferenceField reference="postJobs" source="jobId" label="Currency">
-          <ReferenceField reference="currencies" source="currencyId">
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Currency"
+          link={false}
+        >
+          <ReferenceField
+            reference="currencies"
+            source="currencyId"
+            link={false}
+          >
             <TextField source="name" />
           </ReferenceField>
         </ReferenceField>
@@ -143,6 +155,7 @@ const ListScreen = () => {
           reference="postJobs"
           source="jobId"
           label="Job deadline"
+          link={false}
         >
           <DateField source="expectDate" showTime />
         </ReferenceField>

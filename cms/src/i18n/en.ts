@@ -47,6 +47,9 @@ const customEnglishMessages: TranslationMessages = {
     changePassword: {
       name: "Change password",
     },
+    users: {
+      name: "App users",
+    },
     paymentReport: {
       name: "Payment",
     },

@@ -350,7 +350,7 @@ export default function SmartContract(props) {
               label={
                 receiveAddress.refund
                   ? "Employer wallet address"
-                  : "Job seeker address"
+                  : "Job seeker wallet address"
               }
               variant="standard"
               value={receiveAddress.address}

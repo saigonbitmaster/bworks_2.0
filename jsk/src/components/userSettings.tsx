@@ -11,6 +11,7 @@ import {
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
+import { RichTextInput } from "ra-input-rich-text";
 
 const UserEditToolbar = (props) => (
   <Toolbar {...props}>
@@ -44,6 +45,10 @@ const EditScreen = () => {
             <ReferenceArrayInput source="skills" reference="skills">
               <SelectArrayInput fullWidth />
             </ReferenceArrayInput>
+          </Grid>
+          <Grid item md={12} />
+          <Grid item xs={12} md={12} lg={8} xl={6}>
+            <RichTextInput source="description" fullWidth />
           </Grid>
         </Grid>
       </SimpleForm>

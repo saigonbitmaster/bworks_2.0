@@ -29,7 +29,7 @@ const SmartContracts = () => {
     .catch((error) => console.error(error));
 
   const isMainnet = process.env.REACT_APP_IS_MAINNET;
-  const cardanoNetwork = isMainnet ? "mainnet" : "preprod";
+  const cardanoNetwork = isMainnet ? "api" : "preprod";
   const [update, { isLoading: _isLoading, error: _error }] = useUpdate();
 
   const [searchParams] = useSearchParams();
@@ -435,6 +435,8 @@ const SmartContracts = () => {
     });
 
     const address = await wallet.getChangeAddress();
+
+    console.log(cardanoNetwork, currentContract, address, utxo)
     const collateralUtxos = await wallet.getCollateral();
     if (!utxo || !receiveAddress.address || !address) {
       setNotification({

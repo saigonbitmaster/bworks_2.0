@@ -77,6 +77,7 @@ const ListScreen = () => {
           source="unlockUserId"
           reference="users"
           label="User to unlock"
+          link={"show"}
         >
           <TextField source="username" />
         </ReferenceField>

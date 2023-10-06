@@ -49,10 +49,10 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
         <TextField source="name" />
-        <ReferenceField reference="users" source="creator">
+        <ReferenceField reference="users" source="creator" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
-        <ReferenceField reference="users" source="updater">
+        <ReferenceField reference="users" source="updater" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <DateField source="startDate" showTime />
