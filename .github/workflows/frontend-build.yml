@@ -37,11 +37,15 @@ jobs:
           cp .env jsk/
           cp .env emp/
           rm -f .env
+          echo "cat jsk/.env"
+          cat jsk/.env
+          echo "cat emp/.env"
+          cat emp/.env
       - name: Generate .env file for cms
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_REACT_APP_IS_MAINNET: ${{ vars.REACT_APP_IS_MAINNET }}
-          envkey_REACT_APP_LOGIN_URL_CMS: ${{ vars.REACT_APP_LOGIN_URL_CMS }}
+          envkey_REACT_APP_LOGIN_URL: ${{ vars.REACT_APP_LOGIN_URL_CMS }}
           envkey_REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
           envkey_REACT_APP_RENEW_ACCESS_TOKEN_URL: ${{ vars.REACT_APP_RENEW_ACCESS_TOKEN_URL }}
           envkey_REACT_APP_LOGOUT_URL: ${{ vars.REACT_APP_LOGOUT_URL }}
@@ -54,6 +58,8 @@ jobs:
         run: |
           cp .env_cms cms/.env
           rm -f .env_cms
+          echo "cat cms/.env"
+          cat cms/.env
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
