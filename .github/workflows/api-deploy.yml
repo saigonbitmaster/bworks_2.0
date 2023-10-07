@@ -29,6 +29,7 @@ jobs:
           envkey_MAIL_HOST: ${{ vars.MAIL_HOST }}
           envkey_MAIL_USER: ${{ vars.MAIL_USER }}
           envkey_MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          envkey_MAIL_VERIFICATION_URL: ${{ secrets.MAIL_VERIFICATION_URL }}
           envkey_MAIL_FROM: ${{ vars.MAIL_FROM }}
           envkey_JWT_TOKEN_EXPIRE: ${{ vars.JWT_TOKEN_EXPIRE }}
           envkey_JWT_RENEW_TOKEN_EXPIRE: ${{ vars.JWT_RENEW_TOKEN_EXPIRE }}
