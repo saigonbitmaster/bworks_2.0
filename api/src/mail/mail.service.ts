@@ -6,10 +6,11 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async send(user: any, token: string) {
-    const url = `http://localhost:3000/auth/verify?access_token=${token}`;
+    const verifyUrl = process.env.MAIL_VERIFICATION_URL;
+    const url = `${verifyUrl}${token}`;
     const result = await this.mailerService.sendMail({
       to: user.email,
-      subject: 'Welcome to Nice App! Confirm your Email',
+      subject: 'Welcome to bWorks! Please confirm your Email',
       template: './confirm', // `.hbs` extension is appended automatically
       //the value to hbs file.
       context: {
