@@ -17,6 +17,7 @@ export class UserService {
     return this.model.find().exec();
   }
 
+  //for rest endpoint remove password & refresh token before return
   async findAllList(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
@@ -24,8 +25,8 @@ export class UserService {
       .sort(query.sort)
       .skip(query.skip)
       .limit(query.limit)
+      .select({ password: 0, refreshToken: 0 })
       .exec();
-
     return { count: count, data: data };
   }
 
@@ -35,6 +36,14 @@ export class UserService {
 
   async findById(id: string): Promise<any> {
     return await this.model.findById(id).exec();
+  }
+
+  //for rest endpoint remove password & refresh token before return
+  async findByIdForRest(id: string): Promise<any> {
+    return await this.model
+      .findById(id)
+      .select({ password: 0, refreshToken: 0 })
+      .exec();
   }
 
   async findOne(username: string): Promise<User> {

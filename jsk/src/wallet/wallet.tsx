@@ -232,7 +232,6 @@ const Wallet = (props) => {
   ] = useUpdate();
 
   const handleClick = () => {
-    alert(wallet.id);
     wallet.id
       ? update("wallets", {
           id: wallet.id,

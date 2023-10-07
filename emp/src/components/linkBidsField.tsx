@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { stringify } from "query-string";
 
 const LinkBidField = (props) => {
-  const record =  useRecordContext(props);
-  const jobId = props.record?.id || record.id
+  const record = useRecordContext(props);
+  const jobId = props.record?.id || record.id;
   const { data, total, isLoading, error } = useGetList("jobbids", {
     filter: { jobId, queryType: "employer" },
   });
@@ -29,6 +29,6 @@ const LinkBidField = (props) => {
   ) : null;
 };
 
-LinkBidField.defaultProps = { label: "Current bids" };
+LinkBidField.defaultProps = { label: "Current applications" };
 
 export default LinkBidField;
