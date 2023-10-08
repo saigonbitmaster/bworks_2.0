@@ -11,22 +11,33 @@ import {
   ReferenceField,
   TextInput,
   BooleanField,
+  CreateButton,
+  ExportButton,
+  TopToolbar,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
-import LinkBidField from "../components/linkBidsField";
+import LinkBidField from "../components/sumBidsField";
 import { Box, Drawer } from "@mui/material";
 import Steps from "../components/jobApplicationAside";
 
 const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
+const JobCreateButton = () => <CreateButton label="Create new job" />;
+
+const JobListActions = () => (
+  <TopToolbar>
+    <JobCreateButton />
+    <ExportButton />
+  </TopToolbar>
+);
+
 const ListScreen = () => {
   const [record, setRecord] = React.useState(null);
   const rowClick = (id, resource, record) => {
     setRecord(record);
-    return "";
+    return null;
   };
 
-   console.log(1, record)
   return (
     <Box display="flex">
       <List
@@ -43,20 +54,20 @@ const ListScreen = () => {
             }),
           marginRight: record ? "300px" : 0,
         }}
+        actions={<JobListActions />}
       >
         <Datagrid rowClick={rowClick}>
           <TextField source="name" label="Job name" />
-         
           <CurrencyNumberField source="budget" threshold={10000} />
           <ReferenceField reference="users" source="employerId" link={"show"}>
             <TextField source="fullName" />
           </ReferenceField>
-          <ReferenceArrayField reference="skills" source="skills">
+          <ReferenceArrayField reference="skills" source="skills" label="Required skills">
             <SingleFieldList>
               <ChipField source="name" />
             </SingleFieldList>
           </ReferenceArrayField>
-          <BooleanField source="isApproved" />
+          <BooleanField source="isApproved" label="Approval"/>
 
           <DateField source="expireDate" showTime />
           <DateField source="createdAt" showTime />
@@ -77,70 +88,3 @@ const ListScreen = () => {
 };
 
 export default ListScreen;
-
-/*
-import * as React from "react";
-import {
-  List,
-  Datagrid,
-  TextField,
-  EditButton,
-  UrlField,
-  SearchInput,
-  ShowButton
-} from "react-admin";
-import Button from '@mui/material/Button';
-
-
-import { Box, Drawer } from "@mui/material";
-import Steps from "../components/proposalSteps";
-
-const ListScreen = (title = "List of posts") => {
- 
-  const Filters = [<SearchInput source="keyword" alwaysOn />];
-   const [record, setRecord] = React.useState(null);
-  const rowClick = (id, resource, record) => {
-    setRecord(record);
-    return "";
-  };
-
-  return (
-    <Box display="flex">
-      <List
-        perPage={25}
-        sort={{ field: "date", order: "desc" }}
-        hasCreate={false}
-
-        filters={Filters}
-        sx={{
-          flexGrow: 1,
-          transition: (theme: any) =>
-            theme.transitions.create(["all"], {
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-          marginRight: record ? "300px" : 0,
-        }}
-      >
-        <Datagrid rowClick={rowClick}   bulkActionButtons={false}>
-          <TextField source="fullName" label="Name" />
-          <UrlField source="telegram" />
-          <TextField source="walletAddress" />
-          <Button variant="text">View proposals</Button>
-          <ShowButton />
-        </Datagrid>
-      </List>
-      <Drawer
-        variant="persistent"
-        open={record}
-        anchor="right"
-        sx={{ zIndex: 100 }}
-      >
-        {record && <Steps record={record} />}
-      </Drawer>
-    </Box>
-  );
-};
-
-export default ListScreen;
-
-*/

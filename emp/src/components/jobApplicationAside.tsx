@@ -7,22 +7,29 @@ import StepContent from "@mui/material/StepContent";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Check from "@mui/icons-material/Check";
+import RateField from "./rateField";
 import {
   useRecordContext,
   useGetList,
   ReferenceField,
   TextField,
   useGetOne,
+  BooleanField,
+  DateField,
+  useRedirect,
 } from "react-admin";
+import Rating from "@mui/material/Rating";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import { stringify } from "query-string";
 
 export default function VerticalLinearStepper(props) {
-  //{label: "label", steps: [{name: string, fundId: string, projectStatus: string}]}
-  let steps = props.steps || [];
-  const record = props.record;
+  const redirect = useRedirect();
 
+  const record = props.record;
   const [jobBids, setJobBids] = React.useState([]);
   const { data, total, isLoading, error } = useGetList("jobbids", {
-    pagination: { page: 1, perPage: 50 },
+    pagination: { page: 1, perPage: 4 },
     sort: { field: "createdAt", order: "DESC" },
     filter: { jobId: record.id, queryType: "employer" },
   });
@@ -33,25 +40,20 @@ export default function VerticalLinearStepper(props) {
     }
   }, [data]);
 
-  steps = [
-    {
-      fundId: "Thang Tran",
-      name: "Apply to the job",
-      projectStatus: "Pending",
-    },
-    {
-      fundId: "Peter Norvig",
-      name: "Apply to the job",
-      projectStatus: "Pending",
-    },
-  ];
-  let label = props.label || "Applications";
+  const label = props.label || `${total || 0} Applications`;
+
+  const onClick = () => {
+    const filter = JSON.stringify({ jobId: record.id });
+
+    redirect(`/jobbids?&filter=${filter}`);
+  };
+
   return (
     <Box
       sx={{
         minWidth: 300,
         maxWidth: 300,
-        marginTop: "6em",
+        marginTop: "4em",
         marginLeft: "0",
         padding: "0.5em",
         boxShadow: "none",
@@ -69,14 +71,40 @@ export default function VerticalLinearStepper(props) {
           {jobBids.length > 0 &&
             jobBids.map((step, index) => (
               <Step key={step.name} active={true}>
-                <StepLabel StepIconComponent={Check}>{step.name}</StepLabel>
+                <StepLabel>{step.name}</StepLabel>
                 <StepContent>
-                  <Typography> Requested { step.bidValue} Ada</Typography>
-                  <p>{step.isSelected}</p>
+                  <ReferenceField
+                    record={step}
+                    source="jobSeekerId"
+                    reference="users"
+                  >
+                    <TextField source="fullName" />
+                  </ReferenceField>
+                </StepContent>
+                <StepContent>
+                  <DateField record={step} source="createdAt" showTime />
+                </StepContent>
+                <StepContent>
+                  <Rating name="read-only" value={step.rate} readOnly />
+                </StepContent>
+                <StepContent>
+                  <Typography> Requested {step.bidValue} Ada</Typography>
+                </StepContent>
+
+                <StepContent>
+                  <span> Selected </span>
+                  <BooleanField record={step} source="isSelected" />
+                </StepContent>
+                <StepContent>
+                  <span> Paid </span>
+                  <BooleanField record={step} source="isPaid" />
                 </StepContent>
               </Step>
             ))}
         </Stepper>
+        <Button onClick={onClick} sx={{ mt: 2 }}>
+          View all applications
+        </Button>
       </Paper>
     </Box>
   );
