@@ -11,25 +11,47 @@ import {
   BooleanField,
   SelectInput,
   ReferenceInput,
+  TopToolbar,
+  ExportButton,
+  CreateButton,
 } from "react-admin";
-import RateField from "../components/RateField";
+import RateField from "../components/rateField";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
   <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
     <SelectInput optionText="name" fullWidth />
   </ReferenceInput>,
+  <SelectInput
+    source="queryType"
+    emptyValue={"jobSeeker"}
+    choices={[
+      { id: "jobSeeker", name: "Yours" },
+      { id: "all", name: "All applications" },
+    ]}
+    alwaysOn
+    label="Applications"
+  />,
 ];
 
 const ListScreen = () => {
+  const JobCreateButton = () => <CreateButton label="Apply a job" />;
+
+  const JobListActions = () => (
+    <TopToolbar>
+      <JobCreateButton />
+      <ExportButton />
+    </TopToolbar>
+  );
+
   return (
     <List
       perPage={25}
       sort={{ field: "date", order: "desc" }}
       hasCreate
       resource="jobbids"
-      filter={{ queryType: "jobSeeker" }}
       filters={filters}
+      actions={<JobListActions />}
     >
       <Datagrid>
         <TextField source="name" />
@@ -38,15 +60,24 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
 
-        <ReferenceField reference="users" source="jobSeekerId"  link={"show"}>
+        <ReferenceField reference="users" source="jobSeekerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
-        <ReferenceField reference="users" source="employerId"  link={"show"}>
+        <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <NumberField source="bidValue" />
-        <ReferenceField reference="postJobs" source="jobId" label="Currency" link={false}>
-          <ReferenceField reference="currencies" source="currencyId" link={false}>
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Currency"
+          link={false}
+        >
+          <ReferenceField
+            reference="currencies"
+            source="currencyId"
+            link={false}
+          >
             <TextField source="name" />
           </ReferenceField>
         </ReferenceField>

@@ -25,13 +25,12 @@ import { stringify } from "query-string";
 
 export default function VerticalLinearStepper(props) {
   const redirect = useRedirect();
-
   const record = props.record;
   const [jobBids, setJobBids] = React.useState([]);
   const { data, total, isLoading, error } = useGetList("jobbids", {
     pagination: { page: 1, perPage: 4 },
     sort: { field: "createdAt", order: "DESC" },
-    filter: { jobId: record.id, queryType: "employer" },
+    filter: { jobId: record.id },
   });
 
   React.useEffect(() => {
@@ -43,7 +42,7 @@ export default function VerticalLinearStepper(props) {
   const label = props.label || `${total || 0} Applications`;
 
   const onClick = () => {
-    const filter = JSON.stringify({ jobId: record.id });
+    const filter = JSON.stringify({ jobId: record.id, queryType: "all" });
 
     redirect(`/jobbids?&filter=${filter}`);
   };
