@@ -6,8 +6,10 @@ import { UpdateJobBidDto } from './dto/update.dto';
 import { JobBid, JobBidDocument } from './schemas/schema';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { PostJob, PostJobDocument } from '../postjob/schemas/schema';
-
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { rankJobBid } from '../flatworks/logics/rank';
+import { UserService } from '../user/user.service';
+import { PostJobService } from '../postJob/service';
 
 @Injectable()
 export class JobBidService {
@@ -16,11 +18,13 @@ export class JobBidService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     @InjectModel(PostJob.name)
     private readonly postJobModel: Model<PostJobDocument>,
+    private readonly userService: UserService,
+    private readonly postJobService: PostJobService,
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();
-    //fix return all when limit = 0
+    //fix return all when limit = 0 for global search service
     if (query.limit <= 0) {
       return {
         data: [],
@@ -34,14 +38,61 @@ export class JobBidService {
       .limit(query.limit)
       .exec();
 
+    //rank applications before return
+    const jobSeekers = await Promise.all(
+      data.map(async (i) => {
+        const jobSeeker = (await this.userService.findById(
+          i.jobSeekerId,
+        )) as any;
+        return jobSeeker;
+      }),
+    );
+    const jobs = await Promise.all(
+      data.map(async (i) => {
+        const job = (await this.postJobService.findOne(i.jobId)) as any;
+        return job;
+      }),
+    );
+
+    const _data = data.map((item) => {
+      const job = jobs.find(
+        (jobItem) => jobItem._doc._id.toString() === item.jobId,
+      );
+
+      const jobSeeker = jobSeekers.find(
+        (jobItem) => jobItem._doc._id.toString() === item.jobSeekerId,
+      );
+
+      const rate = rankJobBid(
+        jobSeeker._doc.skills || [],
+        job._doc.skills || [],
+        job._doc.minBidValue || 0,
+        job._doc.budget || 0,
+        item.bidValue || 0,
+        item.hasPrototype || false,
+      );
+      item.rate = rate;
+      return item;
+    });
+
+    //sort rate for client query
+    const sortFn = (a, b) => {
+      const sort =
+        query.sort.rate === 1
+          ? a.rate - b.rate
+          : query.sort.rate === -1
+          ? b.rate - a.rate
+          : null;
+      return sort;
+    };
+    _data.sort(sortFn);
+
     return {
       count: count,
-      data: data.map((item) => {
-        item.rate = 4;
-        return item;
-      }),
+      data: _data,
     };
   }
+
   async findAllRaw(query): Promise<any> {
     return await this.model.find(query);
   }

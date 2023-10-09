@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import { stringify } from "query-string";
 import { Link } from "react-router-dom";
 
-const LinkBidField = (props) => {
+const ApplyButton = (props) => {
   const record = useRecordContext(props);
   const jobId = props.record?.id || record.id;
   const { data, total, isLoading, error } = useGetList("jobbids", {
@@ -18,6 +18,7 @@ const LinkBidField = (props) => {
 
   return record ? (
     <Button
+    
       sx={{ borderRadius: 0 }}
       component={Link}
       to={{
@@ -35,6 +36,6 @@ const LinkBidField = (props) => {
   ) : null;
 };
 
-LinkBidField.defaultProps = { label: "" };
+ApplyButton.defaultProps = { label: "" };
 
-export default LinkBidField;
+export default ApplyButton;

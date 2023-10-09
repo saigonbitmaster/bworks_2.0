@@ -28,6 +28,9 @@ export class JobBid {
   bidValue: number;
 
   @Prop({ default: false })
+  hasPrototype: boolean;
+
+  @Prop({ default: false })
   isSelected: boolean;
 
   @Prop({ default: false })

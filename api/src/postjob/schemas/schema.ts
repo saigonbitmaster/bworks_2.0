@@ -24,7 +24,7 @@ export class PostJob {
   @Prop({ required: true })
   currencyId: string;
 
-  @Prop()
+  @Prop({ default: 0 })
   minBidValue: number;
 
   @Prop()

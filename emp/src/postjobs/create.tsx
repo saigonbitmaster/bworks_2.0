@@ -22,38 +22,69 @@ const CreateScreen = () => (
     <SimpleForm>
       <Grid container spacing={1}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
-          <TextInput source="name" fullWidth required />
+          <TextInput source="name" fullWidth required label="Job name" />
         </Grid>
         <Grid item md={12} />
-       
-        <Grid item xs={12} md={4} lg={3} xl={2} >
-       
-          <ReferenceInput source="currencyId" reference="currencies" >
-    <SelectInput optionText="name"fullWidth required/>
-</ReferenceInput>
-        </Grid>
-        
+
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <NumberInput source="budget" fullWidth required />
+          <ReferenceInput source="currencyId" reference="currencies">
+            <SelectInput optionText="name" fullWidth required />
+          </ReferenceInput>
         </Grid>
-        <Grid item md={12} />
+
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <NumberInput source="minBidValue" fullWidth   />
-        </Grid>
-        <Grid item xs={12} md={4} lg={3} xl={2}>
-          <NumberInput source="requiredAmountToBid" fullWidth  />
+          <NumberInput
+            source="budget"
+            fullWidth
+            required
+            min={5}
+            defaultValue={5}
+          />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <DateTimeInput source="expireDate" fullWidth required/>
+          <NumberInput
+            source="minBidValue"
+            fullWidth
+            defaultValue={0}
+            label="Min requested budget"
+            min={0}
+          />
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <DateTimeInput source="expectDate" fullWidth required />
+          <NumberInput
+            source="requiredAmountToBid"
+            fullWidth
+            label="Required amount (Ada) to apply"
+            defaultValue={0}
+            min={0}
+          />
+        </Grid>
+        <Grid item md={12} />
+        <Grid item xs={12} md={4} lg={3} xl={2}>
+          <DateTimeInput
+            source="expireDate"
+            fullWidth
+            required
+            label="Job expire date"
+          />
+        </Grid>
+        <Grid item xs={12} md={4} lg={3} xl={2}>
+          <DateTimeInput
+            source="expectDate"
+            fullWidth
+            required
+            label="Job deadline"
+          />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
           <ReferenceArrayInput source="skills" reference="skills" fullWidth>
-            <SelectArrayInput optionText="name" fullWidth />
+            <SelectArrayInput
+              optionText="name"
+              fullWidth
+              label="Required skills"
+            />
           </ReferenceArrayInput>
         </Grid>
         <Grid item md={12} />
