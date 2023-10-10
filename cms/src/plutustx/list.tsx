@@ -11,11 +11,17 @@ import {
   useDataProvider,
   useGetOne,
   BooleanField,
+  FunctionField,
 } from "react-admin";
 import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 
 const ListScreen = () => {
   const isMainnet = process.env.REACT_APP_IS_MAINNET;
+
+  const explorerUrl = isMainnet
+    ? process.env.REACT_APP_CARDANO_EXPLORER_MAINNET_URL
+    : process.env.REACT_APP_CARDANO_EXPLORER_PREPROD_URL;
   const unlockUri = isMainnet ? "queues/unlockMainnet" : "queues/unlock";
   console.log(unlockUri);
   const UnlockButton = () => {
@@ -65,13 +71,43 @@ const ListScreen = () => {
         <ReferenceField source="jobBidId" reference="jobbids">
           <TextField source="name" />
         </ReferenceField>
-        <TextField source="lockedTxHash" />
+        <FunctionField
+          label="UnLock TxHash"
+          render={(record) => (
+            <>
+              {record.lockedTxHash && (
+                <Link
+                  href={`${explorerUrl}${record.lockedTxHash}`}
+                  target="_blank"
+                >
+                  View Tx
+                </Link>
+              )}
+            </>
+          )}
+        />
         <ReferenceField source="unlockUserId" reference="users">
           <TextField source="username" />
         </ReferenceField>
         <DateField source="lockDate" showTime />
         <TextField source="lockMessage" />
-        <TextField source="unlockedTxHash" />
+
+        <FunctionField
+          label="UnLock TxHash"
+          render={(record) => (
+            <>
+              {record.unlockedTxHash && (
+                <Link
+                  href={`${explorerUrl}${record.unlockedTxHash}`}
+                  target="_blank"
+                >
+                  View Tx
+                </Link>
+              )}
+            </>
+          )}
+        />
+
         <TextField source="unlockType" />
         <DateField source="unlockDate" showTime />
         <TextField source="unlockMessage" />

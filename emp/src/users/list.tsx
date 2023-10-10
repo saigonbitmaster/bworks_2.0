@@ -23,9 +23,9 @@ const ListScreen = () => {
       filters={filters}
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
-      hasCreate
+      hasCreate={false}
     >
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="username" />
         <TextField source="email" />
         <TextField source="contact" />

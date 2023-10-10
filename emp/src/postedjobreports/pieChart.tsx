@@ -79,7 +79,7 @@ const PaymentChart = () => {
         titleTypographyProps={{ variant: "subtitle1" }}
         subheader={
           <Typography variant="subtitle2" gutterBottom>
-            {`Posted jobs: ${data2.numberOfPostedJobs}, Attended bids: ${data2.numberOfBids}, Selected bids: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
+            {`Posted jobs: ${data2.numberOfPostedJobs}, Attended applications: ${data2.numberOfBids}, Selected bids: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
           </Typography>
         }
       />
@@ -87,7 +87,7 @@ const PaymentChart = () => {
         <div
           style={{
             width: "100%",
-            height: 295,
+            height: 310,
             display: "flex",
             flexDirection: "row",
           }}

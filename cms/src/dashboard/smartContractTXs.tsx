@@ -47,7 +47,7 @@ const SmartContractTxs = (props: Props) => {
       to="/plutustxs"
       icon={GradingIcon}
       title="Smart contract TXs"
-      subtitle={`${lockTxs} locked TXs, ${unlockTxs} unlocked TXs`}
+      subtitle={`${lockTxs} locked Txs, ${unlockTxs} unlocked Txs`}
     >
       <List sx={{ display: isLoading ? "none" : "block" }}>
         {plutustxs

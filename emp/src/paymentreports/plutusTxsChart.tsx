@@ -32,14 +32,18 @@ const PaymentChart = () => {
     y1: "numberOfLockTxs",
     y2: "numberOfUnlockedTxs",
     y1Name: "Lock Txs",
-    y2Name: "Unlocked Txs",
+    y2Name: "Unlock Txs",
   });
 
   const [data, setData] = React.useState(months.reverse());
   const dataProvider = useDataProvider();
   React.useEffect(() => {
     dataProvider
-      .customMethod("customapis/getmonthlyplutustxsreport", { filter: {queryType: "emp"} }, "GET")
+      .customMethod(
+        "customapis/getmonthlyplutustxsreport",
+        { filter: { queryType: "emp" } },
+        "GET"
+      )
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
@@ -55,7 +59,7 @@ const PaymentChart = () => {
         y1: "numberOfLockTxs",
         y2: "numberOfUnlockedTxs",
         y1Name: "Lock Txs",
-        y2Name: "Unlocked Txs",
+        y2Name: "Unlock Txs",
       });
     } else {
       setLabel("Plutus TX Amounts ($Ada)");
@@ -88,11 +92,11 @@ const PaymentChart = () => {
         />
       </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 280 }}>
+        <div style={{ width: "100%", height: 290 }}>
           <ResponsiveContainer>
             <AreaChart
               width={730}
-              height={280}
+              height={290}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

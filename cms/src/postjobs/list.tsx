@@ -13,15 +13,27 @@ import {
   useRecordContext,
   useRefresh,
   useUpdate,
-  TextInput
+  TextInput,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/linkBidsField";
 import Button from "@mui/material/Button";
+import Steps from "../components/jobApplicationAside";
+import { Box, Drawer } from "@mui/material";
 
 const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
+const JobPanel = () => {
+  const record = useRecordContext();
+  return <div dangerouslySetInnerHTML={{ __html: record.description }} />;
+};
+
 const ListScreen = () => {
+  const [record, setRecord] = React.useState(null);
+  const rowClick = (id, resource, record) => {
+    setRecord(record);
+    return null;
+  };
   const SelectButton = (props) => {
     const record = useRecordContext();
     const diff = { isApproved: !record.isApproved };
@@ -47,8 +59,16 @@ const ListScreen = () => {
     );
   };
   return (
-    <List perPage={25}  sort={{ field: "createdAt", order: "desc" }} filters={filters}>
-      <Datagrid bulkActionButtons={false}>
+    <List
+      perPage={25}
+      sort={{ field: "createdAt", order: "desc" }}
+      filters={filters}
+    >
+      <Datagrid
+        bulkActionButtons={false}
+        expand={<JobPanel />}
+        rowClick={rowClick}
+      >
         <TextField source="name" />
         <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
@@ -63,6 +83,14 @@ const ListScreen = () => {
         </ReferenceArrayField>
         <SelectButton source="isApproved" label="Approve" />
         <DateField source="expireDate" showTime />
+        <Drawer
+          variant="persistent"
+          open={record}
+          anchor="right"
+          sx={{ zIndex: 100 }}
+        >
+          {record && <Steps record={record}></Steps>}
+        </Drawer>
       </Datagrid>
     </List>
   );

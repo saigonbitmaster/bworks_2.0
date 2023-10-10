@@ -7,7 +7,7 @@ const Logo = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg width={234.532} height={30} viewBox="0 0 62.053 5.417" {...props}>
       <g
-        aria-label="Bworks Employer"
+        aria-label="bWorks"
         style={{
           lineHeight: 1.25,
         }}
@@ -17,10 +17,10 @@ const Logo = (props: SVGProps<SVGSVGElement>) => {
         letterSpacing={0}
         wordSpacing={0}
         strokeWidth={0.265}
-        fill="#ff6d00"
+        fill="#d50000"
       >
         <text y="5" fontSize="1em">
-        BWORKS Employer
+          BWORKs
         </text>
       </g>
     </svg>

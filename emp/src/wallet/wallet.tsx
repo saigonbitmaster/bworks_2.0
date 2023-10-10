@@ -108,31 +108,25 @@ const Wallet = (props) => {
       return;
     }
 
-    wallets.push({ name: "bworks", selected: true });
+    //set default selected wallet
+    const _wallets = wallets.map((item, index) => {
+      if (index === 0) {
+        item.selected = true;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
 
     setState({
       ...state,
-      wallets,
-      selectedWallet: wallets.find((item) => item.selected === true).name,
+      wallets: _wallets,
+      selectedWallet: _wallets.find((item) => item.selected === true).name,
     });
   };
 
   const refresh = async () => {
     const walletKey = state.selectedWallet;
-    if (walletKey === "bworks") {
-      setState({
-        ...state,
-        balance: 2332.710075,
-        networkId: 0,
-        usedAddress:
-          "addr_test1qrsyt5qv7pvdcqf9thpmjyv6kukpqv4nmr3tqjy6k6tm6705dl4czkn5ap78f35r0q8yudwazghgqdcad4sx2srew9vqe7c7lv",
-        changeAddress:
-          "addr_test1qrsyt5qv7pvdcqf9thpmjyv6kukpqv4nmr3tqjy6k6tm6705dl4czkn5ap78f35r0q8yudwazghgqdcad4sx2srew9vqe7c7lv",
-        walletFound: true,
-        walletIsEnabled: true,
-      });
-      return;
-    }
 
     const walletFound = !!(window as any)?.cardano?.[walletKey];
     if (!walletFound) {

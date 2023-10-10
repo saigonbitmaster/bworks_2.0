@@ -23,12 +23,11 @@ const PostedJob = (props) => {
       .catch((error) => console.error(error));
   }, []);
 
-
   const translate = useTranslate();
   const headers = [
     { key: "_id", name: "Month" },
-    { key: "numberOfLockTxs", name: "Locked TXs" },
-    { key: "numberOfUnlockedTxs", name: "Unlocked TXs" },
+    { key: "numberOfLockTxs", name: "Lock Txs" },
+    { key: "numberOfUnlockedTxs", name: "Unlock Txs" },
     { key: "sumLockedAmounts", name: "Locked amounts ($Ada)" },
     { key: "sumUnlockedAmounts", name: "Unlocked amount ($Ada)" },
   ];

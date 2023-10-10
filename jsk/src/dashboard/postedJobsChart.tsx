@@ -78,7 +78,7 @@ const PostedJobChart = () => {
               />
               <Area
                 type="monotone"
-                name="Attended bids"
+                name="Attended applications"
                 dataKey="numberOfBids"
                 stroke="#8884d8"
                 fillOpacity={1}

@@ -17,6 +17,7 @@ import {
 } from "react-admin";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
 
 const ListScreen = () => {
   const UnlockButton = () => {
@@ -45,12 +46,16 @@ const ListScreen = () => {
     );
   };
 
+  const explorerUrl = process.env.REACT_APP_IS_MAINNET
+    ? process.env.REACT_APP_CARDANO_EXPLORER_MAINNET_URL
+    : process.env.REACT_APP_CARDANO_EXPLORER_PREPROD_URL;
+
   const filters = [
     <ReferenceInput source="name" reference="postjobs" alwaysOn>
       <SelectInput optionText="name" fullWidth />
     </ReferenceInput>,
-    <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
-      <SelectInput optionText="name" fullWidth />
+    <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn >
+      <SelectInput optionText="name" fullWidth label="Job application"/>
     </ReferenceInput>,
   ];
 
@@ -69,8 +74,21 @@ const ListScreen = () => {
         <ReferenceField source="jobBidId" reference="jobbids">
           <TextField source="name" />
         </ReferenceField>
-
-        <TextField source="lockedTxHash" />
+        <FunctionField
+          label="UnLock TxHash"
+          render={(record) => (
+            <>
+              {record.lockedTxHash && (
+                <Link
+                  href={`${explorerUrl}${record.lockedTxHash}`}
+                  target="_blank"
+                >
+                  View Tx
+                </Link>
+              )}
+            </>
+          )}
+        />
 
         <NumberField source="amount" label="Amount (Ada)" />
         <ReferenceField
@@ -91,7 +109,23 @@ const ListScreen = () => {
           )}
         />
         <TextField source="unlockType" />
-        <TextField source="unlockedTxHash" />
+
+        <FunctionField
+          label="UnLock TxHash"
+          render={(record) => (
+            <>
+              {record.unlockedTxHash && (
+                <Link
+                  href={`${explorerUrl}${record.unlockedTxHash}`}
+                  target="_blank"
+                >
+                  View Tx
+                </Link>
+              )}
+            </>
+          )}
+        />
+
         <DateField source="unlockDate" showTime />
         <TextField source="unlockMessage" />
       </Datagrid>

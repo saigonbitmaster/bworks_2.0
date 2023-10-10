@@ -14,6 +14,7 @@ import {
   CreateButton,
   ExportButton,
   TopToolbar,
+  useRecordContext,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
@@ -30,6 +31,11 @@ const JobListActions = () => (
     <ExportButton />
   </TopToolbar>
 );
+
+const JobPanel = () => {
+  const record = useRecordContext();
+  return <div dangerouslySetInnerHTML={{ __html: record.description }} />;
+};
 
 const ListScreen = () => {
   const [record, setRecord] = React.useState(null);
@@ -56,18 +62,22 @@ const ListScreen = () => {
         }}
         actions={<JobListActions />}
       >
-        <Datagrid rowClick={rowClick}>
+        <Datagrid rowClick={rowClick} expand={<JobPanel />}>
           <TextField source="name" label="Job name" />
           <CurrencyNumberField source="budget" threshold={10000} />
           <ReferenceField reference="users" source="employerId" link={"show"}>
             <TextField source="fullName" />
           </ReferenceField>
-          <ReferenceArrayField reference="skills" source="skills" label="Required skills">
+          <ReferenceArrayField
+            reference="skills"
+            source="skills"
+            label="Required skills"
+          >
             <SingleFieldList>
               <ChipField source="name" />
             </SingleFieldList>
           </ReferenceArrayField>
-          <BooleanField source="isApproved" label="Approval"/>
+          <BooleanField source="isApproved" label="Approval" />
 
           <DateField source="expireDate" showTime />
           <DateField source="createdAt" showTime />

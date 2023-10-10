@@ -26,9 +26,9 @@ const PaymentChart = () => {
   }, []);
 
   const data1 = [
-    { name: "Unlocked TXs", value: data2.numberOfUnlockedTxs },
+    { name: "Unlock Txs", value: data2.numberOfUnlockedTxs },
     {
-      name: "Pending TXs",
+      name: "Pending Txs",
       value: data2.numberOfLockTxs - data2.numberOfUnlockedTxs,
     },
   ];
@@ -76,7 +76,7 @@ const PaymentChart = () => {
         titleTypographyProps={{ variant: "subtitle1" }}
         subheader={
           <Typography variant="subtitle2" gutterBottom>
-            {`Locked TXs: ${data2.numberOfLockTxs}, Unlocked TXs: ${data2.numberOfUnlockedTxs}, Locked amounts: ${data2.sumLockedAmounts}, Unlocked amounts: ${data2.sumUnlockedAmounts}`}
+            {`Lock Txs: ${data2.numberOfLockTxs}, Unlock Txs: ${data2.numberOfUnlockedTxs}, Locked amounts: ${data2.sumLockedAmounts}, Unlocked amounts: ${data2.sumUnlockedAmounts}`}
           </Typography>
         }
       />
@@ -84,7 +84,7 @@ const PaymentChart = () => {
         <div
           style={{
             width: "100%",
-            height: 275,
+            height: 300,
             display: "flex",
             flexDirection: "row",
           }}

@@ -32,7 +32,7 @@ const PaymentChart = () => {
     y1: "numberOfLockTxs",
     y2: "numberOfUnlockedTxs",
     y1Name: "Lock Txs",
-    y2Name: "Unlocked Txs",
+    y2Name: "Unlock Txs",
   });
 
   const [data, setData] = React.useState(months.reverse());
@@ -55,7 +55,7 @@ const PaymentChart = () => {
         y1: "numberOfLockTxs",
         y2: "numberOfUnlockedTxs",
         y1Name: "Lock Txs",
-        y2Name: "Unlocked Txs",
+        y2Name: "Unlock Txs",
       });
     } else {
       setLabel("Plutus TX Amounts ($Ada)");

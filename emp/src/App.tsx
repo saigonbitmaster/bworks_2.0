@@ -76,10 +76,10 @@ const App = () => {
       <Typography
         variant="subtitle2"
         align="left"
-        color="orange"
-        sx={{ position: "fixed", right: 0, bottom: 10, left: 10, zIndex: 100 }}
+        color="#d50000"
+        sx={{ position: "fixed", right: 0, bottom: 20, left: 10, zIndex: 100 }}
       >
-        @ {new Date().getFullYear()} Built on Cardano <br/>
+        @ {new Date().getFullYear()} Built on Cardano <br />
       </Typography>
     </MeshProvider>
   );

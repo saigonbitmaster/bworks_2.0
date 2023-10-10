@@ -11,20 +11,14 @@ import CommentIcon from "@mui/icons-material/Comment";
 import { Link } from "react-router-dom";
 import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
 
-import {
- 
-  useGetList,
-  useTranslate,
-  TextField,
-  DateField,
-} from "react-admin";
+import { useGetList, useTranslate, TextField, DateField } from "react-admin";
 
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsField";
-import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
+import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
 const text = {
-  color: "orange",
+  color: "#33ab9f",
 };
 
 const Spacer = () => <span style={{ width: "3em" }} />;
@@ -63,7 +57,11 @@ const PostedJob = (props) => {
               <ListItemAvatar>
                 <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
               </ListItemAvatar>
-              <TextField record={record} source="name"></TextField>
+              <TextField
+                record={record}
+                source="name"
+                /*  sx={{ color: "primary", fontSize: 15, textAlign: "left", fontWeight: 'bold', }} */
+              ></TextField>
               <Spacer />
               <DateField record={record} source="createdAt"></DateField>
             </ListItem>
@@ -75,8 +73,8 @@ const PostedJob = (props) => {
               to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`}
               alignItems="flex-start"
             >
-              <ListItemText primaryTypographyProps={{ style: text }}>
-                Current bids
+              <ListItemText primaryTypographyProps={{ variant: "caption" }}>
+                Attended applications
               </ListItemText>
               <LinkBidField record={record} />
             </ListItem>

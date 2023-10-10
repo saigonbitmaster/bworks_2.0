@@ -23,6 +23,8 @@ import {
 } from "@mui/material";
 
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
+import Typography from "@mui/material/Typography";
+
 interface Props {
   lockTxs: number;
   unlockTxs: number;
@@ -47,7 +49,7 @@ const SmartContractTxs = (props: Props) => {
       to="/plutustxs"
       icon={GradingIcon}
       title="Smart contract TXs"
-      subtitle={`${lockTxs} locked TXs, ${unlockTxs} unlocked TXs`}
+      subtitle={`${lockTxs} locked Txs, ${unlockTxs} unlocked Txs`}
     >
       <List sx={{ display: isLoading ? "none" : "block" }}>
         {plutustxs
@@ -80,16 +82,22 @@ const SmartContractTxs = (props: Props) => {
                   alignItems="center"
                 >
                   <Tooltip title={record.lockedTxHash}>
-                    <ListItemText primaryTypographyProps={{ style: text }}>
+                    <ListItemText
+                      primaryTypographyProps={{ variant: "caption" }}
+                    >
                       Lock Tx
                     </ListItemText>
                   </Tooltip>
                   <Tooltip title={record.unlockedTxHash || ""}>
-                    <ListItemText primaryTypographyProps={{ style: text }}>
+                    <ListItemText
+                      primaryTypographyProps={{ variant: "caption" }}
+                    >
                       {record.unlockedTxHash ? "Unlock Tx" : "UnPaid"}
                     </ListItemText>
                   </Tooltip>
-                  <Box>{record.amount} Ada</Box>
+                  <Typography variant="caption" display="block" gutterBottom>
+                    {record.amount} Ada
+                  </Typography>
                 </ListItem>
               </>
             ))
