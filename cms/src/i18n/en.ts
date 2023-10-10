@@ -227,7 +227,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     plutusTxs: {
-      name: "Plutus TXs |||| Plutus TXs",
+      name: "Payment TXs |||| Payment TXs",
       fields: {
         commands: "Orders",
       },

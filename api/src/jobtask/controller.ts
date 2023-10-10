@@ -10,6 +10,7 @@ import {
   Query,
   Req,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { CreateJobTaskDto } from './dto/create.dto';
 import { UpdateJobTaskDto } from './dto/update.dto';
@@ -33,18 +34,35 @@ export class JobTaskController {
     const userId = lodash.get(request, 'user.userId', null);
     const mongooseQuery = queryTransform(query);
     mongooseQuery.filter.queryType == 'employer'
-      ? (mongooseQuery.filter.jobId = {
+      ? (mongooseQuery.filter.jobBidId = {
           $in: (
             await this.jobBidService.findAllRaw({ employerId: userId })
-          ).map((item) => item.jobId.toString()),
+          ).map((item) => item._id.toString()),
         })
       : mongooseQuery.filter.queryType == 'jobSeeker'
-      ? (mongooseQuery.filter.jobId = {
+      ? (mongooseQuery.filter.jobBidId = {
           $in: (
             await this.jobBidService.findAllRaw({ jobSeekerId: userId })
-          ).map((item) => item.jobId.toString()),
+          ).map((item) => item._id.toString()),
         })
-      : (mongooseQuery.filter.jobId = []);
+      : mongooseQuery.filter.queryType == 'user'
+      ? (mongooseQuery.filter = {
+          ...mongooseQuery.filter,
+          $or: [
+            { creator: userId },
+            { updater: userId },
+            {
+              jobBidId: {
+                $in: (
+                  await this.jobBidService.findAllRaw({
+                    $or: [{ employerId: userId }, { jobSeekerId: userId }],
+                  })
+                ).map((item) => item._id.toString()),
+              },
+            },
+          ],
+        })
+      : (mongooseQuery.filter.jobBidId = []);
 
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);
@@ -67,12 +85,12 @@ export class JobTaskController {
   async create(@Body() createJobTaskDto: CreateJobTaskDto, @Req() request) {
     //either jobSeekerId or employerId own the bid, allow create task for the job. otherwise don't allow
     const userId = lodash.get(request, 'user.userId', null);
-    const jobIds = (
+    const jobBidIds = (
       await this.jobBidService.findAllRaw({
         $or: [{ jobSeekerId: userId }, { employeeId: userId }],
       })
-    ).map((item) => item.jobId.toString());
-    if (!jobIds.includes(createJobTaskDto.jobId)) {
+    ).map((item) => item._id.toString());
+    if (!jobBidIds.includes(createJobTaskDto.jobBidId)) {
       return null;
     }
 
@@ -87,14 +105,14 @@ export class JobTaskController {
   ) {
     //either jobSeekerId or employerId own the bid, allow create task for the job. otherwise don't allow
     const userId = lodash.get(request, 'user.userId', null);
-    const jobIds = (
+    const jobBidIds = (
       await this.jobBidService.findAllRaw({
         $or: [{ jobSeekerId: userId }, { employeeId: userId }],
       })
-    ).map((item) => item.jobId.toString());
+    ).map((item) => item._id.toString());
 
-    if (!jobIds.includes(updateJobTaskDto.jobId)) {
-      return null;
+    if (!jobBidIds.includes(updateJobTaskDto.jobBidId)) {
+      throw new ForbiddenException('Permission Denied');
     }
 
     return await this.service.update(

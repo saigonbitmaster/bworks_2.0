@@ -7,12 +7,11 @@ import {
   DateTimeInput,
   Edit,
   ReferenceInput,
-  BooleanInput
+  BooleanInput,
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
-
 
 const EditScreen = () => (
   <Edit>
@@ -22,22 +21,26 @@ const EditScreen = () => (
           <TextInput source="name" fullWidth required />
         </Grid>
         <Grid item md={12} />
-       
-        <Grid item xs={12} md={4} lg={3} xl={2}>
-          <NumberInput source="bidValue"  required />
-        </Grid>
 
+        <Grid item xs={12} md={4} lg={3} xl={2}>
+          <NumberInput source="bidValue" required />
+        </Grid>
+        <Grid item md={12} />
         <Grid item xs={12} md={4} lg={3} xl={2}>
           <BooleanInput source="isSelected" fullWidth label="Select this bid" />
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <BooleanInput source="isCompleted" fullWidth label="Select this bid" />
+          <BooleanInput
+            source="isCompleted"
+            fullWidth
+            label="Complete this application"
+          />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
-        <ReferenceInput source="jobId" reference="postjobs">
-          <SelectInput optionText="name" fullWidth />
-        </ReferenceInput>
+          <ReferenceInput source="jobId" reference="postjobs">
+            <SelectInput optionText="name" fullWidth />
+          </ReferenceInput>
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={4} lg={3} xl={2}>

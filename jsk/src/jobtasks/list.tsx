@@ -9,7 +9,7 @@ import {
   ReferenceField,
   ReferenceInput,
   SelectInput,
-  TextInput
+  TextInput,
 } from "react-admin";
 const statusChoices: any[] = [
   { id: "inProgress", name: "In progress" },

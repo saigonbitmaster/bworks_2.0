@@ -23,17 +23,26 @@ const CreateScreen = () => (
     <SimpleForm>
       <Grid container spacing={1}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
-          <ReferenceInput source="jobId" reference="postjobs">
-            <SelectInput optionText="name" fullWidth />
-          </ReferenceInput>
-        </Grid>
-        <Grid item md={12} />
-        <Grid item xs={12} md={6} lg={5} xl={3}>
-          <TextInput source="name" fullWidth required />
+          <TextInput source="name" fullWidth required label="Task name" />
         </Grid>
 
+        <Grid item md={12} />
+
+        <Grid item xs={12} md={6} lg={5} xl={3}>
+          <ReferenceInput
+            source="jobBidId"
+            reference="jobbids"
+            filter={{ queryType: "user" }}
+          >
+            <SelectInput
+              optionText="name"
+              fullWidth
+              label="Select a job application"
+            />
+          </ReferenceInput>
+        </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <SelectInput source="status" choices={statusChoices} />
+          <SelectInput source="status" choices={statusChoices} required/>
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={6} lg={5} xl={3}>
@@ -44,11 +53,11 @@ const CreateScreen = () => (
           />
         </Grid>
         <Grid item xs={12} md={6} lg={5} xl={3}>
-          <DateTimeInput source="deadline" fullWidth />
+          <DateTimeInput source="deadline" fullWidth required/>
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} lg={10} xl={6}>
-          <TextInput source="gitLink" fullWidth  />
+          <TextInput source="gitLink" fullWidth />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={12} lg={10} xl={6}>

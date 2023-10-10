@@ -15,7 +15,7 @@ import { useGetList, useTranslate, TextField, DateField } from "react-admin";
 
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
-import LinkBidField from "../components/linkBidsField";
+import LinkBidField from "../components/linkBidsFieldDashboard";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
 const text = {
   color: "#33ab9f",

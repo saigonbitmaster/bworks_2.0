@@ -20,7 +20,7 @@ const statusChoices: any[] = [
 
 const jobFilters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
-  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
+  <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
     <SelectInput optionText="name" fullWidth />
   </ReferenceInput>,
   <SelectInput source="status" choices={statusChoices} alwaysOn />,
@@ -28,7 +28,7 @@ const jobFilters = [
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
-  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
+  <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
     <SelectInput optionText="name" fullWidth />
   </ReferenceInput>,
   <SelectInput source="status" choices={statusChoices} alwaysOn />,
@@ -45,7 +45,7 @@ const ListScreen = () => {
       filters={filters}
     >
       <Datagrid empty={<> </>} bulkActionButtons={false}>
-        <ReferenceField reference="postJobs" source="jobId">
+        <ReferenceField reference="jobbids" source="jobBidId">
           <TextField source="name" />
         </ReferenceField>
         <TextField source="name" />

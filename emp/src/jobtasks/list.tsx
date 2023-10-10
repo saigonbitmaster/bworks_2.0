@@ -27,14 +27,7 @@ const statusChoices: any[] = [
 
 const jobFilters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
-  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
-    <SelectInput optionText="name" fullWidth />
-  </ReferenceInput>,
-];
-
-const jobCompleteFilters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />,
-  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
+  <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
     <SelectInput optionText="name" fullWidth />
   </ReferenceInput>,
 ];
@@ -72,12 +65,16 @@ const ListScreen = () => {
           sort={{ field: "createdAt", order: "desc" }}
           hasCreate
           resource="jobtasks"
-          filter={{ queryType: "employer", status: { $ne: "completed" } }}
+          filter={{ queryType: "user", status: { $ne: "completed" } }}
           filters={jobFilters}
         >
           <Datagrid bulkActionButtons={false}>
             <TextField source="name" />
-            <ReferenceField reference="postJobs" source="jobId">
+            <ReferenceField
+              reference="jobbids"
+              source="jobBidId"
+              label="Application"
+            >
               <TextField source="name" />
             </ReferenceField>
             <ReferenceField reference="users" source="creator" link={"show"}>
@@ -116,11 +113,15 @@ const ListScreen = () => {
           sort={{ field: "createdAt", order: "desc" }}
           hasCreate={false}
           resource="jobtasks"
-          filter={{ queryType: "employer", status: "completed" }}
+          filter={{ queryType: "user", status: "completed" }}
         >
           <Datagrid bulkActionButtons={false}>
             <TextField source="name" />
-            <ReferenceField reference="postJobs" source="jobId">
+            <ReferenceField
+              reference="jobbids"
+              source="jobBidId"
+              label="Application"
+            >
               <TextField source="name" />
             </ReferenceField>
             <ReferenceField reference="users" source="creator" link={"show"}>

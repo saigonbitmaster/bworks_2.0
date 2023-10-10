@@ -55,7 +55,7 @@ const customEnglishMessages: TranslationMessages = {
       name: "User settings",
     },
     jobtasks: {
-      name: "Task management",
+      name: "Tasks",
     },
     paymentReport: {
       name: "Payment",
@@ -158,7 +158,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     jobBids: {
-      name: "Job Application |||| Job Applications",
+      name: "Application |||| Applications",
       fields: {
         commands: "Orders",
       },
@@ -176,10 +176,8 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     contractedJobs: {
-      name: "Plutus TX |||| Plutus TXs",
-      fields: {
-        commands: "Orders",
-      },
+      name: "Payment Tx |||| Payment Txs",
+
       filters: {
         last_visited: "Last visited",
         today: "Today",

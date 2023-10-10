@@ -26,20 +26,18 @@ export class JobBidController {
   @Get()
   async getByEmployer(@Response() res: any, @Query() query, @Req() request) {
     const mongooseQuery = queryTransform(query);
+    const userId = lodash.get(request, 'user.userId', null);
     mongooseQuery.filter.queryType == 'employer'
-      ? (mongooseQuery.filter.employerId = lodash.get(
-          request,
-          'user.userId',
-          null,
-        ))
+      ? (mongooseQuery.filter.employerId = userId)
       : mongooseQuery.filter.queryType == 'jobSeeker'
-      ? (mongooseQuery.filter.jobSeekerId = lodash.get(
-          request,
-          'user.userId',
-          null,
-        ))
-      : //  : (mongooseQuery.filter._id = null);
-        null;
+      ? (mongooseQuery.filter.jobSeekerId = userId)
+      : mongooseQuery.filter.queryType == 'user'
+      ? (mongooseQuery.filter.$or = [
+          { jobSeekerId: userId },
+          { employerId: userId },
+        ])
+      : null;
+
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);
   }
