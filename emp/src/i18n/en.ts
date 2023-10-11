@@ -67,6 +67,9 @@ const customEnglishMessages: TranslationMessages = {
     paymentReport: {
       name: "Payment",
     },
+    paymentReportJsk: {
+      name: "Receipt",
+    },
     reports: {
       import: "Import excels",
     },
@@ -236,21 +239,9 @@ const customEnglishMessages: TranslationMessages = {
     },
     postJobReports: {
       name: "Posted job |||| Posted jobs",
-      fields: {
-        commands: "Orders",
-      },
-      filters: {
-        last_visited: "Last visited",
-        today: "Today",
-      },
-      fieldGroups: {},
-      page: {
-        delete: "Delete Customer",
-      },
-      errors: {
-        password_mismatch:
-          "The password confirmation is not the same as the password.",
-      },
+    },
+    postJobReportsJsk: {
+      name: "Application |||| Applications",
     },
     walletReports: {
       name: "Wallet UTXO |||| Wallet UTXOs",

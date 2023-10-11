@@ -170,6 +170,25 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<AttachMoneyIcon />}
           dense={dense}
         />
+        <MenuItemLink
+          to="/postedjobreportjsk"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.postJobReportsJsk.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<NotesIcon />}
+          dense={dense}
+        />
+
+        <MenuItemLink
+          to="/paymentreportjsk"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.paymentReportJsk.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<AttachMoneyIcon />}
+          dense={dense}
+        />
       </SubMenu>
       <MenuItemLink
         to="/jobtasks"

@@ -26,12 +26,21 @@ export class PlutusTxController {
   @Get()
   async index(@Response() res: any, @Query() query, @Req() request) {
     const mongooseQuery = queryTransform(query);
+    const userId = lodash.get(request, 'user.userId', null);
     mongooseQuery.filter.queryType == 'employer'
-      ? (mongooseQuery.filter.empId = lodash.get(request, 'user.userId', null))
+      ? (mongooseQuery.filter.empId = userId)
       : mongooseQuery.filter.queryType == 'jobSeeker'
-      ? (mongooseQuery.filter.jskId = lodash.get(request, 'user.userId', null))
+      ? (mongooseQuery.filter.jskId = userId)
+      : //return all plutusTxs if user is jsk, emp or unlock partner
+      mongooseQuery.filter.queryType == 'user'
+      ? (mongooseQuery.filter.$or = [
+          { jskId: userId },
+          { empId: userId },
+          { unlockUserId: userId },
+        ])
       : //  : (mongooseQuery.filter._id = null);
         null;
+
     delete mongooseQuery.filter.queryType;
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);

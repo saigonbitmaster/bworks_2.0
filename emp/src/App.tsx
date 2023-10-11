@@ -28,6 +28,8 @@ import Typography from "@mui/material/Typography";
 import postjobsjsk from "./postjobsjsk";
 import jobbidsjsk from "./jobbidsjsk";
 
+import { PostedJobReportJsk } from "./postedjobreportsjsk";
+import { PaymentReportJsk } from "./paymentreportsjsk";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -67,6 +69,8 @@ const App = () => {
           <Route path="/parseaddress" element={<ParseAddress />} />
           <Route path="/postedjobreport" element={<PostedJobReport />} />
           <Route path="/paymentreport" element={<PaymentReport />} />
+          <Route path="/postedjobreportjsk" element={<PostedJobReportJsk />} />
+          <Route path="/paymentreportjsk" element={<PaymentReportJsk />} />
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/userSettings" element={<UserSettings />} />
         </CustomRoutes>

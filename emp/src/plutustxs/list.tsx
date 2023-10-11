@@ -54,8 +54,8 @@ const ListScreen = () => {
     <ReferenceInput source="name" reference="postjobs" alwaysOn>
       <SelectInput optionText="name" fullWidth />
     </ReferenceInput>,
-    <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn >
-      <SelectInput optionText="name" fullWidth label="Job application"/>
+    <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
+      <SelectInput optionText="name" fullWidth label="Job application" />
     </ReferenceInput>,
   ];
 
@@ -64,7 +64,10 @@ const ListScreen = () => {
       perPage={25}
       sort={{ field: "lockDate", order: "DESC" }}
       resource="plutustxs"
-      filter={{ queryType: "employer" }}
+      filter={{
+        queryType: "user",
+        lockedTxHash: { $nin: [null, "", undefined] },
+      }}
       filters={filters}
     >
       <Datagrid bulkActionButtons={false}>

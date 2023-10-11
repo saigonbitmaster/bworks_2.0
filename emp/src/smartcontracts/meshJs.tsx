@@ -109,8 +109,9 @@ const SmartContracts = () => {
     sort: { field: "createdAt", order: "DESC" },
     filter: {
       unlockUserId: userId,
-      unlockedTxHash: { $eq: null },
-      lockedTxHash: { $ne: null },
+      unlockedTxHash1: { $exists: false },
+      //not null, empty or not exist
+      lockedTxHash: { $nin: [null, "", undefined] },
     },
   });
 
@@ -223,7 +224,6 @@ const SmartContracts = () => {
     const receiveWallet = userWallets.data?.find(
       (wallet) => wallet.userId === receiveUserId
     );
-    console.log(receiveUserId, receiveWallet, plutusTx);
 
     if (!plutusTx || !receiveWallet) return;
 
@@ -276,7 +276,6 @@ const SmartContracts = () => {
       });
     }
   };
-  console.log(userPKH, unlockPartner, unlockUsers.selected);
   //lock datum
   const currentDate = dayjs();
   const [datum, setDatum] = React.useState({
@@ -361,7 +360,6 @@ const SmartContracts = () => {
             jskId: getJobBid(jobBids.jobBids).jobSeekerId,
             empId: getJobBid(jobBids.jobBids).employerId,
             amount: amountToLock,
-            lockedTxHash: txHash,
             lockDate: new Date(),
             datumUnlockPublicKeyHash: datum.publicKeyHash,
             scriptAddress: scriptAddr,
@@ -436,7 +434,7 @@ const SmartContracts = () => {
 
     const address = await wallet.getChangeAddress();
 
-    console.log(cardanoNetwork, currentContract, address, utxo)
+    console.log(cardanoNetwork, currentContract, address, utxo);
     const collateralUtxos = await wallet.getCollateral();
     if (!utxo || !receiveAddress.address || !address) {
       setNotification({
@@ -500,8 +498,6 @@ const SmartContracts = () => {
       },
       previousData: lockedPlutusTx,
     });
-
-    console.log(lockedPlutusTx.jobBidId);
 
     update("jobbids", {
       id: lockedPlutusTx.jobBidId,
