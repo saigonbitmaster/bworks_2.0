@@ -10,5 +10,6 @@ const TextField = ({ source }) => {
     <Rating name="read-only" value={get(record, source)} readOnly />
   ) : null;
 };
+TextField.defaultProps = { label: "Current applications" };
 
 export default TextField;

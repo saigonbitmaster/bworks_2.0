@@ -10,6 +10,7 @@ import {
   ReferenceField,
   TextInput,
   BooleanField,
+  UrlField,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 
@@ -28,8 +29,12 @@ const ListScreen = () => {
       <Datagrid bulkActionButtons={false}>
         <TextField source="username" />
         <TextField source="email" />
-        <TextField source="contact" />
-        <ReferenceArrayField reference="skills" source="skills">
+        <UrlField source="contact" target="_blank" />
+        <ReferenceArrayField
+          reference="skills"
+          source="skills"
+          label="Work skills"
+        >
           <SingleFieldList>
             <ChipField source="name" />
           </SingleFieldList>

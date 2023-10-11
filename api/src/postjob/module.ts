@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PostJob, PostJobSchema } from './schemas/schema';
 import { JwtService } from '@nestjs/jwt';
 import { User, UserSchema } from '../user/schemas/user.schema';
+import { UserModule } from '../user/user.module';
 
 @Module({
   providers: [PostJobService, JwtService],
@@ -12,6 +13,7 @@ import { User, UserSchema } from '../user/schemas/user.schema';
   imports: [
     MongooseModule.forFeature([{ name: PostJob.name, schema: PostJobSchema }]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    UserModule,
   ],
   exports: [PostJobService],
 })

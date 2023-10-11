@@ -30,8 +30,8 @@ export class UserService {
     return { count: count, data: data };
   }
 
-  async findAllRaw(filter = {}): Promise<any[]> {
-    return this.model.find(filter).exec();
+  async findAllRaw(filter = {}, select = {}): Promise<User[]> {
+    return this.model.find(filter).select(select).exec();
   }
 
   async findById(id: string): Promise<any> {

@@ -12,12 +12,15 @@ import {
   jobMonthlyScript,
 } from '../flatworks/dbcripts/aggregate.scripts';
 import * as moment from 'moment';
+import { UserService } from '../user/user.service';
+import { rankSkills } from '../flatworks/logics/rank';
 
 @Injectable()
 export class PostJobService {
   constructor(
     @InjectModel(PostJob.name) private readonly model: Model<PostJobDocument>,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private readonly userService: UserService,
   ) {}
 
   async getMonthlyJobReport(queryType, userId): Promise<any> {
@@ -115,22 +118,78 @@ export class PostJobService {
     return {};
   }
 
-  async findAll(query: MongooseQuery): Promise<RaList> {
+  async findAll(query: MongooseQuery, userId = null): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();
-    //fix return all when limit = 0
+
+    //fix return all when limit = 0 for global search service
     if (query.limit <= 0) {
       return {
         data: [],
         count: count,
       };
     }
-    const data = await this.model
+    const data = (await this.model
       .find(query.filter)
       .sort(query.sort)
       .skip(query.skip)
       .limit(query.limit)
-      .exec();
-    return { count: count, data: data };
+      .exec()) as any;
+
+    //return list jobs with top 10 matched job seekers for a posted job [{userId: xxx, matchRate: RateNumber}]
+    const users = (await this.userService.findAllRaw()) as any;
+    const jobSeeker = await this.userService.findById(userId);
+    let _data = data;
+    if (query.filter.queryType === 'employer') {
+      _data = data.map((item) => {
+        const matchUsers = users.map((user) => ({
+          userId: user._id.toString(),
+          username: user.username,
+          matchRate: rankSkills(user.skills, item.skills),
+        }));
+
+        //get top 10 matched users with rate > 0
+        matchUsers.sort((a, b) => b.matchRate - a.matchRate);
+        const topMatchUsers = matchUsers
+          .filter((user) => user.matchRate > 0)
+          .slice(0, 10);
+
+        return { ...item._doc, matchUsers: topMatchUsers };
+      });
+
+      //sort number of matched users
+      const sortFn = (a, b) => {
+        const sort =
+          query.sort.matchUsers === 1
+            ? a.matchUsers.length - b.matchUsers.length
+            : query.sort.matchUsers === -1
+            ? b.matchUsers.length - a.matchUsers.length
+            : null;
+        return sort;
+      };
+      _data.sort(sortFn);
+    }
+
+    if (query.filter.queryType === 'jobSeeker') {
+      _data = data.map((item) => {
+        return {
+          ...item._doc,
+          matchRate: rankSkills(jobSeeker.skills, item.skills),
+        };
+      });
+      //sort match rate for job seeker query
+      const sortFn = (a, b) => {
+        const sort =
+          query.sort.matchRate === 1
+            ? a.rate - b.rate
+            : query.sort.rate === -1
+            ? b.rate - a.rate
+            : null;
+        return sort;
+      };
+      _data.sort(sortFn);
+    }
+
+    return { count: count, data: _data };
   }
 
   async findRefAll(): Promise<RaList> {

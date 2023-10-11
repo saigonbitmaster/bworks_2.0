@@ -84,15 +84,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
-      <MenuItemLink
-        to="/jobtasks"
-        state={{ _scrollToTop: true }}
-        primaryText={translate(`resources.jobtasks.name`, {
-          smart_count: 2,
-        })}
-        leftIcon={<ListAltOutlinedIcon />}
-        dense={dense}
-      />
+
       <SubMenu
         handleToggle={() => handleToggle("manageFund")}
         isOpen={state.manageFund}
@@ -147,6 +139,15 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+      <MenuItemLink
+        to="/jobtasks"
+        state={{ _scrollToTop: true }}
+        primaryText={translate(`resources.jobtasks.name`, {
+          smart_count: 2,
+        })}
+        leftIcon={<ListAltOutlinedIcon />}
+        dense={dense}
+      />
       <SubMenu
         handleToggle={() => handleToggle("tools")}
         isOpen={state.tools}

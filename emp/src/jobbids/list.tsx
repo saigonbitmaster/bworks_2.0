@@ -24,7 +24,12 @@ import { stringify } from "query-string";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
-  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
+  <ReferenceInput
+    source="jobId"
+    reference="postjobs"
+    filter={{ queryType: "employer" }}
+    alwaysOn
+  >
     <SelectInput optionText="name" fullWidth />
   </ReferenceInput>,
 ];
@@ -146,7 +151,7 @@ const ListScreen = () => {
             <TextField source="name" />
           </ReferenceField>
         </ReferenceField>
-        <RateField source="rate" />
+        <RateField source="rate" label="Matching rate" />
 
         <BooleanField source="isSelected" label="Selected" />
         <DateField source="completeDate" showTime label="Your deadline" />

@@ -69,9 +69,9 @@ const Dashboard = () => {
     <div style={styles.flexColumn as CSSProperties}>
       <div style={styles.singleCol}></div>
       <div style={styles.flex}>
-        <PaidByPlutus
-          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
-          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
+        <PostedJobs
+          postedJobs={dashBoardCardData.postedJobs.postedJobs}
+          bids={dashBoardCardData.postedJobs.bids}
         />
         <Spacer />
         <SmartContractTxs

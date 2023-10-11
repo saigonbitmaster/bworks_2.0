@@ -15,11 +15,16 @@ import {
   ExportButton,
   TopToolbar,
   useRecordContext,
+  FunctionField,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
 import { Box, Drawer } from "@mui/material";
 import Steps from "../components/jobApplicationAside";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
+import MatchUsers from "../components/matchedUsers";
+import MatchedUsersField from "../components/matchedUsersField";
 
 const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
@@ -34,7 +39,12 @@ const JobListActions = () => (
 
 const JobPanel = () => {
   const record = useRecordContext();
-  return <div dangerouslySetInnerHTML={{ __html: record.description }} />;
+  return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: record.description }} />
+      <MatchUsers matchUsers={record.matchUsers}></MatchUsers>
+    </>
+  );
 };
 
 const ListScreen = () => {
@@ -81,6 +91,8 @@ const ListScreen = () => {
 
           <DateField source="expireDate" showTime />
           <DateField source="createdAt" showTime />
+          <MatchedUsersField label="Matched users" source="matchUsers" />
+
           <LinkBidField />
           <Drawer
             variant="persistent"

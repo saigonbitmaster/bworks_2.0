@@ -18,9 +18,9 @@ import {
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
 import ApplyButton from "../components/applyButton";
-
 import { Box, Drawer } from "@mui/material";
 import Steps from "../components/jobApplicationAside";
+import RateField from "../components/rateField";
 
 const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
@@ -71,7 +71,7 @@ const ListScreen = () => {
             </SingleFieldList>
           </ReferenceArrayField>
           <BooleanField source="isApproved" label="Approval" />
-
+          <RateField source="matchRate" label="Your match" />
           <DateField source="expireDate" showTime />
           <DateField source="createdAt" showTime />
           <LinkBidField />

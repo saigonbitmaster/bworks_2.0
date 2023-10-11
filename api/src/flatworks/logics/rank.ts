@@ -15,6 +15,18 @@ const rankLanguage = (
   return (matchedLangues.length / requiredLanguages.length) * 4;
 };
 
+//max is 5 for rate field 5 stars
+const rankSkills = (
+  gitLanguages: string[],
+  requiredLanguages: string[],
+): number => {
+  const matchedLangues = requiredLanguages.filter((language) =>
+    gitLanguages.includes(language),
+  );
+  if (requiredLanguages.length === 0) return 0;
+  return (matchedLangues.length / requiredLanguages.length) * 5;
+};
+
 const rankPrice = (
   minPrice: number,
   maxPrice: number,
@@ -43,4 +55,8 @@ const rankJobBid = (
   const priceRate = rankPrice(minPrice, maxPrice, placedPrice);
   return rankBid(languageRate, priceRate, hasPrototype);
 };
-export { rankBid, rankLanguage, rankPrice, rankJobBid };
+
+const matchedUsers = () => {
+  
+}
+export { rankBid, rankLanguage, rankPrice, rankJobBid, rankSkills };
