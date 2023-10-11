@@ -39,16 +39,23 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     menu: {
-      postJobs: "Manage jobs",
+      postJobs: "Hiring",
       reports: "Reports",
       manageFund: "Payment",
       tools: "Tools",
       settings: "Settings",
+      jobSeeker: "Seeking",
     },
   },
   resources: {
     changePassword: {
       name: "Change password",
+    },
+    postJobsJsk: {
+      name: "Job list",
+    },
+    jobBidsJsk: {
+      name: "Your applications",
     },
 
     userSettings: {
@@ -158,7 +165,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     jobBids: {
-      name: "Application |||| Applications",
+      name: "Applied applicant |||| Applied applicants",
       fields: {
         commands: "Orders",
       },

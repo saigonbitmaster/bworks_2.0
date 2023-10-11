@@ -19,7 +19,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import * as lodash from 'lodash';
 
 @UseGuards(JwtAuthGuard)
-@Controller('jobbids')
+@Controller(['jobbids', 'jobbidsjsk'])
 export class JobBidController {
   constructor(private readonly service: JobBidService) {}
 

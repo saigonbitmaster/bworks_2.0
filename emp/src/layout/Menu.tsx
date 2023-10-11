@@ -26,15 +26,22 @@ import SubMenu from "./SubMenu";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
 
-type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
+type MenuName =
+  | "postJobs"
+  | "manageFund"
+  | "reports"
+  | "settings"
+  | "tools"
+  | "jobSeeker";
 
 const Menu = ({ dense = false }: MenuProps) => {
   const [state, setState] = useState({
     postJobs: true,
     manageFund: true,
     reports: true,
-    settings: true,
-    tools: true,
+    settings: false,
+    tools: false,
+    jobSeeker: true,
   });
   const translate = useTranslate();
   const [open] = useSidebarState();
@@ -84,7 +91,32 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
-
+      <SubMenu
+        handleToggle={() => handleToggle("jobSeeker")}
+        isOpen={state.jobSeeker}
+        name="pos.menu.jobSeeker"
+        icon={<DoneAllOutlinedIcon />}
+        dense={dense}
+      >
+        <MenuItemLink
+          to="/postjobsjsk"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.postJobsJsk.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<GradingOutlinedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/jobbidsjsk"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.jobBidsJsk.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FormatListNumberedOutlinedIcon />}
+          dense={dense}
+        />
+      </SubMenu>
       <SubMenu
         handleToggle={() => handleToggle("manageFund")}
         isOpen={state.manageFund}

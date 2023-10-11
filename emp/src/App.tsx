@@ -25,6 +25,9 @@ import ChangePassword from "./components/changePassword";
 import UserSettings from "./components/userSettings";
 import users from "./users";
 import Typography from "@mui/material/Typography";
+import postjobsjsk from "./postjobsjsk";
+import jobbidsjsk from "./jobbidsjsk";
+
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -69,6 +72,8 @@ const App = () => {
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobbids" {...jobbids} />
+        <Resource name="postjobsjsk" {...postjobsjsk} />
+        <Resource name="jobbidsjsk" {...jobbidsjsk} />
         <Resource name="jobtasks" {...jobtasks} />
         <Resource name="plutustxs" {...plutustxs} />
         <Resource name="users" {...users} />
