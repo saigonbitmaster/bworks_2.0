@@ -13,6 +13,7 @@ interface Props {
   title?: string;
   subtitle?: string | number;
   children?: ReactNode;
+  minHeight?: number;
 }
 
 const CardWithIcon = (props: Props) => {
@@ -22,8 +23,8 @@ const CardWithIcon = (props: Props) => {
     // @ts-ignore
     <Card
       sx={{
-        minHeight: 52,
-        maxHeight: 880,
+        minHeight: props.minHeight ? props.minHeight : 52,
+        maxHeight: 890,
         display: "flex",
         flexDirection: "column",
         flex: "1",

@@ -44,11 +44,11 @@ const PostedJobChart = () => {
         titleTypographyProps={{ variant: "subtitle1" }}
       />
       <CardContent>
-        <div style={{ width: "100%", height: 300 }}>
+        <div style={{ width: "100%", height: 310 }}>
           <ResponsiveContainer>
             <AreaChart
               width={730}
-              height={280}
+              height={310}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >
@@ -77,7 +77,7 @@ const PostedJobChart = () => {
               <Tooltip />
               <Area
                 type="monotone"
-                name="Posted jobs"
+                name="Interested jobs"
                 dataKey="numberOfPostedJobs"
                 stroke="#8884d8"
                 fillOpacity={1}

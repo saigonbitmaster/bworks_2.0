@@ -388,7 +388,7 @@ const jobMonthlyScript = (queryType, userId, fromDate, toDate) => {
       : {};
 
   const preserveNullAndEmptyArrays =
-    queryType === 'emp' ? false : queryType === 'jsk' ? false : true;
+    queryType === 'emp' ? true : queryType === 'jsk' ? false : true;
   const script = [
     {
       $match: {

@@ -14,6 +14,7 @@ import {
   CreateButton,
   ExportButton,
   TopToolbar,
+  useRecordContext,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
@@ -21,6 +22,7 @@ import ApplyButton from "../components/applyButton";
 import { Box, Drawer } from "@mui/material";
 import Steps from "../components/jobApplicationAside";
 import RateField from "../components/rateField";
+import MatchUsers from "../components/matchedUsers";
 
 const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
@@ -29,6 +31,16 @@ const JobListActions = () => (
     <ExportButton />
   </TopToolbar>
 );
+
+const JobPanel = () => {
+  const record = useRecordContext();
+  return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: record.description }} />
+      <MatchUsers matchUsers={record.matchUsers}></MatchUsers>
+    </>
+  );
+};
 
 const ListScreen = () => {
   const [record, setRecord] = React.useState(null);
@@ -56,7 +68,11 @@ const ListScreen = () => {
         actions={<JobListActions />}
         filter={{ queryType: "jobSeeker", isApproved: true }}
       >
-        <Datagrid rowClick={rowClick}>
+        <Datagrid
+          rowClick={rowClick}
+          bulkActionButtons={false}
+          expand={<JobPanel />}
+        >
           <TextField source="name" label="Job name" />
           <CurrencyNumberField source="budget" threshold={10000} />
           <ReferenceField reference="users" source="employerId" link={"show"}>
@@ -85,7 +101,6 @@ const ListScreen = () => {
           >
             {record && <Steps record={record}></Steps>}
           </Drawer>
-          <EditButton />
         </Datagrid>
       </List>
     </Box>

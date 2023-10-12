@@ -16,11 +16,14 @@ import {
   useGetList,
   ReferenceInput,
   SelectInput,
+  useGetOne,
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { stringify } from "query-string";
+import CurrencyNumberField from "../components/currencyNumberFieldBid";
+import Typography from "@mui/material/Typography";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
@@ -114,6 +117,35 @@ const SignButton = (props) => {
 };
 
 const ListScreen = () => {
+  const BidPanel = () => {
+    const record = useRecordContext();
+    const {
+      data: job,
+      isLoading,
+      error,
+    } = useGetOne("postjobs", { id: record.jobId });
+
+    return (
+      <>
+        {record.description && (
+          <>
+            <div dangerouslySetInnerHTML={{ __html: record.description }} />
+          </>
+        )}
+
+        {!isLoading && !error && job.description && (
+          <>
+            <Typography variant="caption" gutterBottom>
+              <strong> Job description</strong>
+            </Typography>
+
+            <div dangerouslySetInnerHTML={{ __html: job.description }} />
+          </>
+        )}
+      </>
+    );
+  };
+
   return (
     <List
       perPage={25}
@@ -123,7 +155,7 @@ const ListScreen = () => {
       filter={{ queryType: "employer" }}
       filters={filters}
     >
-      <Datagrid bulkActionButtons={false}>
+      <Datagrid bulkActionButtons={false} expand={<BidPanel />}>
         <TextField source="name" label="Application" />
 
         <ReferenceField reference="postJobs" source="jobId" label="Job name">
@@ -133,24 +165,12 @@ const ListScreen = () => {
         <ReferenceField reference="users" source="jobSeekerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
-        <ReferenceField reference="users" source="employerId" link={"show"}>
-          <TextField source="fullName" />
-        </ReferenceField>
-        <NumberField source="bidValue" />
-        <ReferenceField
-          reference="postJobs"
-          source="jobId"
-          label="Currency"
-          link={false}
-        >
-          <ReferenceField
-            reference="currencies"
-            source="currencyId"
-            link={false}
-          >
-            <TextField source="name" />
-          </ReferenceField>
-        </ReferenceField>
+        <CurrencyNumberField
+          source="bidValue"
+          threshold={10000}
+          label="Requested amount"
+        />
+
         <RateField source="rate" label="Matching rate" />
 
         <BooleanField source="isSelected" label="Selected" />

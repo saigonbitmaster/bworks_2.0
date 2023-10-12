@@ -6,7 +6,12 @@ import Rating from "@mui/material/Rating";
 
 export default function MatchUsers(props) {
   const matchUsers = props.matchUsers || [];
-  if (matchUsers.length === 0) return null;
+  if (matchUsers.length === 0)
+    return (
+      <Typography variant="caption" gutterBottom color="primary.alert">
+        <strong> No matched users </strong>
+      </Typography>
+    );
   return (
     <>
       <Typography variant="caption" gutterBottom>

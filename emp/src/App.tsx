@@ -86,7 +86,14 @@ const App = () => {
         variant="subtitle2"
         align="left"
         color="#d50000"
-        sx={{ position: "fixed", right: 0, bottom: 20, left: 10, zIndex: 100 }}
+        sx={{
+          position: "fixed",
+          right: 0,
+          bottom: 10,
+          left: 10,
+          zIndex: 100,
+          width: 250,
+        }}
       >
         @ {new Date().getFullYear()} Built on Cardano <br />
       </Typography>

@@ -52,7 +52,7 @@ const customEnglishMessages: TranslationMessages = {
       name: "Change password",
     },
     postJobsJsk: {
-      name: "Job list",
+      name: "Listing jobs",
     },
     jobBidsJsk: {
       name: "Your applications",

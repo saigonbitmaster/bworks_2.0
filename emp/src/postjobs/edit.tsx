@@ -19,7 +19,7 @@ import { RichTextInput } from "ra-input-rich-text";
 const EditScreen = () => (
   <Edit>
     <SimpleForm>
-      <Grid container spacing={1}>
+      <Grid container spacing={0.5}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
           <TextInput source="name" fullWidth required label="Job name" />
         </Grid>
@@ -96,7 +96,11 @@ const EditScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
-          <RichTextInput source="description" fullWidth />
+          <RichTextInput
+            source="description"
+            fullWidth
+            label="Job description"
+          />
         </Grid>
       </Grid>
     </SimpleForm>

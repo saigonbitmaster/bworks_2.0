@@ -72,7 +72,7 @@ export default function SmartContract(props) {
           <TabList onChange={handleChange} aria-label="wallet actions">
             <Tab
               value="1"
-              label="Submit to smart contract"
+              label="Lock to smart contract"
               sx={{ padding: 0, marginLeft: 0 }} //to make underline of tab equal to text
             />
             <Tab

@@ -40,6 +40,7 @@ export const lightTheme = {
   palette: {
     primary: {
       main: "#4f3cc9",
+      alert: "#ff0000",
     },
     secondary: {
       light: "#5f5fc4",

@@ -46,6 +46,8 @@ export class PostJobService {
     );
     const _result = await this.model.aggregate(aggregateScript);
 
+    console.log(queryType, userId, fromDate, toDate, _result);
+
     const emptyRecord = {
       _id: '',
       date: '',
@@ -137,6 +139,7 @@ export class PostJobService {
 
     //return list jobs with top 10 matched job seekers for a posted job [{userId: xxx, matchRate: RateNumber}]
     const users = (await this.userService.findAllRaw()) as any;
+
     const jobSeeker = await this.userService.findById(userId);
     let _data = data;
     if (query.filter.queryType === 'employer') {
@@ -170,9 +173,40 @@ export class PostJobService {
     }
 
     if (query.filter.queryType === 'jobSeeker') {
-      _data = data.map((item) => {
+      const dataUsers = data.map((item) => {
+        const matchUsers = users
+          .filter((u) => u._id.toString() !== userId)
+          .map((user) => ({
+            userId: user._id.toString(),
+            username: user.username,
+            matchRate: rankSkills(user.skills, item.skills),
+          }));
+
+        //get top 10 matched users with rate > 0
+        matchUsers.sort((a, b) => b.matchRate - a.matchRate);
+        const topMatchUsers = matchUsers
+          .filter((user) => user.matchRate > 0)
+          .slice(0, 10);
+
+        return { ...item._doc, matchUsers: topMatchUsers };
+      });
+
+      //sort number of matched users
+      const sortFn1 = (a, b) => {
+        const sort =
+          query.sort.matchUsers === 1
+            ? a.matchUsers.length - b.matchUsers.length
+            : query.sort.matchUsers === -1
+            ? b.matchUsers.length - a.matchUsers.length
+            : null;
+        return sort;
+      };
+      dataUsers.sort(sortFn1);
+
+      _data = dataUsers.map((item) => {
         return {
-          ...item._doc,
+          ...item,
+          matchUsers: item.matchUsers,
           matchRate: rankSkills(jobSeeker.skills, item.skills),
         };
       });

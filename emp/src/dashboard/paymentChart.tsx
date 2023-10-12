@@ -89,11 +89,11 @@ const PaymentChart = () => {
         />
       </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 260 }}>
+        <div style={{ width: "100%", height: 270 }}>
           <ResponsiveContainer>
             <AreaChart
               width={730}
-              height={260}
+              height={270}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

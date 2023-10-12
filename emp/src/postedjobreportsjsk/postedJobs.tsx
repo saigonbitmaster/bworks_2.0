@@ -28,7 +28,7 @@ const PostedJob = (props) => {
   const translate = useTranslate();
   const headers = [
     { key: "_id", name: "Month" },
-    { key: "numberOfPostedJobs", name: "Posted jobs" },
+   /*  { key: "numberOfPostedJobs", name: "Posted jobs" }, */
     { key: "numberOfBids", name: "Attended applications" },
     { key: "sumBidsAmounts", name: "Sum bid amounts ($Ada)" },
     { key: "numberOfPaidJobs", name: "Paid jobs" },

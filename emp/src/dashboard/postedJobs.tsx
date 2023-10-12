@@ -33,7 +33,7 @@ const PostedJob = (props) => {
   const translate = useTranslate();
   const { data: postedjobs, total } = useGetList<any>("postjobs", {
     sort: { field: "createdAt", order: "DESC" },
-    pagination: { page: 1, perPage: 8 },
+    pagination: { page: 1, perPage: 9},
   });
 
   const display = "block";
@@ -41,40 +41,44 @@ const PostedJob = (props) => {
   return (
     <CardWithIcon
       to={{
-        pathname: "/postjobs",
+        pathname: "/postjobsjsk",
         search: stringify({
-          filter: JSON.stringify({ status: "active" }),
+          filter: JSON.stringify({ jsApproved: true }),
         }),
       }}
       icon={DynamicFeedOutlinedIcon}
       title={translate("pos.dashboard.postedJob")}
       subtitle={`${postedJobs} jobs, ${bids} bids`}
+      minHeight={890}
     >
       <List sx={{ display }}>
         {postedjobs?.map((record: any) => (
           <>
-            <ListItem key={record.id} alignItems="center">
+            <ListItem key={record.id} alignItems="center" sx={{ m: 0, p: 0.6 }}>
               <ListItemAvatar>
                 <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
               </ListItemAvatar>
-              <TextField
+              <ListItemText>
+                <TextField record={record} source="name"></TextField>
+              </ListItemText>
+
+              <DateField
+                sx={{ mr: 0 }}
                 record={record}
-                source="name"
-                /*  sx={{ color: "primary", fontSize: 15, textAlign: "left", fontWeight: 'bold', }} */
-              ></TextField>
-              <Spacer />
-              <DateField record={record} source="createdAt"></DateField>
+                source="createdAt"
+              ></DateField>
             </ListItem>
 
             <ListItem
               key={record.id + 1}
-              button
+              sx={{ m: 0, p: 0.6 }}
+              /*    button
               component={Link}
-              to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`}
+              to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`} */
               alignItems="flex-start"
             >
-              <ListItemText primaryTypographyProps={{ variant: "caption" }}>
-                Attended applications
+              <ListItemText primaryTypographyProps={{ variant: "body2" }}>
+                Applications
               </ListItemText>
               <LinkBidField record={record} />
             </ListItem>
@@ -85,7 +89,7 @@ const PostedJob = (props) => {
       <Button
         sx={{ borderRadius: 0 }}
         component={Link}
-        to="/postjobs"
+        to="/postjobsjsk"
         size="small"
         color="primary"
       >

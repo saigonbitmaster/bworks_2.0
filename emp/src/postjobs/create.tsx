@@ -20,7 +20,7 @@ import { RichTextInput } from "ra-input-rich-text";
 const CreateScreen = () => (
   <Create redirect="list">
     <SimpleForm>
-      <Grid container spacing={1}>
+      <Grid container spacing={0.5}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
           <TextInput source="name" fullWidth required label="Job name" />
         </Grid>
@@ -67,6 +67,7 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job expire date"
+            defaultValue={new Date()}
           />
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
@@ -75,6 +76,7 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job deadline"
+            defaultValue={new Date()}
           />
         </Grid>
         <Grid item md={12} />
@@ -97,7 +99,7 @@ const CreateScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
-          <RichTextInput source="description" fullWidth />
+          <RichTextInput source="description" fullWidth label="Job description"/>
         </Grid>
       </Grid>
     </SimpleForm>

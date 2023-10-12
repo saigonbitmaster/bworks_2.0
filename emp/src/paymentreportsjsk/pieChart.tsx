@@ -84,7 +84,7 @@ const PaymentChart = () => {
         <div
           style={{
             width: "100%",
-            height: 275,
+            height: 280,
             display: "flex",
             flexDirection: "row",
           }}
