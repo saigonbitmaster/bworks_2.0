@@ -11,24 +11,21 @@ import {
   SelectInput,
   TextInput,
   DeleteButton,
+  AutocompleteInput,
 } from "react-admin";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
-
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
-const statusChoices: any[] = [
-  { id: "inProgress", name: "In progress" },
-  { id: "todo", name: "Todo" },
-  { id: "completed", name: "Completed" },
-];
 
+
+const filterToQuery = (searchText) => ({ textSearch: searchText });
 const jobFilters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
   <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
-    <SelectInput optionText="name" fullWidth />
+    <AutocompleteInput filterToQuery={filterToQuery} optionText="name" label="Application" />
   </ReferenceInput>,
 ];
 

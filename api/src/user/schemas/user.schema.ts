@@ -15,6 +15,9 @@ export class User {
   @Prop()
   contact: string;
 
+  @Prop({ default: false })
+  isShowContact: boolean;
+
   @Prop({ required: true })
   password: string;
 

@@ -17,6 +17,7 @@ import {
   ReferenceInput,
   SelectInput,
   useGetOne,
+  AutocompleteInput,
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
@@ -25,15 +26,22 @@ import { stringify } from "query-string";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
 
+const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />,
+  <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
   <ReferenceInput
     source="jobId"
     reference="postjobs"
     filter={{ queryType: "employer" }}
     alwaysOn
   >
-    <SelectInput optionText="name" fullWidth />
+    <AutocompleteInput
+      sx={{ width: 300 }}
+      filterToQuery={filterToQuery}
+      fullWidth
+      optionText="name"
+      label="Select a job"
+    />
   </ReferenceInput>,
 ];
 

@@ -26,7 +26,7 @@ import Typography from "@mui/material/Typography";
 import MatchUsers from "../components/matchedUsers";
 import MatchedUsersField from "../components/matchedUsersField";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+const filters = [<TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300}} />];
 
 const JobCreateButton = () => <CreateButton label="Create new job" />;
 

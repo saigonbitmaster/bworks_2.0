@@ -8,6 +8,7 @@ import {
   SaveButton,
   Toolbar,
   useDataProvider,
+  BooleanInput,
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
@@ -18,6 +19,15 @@ const UserEditToolbar = (props) => (
     <SaveButton />
   </Toolbar>
 );
+
+const urlValidate = (url) => {
+  if (!url) return undefined;
+  const regex = new RegExp("^(http|https)://");
+  if (regex.test(url)) {
+    return undefined;
+  }
+  return "Must be a https or http url";
+};
 
 const EditScreen = () => {
   const dataProvider = useDataProvider();
@@ -38,12 +48,26 @@ const EditScreen = () => {
           </Grid>
           <Grid item md={12} />
           <Grid item xs={12} md={6} lg={5} xl={3}>
-            <TextInput source="email" fullWidth />
+            <TextInput source="email" fullWidth required />
           </Grid>
 
           <Grid item xs={12} md={6} lg={5} xl={3}>
-            <TextInput source="contact" fullWidth label="Telegram" />
+            <TextInput
+              source="contact"
+              fullWidth
+              label="Messenger contact"
+              validate={urlValidate}
+            />
           </Grid>
+          <Grid item md={12} />
+          <Grid item xs={12} md={6} lg={5} xl={3}>
+            <BooleanInput
+              source="isShowContact"
+              fullWidth
+              label="Agree to show contact"
+            />
+          </Grid>
+
           <Grid item md={12} />
           <Grid item xs={12} md={6} lg={5} xl={3}>
             <ReferenceArrayInput source="skills" reference="skills">
@@ -51,8 +75,9 @@ const EditScreen = () => {
             </ReferenceArrayInput>
           </Grid>
           <Grid item md={12} />
+
           <Grid item xs={12} md={12} lg={8} xl={6}>
-            <RichTextInput source="description" fullWidth />
+            <RichTextInput source="description" fullWidth label="Profile" />
           </Grid>
         </Grid>
       </SimpleForm>

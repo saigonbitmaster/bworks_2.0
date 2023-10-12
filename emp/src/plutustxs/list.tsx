@@ -14,6 +14,7 @@ import {
   TextInput,
   ReferenceInput,
   SelectInput,
+  AutocompleteInput,
 } from "react-admin";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -50,12 +51,25 @@ const ListScreen = () => {
     ? process.env.REACT_APP_CARDANO_EXPLORER_MAINNET_URL
     : process.env.REACT_APP_CARDANO_EXPLORER_PREPROD_URL;
 
+  const filterToQuery = (searchText) => ({ textSearch: searchText });
   const filters = [
     <ReferenceInput source="name" reference="postjobs" alwaysOn>
-      <SelectInput optionText="name" fullWidth />
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        fullWidth
+        optionText="name"
+        label="Search a job"
+        sx={{ width: 300 }}
+      />
     </ReferenceInput>,
     <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
-      <SelectInput optionText="name" fullWidth label="Job application" />
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        fullWidth
+        optionText="name"
+        label="Search a job application"
+        sx={{ width: 300 }}
+      />
     </ReferenceInput>,
   ];
 
@@ -74,8 +88,8 @@ const ListScreen = () => {
         <ReferenceField source="name" reference="postjobs" label="Job">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField source="jobBidId" reference="jobbids">
-          <TextField source="name" />
+        <ReferenceField source="jobBidId" reference="jobbids" label="Job application">
+          <TextField source="name"  />
         </ReferenceField>
         <FunctionField
           label="UnLock TxHash"

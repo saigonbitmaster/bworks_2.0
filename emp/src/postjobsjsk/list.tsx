@@ -24,7 +24,9 @@ import Steps from "../components/jobApplicationAside";
 import RateField from "../components/rateField";
 import MatchUsers from "../components/matchedUsers";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+const filters = [
+  <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
+];
 
 const JobListActions = () => (
   <TopToolbar>

@@ -3,6 +3,7 @@ export class BaseUserDto {
   userId: string;
   email: string;
   contact: string;
+  isShowContact: boolean;
   fullName: string;
   refreshToken: string;
   role: any[];

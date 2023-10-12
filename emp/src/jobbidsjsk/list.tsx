@@ -16,15 +16,23 @@ import {
   CreateButton,
   useRecordContext,
   useGetOne,
+  AutocompleteInput,
 } from "react-admin";
 import RateField from "../components/rateField";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
 
+const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />,
+  <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300}} />,
   <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
-    <SelectInput optionText="name" fullWidth />
+    <AutocompleteInput
+      filterToQuery={filterToQuery}
+      fullWidth
+      optionText="name"
+      label="Search a job"
+      sx={{ width: 300 }}
+    />
   </ReferenceInput>,
 ];
 

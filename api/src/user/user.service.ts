@@ -27,6 +27,29 @@ export class UserService {
       .limit(query.limit)
       .select({ password: 0, refreshToken: 0 })
       .exec();
+
+    //remove user'contact if it is not set to show
+    const _data = (data as any).map((user) => {
+      if (!user._doc.isShowContact) {
+        delete user._doc.email;
+        delete user._doc.contact;
+      }
+      return user;
+    });
+    return { count: count, data: _data };
+  }
+
+  //for rest endpoint remove password & refresh token before return
+  async findAllByAdmin(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
+    const data = await this.model
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
+      .select({ password: 0, refreshToken: 0 })
+      .exec();
+
     return { count: count, data: data };
   }
 
@@ -39,11 +62,18 @@ export class UserService {
   }
 
   //for rest endpoint remove password & refresh token before return
-  async findByIdForRest(id: string): Promise<any> {
-    return await this.model
-      .findById(id)
-      .select({ password: 0, refreshToken: 0 })
-      .exec();
+  //for user query return contact, query from other depend on user setting
+  async findByIdForRest(id: string, userId = null): Promise<any> {
+    const select = { password: 0, refreshToken: 0 };
+
+    const _user = (await this.model.findById(id).select(select).exec()) as any;
+
+    if (id !== userId) {
+      _user._doc.isShowContact
+        ? null
+        : (delete _user._doc.email, delete _user._doc.contact);
+    }
+    return _user;
   }
 
   async findOne(username: string): Promise<User> {

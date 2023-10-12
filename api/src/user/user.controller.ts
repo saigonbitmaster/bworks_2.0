@@ -24,7 +24,6 @@ export class UserController {
 
   //post {password: abc}
   @Post('changepassword')
-  //@Roles(Role.Admin)
   async changePassword(
     @Body() changePasswordDto: ChangePasswordDto,
     @Request() req,
@@ -40,11 +39,19 @@ export class UserController {
     return formatRaList(res, result);
   }
 
+  @Roles(Role.Admin)
+  @Get('allusers')
+  async findAllByAdmin(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result = await this.service.findAllByAdmin(mongooseQuery);
+    return formatRaList(res, result);
+  }
+
   @Get(':id')
-  async find(@Param('id') id: string) {
-    const user = await this.service.findByIdForRest(id);
-    //remote password, refreshToken
-    console.log(user);
+  async find(@Param('id') id: string, @Request() req) {
+    const userId = req.user.userId;
+    const user = await this.service.findByIdForRest(id, userId);
+
     return user;
   }
 
