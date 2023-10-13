@@ -3,9 +3,8 @@ import {
   List,
   Datagrid,
   TextField,
-  EditButton,
   DateField,
-  NumberField,
+  ExportButton,
   ReferenceField,
   TextInput,
   BooleanField,
@@ -13,9 +12,8 @@ import {
   useRecordContext,
   useRefresh,
   FunctionField,
-  useGetList,
+  TopToolbar,
   ReferenceInput,
-  SelectInput,
   useGetOne,
   AutocompleteInput,
 } from "react-admin";
@@ -25,6 +23,14 @@ import { Link } from "react-router-dom";
 import { stringify } from "query-string";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
+import RefreshButton from "../components/refreshButton";
+
+const JobListActions = () => (
+  <TopToolbar>
+    <ExportButton />
+    <RefreshButton baseUrl="/jobbids"></RefreshButton>
+  </TopToolbar>
+);
 
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
@@ -49,7 +55,7 @@ const SelectButton = () => {
   const record = useRecordContext();
   const diff = { isSelected: !record.isSelected };
   const refresh = useRefresh();
-  const [update, { isLoading, error }] = useUpdate("jobbids", {
+  const [update, { isLoading, error }] = useUpdate("/jobbids", {
     id: record.id,
     data: diff,
     previousData: record,
@@ -162,6 +168,7 @@ const ListScreen = () => {
       resource="jobbids"
       filter={{ queryType: "employer" }}
       filters={filters}
+      actions={<JobListActions />}
     >
       <Datagrid bulkActionButtons={false} expand={<BidPanel />}>
         <TextField source="name" label="Application" />

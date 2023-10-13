@@ -30,6 +30,7 @@ import jobbidsjsk from "./jobbidsjsk";
 
 import { PostedJobReportJsk } from "./postedjobreportsjsk";
 import { PaymentReportJsk } from "./paymentreportsjsk";
+import { QueryClient } from "react-query";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -46,6 +47,15 @@ const i18nProvider = polyglotI18nProvider((locale) => {
   return englishMessages;
 }, "en");
 
+//cache
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 1000, // 5 minutes
+    },
+  },
+});
+
 const App = () => {
   return (
     <MeshProvider>
@@ -59,6 +69,7 @@ const App = () => {
         i18nProvider={i18nProvider}
         disableTelemetry
         theme={lightTheme}
+        queryClient={queryClient}
       >
         <CustomRoutes>
           <Route path="/configuration" element={<Configuration />} />
@@ -93,7 +104,7 @@ const App = () => {
           left: 10,
           zIndex: 100,
           width: 250,
-          backgroundColor: "transparent"
+          backgroundColor: "transparent",
         }}
       >
         @ {new Date().getFullYear()} Built on Cardano <br />

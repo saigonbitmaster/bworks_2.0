@@ -22,7 +22,7 @@ import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
 
 @UseGuards(JwtAuthGuard)
-@Controller('postjobs')
+@Controller(['postjobs', 'postjobsjsk'])
 export class PostJobController {
   constructor(private readonly service: PostJobService) {}
 

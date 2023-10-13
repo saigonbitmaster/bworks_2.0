@@ -17,9 +17,6 @@ import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsFieldDashboard";
 import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
-const text = {
-  color: "#33ab9f",
-};
 
 const Spacer = () => <span style={{ width: "3em" }} />;
 
@@ -33,7 +30,7 @@ const PostedJob = (props) => {
   const translate = useTranslate();
   const { data: postedjobs, total } = useGetList<any>("postjobs", {
     sort: { field: "createdAt", order: "DESC" },
-    pagination: { page: 1, perPage: 9},
+    pagination: { page: 1, perPage: 9 },
   });
 
   const display = "block";
@@ -54,7 +51,14 @@ const PostedJob = (props) => {
       <List sx={{ display }}>
         {postedjobs?.map((record: any) => (
           <>
-            <ListItem key={record.id} alignItems="center" sx={{ m: 0, p: 0.6 }}>
+            <ListItem
+              key={record.id}
+              alignItems="center"
+              sx={{ m: 0, p: 0.6 }}
+                button
+              component={Link}
+              to={`/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({ _id: record.id })}`}
+            >
               <ListItemAvatar>
                 <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
               </ListItemAvatar>

@@ -3,7 +3,6 @@ import {
   List,
   Datagrid,
   TextField,
-  EditButton,
   DateField,
   SingleFieldList,
   ChipField,
@@ -11,7 +10,6 @@ import {
   ReferenceField,
   TextInput,
   BooleanField,
-  CreateButton,
   ExportButton,
   TopToolbar,
   useRecordContext,
@@ -23,16 +21,20 @@ import { Box, Drawer } from "@mui/material";
 import Steps from "../components/jobApplicationAside";
 import RateField from "../components/rateField";
 import MatchUsers from "../components/matchedUsers";
+import RefreshButton from "../components/refreshButton";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
 ];
 
-const JobListActions = () => (
-  <TopToolbar>
-    <ExportButton />
-  </TopToolbar>
-);
+const JobListActions = () => {
+  return (
+    <TopToolbar>
+      <ExportButton />
+      <RefreshButton baseUrl="/postjobsjsk"></RefreshButton>
+    </TopToolbar>
+  );
+};
 
 const JobPanel = () => {
   const record = useRecordContext();
@@ -54,7 +56,8 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
-        resource="postjobs"
+        disableSyncWithLocation={false}
+        resource="postjobsjsk"
         filters={filters}
         perPage={25}
         sort={{ field: "createdAt", order: "desc" }}

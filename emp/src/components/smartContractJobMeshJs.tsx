@@ -123,7 +123,7 @@ export default function SmartContract(props) {
               </FormControl>
               <FormControl variant="standard" sx={{ minWidth: 120 }}>
                 <InputLabel id="simple-select-standard-label">
-                  Select a job bid
+                  Select a job application to pay
                 </InputLabel>
                 <Select
                   sx={{ width: 240 }}

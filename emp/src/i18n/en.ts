@@ -26,7 +26,7 @@ const customEnglishMessages: TranslationMessages = {
       pending_orders: "Pending Orders",
       allPostedJobs: "See all Jobs",
       plutusTxs: "Plutus TXs",
-      allPlutusTxs: "See all plutus TXs",
+      allPlutusTxs: "See all payment TXs",
       order: {
         items:
           "by %{customer_name}, one item |||| by %{customer_name}, %{nb_items} items",
@@ -39,12 +39,12 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     menu: {
-      postJobs: "Hiring",
+      postJobs: "Hire",
       reports: "Reports",
       manageFund: "Payment",
       tools: "Tools",
       settings: "Settings",
-      jobSeeker: "Seeking",
+      jobSeeker: "Apply",
     },
   },
   resources: {

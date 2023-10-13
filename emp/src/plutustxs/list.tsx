@@ -15,10 +15,13 @@ import {
   ReferenceInput,
   SelectInput,
   AutocompleteInput,
+  TopToolbar,
+  ExportButton,
 } from "react-admin";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
+import RefreshButton from "../components/refreshButton";
 
 const ListScreen = () => {
   const UnlockButton = () => {
@@ -50,6 +53,13 @@ const ListScreen = () => {
   const explorerUrl = process.env.REACT_APP_IS_MAINNET
     ? process.env.REACT_APP_CARDANO_EXPLORER_MAINNET_URL
     : process.env.REACT_APP_CARDANO_EXPLORER_PREPROD_URL;
+
+  const ListActions = () => (
+    <TopToolbar>
+      <ExportButton />
+      <RefreshButton baseUrl="/plutustxs"></RefreshButton>
+    </TopToolbar>
+  );
 
   const filterToQuery = (searchText) => ({ textSearch: searchText });
   const filters = [
@@ -83,13 +93,18 @@ const ListScreen = () => {
         lockedTxHash: { $nin: [null, "", undefined] },
       }}
       filters={filters}
+      actions={<ListActions></ListActions>}
     >
       <Datagrid bulkActionButtons={false}>
         <ReferenceField source="name" reference="postjobs" label="Job">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField source="jobBidId" reference="jobbids" label="Job application">
-          <TextField source="name"  />
+        <ReferenceField
+          source="jobBidId"
+          reference="jobbids"
+          label="Job application"
+        >
+          <TextField source="name" />
         </ReferenceField>
         <FunctionField
           label="UnLock TxHash"

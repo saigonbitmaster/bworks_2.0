@@ -21,10 +21,11 @@ import {
 import RateField from "../components/rateField";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
+import RefreshButton from "../components/refreshButton";
 
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300}} />,
+  <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
   <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
     <AutocompleteInput
       filterToQuery={filterToQuery}
@@ -72,6 +73,7 @@ const ListScreen = () => {
     <TopToolbar>
       <JobCreateButton />
       <ExportButton />
+      <RefreshButton baseUrl="/jobbidsjsk"></RefreshButton>
     </TopToolbar>
   );
 

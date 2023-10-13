@@ -25,8 +25,11 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import MatchUsers from "../components/matchedUsers";
 import MatchedUsersField from "../components/matchedUsersField";
+import RefreshButton from "../components/refreshButton";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300}} />];
+const filters = [
+  <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
+];
 
 const JobCreateButton = () => <CreateButton label="Create new job" />;
 
@@ -34,6 +37,7 @@ const JobListActions = () => (
   <TopToolbar>
     <JobCreateButton />
     <ExportButton />
+    <RefreshButton baseUrl="/postjobs"></RefreshButton>
   </TopToolbar>
 );
 

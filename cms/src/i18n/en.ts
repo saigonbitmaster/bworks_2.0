@@ -22,7 +22,7 @@ const customEnglishMessages: TranslationMessages = {
       all_customers: "See all customers",
       pending_orders: "Pending Orders",
       allPostedJobs: "See all Jobs",
-      allPlutusTxs: "See all plutus TXs",
+      allPlutusTxs: "See all payment TXs",
       postedJob: "Posted jobs",
       order: {
         items:

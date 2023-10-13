@@ -100,6 +100,12 @@ const Menu = ({ dense = false }: MenuProps) => {
       >
         <MenuItemLink
           to="/postjobsjsk"
+          /*  
+        //to reset search filter when click menu item
+         to={{
+            pathname: "/postjobsjsk",
+            search: `filter=${JSON.stringify({})}`,
+          }} */
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.postJobsJsk.name`, {
             smart_count: 2,
