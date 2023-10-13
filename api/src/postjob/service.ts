@@ -226,6 +226,11 @@ export class PostJobService {
     return { count: count, data: _data };
   }
 
+  //count for global app search
+  async count(filter): Promise<any> {
+    return await this.model.find(filter).count().exec();
+  }
+
   async findRefAll(): Promise<RaList> {
     const data = await this.model.find().exec();
     return { count: 0, data: data };

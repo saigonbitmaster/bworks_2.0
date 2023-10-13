@@ -1,11 +1,15 @@
 import { SkillService } from '../skill/service';
 import { PostJobService } from '../postjob/service';
 import { JobBidService } from '../jobbid/service';
+import { PlutusTxService } from '../plutustx/service';
+import { UserService } from '../user/user.service';
+
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import {
   empSearchConfig,
   jskSearchConfig,
   cmsSearchConfig,
+  appSearchConfig,
 } from '../flatworks/config/search';
 
 @Injectable()
@@ -14,7 +18,51 @@ export class SearchService {
     private readonly postJobService: PostJobService,
     private readonly jobBidService: JobBidService,
     private readonly skillService: SkillService,
+    private readonly plutusTxService: PlutusTxService,
+    private readonly userService: UserService,
   ) {}
+
+  async findAllApp(filter, userId): Promise<any> {
+    const text = filter.text;
+    const results = [];
+    const baseUrl = process.env.APP_SEARCH_BASE_URL;
+
+    const configs = appSearchConfig(userId);
+    await Promise.all(
+      configs.map(async (item) => {
+        let count = 0;
+
+        try {
+          count = await this[item.serviceName].count({
+            ...item.filter,
+            $text: {
+              $search: text,
+            },
+          });
+        } catch (e) {
+          console.log('global app search error!', e);
+        }
+
+        count > 0
+          ? results.push({
+              id: item.subUrl,
+              text: `${item.text} ${count} `,
+              //encode url before return
+              link: encodeURI(
+                `${baseUrl}/${item.subUrl}?filter=${JSON.stringify({
+                  textSearch: text,
+                })}`,
+              ),
+            })
+          : null;
+      }),
+    );
+
+    return {
+      data: results,
+      count: results.length,
+    };
+  }
 
   async findAllEmp(filter): Promise<any> {
     const config = empSearchConfig();

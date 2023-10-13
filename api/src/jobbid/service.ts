@@ -93,6 +93,11 @@ export class JobBidService {
     };
   }
 
+  //count for global app search
+  async count(filter): Promise<any> {
+    return await this.model.find(filter).count().exec();
+  }
+
   async findAllRaw(query): Promise<any> {
     return await this.model.find(query);
   }

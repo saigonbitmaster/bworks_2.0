@@ -65,6 +65,11 @@ export class PlutusTxService {
     return result.reverse();
   }
 
+  //count for global app search
+  async count(filter): Promise<any> {
+    return await this.model.find(filter).count().exec();
+  }
+
   async getPlutusReports(queryType: string, userId: string): Promise<any> {
     const aggregateScript = plutusScript(queryType, userId);
     const result = await this.model.aggregate(aggregateScript);

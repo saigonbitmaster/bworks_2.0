@@ -24,6 +24,10 @@ export class SkillService {
     return { count: count, data: data };
   }
 
+  //count for global app search
+  async count(filter): Promise<any> {
+    return await this.model.find(filter).count().exec();
+  }
   async findOne(id: string): Promise<Skill> {
     return await this.model.findById(id).exec();
   }

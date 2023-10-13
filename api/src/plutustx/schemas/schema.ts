@@ -72,5 +72,6 @@ export class PlutusTx {
 
 const PlutusTxSchema = SchemaFactory.createForClass(PlutusTx);
 PlutusTxSchema.plugin(uniqueValidator);
+PlutusTxSchema.index({ name: 'text' });
 
 export { PlutusTxSchema };

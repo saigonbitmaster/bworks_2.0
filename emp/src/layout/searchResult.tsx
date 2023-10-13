@@ -105,20 +105,19 @@ export default function CustomPaginationActionsTable(props) {
     handleChangeRowsPerPage,
     rows,
   } = props;
-  console.log(10, props);
   return (
     <TableContainer>
       <Table
-        sx={{ minWidth: 500, border: "none" }}
+        sx={{ minWidth: 600, border: "none" }}
         aria-label="custom pagination table"
       >
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row._id}>
-              <TableCell component="th" scope="row" style={{ width: 160 }}>
+              <TableCell component="th" scope="row" style={{ width: 100 }}>
                 {row.text}
               </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
+              <TableCell style={{ width: 300 }} align="right">
                 <Link href={row.link} onClick={props.rowClick}>
                   {" "}
                   {row.link}

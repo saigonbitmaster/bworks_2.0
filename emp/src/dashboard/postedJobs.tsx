@@ -55,9 +55,13 @@ const PostedJob = (props) => {
               key={record.id}
               alignItems="center"
               sx={{ m: 0, p: 0.6 }}
-                button
+              button
               component={Link}
-              to={`/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({ _id: record.id })}`}
+              to={encodeURI(
+                `/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({
+                  _id: record.id,
+                })}`
+              )}
             >
               <ListItemAvatar>
                 <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>

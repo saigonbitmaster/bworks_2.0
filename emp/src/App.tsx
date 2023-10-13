@@ -27,7 +27,7 @@ import users from "./users";
 import Typography from "@mui/material/Typography";
 import postjobsjsk from "./postjobsjsk";
 import jobbidsjsk from "./jobbidsjsk";
-
+import skills from "./skills";
 import { PostedJobReportJsk } from "./postedjobreportsjsk";
 import { PaymentReportJsk } from "./paymentreportsjsk";
 import { QueryClient } from "react-query";
@@ -92,6 +92,7 @@ const App = () => {
         <Resource name="jobtasks" {...jobtasks} />
         <Resource name="plutustxs" {...plutustxs} />
         <Resource name="users" {...users} />
+        <Resource name="skills" {...skills} />
       </Admin>
       <Typography
         variant="subtitle2"

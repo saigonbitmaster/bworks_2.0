@@ -49,4 +49,12 @@ export class User {
   deletedAt?: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.index({
+  username: 'text',
+  fullName: 'text',
+  email: 'text',
+  description: 'text',
+});
+
+export { UserSchema };
