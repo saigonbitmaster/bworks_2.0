@@ -89,14 +89,14 @@ const ListScreen = () => {
     >
       <Datagrid expand={<BidPanel />}>
         <TextField source="name" label="Application" />
-        <ReferenceField reference="postJobs" source="jobId">
+        <ReferenceField reference="postJobsjsk" source="jobId" link={"show"}>
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <ReferenceField
-          reference="postjobs"
+          reference="postjobsjsk"
           source="jobId"
           label="Job deadline"
           link={false}

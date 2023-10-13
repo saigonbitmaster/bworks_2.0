@@ -56,7 +56,7 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
-        disableSyncWithLocation={false}
+  
         resource="postjobsjsk"
         filters={filters}
         perPage={25}

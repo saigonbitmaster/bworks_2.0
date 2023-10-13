@@ -162,6 +162,7 @@ const ListScreen = () => {
 
   return (
     <List
+ 
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
@@ -173,7 +174,12 @@ const ListScreen = () => {
       <Datagrid bulkActionButtons={false} expand={<BidPanel />}>
         <TextField source="name" label="Application" />
 
-        <ReferenceField reference="postJobs" source="jobId" label="Job name">
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Job name"
+          link={"show"}
+        >
           <TextField source="name" />
         </ReferenceField>
 
