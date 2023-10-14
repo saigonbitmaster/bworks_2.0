@@ -8,6 +8,7 @@ export class BaseJobBidDto {
   bidValue: number;
   isSelected: boolean;
   isSignedTx: boolean;
+  jobDone: boolean;
   isPaid: boolean;
   hasPrototype: boolean;
   prototypeLink: string;

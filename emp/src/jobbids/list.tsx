@@ -16,6 +16,8 @@ import {
   ReferenceInput,
   useGetOne,
   AutocompleteInput,
+  BooleanInput,
+  FilterButton,
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
@@ -27,6 +29,7 @@ import RefreshButton from "../components/refreshButton";
 
 const JobListActions = () => (
   <TopToolbar>
+    <FilterButton></FilterButton>
     <ExportButton />
     <RefreshButton baseUrl="/jobbids"></RefreshButton>
   </TopToolbar>
@@ -49,13 +52,34 @@ const filters = [
       label="Select a job"
     />
   </ReferenceInput>,
+
+  <BooleanInput
+    source="isSelected"
+    label="Selected applications"
+    defaultValue={true}
+  />,
+  <BooleanInput
+    source="jobDone"
+    label="Job done  applications"
+    defaultValue={true}
+  />,
+  <BooleanInput
+    source="isCompleted"
+    label=" Confirmed complete applications"
+    defaultValue={true}
+  />,
+  <BooleanInput
+    source="isPaid"
+    label="Paid applications"
+    defaultValue={true}
+  />,
 ];
 
 const SelectButton = () => {
   const record = useRecordContext();
   const diff = { isSelected: !record.isSelected };
   const refresh = useRefresh();
-  const [update, { isLoading, error }] = useUpdate("/jobbids", {
+  const [update, { isLoading, error }] = useUpdate("jobbids", {
     id: record.id,
     data: diff,
     previousData: record,
@@ -74,13 +98,16 @@ const SelectButton = () => {
       variant="text"
       disabled={record.isSignedTx || record.isPaid}
       onClick={handleClick}
+      /*  startIcon={
+        record.isSelected ? <ClearOutlinedIcon /> : <DoneOutlinedIcon />
+      } */
     >
       {record.isSelected ? "deselect" : "select"}
     </Button>
   );
 };
 
-const CompletedButton = () => {
+const CompletedButton = (props) => {
   const record = useRecordContext();
   const diff = { isCompleted: !record.isCompleted };
   const refresh = useRefresh();
@@ -104,7 +131,7 @@ const CompletedButton = () => {
       disabled={record.isPaid || !record.isSelected}
       onClick={handleClick}
     >
-      {record.isCompleted ? "Incomplete" : "Complete"}
+      {record.isCompleted ? "Mark incomplete" : "Mark complete"}
     </Button>
   );
 };
@@ -162,7 +189,6 @@ const ListScreen = () => {
 
   return (
     <List
- 
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
@@ -194,7 +220,6 @@ const ListScreen = () => {
 
         <RateField source="rate" label="Matching rate" />
 
-        <BooleanField source="isSelected" label="Selected" />
         <DateField source="completeDate" showTime label="Your deadline" />
 
         <ReferenceField
@@ -213,7 +238,8 @@ const ListScreen = () => {
             <SignButton disabled={record.isSignedTx || !record.isSelected} />
           )}
         />
-        <CompletedButton />
+        <BooleanField source="jobDone" label="Job done" />
+        <CompletedButton label="Confirm complete" />
         <BooleanField source="isPaid" />
       </Datagrid>
     </List>

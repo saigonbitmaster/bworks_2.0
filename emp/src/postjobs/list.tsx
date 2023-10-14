@@ -16,6 +16,7 @@ import {
   TopToolbar,
   useRecordContext,
   FunctionField,
+  ShowButton,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
@@ -26,6 +27,7 @@ import Typography from "@mui/material/Typography";
 import MatchUsers from "../components/matchedUsers";
 import MatchedUsersField from "../components/matchedUsersField";
 import RefreshButton from "../components/refreshButton";
+import ShowJob from "../components/showJob";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
@@ -107,6 +109,7 @@ const ListScreen = () => {
             {record && <Steps record={record}></Steps>}
           </Drawer>
           <EditButton />
+          <ShowJob />
         </Datagrid>
       </List>
     </Box>

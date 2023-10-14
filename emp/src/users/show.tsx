@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Show,
   SimpleShowLayout,
@@ -8,8 +9,51 @@ import {
   ReferenceArrayField,
   SingleFieldList,
   ChipField,
+  useDataProvider,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { Link } from "react-router-dom";
+
+const UserProfile = () => {
+  const record = useRecordContext();
+
+  const [data, setData] = React.useState({
+    postedJobs: 0,
+    gotApplications: 0,
+    submittedJobs: 0,
+    gotJobs: 0,
+  });
+  const dataProvider = useDataProvider();
+
+  dataProvider
+    .customMethod(
+      "customapis/userprofile",
+      { filter: { userId: record.id } },
+      "GET"
+    )
+    .then((result) => {
+      setData(result.data);
+    })
+    .catch((error) => console.error(error));
+  // the record can be empty while loading
+  if (!record) return null;
+  return (
+    <>
+      <Link
+        to={encodeURI(
+          `/postjobsjsk/?filter=${JSON.stringify({
+            employerId: record.id,
+          })}`
+        )}
+      >
+        Posted jobs: {data?.postedJobs || null}, Got applications:
+        {data?.gotApplications || null}, Applied jobs:
+        {data?.submittedJobs || null}, Got jobs: {data?.gotJobs || null}
+      </Link>
+    </>
+  );
+};
 
 export const ShowScreen = () => (
   <Show>
@@ -19,6 +63,7 @@ export const ShowScreen = () => (
           <TextField source="fullName" />
         </Grid>
         <Grid item md={12} />
+
         <Grid item xs={12} md={4} lg={4} xl={2}>
           <span>Username: </span>
           <TextField source="username" label="username" />
@@ -51,6 +96,8 @@ export const ShowScreen = () => (
           <RichTextField source="description" />
         </Grid>
       </Grid>
+
+      <UserProfile></UserProfile>
 
       <DateField source="createdAt" />
     </SimpleShowLayout>

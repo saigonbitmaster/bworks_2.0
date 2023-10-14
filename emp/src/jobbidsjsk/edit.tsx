@@ -94,6 +94,7 @@ const EditScreen = () => (
             }}
           </FormDataConsumer>
         </Grid>
+
         <Grid item md={12} />
         <Grid item xs={12} md={12} lg={9} xl={6}>
           <RichTextInput

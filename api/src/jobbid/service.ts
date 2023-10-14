@@ -143,6 +143,7 @@ export class JobBidService {
         : isCompleted !== undefined
         ? (updateData.isCompleted = isCompleted)
         : null;
+
       return await this.model
         .findByIdAndUpdate(id, { isSelected, isSignedTx, isCompleted })
         .exec();
@@ -150,6 +151,7 @@ export class JobBidService {
     if (record.jobSeekerId !== userId) {
       throw new Error('This is not your record');
     }
+    console.log(id, updateJobBidDto);
 
     return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
   }

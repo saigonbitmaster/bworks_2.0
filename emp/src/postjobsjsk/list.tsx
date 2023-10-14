@@ -22,6 +22,7 @@ import Steps from "../components/jobApplicationAside";
 import RateField from "../components/rateField";
 import MatchUsers from "../components/matchedUsers";
 import RefreshButton from "../components/refreshButton";
+import ShowJob from "../components/showJob";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
@@ -56,7 +57,6 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
-  
         resource="postjobsjsk"
         filters={filters}
         perPage={25}
@@ -98,6 +98,7 @@ const ListScreen = () => {
           <DateField source="createdAt" showTime />
           <LinkBidField />
           <ApplyButton />
+          <ShowJob />
           <Drawer
             variant="persistent"
             open={record}

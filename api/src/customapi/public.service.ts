@@ -115,6 +115,22 @@ export class PublicService {
     return { count: count, data: data };
   }
 
+  async getDashboardUserStatistic(userId: string) {
+    const postedJobs = await this.postJobService.count({ employerId: userId });
+    const gotApplications = await this.jobBidService.count({
+      employerId: userId,
+    });
+    const submittedJobs = await this.jobBidService.count({
+      jobSeekerId: userId,
+    });
+    const gotJobs = await this.jobBidService.count({
+      jobSeekerId: userId,
+      isSelected: true,
+    });
+
+    return { postedJobs, gotApplications, submittedJobs, gotJobs };
+  }
+
   async findTokenReceiverById(id: string): Promise<TokenReceiver> {
     return await this.token.findById(id).exec();
   }

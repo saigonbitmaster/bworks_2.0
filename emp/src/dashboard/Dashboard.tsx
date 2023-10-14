@@ -7,6 +7,8 @@ import PaidByPlutus from "./paidByPlutus";
 import PostedJobsChart from "./postedJobsChart";
 import PaymentChart from "./paymentChart";
 import { useDataProvider } from "react-admin";
+import UserStatistic from "./currentUserStatistic";
+import Typography from "@mui/material/Typography";
 
 const styles = {
   flex: { display: "flex" },
@@ -85,6 +87,9 @@ const Dashboard = () => {
       <div style={styles.singleCol}>
         <PaymentChart />
       </div>
+      <div style={styles.singleCol}>
+        <UserStatistic></UserStatistic>
+      </div>
     </div>
   ) : (
     <>
@@ -101,11 +106,15 @@ const Dashboard = () => {
               employers={dashBoardCardData.activeUsers.employers}
             />
           </div>
+
           <div style={styles.singleCol}>
             <PostedJobsChart />
           </div>
           <div style={styles.singleCol}>
             <PaymentChart />
+          </div>
+          <div style={styles.singleCol}>
+            <UserStatistic></UserStatistic>
           </div>
         </div>
         <div style={styles.rightCol}>

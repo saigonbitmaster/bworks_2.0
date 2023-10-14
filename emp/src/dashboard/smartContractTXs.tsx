@@ -14,6 +14,8 @@ import { subDays } from "date-fns";
 import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import MuiLink from "@mui/material/Link";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 
 import {
   Box,
@@ -26,6 +28,7 @@ import {
 
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import Typography from "@mui/material/Typography";
+import { LockClockOutlined } from "@mui/icons-material";
 
 interface Props {
   lockTxs: number;
@@ -62,8 +65,12 @@ const SmartContractTxs = (props: Props) => {
           ? plutustxs.map((record: any) => (
               <>
                 <ListItem key={record.id} sx={{ m: 0, p: 0.6 }}>
-                  <ListItemAvatar>
-                    <PaymentsOutlinedIcon></PaymentsOutlinedIcon>
+                  <ListItemAvatar sx={{ minWidth: 30 }}>
+                    {record.unlockedTxHash ? (
+                      <DoneOutlinedIcon />
+                    ) : (
+                      <LockClockOutlined />
+                    )}
                   </ListItemAvatar>
                   <ListItemText>
                     <ReferenceField

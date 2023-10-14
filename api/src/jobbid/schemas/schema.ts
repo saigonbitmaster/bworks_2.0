@@ -42,6 +42,9 @@ export class JobBid {
   @Prop({ default: false })
   isCompleted: boolean;
 
+  @Prop({ default: false })
+  jobDone: boolean;
+
   @Prop()
   rate?: number;
 

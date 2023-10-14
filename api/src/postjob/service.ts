@@ -46,8 +46,8 @@ export class PostJobService {
     );
     const _result = await this.model.aggregate(aggregateScript);
 
-    console.log(queryType, userId, fromDate, toDate, _result);
 
+    
     const emptyRecord = {
       _id: '',
       date: '',

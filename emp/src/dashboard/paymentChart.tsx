@@ -72,8 +72,8 @@ const PaymentChart = () => {
   return (
     <Card>
       <CardHeader
-        title="Plutus TXs"
-        titleTypographyProps={{ variant: "subtitle1" }}
+       /*  title="Payment TXs"
+        titleTypographyProps={{ variant: "subtitle1" }} */
       />
       <FormGroup sx={{ ml: 2 }}>
         <FormControlLabel
@@ -89,11 +89,11 @@ const PaymentChart = () => {
         />
       </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 270 }}>
+        <div style={{ width: "100%", height: 240 }}>
           <ResponsiveContainer>
             <AreaChart
-              width={730}
-              height={270}
+              width={700}
+              height={223}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

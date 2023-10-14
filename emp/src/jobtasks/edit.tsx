@@ -22,8 +22,16 @@ const EditScreen = () => (
     <SimpleForm>
       <Grid container spacing={1}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
-          <ReferenceInput source="jobBidId" reference="jobbids" filter={{queryType: "user"}}>
-            <SelectInput optionText="name" fullWidth />
+          <ReferenceInput
+            source="jobBidId"
+            reference="jobbids"
+            filter={{ queryType: "user" }}
+          >
+            <SelectInput
+              optionText="name"
+              fullWidth
+              label="Select a application"
+            />
           </ReferenceInput>
         </Grid>
         <Grid item md={12} />

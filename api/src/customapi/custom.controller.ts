@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
   Req,
+  Request,
 } from '@nestjs/common';
 import { PublicService } from './public.service';
 import { PlutusTxService } from '../plutustx/service';
@@ -25,7 +26,26 @@ export class CustomController {
   constructor(
     private readonly plutusTxService: PlutusTxService,
     private readonly postJobService: PostJobService,
+    private readonly publicService: PublicService,
   ) {}
+
+  //current user, jobs statistic
+  @Get('userstatistic')
+  async getDashboardUserStatistic(@Response() res: any, @Request() req) {
+    const userId = req.user.userId;
+    const result = await this.publicService.getDashboardUserStatistic(userId);
+    return res.json(result);
+  }
+
+  //current user, jobs statistic by userId {filter: {userId: abc}}
+  @Get('userprofile')
+  async userStatistic(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result = await this.publicService.getDashboardUserStatistic(
+      mongooseQuery.filter.userId,
+    );
+    return res.json(result);
+  }
 
   //get userId from access token
   @Get('userid')

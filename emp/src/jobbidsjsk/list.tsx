@@ -17,11 +17,16 @@ import {
   useRecordContext,
   useGetOne,
   AutocompleteInput,
+  useRefresh,
+  useUpdate,
+  BooleanInput,
+  FilterButton,
 } from "react-admin";
 import RateField from "../components/rateField";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
 import RefreshButton from "../components/refreshButton";
+import Button from "@mui/material/Button";
 
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
@@ -35,6 +40,27 @@ const filters = [
       sx={{ width: 300 }}
     />
   </ReferenceInput>,
+
+  <BooleanInput
+    source="isSelected"
+    label="Selected applications"
+    defaultValue={true}
+  />,
+  <BooleanInput
+    source="jobDone"
+    label="Job done  applications"
+    defaultValue={true}
+  />,
+  <BooleanInput
+    source="isCompleted"
+    label=" Confirmed complete applications"
+    defaultValue={true}
+  />,
+  <BooleanInput
+    source="isPaid"
+    label="Paid applications"
+    defaultValue={true}
+  />,
 ];
 
 const ListScreen = () => {
@@ -71,11 +97,41 @@ const ListScreen = () => {
 
   const JobListActions = () => (
     <TopToolbar>
+      <FilterButton />
       <JobCreateButton />
       <ExportButton />
       <RefreshButton baseUrl="/jobbidsjsk"></RefreshButton>
     </TopToolbar>
   );
+
+  const JobDoneButton = (props) => {
+    const record = useRecordContext();
+    const diff = { jobDone: !record.jobDone };
+    const refresh = useRefresh();
+    const [update, { isLoading, error }] = useUpdate("jobbids", {
+      id: record.id,
+      data: diff,
+      previousData: record,
+    });
+
+    const handleClick = () => {
+      update();
+    };
+
+    React.useEffect(() => {
+      refresh();
+    }, [isLoading, error]);
+
+    return (
+      <Button
+        variant="text"
+        disabled={record.isPaid || !record.isSelected}
+        onClick={handleClick}
+      >
+        {record.jobDone ? "Mark in progress" : "Mark job done"}
+      </Button>
+    );
+  };
 
   return (
     <List
@@ -112,7 +168,8 @@ const ListScreen = () => {
         <DateField source="completeDate" showTime label="Your deadline" />
         <RateField source="rate" label="Matching rate" />
         <BooleanField source="isSelected" />
-        <BooleanField source="isCompleted" />
+        <JobDoneButton source="jobDone" label="Job done" />
+        <BooleanField source="isCompleted" label="Confirmed Complete" />
         <BooleanField source="isPaid" />
         <EditButton />
       </Datagrid>

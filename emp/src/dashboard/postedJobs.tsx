@@ -7,18 +7,13 @@ import {
   ListItemAvatar,
   ListItemText,
 } from "@mui/material";
-import CommentIcon from "@mui/icons-material/Comment";
 import { Link } from "react-router-dom";
 import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
-
 import { useGetList, useTranslate, TextField, DateField } from "react-admin";
-
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsFieldDashboard";
-import AppRegistrationOutlinedIcon from "@mui/icons-material/AppRegistrationOutlined";
-
-const Spacer = () => <span style={{ width: "3em" }} />;
+import SyncAltOutlinedIcon from "@mui/icons-material/SyncAltOutlined";
 
 const PostedJob = (props) => {
   interface Props {
@@ -45,7 +40,7 @@ const PostedJob = (props) => {
       }}
       icon={DynamicFeedOutlinedIcon}
       title={translate("pos.dashboard.postedJob")}
-      subtitle={`${postedJobs} jobs, ${bids} bids`}
+      subtitle={`${postedJobs} jobs, ${bids} applications`}
       minHeight={890}
     >
       <List sx={{ display }}>
@@ -55,7 +50,6 @@ const PostedJob = (props) => {
               key={record.id}
               alignItems="center"
               sx={{ m: 0, p: 0.6 }}
-              button
               component={Link}
               to={encodeURI(
                 `/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({
@@ -63,9 +57,10 @@ const PostedJob = (props) => {
                 })}`
               )}
             >
-              <ListItemAvatar>
-                <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
+              <ListItemAvatar sx={{ minWidth: 30 }}>
+                <SyncAltOutlinedIcon></SyncAltOutlinedIcon>
               </ListItemAvatar>
+
               <ListItemText>
                 <TextField record={record} source="name"></TextField>
               </ListItemText>
