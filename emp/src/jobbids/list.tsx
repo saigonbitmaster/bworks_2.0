@@ -18,6 +18,8 @@ import {
   AutocompleteInput,
   BooleanInput,
   FilterButton,
+  UrlField,
+  RichTextField,
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
@@ -170,17 +172,28 @@ const ListScreen = () => {
       <>
         {record.description && (
           <>
-            <div dangerouslySetInnerHTML={{ __html: record.description }} />
+            <Typography variant="caption" gutterBottom>
+              <strong>Application letter</strong>
+            </Typography>
+            <RichTextField record={record} source="description" />
+          </>
+        )}
+        {record.hasPrototype && record.prototypeLink && (
+          <>
+            <Typography variant="subtitle2" gutterBottom display="inline">
+              Prototype url:{" "}
+            </Typography>
+            <UrlField record={record} source="prototypeLink" target="_blank" />
           </>
         )}
 
         {!isLoading && !error && job.description && (
           <>
-            <Typography variant="caption" gutterBottom>
+            <Typography variant="caption" display="block" sx={{ mt: 2 }}>
               <strong> Job description</strong>
             </Typography>
 
-            <div dangerouslySetInnerHTML={{ __html: job.description }} />
+            <RichTextField record={job} source="description" />
           </>
         )}
       </>
@@ -193,7 +206,7 @@ const ListScreen = () => {
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
       resource="jobbids"
-      filter={{ queryType: "employer" }}
+      filter={{ queryType: "employer", isApproved: true }}
       filters={filters}
       actions={<JobListActions />}
     >

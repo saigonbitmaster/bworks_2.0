@@ -27,7 +27,7 @@ for (let i = 0; i < 12; i++) {
 
 const PaymentChart = () => {
   const [checked, setChecked] = React.useState(true);
-  const [label, setLabel] = React.useState("Plutus TXs");
+  const [label, setLabel] = React.useState("Payment TXs");
   const [dataKeys, setDataKeys] = React.useState({
     y1: "numberOfLockTxs",
     y2: "numberOfUnlockedTxs",
@@ -51,7 +51,7 @@ const PaymentChart = () => {
 
   React.useEffect(() => {
     if (checked) {
-      setLabel("Plutus TXs");
+      setLabel("Payment TXs");
       setDataKeys({
         y1: "numberOfLockTxs",
         y2: "numberOfUnlockedTxs",
@@ -59,7 +59,7 @@ const PaymentChart = () => {
         y2Name: "Unlock Txs",
       });
     } else {
-      setLabel("Plutus TX Amounts ($Ada)");
+      setLabel("Payment TXAmounts ($Ada)");
       setDataKeys({
         y1: "sumLockedAmounts",
         y2: "sumUnlockedAmounts",
@@ -72,8 +72,8 @@ const PaymentChart = () => {
   return (
     <Card>
       <CardHeader
-        title="Plutus TXs"
-        titleTypographyProps={{ variant: "subtitle1" }}
+       /*  title="Payment TXs"
+        titleTypographyProps={{ variant: "subtitle1" }} */
       />
       <FormGroup sx={{ ml: 2 }}>
         <FormControlLabel
@@ -89,11 +89,11 @@ const PaymentChart = () => {
         />
       </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 280 }}>
+        <div style={{ width: "100%", height: 240 }}>
           <ResponsiveContainer>
             <AreaChart
-              width={730}
-              height={280}
+              width={700}
+              height={223}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

@@ -27,7 +27,7 @@ for (let i = 0; i < 12; i++) {
 
 const PaymentChart = () => {
   const [checked, setChecked] = React.useState(true);
-  const [label, setLabel] = React.useState("Payment TXs");
+  const [label, setLabel] = React.useState("Plutus TXs");
   const [dataKeys, setDataKeys] = React.useState({
     y1: "numberOfLockTxs",
     y2: "numberOfUnlockedTxs",
@@ -37,9 +37,10 @@ const PaymentChart = () => {
 
   const [data, setData] = React.useState(months.reverse());
   const dataProvider = useDataProvider();
+
   React.useEffect(() => {
     dataProvider
-      .customMethod("customapis/getmonthlyplutustxsreport", { filter: {queryType: "jsk"} }, "GET")
+      .customMethod("public/dashboardplutus", { filter: {} }, "GET")
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
@@ -50,7 +51,7 @@ const PaymentChart = () => {
 
   React.useEffect(() => {
     if (checked) {
-      setLabel("Payment TXs");
+      setLabel("Plutus TXs");
       setDataKeys({
         y1: "numberOfLockTxs",
         y2: "numberOfUnlockedTxs",
@@ -58,7 +59,7 @@ const PaymentChart = () => {
         y2Name: "Unlock Txs",
       });
     } else {
-      setLabel("Payment Tx Amounts ($Ada)");
+      setLabel("Plutus TX Amounts ($Ada)");
       setDataKeys({
         y1: "sumLockedAmounts",
         y2: "sumUnlockedAmounts",
@@ -71,7 +72,7 @@ const PaymentChart = () => {
   return (
     <Card>
       <CardHeader
-        title="Payment TXs"
+        title="Plutus TXs"
         titleTypographyProps={{ variant: "subtitle1" }}
       />
       <FormGroup sx={{ ml: 2 }}>
@@ -88,11 +89,11 @@ const PaymentChart = () => {
         />
       </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 310 }}>
+        <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer>
             <AreaChart
               width={730}
-              height={310}
+              height={280}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

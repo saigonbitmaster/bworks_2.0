@@ -45,7 +45,7 @@ export default function VerticalLinearStepper(props) {
   const onClick = () => {
     const filter = JSON.stringify({ jobId: record.id });
 
-    redirect(`/jobbids?&filter=${filter}`);
+    redirect(`/jobbidscms?&filter=${filter}`);
   };
 
   return (

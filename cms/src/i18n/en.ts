@@ -60,20 +60,7 @@ const customEnglishMessages: TranslationMessages = {
       import: "Import excels",
     },
     jobtasks: {
-      name: "Task management|||| Task management",
-
-      filters: {
-        last_visited: "Last visited",
-        today: "Today",
-      },
-      fieldGroups: {},
-      page: {
-        delete: "Delete Customer",
-      },
-      errors: {
-        password_mismatch:
-          "The password confirmation is not the same as the password.",
-      },
+      name: "Task |||| Tasks ",
     },
     smartContracts: {
       name: "Smart contracts",
@@ -173,22 +160,7 @@ const customEnglishMessages: TranslationMessages = {
       },
     },
     jobBids: {
-      name: "Job application |||| Job applications",
-      fields: {
-        commands: "Orders",
-      },
-      filters: {
-        last_visited: "Last visited",
-        today: "Today",
-      },
-      fieldGroups: {},
-      page: {
-        delete: "Delete Customer",
-      },
-      errors: {
-        password_mismatch:
-          "The password confirmation is not the same as the password.",
-      },
+      name: "Application |||| Applications",
     },
     contractedJobs: {
       name: "Contracted job |||| Contracted jobs",

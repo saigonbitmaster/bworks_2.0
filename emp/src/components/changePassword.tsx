@@ -20,6 +20,14 @@ export default function FormPropsTextFields() {
   };
 
   const handleClick = () => {
+    const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    if (!re.test(state.password)) {
+      setMessage(
+        "Password must be min 8 letters, with at least a symbol, upper and lower case letters and a number"
+      );
+      return;
+    }
+
     if (state.password !== state.repeatPassword) {
       setMessage("Password mismatch");
       return;

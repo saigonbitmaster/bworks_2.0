@@ -4,8 +4,7 @@ import { Model } from 'mongoose';
 import { CreateJobBidDto } from './dto/create.dto';
 import { UpdateJobBidDto } from './dto/update.dto';
 import { JobBid, JobBidDocument } from './schemas/schema';
-import { User, UserDocument } from '../user/schemas/user.schema';
-import { PostJob, PostJobDocument } from '../postjob/schemas/schema';
+import { User } from '../user/schemas/user.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { rankJobBid } from '../flatworks/logics/rank';
 import { UserService } from '../user/user.service';
@@ -15,27 +14,19 @@ import { PostJobService } from '../postJob/service';
 export class JobBidService {
   constructor(
     @InjectModel(JobBid.name) private readonly model: Model<JobBidDocument>,
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @InjectModel(PostJob.name)
-    private readonly postJobModel: Model<PostJobDocument>,
     private readonly userService: UserService,
     private readonly postJobService: PostJobService,
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();
-    //fix return all when limit = 0 for global search service
-    if (query.limit <= 0) {
-      return {
-        data: [],
-        count: count,
-      };
-    }
+
     const data = await this.model
       .find(query.filter)
       .sort(query.sort)
       .skip(query.skip)
       .limit(query.limit)
+      .select(query.select)
       .exec();
 
     //rank applications before return
@@ -106,13 +97,19 @@ export class JobBidService {
     return await this.model.findById(id).exec();
   }
 
+  async findOneForRest(id: string, userId: string): Promise<JobBid> {
+    const jobBid = await this.model.findById(id).exec();
+    if (jobBid.employerId !== userId || jobBid.jobSeekerId !== userId) {
+      return null;
+    }
+    return jobBid;
+  }
+
   async create(
     createJobBidDto: CreateJobBidDto,
     jobSeekerId: string,
   ): Promise<JobBid> {
-    const postJob = await this.postJobModel
-      .findById(createJobBidDto.jobId)
-      .exec();
+    const postJob = await this.postJobService.findOne(createJobBidDto.jobId);
 
     return await new this.model({
       ...createJobBidDto,
@@ -151,8 +148,6 @@ export class JobBidService {
     if (record.jobSeekerId !== userId) {
       throw new Error('This is not your record');
     }
-    console.log(id, updateJobBidDto);
-
     return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
   }
 
@@ -163,9 +158,6 @@ export class JobBidService {
     return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
   }
 
-  async findOneUser(id: string): Promise<User> {
-    return await this.userModel.findById(id).exec();
-  }
   async delete(id: string, userId: string): Promise<JobBid> {
     const record: JobBid = await this.model.findById(id).exec();
     if (record.jobSeekerId !== userId) {
@@ -176,5 +168,36 @@ export class JobBidService {
     }
 
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  //cms services
+  async findAllCms(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
+
+    const data = await this.model
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
+      .exec();
+
+    return {
+      count,
+      data,
+    };
+  }
+
+  async deleteCms(id: string): Promise<JobBid> {
+    return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  async findOneCms(id: string): Promise<JobBid> {
+    return await this.model.findById(id).exec();
+  }
+
+  async approve(id: string, updateJobBidDto: UpdateJobBidDto): Promise<JobBid> {
+    //cms update isApproved only
+    const { isApproved } = updateJobBidDto;
+    return await this.model.findByIdAndUpdate(id, { isApproved }).exec();
   }
 }

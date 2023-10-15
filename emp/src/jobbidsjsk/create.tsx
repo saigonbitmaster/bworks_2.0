@@ -98,6 +98,7 @@ const CreateScreen = (props) => {
                       fullWidth
                       {...rest}
                       validate={urlValidate}
+                      label="Prototype Url"
                     />
                   )
                 );

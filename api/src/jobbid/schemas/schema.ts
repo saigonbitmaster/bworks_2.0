@@ -30,6 +30,9 @@ export class JobBid {
   @Prop({ default: false })
   hasPrototype: boolean;
 
+  @Prop()
+  prototypeLink: string;
+
   @Prop({ default: false })
   isSelected: boolean;
 
@@ -38,6 +41,9 @@ export class JobBid {
 
   @Prop({ default: false })
   isSignedTx: boolean;
+
+  @Prop({ default: true })
+  isApproved: boolean;
 
   @Prop({ default: false })
   isCompleted: boolean;

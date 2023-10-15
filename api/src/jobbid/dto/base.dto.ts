@@ -13,5 +13,6 @@ export class BaseJobBidDto {
   hasPrototype: boolean;
   prototypeLink: string;
   isCompleted: boolean;
+  isApproved: boolean;
   description: string;
 }

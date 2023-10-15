@@ -7,10 +7,10 @@ import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import Table from "../components/table";
 
-const PostedJob = (props) => {
+const PaymentTx = (props) => {
   const dataProvider = useDataProvider();
 
-  const [postedJobs, setPostedJobs] = React.useState([]);
+  const [PaymentTxs, setPaymentTxs] = React.useState([]);
 
   React.useEffect(() => {
     dataProvider
@@ -19,7 +19,7 @@ const PostedJob = (props) => {
         { filter: { queryType: "emp" } },
         "GET"
       )
-      .then((result) => setPostedJobs(result.data.reverse()))
+      .then((result) => setPaymentTxs(result.data.reverse()))
       .catch((error) => console.error(error));
   }, []);
 
@@ -43,7 +43,7 @@ const PostedJob = (props) => {
       title={translate("pos.dashboard.plutusTxs")}
       subtitle={`Last 12 months plutus TXs`}
     >
-      <Table headers={headers} data={postedJobs}></Table>
+      <Table headers={headers} data={PaymentTxs}></Table>
       <Box flexGrow={1}>&nbsp;</Box>
       <Button
         sx={{ borderRadius: 0 }}
@@ -60,4 +60,4 @@ const PostedJob = (props) => {
   );
 };
 
-export default PostedJob;
+export default PaymentTx;

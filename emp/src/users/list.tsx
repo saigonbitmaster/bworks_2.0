@@ -13,8 +13,8 @@ import {
   UrlField,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
-
 import LinkBidField from "../components/linkBidsField";
+import ShowButton from "../components/showButton";
 
 const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
@@ -40,6 +40,7 @@ const ListScreen = () => {
           </SingleFieldList>
         </ReferenceArrayField>
         <DateField source="createdAt" showTime />
+        <ShowButton customLabel="User description" />
       </Datagrid>
     </List>
   );

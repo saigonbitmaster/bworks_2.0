@@ -50,6 +50,7 @@ export interface userJwtPayload {
 export interface MongooseQuery {
   filter: { [key: string]: any };
   sort: { [key: string]: any };
+  select?: { [key: string]: number };
   skip: number;
   limit: number;
 }

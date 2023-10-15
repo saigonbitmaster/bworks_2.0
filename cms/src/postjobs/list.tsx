@@ -20,7 +20,7 @@ import LinkBidField from "../components/linkBidsField";
 import Button from "@mui/material/Button";
 import Steps from "../components/jobApplicationAside";
 import { Box, Drawer } from "@mui/material";
-
+import MatchedUsersField from "../components/matchedUsersField";
 const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
 
 const JobPanel = () => {
@@ -29,11 +29,6 @@ const JobPanel = () => {
 };
 
 const ListScreen = () => {
-  const [record, setRecord] = React.useState(null);
-  const rowClick = (id, resource, record) => {
-    setRecord(record);
-    return null;
-  };
   const SelectButton = (props) => {
     const record = useRecordContext();
     const diff = { isApproved: !record.isApproved };
@@ -58,39 +53,30 @@ const ListScreen = () => {
       </Button>
     );
   };
+
   return (
     <List
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       filters={filters}
+      resource="postjobs/cms"
     >
-      <Datagrid
-        bulkActionButtons={false}
-        expand={<JobPanel />}
-        rowClick={rowClick}
-      >
+      <Datagrid bulkActionButtons={false} expand={<JobPanel />}>
         <TextField source="name" />
         <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <DateField source="createdAt" showTime />
-        <LinkBidField />
+        <LinkBidField label="Applications" />
         <CurrencyNumberField source="budget" threshold={10000} />
         <ReferenceArrayField reference="skills" source="skills">
           <SingleFieldList>
             <ChipField source="name" />
           </SingleFieldList>
         </ReferenceArrayField>
-        <SelectButton source="isApproved" label="Approve" />
         <DateField source="expireDate" showTime />
-        <Drawer
-          variant="persistent"
-          open={record}
-          anchor="right"
-          sx={{ zIndex: 100 }}
-        >
-          {record && <Steps record={record}></Steps>}
-        </Drawer>
+        <MatchedUsersField label="Matched users" source="matchUsers" />
+        <SelectButton source="isApproved" label="Approval" />
       </Datagrid>
     </List>
   );

@@ -29,6 +29,11 @@ export class WalletService {
     return { count: count, data: data };
   }
 
+  //use for other internal service. no sort, skip & limit
+  async findAllRaw(filter = {}): Promise<any[]> {
+    return await this.model.find(filter).exec();
+  }
+
   async findOne(id: string): Promise<Wallet> {
     return await this.model.findById(id).exec();
   }

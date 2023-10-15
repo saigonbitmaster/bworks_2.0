@@ -46,8 +46,6 @@ export class PostJobService {
     );
     const _result = await this.model.aggregate(aggregateScript);
 
-
-    
     const emptyRecord = {
       _id: '',
       date: '',
@@ -240,6 +238,10 @@ export class PostJobService {
     return await this.model.findById(id).exec();
   }
 
+  async findById(id: string): Promise<PostJob> {
+    return await this.model.findById(id).exec();
+  }
+
   async create(
     createPostJobDto: CreatePostJobDto,
     employerId: string,
@@ -279,5 +281,50 @@ export class PostJobService {
       throw new Error('This is not your record');
     }
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  //cms get
+  async findAllCms(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
+
+    const data = (await this.model
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
+      .exec()) as any;
+
+    //return list jobs with top 10 matched job seekers for posted jobs
+    const users = (await this.userService.findAllRaw()) as any;
+
+    const _data = data.map((item) => {
+      const matchUsers = users.map((user) => ({
+        userId: user._id.toString(),
+        username: user.username,
+        matchRate: rankSkills(user.skills, item.skills),
+      }));
+
+      //get top 10 matched users with rate > 0
+      matchUsers.sort((a, b) => b.matchRate - a.matchRate);
+      const topMatchUsers = matchUsers
+        .filter((user) => user.matchRate > 0)
+        .slice(0, 10);
+
+      return { ...item._doc, matchUsers: topMatchUsers };
+    });
+
+    //sort number of matched users
+    const sortFn = (a, b) => {
+      const sort =
+        query.sort.matchUsers === 1
+          ? a.matchUsers.length - b.matchUsers.length
+          : query.sort.matchUsers === -1
+          ? b.matchUsers.length - a.matchUsers.length
+          : null;
+      return sort;
+    };
+    _data.sort(sortFn);
+
+    return { count: count, data: _data };
   }
 }

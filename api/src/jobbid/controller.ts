@@ -17,12 +17,17 @@ import { JobBidService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import * as lodash from 'lodash';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
 
 @UseGuards(JwtAuthGuard)
 @Controller(['jobbids', 'jobbidsjsk'])
 export class JobBidController {
   constructor(private readonly service: JobBidService) {}
-
+  /*
+return related applications to employer and job seeker.
+if requested user is not either employer or job seeker remove description (apply letter) before return
+*/
   @Get()
   async getByEmployer(@Response() res: any, @Query() query, @Req() request) {
     const mongooseQuery = queryTransform(query);
@@ -36,15 +41,17 @@ export class JobBidController {
           { jobSeekerId: userId },
           { employerId: userId },
         ])
-      : null;
+      : (mongooseQuery.select = { description: 0 });
 
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);
   }
 
+  //return only if user is job seeker, employer
   @Get(':id')
-  async find(@Param('id') id: string) {
-    return await this.service.findOne(id);
+  async find(@Param('id') id: string, @Req() request) {
+    const userId = lodash.get(request, 'user.userId', null);
+    return await this.service.findOneForRest(id, userId);
   }
 
   @Post()

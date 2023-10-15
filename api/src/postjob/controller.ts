@@ -17,7 +17,6 @@ import { PostJobService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import * as lodash from 'lodash';
-import { Public } from '../flatworks/roles/public.api.decorator';
 import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
 
@@ -34,6 +33,15 @@ export class PostJobController {
       ? (mongooseQuery.filter.employerId = userId)
       : null;
     const result = await this.service.findAll(mongooseQuery, userId);
+    return formatRaList(res, result);
+  }
+  //order other get routes before get(:/id)
+  //cms only
+  @Roles(Role.Admin)
+  @Get('/cms')
+  async indexCms(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result = await this.service.findAllCms(mongooseQuery);
     return formatRaList(res, result);
   }
 
@@ -63,13 +71,12 @@ export class PostJobController {
     );
   }
 
-  //admin only
+  //cms only
   @Roles(Role.Admin)
   @Put('/approve/:id')
   async approve(
     @Param('id') id: string,
     @Body() updatePostJobDto: UpdatePostJobDto,
-    @Req() request,
   ) {
     return await this.service.approve(id, updatePostJobDto);
   }

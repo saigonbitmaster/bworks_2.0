@@ -42,7 +42,7 @@ const PostedJob = (props) => {
       }}
       icon={DynamicFeedOutlinedIcon}
       title={translate("pos.dashboard.plutusTxs")}
-      subtitle={`Last 12 months plutus TXs`}
+      subtitle={`Last 12 months Payment TXs`}
     >
       <Table headers={headers} data={postedJobs}></Table>
       <Box flexGrow={1}>&nbsp;</Box>

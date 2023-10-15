@@ -39,20 +39,18 @@ export class UserController {
     return formatRaList(res, result);
   }
 
-  @Roles(Role.Admin)
   @Get('allusers')
+  @Roles(Role.Admin)
   async findAllByAdmin(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
-    const result = await this.service.findAllByAdmin(mongooseQuery);
+    const result = await this.service.findAllCms(mongooseQuery);
     return formatRaList(res, result);
   }
 
   @Get(':id')
   async find(@Param('id') id: string, @Request() req) {
     const userId = req.user.userId;
-    const user = await this.service.findByIdForRest(id, userId);
-
-    return user;
+    return await this.service.findByIdForRest(id, userId);
   }
 
   @Post()
@@ -62,8 +60,20 @@ export class UserController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.service.update(id, updateUserDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req,
+  ) {
+    const userId = req.user.userId;
+    return await this.service.updateForRest(id, updateUserDto, userId);
+  }
+
+  //cms only
+  @Roles(Role.Admin)
+  @Put('/approve/:id')
+  async approve(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.service.approve(id, updateUserDto);
   }
 
   @Delete(':id')

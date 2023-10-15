@@ -60,7 +60,7 @@ const ListScreen = () => {
     <List
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
-      hasCreate
+      hasCreate={false}
       resource="plutustxs"
     >
       <Datagrid bulkActionButtons={false}>

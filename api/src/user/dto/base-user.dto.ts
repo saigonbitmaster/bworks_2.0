@@ -11,5 +11,6 @@ export class BaseUserDto {
   isJobSeeker: boolean;
   isEmployer: boolean;
   password: string;
+  isApproved: boolean;
   description: string;
 }

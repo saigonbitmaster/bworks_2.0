@@ -15,8 +15,7 @@ import {
   ExportButton,
   TopToolbar,
   useRecordContext,
-  FunctionField,
-  ShowButton,
+  UrlField,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
@@ -27,7 +26,7 @@ import Typography from "@mui/material/Typography";
 import MatchUsers from "../components/matchedUsers";
 import MatchedUsersField from "../components/matchedUsersField";
 import RefreshButton from "../components/refreshButton";
-import ShowJob from "../components/showJob";
+import ShowJob from "../components/showButton";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
@@ -48,6 +47,7 @@ const JobPanel = () => {
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: record.description }} />
+
       <MatchUsers matchUsers={record.matchUsers}></MatchUsers>
     </>
   );
@@ -63,6 +63,7 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
+        title={"abc"}
         filters={filters}
         perPage={25}
         sort={{ field: "createdAt", order: "desc" }}

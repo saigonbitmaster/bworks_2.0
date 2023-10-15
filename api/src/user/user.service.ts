@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { validatePassword } from '../flatworks/utils/common';
 
 @Injectable()
 export class UserService {
@@ -37,20 +38,6 @@ export class UserService {
       return user;
     });
     return { count: count, data: _data };
-  }
-
-  //for rest endpoint remove password & refresh token before return
-  async findAllByAdmin(query: MongooseQuery): Promise<RaList> {
-    const count = await this.model.find(query.filter).count().exec();
-    const data = await this.model
-      .find(query.filter)
-      .sort(query.sort)
-      .skip(query.skip)
-      .limit(query.limit)
-      .select({ password: 0, refreshToken: 0 })
-      .exec();
-
-    return { count: count, data: data };
   }
 
   async findAllRaw(filter = {}, select = {}): Promise<User[]> {
@@ -105,9 +92,16 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    if (!updateUserDto.password) {
-      return;
+    //validate password
+    if (!validatePassword(updateUserDto.password)) {
+      throw new BadRequestException({
+        cause: new Error(),
+        description: 'Submit error',
+        message:
+          'password is must min 8 letters, with at least a symbol, upper and lower case letters and a number',
+      });
     }
+
     let _updateUserDto = updateUserDto;
     //don't update roles
     delete _updateUserDto['roles'];
@@ -119,15 +113,54 @@ export class UserService {
     return await this.model.findByIdAndUpdate(id, _updateUserDto).exec();
   }
 
+  /*
+  only user is allow to update itself
+  don't update roles & password
+*/
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    //don't update roles & password
     delete updateUserDto['roles'];
     delete updateUserDto['password'];
 
     return await this.model.findByIdAndUpdate(id, updateUserDto).exec();
   }
 
+  async updateForRest(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    userId = null,
+  ): Promise<User> {
+    const user = await this.model.findById(id);
+    if (user._id !== userId) {
+      return;
+    }
+
+    delete updateUserDto['roles'];
+    delete updateUserDto['password'];
+
+    return await this.model.findByIdAndUpdate(id, updateUserDto).exec();
+  }
+  /*
+cms services
+*/
   async delete(id: string): Promise<User> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  async approve(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const { isApproved } = updateUserDto;
+    return await this.model.findByIdAndUpdate(id, { isApproved }).exec();
+  }
+
+  async findAllCms(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
+    const data = await this.model
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
+      .select({ password: 0, refreshToken: 0 })
+      .exec();
+
+    return { count: count, data: data };
   }
 }

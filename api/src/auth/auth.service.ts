@@ -9,9 +9,10 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
-import { validateEmail } from '../flatworks/utils/common';
+import { validateEmail, validatePassword } from '../flatworks/utils/common';
 import { Role } from '../flatworks/utils/roles';
 import { WalletService } from '../wallet/service';
+import { validateAddress } from '../flatworks/utils/cardano';
 
 @Injectable()
 export class AuthService {
@@ -22,8 +23,14 @@ export class AuthService {
     private walletService: WalletService,
   ) {}
 
+  /*
+validate only approved users
+*/
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.userService.findOne(username);
+    if (!user.isApproved) {
+      return;
+    }
     const isMatch = await bcrypt.compare(pass, user.password);
 
     if (user && isMatch) {
@@ -128,12 +135,24 @@ export class AuthService {
       email: registerUser.email,
     });
 
+    const _wallet = await this.walletService.findAllRaw({
+      address: registerUser.walletAddress,
+    });
+
+    const _isCardanoAddress = await validateAddress(registerUser.walletAddress);
+
     const errorMessage = !validateEmail(registerUser.email)
       ? 'Not a valid email address'
       : _usernames?.length > 0
       ? 'Username is already existed'
       : _emails?.length > 0
       ? 'Email is already existed'
+      : !validatePassword(registerUser.password)
+      ? 'Password is min 8 letters, with at least a symbol, upper and lower case letters and a number'
+      : !_isCardanoAddress
+      ? 'Invalidate Cardano wallet address'
+      : _wallet.length > 0
+      ? 'Wallet is already in use'
       : null;
 
     if (errorMessage) {
@@ -143,6 +162,7 @@ export class AuthService {
         message: errorMessage,
       });
     }
+
     const payload = {
       fullName: registerUser.fullName,
       username: registerUser.username,
@@ -152,7 +172,7 @@ export class AuthService {
     };
 
     const emailToken = await this.createToken(payload);
-    console.log(emailToken);
+    console.log('email token', emailToken);
     return this.mailService.send(registerUser, emailToken);
   }
 

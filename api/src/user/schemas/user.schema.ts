@@ -27,6 +27,9 @@ export class User {
   @Prop()
   fullName: string;
 
+  @Prop({ default: true })
+  isApproved: boolean;
+
   @Prop()
   refreshToken: string;
 

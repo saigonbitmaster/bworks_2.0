@@ -8,11 +8,12 @@ import { User, UserSchema } from '../user/schemas/user.schema';
 import { PostJob, PostJobSchema } from '../postjob/schemas/schema';
 import { UserModule } from '../user/user.module';
 import { PostJobModule } from '../postJob/module';
+import { JobBidControllerCms } from './controller.cms';
 
 @Global()
 @Module({
   providers: [JobBidService, JwtService],
-  controllers: [JobBidController],
+  controllers: [JobBidController, JobBidControllerCms],
   imports: [
     MongooseModule.forFeature([{ name: JobBid.name, schema: JobBidSchema }]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),

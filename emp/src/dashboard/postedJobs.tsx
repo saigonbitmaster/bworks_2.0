@@ -13,7 +13,9 @@ import { useGetList, useTranslate, TextField, DateField } from "react-admin";
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
 import LinkBidField from "../components/linkBidsFieldDashboard";
-import SyncAltOutlinedIcon from "@mui/icons-material/SyncAltOutlined";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
+import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import moment from "moment";
 
 const PostedJob = (props) => {
   interface Props {
@@ -58,7 +60,11 @@ const PostedJob = (props) => {
               )}
             >
               <ListItemAvatar sx={{ minWidth: 30 }}>
-                <SyncAltOutlinedIcon></SyncAltOutlinedIcon>
+                {moment(record.expireDate).isAfter() ? (
+                  <DoneOutlinedIcon />
+                ) : (
+                  <ClearOutlinedIcon />
+                )}
               </ListItemAvatar>
 
               <ListItemText>
@@ -68,7 +74,7 @@ const PostedJob = (props) => {
               <DateField
                 sx={{ mr: 0 }}
                 record={record}
-                source="createdAt"
+                source="expireDate"
               ></DateField>
             </ListItem>
 

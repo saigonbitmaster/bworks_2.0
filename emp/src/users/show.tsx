@@ -10,10 +10,19 @@ import {
   SingleFieldList,
   ChipField,
   useDataProvider,
+  TopToolbar,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import BackButton from "../components/backButton";
+
+const ShowActions = () => (
+  <TopToolbar>
+    {/* Add your custom action components */}
+    <BackButton />
+  </TopToolbar>
+);
 
 const UserProfile = () => {
   const record = useRecordContext();
@@ -56,7 +65,7 @@ const UserProfile = () => {
 };
 
 export const ShowScreen = () => (
-  <Show>
+  <Show actions={<ShowActions />}>
     <SimpleShowLayout>
       <Grid container spacing={1}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
@@ -93,7 +102,7 @@ export const ShowScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={12} lg={8} xl={6}>
-          <RichTextField source="description" />
+          <RichTextField source="description" label="User description"/>
         </Grid>
       </Grid>
 

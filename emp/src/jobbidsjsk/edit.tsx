@@ -88,6 +88,7 @@ const EditScreen = () => (
                     fullWidth
                     {...rest}
                     validate={urlValidate}
+                    label="Prototype Url"
                   />
                 )
               );
