@@ -1,3 +1,4 @@
+import { SkillService } from './../skill/service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -21,6 +22,7 @@ export class PostJobService {
     @InjectModel(PostJob.name) private readonly model: Model<PostJobDocument>,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly userService: UserService,
+    private readonly skillService: SkillService,
   ) {}
 
   async getMonthlyJobReport(queryType, userId): Promise<any> {
@@ -119,15 +121,41 @@ export class PostJobService {
   }
 
   async findAll(query: MongooseQuery, userId = null): Promise<RaList> {
+    //include employer & skill to text search
+    if (query.filter.$text?.$search) {
+      const $or = query.filter.$or || [];
+      let users = (await this.userService.findAllRaw(
+        {
+          $text: { $search: query.filter.$text?.$search },
+        },
+        { _id: 1 },
+      )) as any;
+
+      users = users.map((item) => item._id.toString());
+      users.length > 0 && !query.filter.employerId
+        ? $or.push({ employerId: { $in: users } })
+        : null;
+
+      let skills = (await this.skillService.findAllRaw(
+        {
+          $text: { $search: query.filter.$text?.$search },
+        },
+        { _id: 1 },
+      )) as any;
+
+      skills = skills.map((item) => item._id.toString());
+
+      skills.length > 0 && !query.filter.skills
+        ? $or.push({ skills: { $elemMatch: { $in: skills } } })
+        : null;
+
+      $or.push({ $text: query.filter.$text });
+      query.filter.$or = $or;
+      delete query.filter.$text;
+    }
+
     const count = await this.model.find(query.filter).count().exec();
 
-    //fix return all when limit = 0 for global search service
-    if (query.limit <= 0) {
-      return {
-        data: [],
-        count: count,
-      };
-    }
     const data = (await this.model
       .find(query.filter)
       .sort(query.sort)
@@ -135,7 +163,7 @@ export class PostJobService {
       .limit(query.limit)
       .exec()) as any;
 
-    //return list jobs with top 10 matched job seekers for a posted job [{userId: xxx, matchRate: RateNumber}]
+    //return list jobs with top 10 matched job seekers for a posted job [{userId: xxx, matchRate: number}]
     const users = (await this.userService.findAllRaw()) as any;
 
     const jobSeeker = await this.userService.findById(userId);
@@ -224,8 +252,42 @@ export class PostJobService {
     return { count: count, data: _data };
   }
 
-  //count for global app search
+  /* count for global app search
+  filter = {$text: 'text'}
+  filter = {$or: [{$text: 'text'}, { skills: { $elemMatch: { $in: skills } } },{ skills: { $elemMatch: { $in: skills } } },]}
+  */
   async count(filter): Promise<any> {
+    if (filter.$text?.$search) {
+      const $or = filter.$or || [];
+      let users = (await this.userService.findAllRaw(
+        {
+          $text: { $search: filter.$text.$search },
+        },
+        { _id: 1 },
+      )) as any;
+
+      users = users.map((item) => item._id.toString());
+      users.length > 0 && !filter.employerId
+        ? $or.push({ employerId: { $in: users } })
+        : null;
+
+      let skills = (await this.skillService.findAllRaw(
+        {
+          $text: { $search: filter.$text.$search },
+        },
+        { _id: 1 },
+      )) as any;
+
+      skills = skills.map((item) => item._id.toString());
+
+      skills.length > 0 && !filter.skills
+        ? $or.push({ skills: { $elemMatch: { $in: skills } } })
+        : null;
+
+      $or.push({ $text: filter.$text });
+      filter.$or = $or;
+      delete filter.$text;
+    }
     return await this.model.find(filter).count().exec();
   }
 

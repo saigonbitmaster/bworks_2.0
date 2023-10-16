@@ -22,9 +22,12 @@ import RateField from "../components/rateField";
 import JobAside from "../components/jobShowAside";
 import Box from "@mui/material/Box";
 import MatchUsers from "../components/matchedUsers";
+import BackButton from "../components/backButton";
 
 const ShowActions = () => (
-  <TopToolbar>{/* Add your custom action components */}</TopToolbar>
+  <TopToolbar>
+    <BackButton />
+  </TopToolbar>
 );
 
 const Aside = () => {

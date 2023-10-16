@@ -19,8 +19,31 @@ export class JobBidService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
-    const count = await this.model.find(query.filter).count().exec();
+    //include skills and users to fullText search
+    if (query.filter.$text) {
+      const $or = query.filter.$or || [];
+      let users = (await this.userService.findAllRaw(
+        {
+          $text: { $search: query.filter.$text.$search },
+        },
+        { _id: 1 },
+      )) as any;
 
+      users = users.map((item) => item._id.toString());
+      users.length > 0 && !query.filter.employerId
+        ? $or.push({ employerId: { $in: users } })
+        : null;
+
+      users.length > 0 && !query.filter.jobSeekerId
+        ? $or.push({ jobSeekerId: { $in: users } })
+        : null;
+
+      $or.push({ $text: query.filter.$text });
+      query.filter.$or = $or;
+      delete query.filter.$text;
+    }
+
+    const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
       .find(query.filter)
       .sort(query.sort)
@@ -86,6 +109,29 @@ export class JobBidService {
 
   //count for global app search
   async count(filter): Promise<any> {
+    if (filter.$text?.$search) {
+      const $or = filter.$or || [];
+      let users = (await this.userService.findAllRaw(
+        {
+          $text: { $search: filter.$text.$search },
+        },
+        { _id: 1 },
+      )) as any;
+
+      users = users.map((item) => item._id.toString());
+      users.length > 0 && !filter.employerId
+        ? $or.push({ employerId: { $in: users } })
+        : null;
+
+      users.length > 0 && !filter.jobSeekerId
+        ? $or.push({ jobSeekerId: { $in: users } })
+        : null;
+
+      $or.push({ $text: filter.$text });
+      filter.$or = $or;
+      delete filter.$text;
+    }
+
     return await this.model.find(filter).count().exec();
   }
 
@@ -97,9 +143,10 @@ export class JobBidService {
     return await this.model.findById(id).exec();
   }
 
+  //only employer & job seeker can get detail a application
   async findOneForRest(id: string, userId: string): Promise<JobBid> {
     const jobBid = await this.model.findById(id).exec();
-    if (jobBid.employerId !== userId || jobBid.jobSeekerId !== userId) {
+    if (jobBid.employerId !== userId && jobBid.jobSeekerId !== userId) {
       return null;
     }
     return jobBid;

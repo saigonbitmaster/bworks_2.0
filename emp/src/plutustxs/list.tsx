@@ -81,6 +81,15 @@ const ListScreen = () => {
         sx={{ width: 300 }}
       />
     </ReferenceInput>,
+    <ReferenceInput source="unlockUserId" reference="users" alwaysOn>
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        fullWidth
+        optionText="username"
+        label="Search a unlock user"
+        sx={{ width: 300 }}
+      />
+    </ReferenceInput>,
   ];
 
   return (

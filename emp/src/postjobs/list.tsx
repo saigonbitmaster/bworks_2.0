@@ -20,7 +20,7 @@ import {
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
 import { Box, Drawer } from "@mui/material";
-import Steps from "../components/jobApplicationAside";
+import JobAppSteps from "../components/jobApplicationAside";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import MatchUsers from "../components/matchedUsers";
@@ -63,7 +63,8 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
-        title={"abc"}
+        empty={<></>}
+        emptyWhileLoading
         filters={filters}
         perPage={25}
         sort={{ field: "createdAt", order: "desc" }}
@@ -75,9 +76,9 @@ const ListScreen = () => {
             theme.transitions.create(["all"], {
               duration: theme.transitions.duration.enteringScreen,
             }),
-          marginRight: record ? "300px" : 0,
         }}
         actions={<JobListActions />}
+        aside={<JobAppSteps record={record} queryType="employer"></JobAppSteps>}
       >
         <Datagrid rowClick={rowClick} expand={<JobPanel />}>
           <TextField source="name" label="Job name" />
@@ -101,14 +102,7 @@ const ListScreen = () => {
           <MatchedUsersField label="Matched users" source="matchUsers" />
 
           <LinkBidField />
-          <Drawer
-            variant="persistent"
-            open={record}
-            anchor="right"
-            sx={{ zIndex: 100 }}
-          >
-            {record && <Steps record={record}></Steps>}
-          </Drawer>
+
           <EditButton />
           <ShowJob />
         </Datagrid>

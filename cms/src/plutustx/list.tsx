@@ -12,6 +12,8 @@ import {
   useGetOne,
   BooleanField,
   FunctionField,
+  ReferenceInput,
+  AutocompleteInput,
 } from "react-admin";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
@@ -56,12 +58,45 @@ const ListScreen = () => {
     );
   };
 
+  const filterToQuery = (searchText) => ({ textSearch: searchText });
+  const filters = [
+    <ReferenceInput source="name" reference="postjobs" alwaysOn>
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        optionText="name"
+        label="Search a job"
+        fullWidth
+        sx={{ width: 300 }}
+      />
+    </ReferenceInput>,
+    <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        fullWidth
+        optionText="name"
+        label="Search a job application"
+        sx={{ width: 300 }}
+      />
+    </ReferenceInput>,
+    <ReferenceInput source="unlockUserId" reference="users" alwaysOn>
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        fullWidth
+        optionText="username"
+        label="Search a unlock user"
+        sx={{ width: 300 }}
+      />
+    </ReferenceInput>,
+  ];
   return (
     <List
+      empty={<></>}
+      emptyWhileLoading
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
       resource="plutustxs"
+      filters={filters}
     >
       <Datagrid bulkActionButtons={false}>
         <ReferenceField source="name" reference="postjobs" label="Job Name">

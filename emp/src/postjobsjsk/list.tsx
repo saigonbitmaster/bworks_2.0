@@ -18,7 +18,7 @@ import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
 import ApplyButton from "../components/applyButton";
 import { Box, Drawer } from "@mui/material";
-import Steps from "../components/jobApplicationAside";
+import JobAppSteps from "../components/jobApplicationAside";
 import RateField from "../components/rateField";
 import MatchUsers from "../components/matchedUsers";
 import RefreshButton from "../components/refreshButton";
@@ -57,6 +57,8 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
+       empty={<></>}
+       emptyWhileLoading
         resource="postjobsjsk"
         filters={filters}
         perPage={25}
@@ -68,10 +70,12 @@ const ListScreen = () => {
             theme.transitions.create(["all"], {
               duration: theme.transitions.duration.enteringScreen,
             }),
-          marginRight: record ? "300px" : 0,
         }}
         actions={<JobListActions />}
         filter={{ queryType: "jobSeeker", isApproved: true }}
+        aside={
+          <JobAppSteps record={record} queryType="jobSeeker"></JobAppSteps>
+        }
       >
         <Datagrid
           rowClick={rowClick}
@@ -96,17 +100,9 @@ const ListScreen = () => {
           <RateField source="matchRate" label="Your match" />
           <DateField source="expireDate" showTime />
           <DateField source="createdAt" showTime />
-          <LinkBidField />
+          <LinkBidField queryType={null} />
           <ApplyButton />
           <ShowJob />
-          <Drawer
-            variant="persistent"
-            open={record}
-            anchor="right"
-            sx={{ zIndex: 100 }}
-          >
-            {record && <Steps record={record}></Steps>}
-          </Drawer>
         </Datagrid>
       </List>
     </Box>

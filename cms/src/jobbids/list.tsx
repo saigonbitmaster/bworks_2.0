@@ -17,9 +17,15 @@ import {
 import Button from "@mui/material/Button";
 
 const filters = [
-  <TextInput label="Search" source="textSearch" alwaysOn />,
+  <TextInput
+    label="Search"
+    source="textSearch"
+    alwaysOn
+    fullWidth
+    sx={{ width: 300 }}
+  />,
   <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
-    <SelectInput optionText="name" fullWidth />
+    <SelectInput optionText="name" fullWidth sx={{ width: 300 }} />
   </ReferenceInput>,
 ];
 

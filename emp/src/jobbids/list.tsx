@@ -202,6 +202,8 @@ const ListScreen = () => {
 
   return (
     <List
+    empty={<></>}
+    emptyWhileLoading
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}

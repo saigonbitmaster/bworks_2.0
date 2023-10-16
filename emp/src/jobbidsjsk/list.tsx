@@ -108,7 +108,7 @@ const ListScreen = () => {
     const record = useRecordContext();
     const diff = { jobDone: !record.jobDone };
     const refresh = useRefresh();
-    const [update, { isLoading, error }] = useUpdate("jobbids", {
+    const [update, { isLoading, error }] = useUpdate("jobbidsjsk", {
       id: record.id,
       data: diff,
       previousData: record,
@@ -135,6 +135,8 @@ const ListScreen = () => {
 
   return (
     <List
+      empty={<></>}
+      emptyWhileLoading
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate
@@ -145,7 +147,7 @@ const ListScreen = () => {
     >
       <Datagrid expand={<BidPanel />}>
         <TextField source="name" label="Application" />
-        <ReferenceField reference="postJobsjsk" source="jobId" link={"show"}>
+        <ReferenceField reference="postjobsjsk" source="jobId" link={"show"}>
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField reference="users" source="employerId" link={"show"}>

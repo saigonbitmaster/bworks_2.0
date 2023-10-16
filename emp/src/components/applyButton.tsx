@@ -7,7 +7,7 @@ const ApplyButton = (props) => {
   const record = useRecordContext(props);
   const jobId = props.record?.id || record.id;
   const { data, total, isLoading, error } = useGetList("jobbids", {
-    filter: { jobId },
+    filter: { jobId, queryType: "jobSeeker" },
   });
   if (isLoading) {
     return <p>Loading...</p>;
@@ -28,7 +28,7 @@ const ApplyButton = (props) => {
       }}
       size="small"
       color="primary"
-      disabled={props.disabled}
+      disabled={data?.length > 0}
     >
       Apply
     </Button>

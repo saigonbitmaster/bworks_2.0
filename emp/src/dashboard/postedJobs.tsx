@@ -16,6 +16,7 @@ import LinkBidField from "../components/linkBidsFieldDashboard";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import moment from "moment";
+import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
 
 const PostedJob = (props) => {
   interface Props {
@@ -60,7 +61,9 @@ const PostedJob = (props) => {
               )}
             >
               <ListItemAvatar sx={{ minWidth: 30 }}>
-                {moment(record.expireDate).isAfter() ? (
+                {record.budget > 10000 ? (
+                  <GradeOutlinedIcon />
+                ) : moment(record.expireDate).isAfter() ? (
                   <DoneOutlinedIcon />
                 ) : (
                   <ClearOutlinedIcon />

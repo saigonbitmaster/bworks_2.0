@@ -2,10 +2,10 @@ import { useRecordContext, useGetList } from "react-admin";
 import Button from "@mui/material/Button";
 
 const LinkBidField = (props) => {
-  const record = useRecordContext(props);
+  const record = useRecordContext();
   const jobId = props.record?.id || record.id;
   const { data, total, isLoading, error } = useGetList("jobbids", {
-    filter: { jobId, queryType: "employer" },
+    filter: { jobId, queryType: props.queryType || null },
   });
   if (isLoading) {
     return <p>Loading...</p>;
@@ -14,7 +14,9 @@ const LinkBidField = (props) => {
     return <p style={{ color: "red" }}>Error!</p>;
   }
 
-  return record ? <Button>{total} Applications</Button> : null;
+  return record ? (
+    <Button onClick={props.handleClick || null}>{total} Applications</Button>
+  ) : null;
 };
 
 LinkBidField.defaultProps = { label: "" };

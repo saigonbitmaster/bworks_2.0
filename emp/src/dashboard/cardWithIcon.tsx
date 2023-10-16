@@ -27,6 +27,7 @@ const CardWithIcon = (props: Props) => {
         maxHeight: 890,
         display: "flex",
         flexDirection: "column",
+        mt: 2,
         flex: "1",
         "& a": {
           textDecoration: "none",

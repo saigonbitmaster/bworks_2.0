@@ -21,7 +21,16 @@ import Button from "@mui/material/Button";
 import Steps from "../components/jobApplicationAside";
 import { Box, Drawer } from "@mui/material";
 import MatchedUsersField from "../components/matchedUsersField";
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+
+const filters = [
+  <TextInput
+    label="Search"
+    source="textSearch"
+    alwaysOn
+    fullWidth
+    sx={{ width: 300 }}
+  />,
+];
 
 const JobPanel = () => {
   const record = useRecordContext();

@@ -88,7 +88,7 @@ const cmsSearchConfig = () => [
   },
   {
     subUrl: 'plutustxs',
-    serviceName: 'PlutusTxService',
+    serviceName: 'plutusTxService',
     text: 'Found plutus payment transactions',
   },
 ];
@@ -137,7 +137,7 @@ const appSearchConfig = (userId) => {
     },
     {
       subUrl: 'plutustxs',
-      serviceName: 'PlutusTxService',
+      serviceName: 'plutusTxService',
       text: 'Found payment transactions',
       filter: {
         $or: [{ jskId: userId }, { empId: userId }, { unlockUserId: userId }],

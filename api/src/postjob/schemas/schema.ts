@@ -54,6 +54,6 @@ export class PostJob {
 
 const PostJobSchema = SchemaFactory.createForClass(PostJob);
 PostJobSchema.plugin(uniqueValidator);
-PostJobSchema.index({ name: 'text' });
+PostJobSchema.index({ name: 'text', employerId: 1, skills: 1 });
 
 export { PostJobSchema };

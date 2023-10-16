@@ -23,35 +23,39 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { stringify } from "query-string";
 
-export default function VerticalLinearStepper(props) {
+export default function JobAppSteps(props) {
   const redirect = useRedirect();
-
-  const record = props.record;
-  const [jobBids, setJobBids] = React.useState([]);
+  const record = props.record || {};
+  const [jobBids, setJobBids] = React.useState({ data: [], total: 0 });
   const { data, total, isLoading, error } = useGetList("jobbids", {
     pagination: { page: 1, perPage: 4 },
     sort: { field: "createdAt", order: "DESC" },
-    filter: { jobId: record.id, queryType: "employer" },
+    filter: {
+      jobId: record.id,
+      queryType: props.queryType === "employer" ? "employer" : null,
+    },
   });
 
   React.useEffect(() => {
     if (!isLoading && !error) {
-      setJobBids(data);
+      setJobBids({ data, total });
     }
-  }, [data]);
-
-  const label = props.label || `${total || 0} Applications`;
+  }, [data, total]);
+  const label = props.label || `${jobBids.total || 0} Applications`;
 
   const onClick = () => {
     const filter = JSON.stringify({ jobId: record.id });
-
-    redirect(`/jobbids?&filter=${filter}`);
+    const redirectUrl =
+      props.queryType === "employer"
+        ? `/jobbids?&filter=${filter}`
+        : `/jobbidsjsk?&filter=${filter}`;
+    redirect(redirectUrl);
   };
 
   return (
     <Box
       sx={{
-        minWidth: 300,
+        minWidth: 250,
         maxWidth: 300,
         marginTop: "4em",
         marginLeft: "0",
@@ -68,8 +72,8 @@ export default function VerticalLinearStepper(props) {
           {label}
         </Typography>
         <Stepper orientation="vertical">
-          {jobBids.length > 0 &&
-            jobBids.map((step, index) => (
+          {jobBids.data.length > 0 &&
+            jobBids.data.map((step, index) => (
               <Step key={step.name} active={true}>
                 <StepLabel>{step.name}</StepLabel>
                 <StepContent>
@@ -102,8 +106,10 @@ export default function VerticalLinearStepper(props) {
               </Step>
             ))}
         </Stepper>
-        <Button onClick={onClick} sx={{ mt: 2 }} disabled={total === 0}>
-          View all applications
+        <Button onClick={onClick} sx={{ mt: 2 }} disabled={jobBids.total === 0}>
+          {props.queryType === "employer"
+            ? "View all applications"
+            : "View your applications"}
         </Button>
       </Paper>
     </Box>
