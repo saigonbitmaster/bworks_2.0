@@ -30,7 +30,7 @@ const ApplyButton = (props) => {
       color="primary"
       disabled={data?.length > 0}
     >
-      Apply
+      {data?.length > 0 ? "Applied" : "Apply"}
     </Button>
   ) : null;
 };

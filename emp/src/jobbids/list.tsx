@@ -28,6 +28,8 @@ import { stringify } from "query-string";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
 import RefreshButton from "../components/refreshButton";
+import ShowButton from "../components/showButton";
+import MessagesCount from "../components/messagesCount";
 
 const JobListActions = () => (
   <TopToolbar>
@@ -160,6 +162,12 @@ const SignButton = (props) => {
 };
 
 const ListScreen = () => {
+  const [record, setRecord] = React.useState(null);
+  const rowClick = (id, resource, record) => {
+    setRecord(record);
+    return null;
+  };
+
   const BidPanel = () => {
     const record = useRecordContext();
     const {
@@ -202,8 +210,8 @@ const ListScreen = () => {
 
   return (
     <List
-    empty={<></>}
-    emptyWhileLoading
+      empty={<></>}
+      emptyWhileLoading
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
@@ -212,7 +220,11 @@ const ListScreen = () => {
       filters={filters}
       actions={<JobListActions />}
     >
-      <Datagrid bulkActionButtons={false} expand={<BidPanel />}>
+      <Datagrid
+        bulkActionButtons={false}
+        expand={<BidPanel />}
+        rowClick={rowClick}
+      >
         <TextField source="name" label="Application" />
 
         <ReferenceField
@@ -235,7 +247,7 @@ const ListScreen = () => {
 
         <RateField source="rate" label="Matching rate" />
 
-        <DateField source="completeDate" showTime label="Your deadline" />
+        <DateField source="completeDate" showTime label="Applied deadline" />
 
         <ReferenceField
           reference="postJobs"
@@ -256,6 +268,8 @@ const ListScreen = () => {
         <BooleanField source="jobDone" label="Job done" />
         <CompletedButton label="Confirm complete" />
         <BooleanField source="isPaid" />
+        <MessagesCount></MessagesCount>
+        <ShowButton />
       </Datagrid>
     </List>
   );

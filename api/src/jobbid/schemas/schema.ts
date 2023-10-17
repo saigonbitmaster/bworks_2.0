@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as uniqueValidator from 'mongoose-unique-validator';
+import { Message } from '../../flatworks/types/types';
 
 export type JobBidDocument = JobBid & Document;
 
@@ -53,6 +54,9 @@ export class JobBid {
 
   @Prop()
   rate?: number;
+
+  @Prop()
+  messages?: Message[];
 
   @Prop()
   description: string;

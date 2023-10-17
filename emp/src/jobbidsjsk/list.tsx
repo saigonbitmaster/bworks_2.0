@@ -27,6 +27,8 @@ import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
 import RefreshButton from "../components/refreshButton";
 import Button from "@mui/material/Button";
+import ShowButton from "../components/showButton";
+import MessagesCount from "../components/messagesCount";
 
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
@@ -174,6 +176,8 @@ const ListScreen = () => {
         <BooleanField source="isCompleted" label="Confirmed Complete" />
         <BooleanField source="isPaid" />
         <EditButton />
+        <MessagesCount></MessagesCount>
+        <ShowButton />
       </Datagrid>
     </List>
   );

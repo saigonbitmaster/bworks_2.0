@@ -68,6 +68,13 @@ export interface RequestUser {
   userId: string;
 }
 
+export interface Message {
+  userId: string;
+  body: string;
+  createdAt: Date;
+  id: string;
+}
+
 export interface TypeSkill {
   name: string;
 }

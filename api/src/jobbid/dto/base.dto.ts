@@ -1,3 +1,4 @@
+import { Message } from '../../flatworks/types/types';
 export class BaseJobBidDto {
   name: string;
   jobId: string;
@@ -13,6 +14,7 @@ export class BaseJobBidDto {
   hasPrototype: boolean;
   prototypeLink: string;
   isCompleted: boolean;
+  messages: Message[];
   isApproved: boolean;
   description: string;
 }

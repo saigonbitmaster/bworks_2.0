@@ -19,6 +19,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import * as lodash from 'lodash';
 import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
+import { MessageDto } from './dto/message.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller(['jobbids', 'jobbidsjsk'])
@@ -71,6 +72,33 @@ if requested user is not either employer or job seeker remove description (apply
     return await this.service.update(
       id,
       updateJobBidDto,
+      lodash.get(request, 'user.userId', null),
+    );
+  }
+
+  @Post('/messages/:id')
+  async createMessage(
+    @Param('id') id: string,
+    @Body() messageDto: MessageDto,
+    @Req() request,
+  ) {
+    return await this.service.createMessage(
+      id,
+      messageDto,
+      lodash.get(request, 'user.userId', null),
+    );
+  }
+
+  @Post('/messages/:id/:messageId')
+  async deleteMessage(
+    @Param('id') id: string,
+    @Param('messageId') messageId: string,
+    @Req() request,
+  ) {
+    console.log(messageId);
+    return await this.service.deleteMessage(
+      id,
+      messageId,
       lodash.get(request, 'user.userId', null),
     );
   }

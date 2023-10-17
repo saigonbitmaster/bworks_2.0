@@ -9,6 +9,8 @@ import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { rankJobBid } from '../flatworks/logics/rank';
 import { UserService } from '../user/user.service';
 import { PostJobService } from '../postJob/service';
+import { MessageDto } from './dto/message.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class JobBidService {
@@ -196,6 +198,54 @@ export class JobBidService {
       throw new Error('This is not your record');
     }
     return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
+  }
+
+  async createMessage(
+    id: string,
+    messageDto: MessageDto,
+    userId: string,
+  ): Promise<JobBid> {
+    const jobBid = await this.model.findById(id);
+    if (userId !== jobBid.employerId && userId !== jobBid.jobSeekerId) return;
+    const messages = jobBid.messages
+      ? [
+          ...jobBid.messages,
+          {
+            ...messageDto,
+            userId,
+            createdAt: new Date(),
+            id: uuidv4(),
+          },
+        ]
+      : [{ ...messageDto, userId, createdAt: new Date(), id: uuidv4() }];
+
+    return await this.model
+      .findByIdAndUpdate(id, {
+        messages,
+      })
+      .exec();
+  }
+
+  async deleteMessage(
+    id: string,
+    messageId: string,
+    userId: string,
+  ): Promise<JobBid> {
+    const jobBid = await this.model.findById(id);
+    console.log(id, messageId, userId);
+
+    if (userId !== jobBid.employerId && userId !== jobBid.jobSeekerId) return;
+
+    const messages = jobBid.messages;
+
+    const message = messages.find((i) => i.id === messageId);
+    if (message.userId !== userId || !message) return;
+
+    return await this.model
+      .findByIdAndUpdate(id, {
+        messages: messages.filter((i) => i.id !== messageId),
+      })
+      .exec();
   }
 
   async updateByBackgroundJob(

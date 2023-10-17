@@ -13,6 +13,7 @@ import {
   ExportButton,
   TopToolbar,
   useRecordContext,
+  BooleanInput,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
@@ -26,6 +27,12 @@ import ShowJob from "../components/showButton";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
+  <BooleanInput
+    label="Your suitable jobs"
+    source="matchRate_gte"
+    parse={(v) => (v ? 1 : 0)}
+    alwaysOn
+  />,
 ];
 
 const JobListActions = () => {
@@ -57,8 +64,8 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
-       empty={<></>}
-       emptyWhileLoading
+        empty={<></>}
+        emptyWhileLoading
         resource="postjobsjsk"
         filters={filters}
         perPage={25}

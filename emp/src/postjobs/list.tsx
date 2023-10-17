@@ -16,6 +16,7 @@ import {
   TopToolbar,
   useRecordContext,
   UrlField,
+  BooleanInput,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
@@ -30,6 +31,12 @@ import ShowJob from "../components/showButton";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
+  <BooleanInput
+    label="Matched with job seekers"
+    source="matchUsers_gte"
+    parse={(v) => (v ? 1 : 0)}
+    alwaysOn
+  />,
 ];
 
 const JobCreateButton = () => <CreateButton label="Create new job" />;

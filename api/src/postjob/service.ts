@@ -196,6 +196,16 @@ export class PostJobService {
         return sort;
       };
       _data.sort(sortFn);
+
+      //filter jobs with at least 01 matched job seekers
+      if (query.filter.matchUsers) {
+        const operator = Object.keys(query.filter.matchUsers)[0];
+        if (operator === '$gte') {
+          _data = _data.filter(
+            (i) => i.matchUsers.length >= query.filter.matchUsers[operator],
+          );
+        }
+      }
     }
 
     if (query.filter.queryType === 'jobSeeker') {
@@ -247,6 +257,17 @@ export class PostJobService {
         return sort;
       };
       _data.sort(sortFn);
+
+      //filter jobs matched job seekers skills
+      if (query.filter.matchRate) {
+        const operator = Object.keys(query.filter.matchRate)[0];
+        console.log(query.filter.matchRate, operator);
+        if (operator === '$gte') {
+          _data = _data.filter(
+            (i) => i.matchRate >= query.filter.matchRate[operator],
+          );
+        }
+      }
     }
 
     return { count: count, data: _data };
