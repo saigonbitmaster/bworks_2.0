@@ -23,7 +23,7 @@ mail notify send to user for cases:
     try {
       result = await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Welcome to bWorks! Please confirm your Email',
+        subject: '[bWorks] Welcome to bWorks! Please confirm your Email',
         template: './confirm',
         context: {
           name: user.username,
@@ -127,15 +127,16 @@ mail notify send to user for cases:
     employer: any,
     isLocked: boolean, //true for lock, false for unlock
   ) {
+    console.log(plutusTx);
     if (!employer.email || !jobSeeker.email || !plutusTx.jobBidId) return;
 
-    const baseUrl = process.env.APP_BASE_URL;
-    const url = `${baseUrl}/plutustxs?filter=${JSON.stringify({
-      jobBidId: plutusTx.jobBidId,
-    })}`;
+    const explorerUrl = process.env.CARDANO_EXPLORER_URL;
+    const url = isLocked
+      ? `${explorerUrl}${plutusTx.lockedTxHash}`
+      : `${explorerUrl}${plutusTx.unlockedTxHash}`;
     const paymentMessage = isLocked
-      ? 'payment is locked to bWorks smart contract, please track with below TxHash:'
-      : 'payment is unlocked from bWorks smart contract, please track with below TxHash:';
+      ? 'Please track the lock transaction with below TxHash:'
+      : 'Please track the unlock transaction with below TxHash:';
 
     const subject = isLocked
       ? 'payment is locked to bWorks smart contract'
@@ -164,6 +165,7 @@ mail notify send to user for cases:
     }
     if (!isLocked) {
       try {
+        console.log(subject, paymentMessage, url);
         result = Promise.all([
           await this.mailerService.sendMail({
             to: employer.email,

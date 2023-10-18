@@ -164,7 +164,7 @@ export class PlutusTxService {
     userId?: string,
   ): Promise<PlutusTx> {
     //update jobBid isPaid if the transaction is signed by right unlockUserId from browser
-    const currentRecord = await this.findOne(id);
+    const currentRecord = (await this.findOne(id)) as any;
     if (
       updatePlutusTxDto.unlockedTxHash &&
       userId === currentRecord.unlockUserId
@@ -177,7 +177,15 @@ export class PlutusTxService {
       //notify employer & job seeker
       const employer = await this.userService.findById(currentRecord.empId);
       const jobSeeker = await this.userService.findById(currentRecord.jskId);
-      this.mailService.paymentUpdate(currentRecord, jobSeeker, employer, false);
+      this.mailService.paymentUpdate(
+        {
+          ...currentRecord._doc,
+          unlockedTxHash: updatePlutusTxDto.unlockedTxHash,
+        },
+        jobSeeker,
+        employer,
+        false,
+      );
     }
 
     return await this.model.findByIdAndUpdate(id, updatePlutusTxDto).exec();
