@@ -171,6 +171,7 @@ const ListScreen = () => {
 
         <DateField source="completeDate" showTime label="Your deadline" />
         <RateField source="rate" label="Matching rate" />
+        <DateField source="createdAt" showTime />
         <BooleanField source="isSelected" />
         <JobDoneButton source="jobDone" label="Job done" />
         <BooleanField source="isCompleted" label="Confirmed Complete" />

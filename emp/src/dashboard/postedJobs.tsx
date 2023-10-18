@@ -52,7 +52,7 @@ const PostedJob = (props) => {
             <ListItem
               key={record.id}
               alignItems="center"
-              sx={{ m: 0, p: 0.6 }}
+              sx={{ m: 0, p: 0.8 }}
               component={Link}
               to={encodeURI(
                 `/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({
@@ -99,7 +99,7 @@ const PostedJob = (props) => {
       </List>
       <Box flexGrow={1}>&nbsp;</Box>
       <Button
-        sx={{ borderRadius: 0 }}
+        sx={{ borderRadius: 0, mb: 5 }}
         component={Link}
         to="/postjobsjsk"
         size="small"

@@ -82,7 +82,7 @@ export default function JobAppSteps(props) {
                     size="small"
                     onClick={() => onClick(step.id)}
                   >
-                    <DeleteIcon fontSize="small" />
+                    <DeleteIcon fontSize="small" sx={{ color: "red" }} />
                   </IconButton>
                 </StepLabel>
 

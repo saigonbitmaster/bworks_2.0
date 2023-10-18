@@ -44,9 +44,9 @@ export class MailModule {}
 
 
 MAIL_HOST=smtp.gmail.com
-MAIL_USER=wateroshelp@gmail.com
-MAIL_PASSWORD=vfgq qeaf gzrq kdcq
-MAIL_FROM=ateroshelp@gmail.com
+MAIL_USER=xxx@gmail.com
+MAIL_PASSWORD=xxxx xxxx xxxx xxxx
+MAIL_FROM=xxx@gmail.com
 
 
 transport: {

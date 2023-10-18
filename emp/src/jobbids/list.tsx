@@ -257,7 +257,7 @@ const ListScreen = () => {
         >
           <DateField source="expectDate" showTime />
         </ReferenceField>
-
+        <DateField source="createdAt" showTime />
         <SelectButton />
 
         <FunctionField

@@ -9,6 +9,7 @@ import { PostJob, PostJobSchema } from '../postjob/schemas/schema';
 import { UserModule } from '../user/user.module';
 import { PostJobModule } from '../postJob/module';
 import { JobBidControllerCms } from './controller.cms';
+import { MailModule } from '../mail/mail.module';
 
 @Global()
 @Module({
@@ -20,6 +21,7 @@ import { JobBidControllerCms } from './controller.cms';
     MongooseModule.forFeature([{ name: PostJob.name, schema: PostJobSchema }]),
     UserModule,
     PostJobModule,
+    MailModule,
   ],
   exports: [JobBidService],
 })

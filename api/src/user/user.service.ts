@@ -130,7 +130,8 @@ export class UserService {
     userId = null,
   ): Promise<User> {
     const user = await this.model.findById(id);
-    if (user._id !== userId) {
+    console.log(user);
+    if (user._id.toString() !== userId) {
       return;
     }
 

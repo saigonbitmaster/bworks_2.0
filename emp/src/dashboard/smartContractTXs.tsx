@@ -64,7 +64,7 @@ const SmartContractTxs = (props: Props) => {
         {plutustxs
           ? plutustxs.map((record: any) => (
               <>
-                <ListItem key={record.id} sx={{ m: 0, p: 0.6 }}>
+                <ListItem key={record.id} sx={{ m: 0, p: 0.8 }}>
                   <ListItemAvatar sx={{ minWidth: 30 }}>
                     {record.unlockedTxHash ? (
                       <DoneOutlinedIcon />

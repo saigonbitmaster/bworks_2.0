@@ -11,6 +11,7 @@ import { UserService } from '../user/user.service';
 import { PostJobService } from '../postJob/service';
 import { MessageDto } from './dto/message.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class JobBidService {
@@ -18,6 +19,7 @@ export class JobBidService {
     @InjectModel(JobBid.name) private readonly model: Model<JobBidDocument>,
     private readonly userService: UserService,
     private readonly postJobService: PostJobService,
+    private readonly mailService: MailService,
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
@@ -145,6 +147,10 @@ export class JobBidService {
     return await this.model.findById(id).exec();
   }
 
+  async findById(id: string): Promise<JobBid> {
+    return await this.model.findById(id).exec();
+  }
+
   //only employer & job seeker can get detail a application
   async findOneForRest(id: string, userId: string): Promise<JobBid> {
     const jobBid = await this.model.findById(id).exec();
@@ -159,13 +165,23 @@ export class JobBidService {
     jobSeekerId: string,
   ): Promise<JobBid> {
     const postJob = await this.postJobService.findOne(createJobBidDto.jobId);
+    const employer = await this.userService.findById(postJob.employerId);
 
-    return await new this.model({
-      ...createJobBidDto,
-      createdAt: new Date(),
-      jobSeekerId: jobSeekerId,
-      employerId: postJob.employerId,
-    }).save();
+    let result;
+    try {
+      result = await new this.model({
+        ...createJobBidDto,
+        createdAt: new Date(),
+        jobSeekerId: jobSeekerId,
+        employerId: postJob.employerId,
+      }).save();
+    } catch (err) {
+      return;
+    }
+
+    //notify employer
+    this.mailService.applyNotify(employer, result);
+    return result;
   }
 
   async update(
@@ -173,7 +189,7 @@ export class JobBidService {
     updateJobBidDto: UpdateJobBidDto,
     userId: string,
   ): Promise<JobBid> {
-    const record: JobBid = await this.model.findById(id).exec();
+    const record: JobBidDocument = await this.model.findById(id).exec();
     //selected bid will not able to change the requested budget
     if (record.isSelected) {
       delete updateJobBidDto['bidValue'];
@@ -189,6 +205,11 @@ export class JobBidService {
         : isCompleted !== undefined
         ? (updateData.isCompleted = isCompleted)
         : null;
+      //notify if the application is selected
+      if (!record.isSelected && isSelected) {
+        const jobSeeker = await this.userService.findById(record.jobSeekerId);
+        this.mailService.applicationSelected(jobSeeker, record);
+      }
 
       return await this.model
         .findByIdAndUpdate(id, { isSelected, isSignedTx, isCompleted })
@@ -206,6 +227,7 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const jobBid = await this.model.findById(id);
+    const user = await this.userService.findById(userId);
     if (userId !== jobBid.employerId && userId !== jobBid.jobSeekerId) return;
     const messages = jobBid.messages
       ? [
@@ -219,11 +241,19 @@ export class JobBidService {
         ]
       : [{ ...messageDto, userId, createdAt: new Date(), id: uuidv4() }];
 
-    return await this.model
-      .findByIdAndUpdate(id, {
-        messages,
-      })
-      .exec();
+    let result;
+    try {
+      result = await this.model
+        .findByIdAndUpdate(id, {
+          messages,
+        })
+        .exec();
+    } catch (e) {
+      return;
+    }
+    //notify mail
+    this.mailService.applicationComment(user, jobBid);
+    return result;
   }
 
   async deleteMessage(
@@ -232,7 +262,6 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const jobBid = await this.model.findById(id);
-    console.log(id, messageId, userId);
 
     if (userId !== jobBid.employerId && userId !== jobBid.jobSeekerId) return;
 

@@ -6,6 +6,8 @@ import { UpdatePlutusTxDto } from './dto/update.dto';
 import { PlutusTx, PlutusTxDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { JobBidService } from '../jobbid/service';
+import { MailService } from '../mail/mail.service';
+import { UserService } from '../user/user.service';
 
 import {
   plutusDashboardScript,
@@ -19,6 +21,8 @@ export class PlutusTxService {
   constructor(
     @InjectModel(PlutusTx.name) private readonly model: Model<PlutusTxDocument>,
     private jobBidService: JobBidService,
+    private mailService: MailService,
+    private userService: UserService,
   ) {}
 
   async getMonthlyPlutusTxsReport(queryType, userId): Promise<any> {
@@ -134,6 +138,20 @@ export class PlutusTxService {
   }
 
   async create(createPlutusTxDto: CreatePlutusTxDto): Promise<PlutusTx> {
+    //notify email
+    const employer = await this.userService.findById(createPlutusTxDto.empId);
+    const jobSeeker = await this.userService.findById(createPlutusTxDto.jskId);
+
+    if (createPlutusTxDto.lockedTxHash && createPlutusTxDto.jobBidId) {
+      this.mailService.paymentUpdate(
+        createPlutusTxDto,
+        jobSeeker,
+        employer,
+        true,
+      );
+    }
+
+    //return
     return await new this.model({
       ...createPlutusTxDto,
       createdAt: new Date(),
@@ -155,7 +173,13 @@ export class PlutusTxService {
         isPaid: true,
         completedAt: new Date(),
       });
+
+      //notify employer & job seeker
+      const employer = await this.userService.findById(currentRecord.empId);
+      const jobSeeker = await this.userService.findById(currentRecord.jskId);
+      this.mailService.paymentUpdate(currentRecord, jobSeeker, employer, false);
     }
+
     return await this.model.findByIdAndUpdate(id, updatePlutusTxDto).exec();
   }
 

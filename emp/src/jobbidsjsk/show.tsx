@@ -63,24 +63,22 @@ const CreateMessage = (props) => {
       )
       .then((result) => {
         //refresh new data but not reset form data to default
-        //refresh();
+        refresh();
         //reset form data to default. formContext does not work
-        refreshBrowser();
+        //refreshBrowser();
       })
       .catch((error) => {});
   };
 
   return (
-    <Create redirect="list">
-      <SimpleForm
-        onSubmit={onSubmit}
-        sx={{ m: 0, p: 0 }}
-        toolbar={<MyToolbar></MyToolbar>}
-        defaultValues={{ body: "" }}
-      >
-        <RichTextInput source="body" label="Message to employer" />
-      </SimpleForm>
-    </Create>
+    <SimpleForm
+      onSubmit={onSubmit}
+      sx={{ m: 0, p: 0 }}
+      toolbar={<MyToolbar></MyToolbar>}
+      defaultValues={{ body: "" }}
+    >
+      <RichTextInput source="body" label="Message to employer" />
+    </SimpleForm>
   );
 };
 
