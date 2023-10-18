@@ -4,7 +4,6 @@ const buffer = require.resolve("buffer/");
 const buffers = ["buffer", "Buffer"];
 const wasmRegExp = /\.wasm$/;
 
-
 /*
 origin:
 const wasmExps = {
@@ -24,7 +23,6 @@ const wasmExps = {
 }
 */
 
-
 const wasmExps = {
   layers: true,
   asyncWebAssembly: true,
@@ -41,7 +39,7 @@ module.exports = {
       webpackConfig.resolve.fallback = {
         buffer: buffer,
       };
-      
+
       webpackConfig.module.rules.forEach((rule) => {
         rule.oneOf?.length
           ? rule.oneOf.forEach((oneOf) => {

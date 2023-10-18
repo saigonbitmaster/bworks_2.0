@@ -6,20 +6,16 @@
     "api",
     "cms",
     "web",
-    "emp",
-    "jsk",
     "packages/*"
   ],
   "main": "index.js",
   "scripts": {
     "api": "cd api && yarn start",
     "cms": "cd cms && yarn start",
-    "emp": "cd emp && yarn start",
-    "jsk": "cd jsk && yarn start",
+    "web": "cd web && yarn start",
     "build-lib": "cd packages/ra-nest-rest && yarn build",
     "build-cms": "cd cms && yarn build",
-    "build-emp": "cd emp && yarn build",
-    "build-jsk": "cd jsk && yarn build",
+    "build-web": "cd web && yarn build",
     "build-api": "cd api && yarn build"
   },
   "license": "MIT",
