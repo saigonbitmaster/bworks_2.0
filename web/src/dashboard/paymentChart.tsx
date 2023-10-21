@@ -9,6 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  BarChart,
+  Bar,
+  Cell,
 } from "recharts";
 
 import FormGroup from "@mui/material/FormGroup";
@@ -79,12 +82,7 @@ const PaymentChart = () => {
       <FormGroup sx={{ ml: 2 }}>
         <FormControlLabel
           control={
-            <Checkbox
-              defaultChecked
-              size="small"
-              checked={checked}
-              onChange={handleChange}
-            />
+            <Checkbox size="small" checked={checked} onChange={handleChange} />
           }
           label={label}
         />
@@ -92,7 +90,7 @@ const PaymentChart = () => {
       <CardContent sx={{ p: 0 }}>
         <div style={{ width: "100%", height: 270 }}>
           <ResponsiveContainer>
-            <AreaChart
+            <BarChart
               width={700}
               height={270}
               data={data}
@@ -138,10 +136,22 @@ const PaymentChart = () => {
                 fillOpacity={1}
                 fill="url(#colorUv)"
               />
+
+              <Bar
+                name={dataKeys.y1Name}
+                dataKey={dataKeys.y1}
+                fill="#ffc658"
+              />
+              <Bar
+                name={dataKeys.y2Name}
+                dataKey={dataKeys.y2}
+                fill="#8884d8"
+              />
+
               <Legend
                 wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
               />
-            </AreaChart>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

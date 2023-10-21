@@ -11,6 +11,8 @@ import {
   ChipField,
   useDataProvider,
   TopToolbar,
+  BooleanField,
+  NumberField,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -68,15 +70,14 @@ export const ShowScreen = () => (
   <Show actions={<ShowActions />}>
     <SimpleShowLayout>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={6} lg={5} xl={3}>
+        <Grid item xs={12} md={4} lg={4} xl={2}>
+          <span>Account: </span>
+          <TextField source="username" label="username" />
+          {" - "}
           <TextField source="fullName" />
         </Grid>
+        <Grid item xs={12} md={6} lg={5} xl={3}></Grid>
         <Grid item md={12} />
-
-        <Grid item xs={12} md={4} lg={4} xl={2}>
-          <span>Username: </span>
-          <TextField source="username" label="username" />
-        </Grid>
 
         <Grid item xs={12} md={4} lg={4} xl={2}>
           <span>Email: </span>
@@ -87,8 +88,28 @@ export const ShowScreen = () => (
           <span>Contact: </span>
           <TextField source="contact" />
         </Grid>
+        <Grid item xs={12} md={4} lg={4} xl={4}>
+          <span>Git link: </span>
+          <TextField source="gitLink" />
+        </Grid>
         <Grid item md={12} />
-        <Grid item xs={12} md={6} lg={5} xl={3}>
+
+        <Grid item xs={12} md={4} lg={4} xl={2}>
+          <span>Is employer: </span>
+          <BooleanField source="isEmployer" />
+        </Grid>
+
+        <Grid item xs={12} md={4} lg={4} xl={2}>
+          <span>Is job seeker: </span>
+          <BooleanField source="isJobSeeker" />
+        </Grid>
+        <Grid item xs={12} md={4} lg={4} xl={2}>
+          <span>Available work hours per month: </span>
+          <NumberField source="workHoursPerMonth" />
+        </Grid>
+        <Grid item md={12} />
+
+        <Grid item xs={12} md={12} lg={8} xl={6}>
           <span>Work skills: </span>
           <ReferenceArrayField
             reference="skills"
@@ -102,7 +123,7 @@ export const ShowScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={12} lg={8} xl={6}>
-          <RichTextField source="description" label="User description"/>
+          <RichTextField source="description" label="User description" />
         </Grid>
       </Grid>
 

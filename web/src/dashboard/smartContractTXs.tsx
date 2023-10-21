@@ -63,8 +63,8 @@ const SmartContractTxs = (props: Props) => {
       <List sx={{ display: isLoading ? "none" : "block" }}>
         {plutustxs
           ? plutustxs.map((record: any) => (
-              <>
-                <ListItem key={record.id} sx={{ m: 0, p: 0.8 }}>
+              <React.Fragment key={record.id}>
+                <ListItem sx={{ m: 0, p: 0.8 }}>
                   <ListItemAvatar sx={{ minWidth: 30 }}>
                     {record.unlockedTxHash ? (
                       <DoneOutlinedIcon />
@@ -90,7 +90,6 @@ const SmartContractTxs = (props: Props) => {
                   <DateField record={record} source="createdAt"></DateField>
                 </ListItem>
                 <ListItem
-                  key={record.id + 1}
                   component={MuiLink}
                   alignItems="center"
                   sx={{ m: 0, p: 0.6 }}
@@ -134,7 +133,7 @@ const SmartContractTxs = (props: Props) => {
                     {record.amount} Ada
                   </Typography>
                 </ListItem>
-              </>
+              </React.Fragment>
             ))
           : null}
       </List>

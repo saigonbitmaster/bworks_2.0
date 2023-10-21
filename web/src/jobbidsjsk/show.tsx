@@ -186,7 +186,7 @@ const ShowScreen = (props) => {
               </Typography>
               <BooleanField source="isCompleted" fullWidth />
             </Grid>
-
+            <Grid item md={12} />
             <Grid item xs={12} md={4} lg={3} xl={2}>
               <Typography variant="subtitle2">
                 <strong> Payment status </strong>
@@ -195,19 +195,21 @@ const ShowScreen = (props) => {
             </Grid>
 
             <Grid item md={12} />
-            <Grid item xs={12} md={8} lg={6} xl={4}>
+            <Grid item xs={12} md={12} lg={9} xl={6}>
               <Typography variant="subtitle2">
                 <strong>Application letter</strong>
               </Typography>
               <RichTextField source="description" fullWidth />
             </Grid>
             <Grid item md={12} />
-            <Grid item xs={12} md={12} lg={12} xl={12}>
+            <Grid item xs={12} md={12} lg={9} xl={6}>
               <MessageField source="messages" />
             </Grid>
             <Grid item md={12} />
+            <Grid item xs={12} md={12} lg={9} xl={6}>
+              <CreateMessage />
+            </Grid>
           </Grid>
-          <CreateMessage />
         </SimpleShowLayout>
       </Show>
     </>

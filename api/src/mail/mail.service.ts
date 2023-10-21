@@ -15,6 +15,7 @@ mail notify send to user for cases:
 - job application is paid to bWorks smart contract
 - job application is paid to job seeker wallet or refund to employer wallet
 */
+  //register email verifyÏ
   async send(user: any, token: string) {
     const verifyUrl = process.env.MAIL_VERIFICATION_URL;
     const url = `${verifyUrl}${token}`;
@@ -41,6 +42,8 @@ mail notify send to user for cases:
 
   //notify to employer when a job seeker apply to the job
   async applyNotify(user: any, jobBid: JobBidDocument) {
+    //ignore if user setting to don't be notified
+    if (user.isNotified) return;
     const baseUrl = process.env.APP_BASE_URL;
     const url = `${baseUrl}/jobbids/${jobBid._id.toString()}/show`; //base url: http://localhost:3002/#
 
@@ -66,6 +69,9 @@ mail notify send to user for cases:
 
   //notify for new comment on a job bid
   async applicationComment(user: any, jobBid: JobBidDocument) {
+    //ignore if user setting to don't be notified
+    if (!user.isNotified) return;
+
     const baseUrl = process.env.APP_BASE_URL;
     const url =
       user._id.toString() === jobBid.employerId
@@ -95,6 +101,9 @@ mail notify send to user for cases:
 
   //notify to job seeker for job application is selected
   async applicationSelected(user: any, jobBid: JobBidDocument) {
+    //ignore if user setting to don't be notified
+    if (!user.isNotified) return;
+
     const baseUrl = process.env.APP_BASE_URL;
     const url = `${baseUrl}/jobbidsjsk/${jobBid._id.toString()}/show`;
 
@@ -127,7 +136,6 @@ mail notify send to user for cases:
     employer: any,
     isLocked: boolean, //true for lock, false for unlock
   ) {
-    console.log(plutusTx);
     if (!employer.email || !jobSeeker.email || !plutusTx.jobBidId) return;
 
     const explorerUrl = process.env.CARDANO_EXPLORER_URL;
@@ -144,7 +152,7 @@ mail notify send to user for cases:
 
     //if isLocked notify to job seeker, if unlocked notify to job seeker and employer
     let result;
-    if (isLocked) {
+    if (isLocked && jobSeeker.isNotified) {
       try {
         result = await this.mailerService.sendMail({
           to: jobSeeker.email,
@@ -165,30 +173,31 @@ mail notify send to user for cases:
     }
     if (!isLocked) {
       try {
-        console.log(subject, paymentMessage, url);
         result = Promise.all([
-          await this.mailerService.sendMail({
-            to: employer.email,
-            subject: `[bWorks] The application ${plutusTx.jobBidName} ${subject}`,
-            template: './payment',
-            context: {
-              name: employer.username,
-              jobBidName: plutusTx.jobBidName,
-              paymentMessage,
-              url,
-            },
-          }),
-          await this.mailerService.sendMail({
-            to: jobSeeker.email,
-            subject: `[bWorks] The application ${plutusTx.jobBidName} ${subject}`,
-            template: './payment',
-            context: {
-              name: jobSeeker.username,
-              jobBidName: plutusTx.jobBidName,
-              paymentMessage,
-              url,
-            },
-          }),
+          employer.isNotified &&
+            (await this.mailerService.sendMail({
+              to: employer.email,
+              subject: `[bWorks] The application ${plutusTx.jobBidName} ${subject}`,
+              template: './payment',
+              context: {
+                name: employer.username,
+                jobBidName: plutusTx.jobBidName,
+                paymentMessage,
+                url,
+              },
+            })),
+          jobSeeker.isNotified &&
+            (await this.mailerService.sendMail({
+              to: jobSeeker.email,
+              subject: `[bWorks] The application ${plutusTx.jobBidName} ${subject}`,
+              template: './payment',
+              context: {
+                name: jobSeeker.username,
+                jobBidName: plutusTx.jobBidName,
+                paymentMessage,
+                url,
+              },
+            })),
         ]);
       } catch (e) {
         console.log(

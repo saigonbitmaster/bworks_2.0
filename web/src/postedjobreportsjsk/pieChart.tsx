@@ -36,9 +36,9 @@ const PaymentChart = () => {
     },
   ];
   const data = [
-    { name: "Selected bids", value: data2.numberOfSelectedBids },
+    { name: "Selected applications", value: data2.numberOfSelectedBids },
     {
-      name: "Unselected bids",
+      name: "UnSelected applications",
       value: data2.numberOfBids - data2.numberOfSelectedBids,
     },
   ];
@@ -75,11 +75,11 @@ const PaymentChart = () => {
   return (
     <Card>
       <CardHeader
-        title="Jobs statistic"
+        title="Search job statistic"
         titleTypographyProps={{ variant: "subtitle1" }}
         subheader={
           <Typography variant="subtitle2" gutterBottom>
-            {`Posted jobs: ${data2.numberOfPostedJobs}, Attended applications: ${data2.numberOfBids}, Selected bids: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
+            {`Applied jobs: ${data2.numberOfPostedJobs}, Submitted applications: ${data2.numberOfBids}, Selected applications: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
           </Typography>
         }
       />
@@ -103,7 +103,6 @@ const PaymentChart = () => {
                 outerRadius={120}
                 fill="#8884d8"
                 dataKey="value"
-                
               >
                 {data1.map((entry, index) => (
                   <Cell

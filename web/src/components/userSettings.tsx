@@ -9,10 +9,14 @@ import {
   Toolbar,
   useDataProvider,
   BooleanInput,
+  TopToolbar,
+  NumberInput,
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
+import BackButton from "./backButton";
+import { urlValidate } from "../utils/validate";
 
 const UserEditToolbar = (props) => (
   <Toolbar {...props}>
@@ -20,14 +24,11 @@ const UserEditToolbar = (props) => (
   </Toolbar>
 );
 
-const urlValidate = (url) => {
-  if (!url) return undefined;
-  const regex = new RegExp("^(http|https)://");
-  if (regex.test(url)) {
-    return undefined;
-  }
-  return "Must be a https or http url";
-};
+const EditActions = () => (
+  <TopToolbar>
+    <BackButton />
+  </TopToolbar>
+);
 
 const EditScreen = () => {
   const dataProvider = useDataProvider();
@@ -40,9 +41,14 @@ const EditScreen = () => {
 
   if (!userId) return <div>...Loading</div>;
   return (
-    <Edit resource="users" id={userId} redirect="/">
+    <Edit
+      resource="users"
+      id={userId}
+      redirect="show"
+      actions={<EditActions />}
+    >
       <SimpleForm toolbar={<UserEditToolbar />}>
-        <Grid container spacing={1}>
+        <Grid container spacing={0.5}>
           <Grid item xs={12} md={6} lg={5} xl={3}>
             <TextInput source="fullName" fullWidth required />
           </Grid>
@@ -67,13 +73,49 @@ const EditScreen = () => {
               label="Agree to show contact"
             />
           </Grid>
+          <Grid item xs={12} md={6} lg={5} xl={3}>
+            <BooleanInput
+              source="isNotified"
+              fullWidth
+              label="Receive notification"
+            />
+          </Grid>
+          <Grid item md={12} />
 
+          <Grid item xs={12} md={6} lg={5} xl={3}>
+            <BooleanInput source="isEmployer" fullWidth label="Is employer" />
+          </Grid>
+          <Grid item xs={12} md={6} lg={5} xl={3}>
+            <BooleanInput
+              source="isJobSeeker"
+              fullWidth
+              label="Is job seeker"
+            />
+          </Grid>
           <Grid item md={12} />
           <Grid item xs={12} md={6} lg={5} xl={3}>
+            <TextInput
+              source="gitLink"
+              sx={{ mt: 0 }}
+              fullWidth
+              required={false}
+              validate={urlValidate}
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={5} xl={3}>
+            <NumberInput
+              source="workHoursPerMonth"
+              sx={{ mt: 0 }}
+              label="Available work hours per month"
+            />
+          </Grid>
+          <Grid item md={12} />
+          <Grid item xs={12} md={12} lg={8} xl={6}>
             <ReferenceArrayInput source="skills" reference="skills">
               <SelectArrayInput fullWidth />
             </ReferenceArrayInput>
           </Grid>
+
           <Grid item md={12} />
 
           <Grid item xs={12} md={12} lg={8} xl={6}>

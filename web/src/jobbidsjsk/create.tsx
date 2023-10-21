@@ -18,6 +18,7 @@ const CreateScreen = (props) => {
   const [searchParams] = useSearchParams();
   const search = searchParams.get("jobId");
   const jobId = JSON.parse(search);
+
   const urlValidate = (url) => {
     const regex = new RegExp("^(http|https)://");
     if (regex.test(url)) {
@@ -25,6 +26,7 @@ const CreateScreen = (props) => {
     }
     return "Must be a https or http url";
   };
+
   return (
     <Create redirect="list">
       <SimpleForm>
@@ -33,7 +35,7 @@ const CreateScreen = (props) => {
             <ReferenceInput
               source="jobId"
               reference="postjobs"
-              sort={{ field: "createdAt", order: "ASC" }}
+              sort={{ field: "createdAt", order: "DESC" }}
               perPage={100}
             >
               <SelectInput

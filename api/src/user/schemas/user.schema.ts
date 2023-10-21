@@ -15,8 +15,20 @@ export class User {
   @Prop()
   contact: string;
 
+  @Prop()
+  gitLink: string;
+
   @Prop({ default: false })
   isShowContact: boolean;
+
+  @Prop({ default: true })
+  isJobSeeker: boolean;
+
+  @Prop({ default: true })
+  isEmployer: boolean;
+
+  @Prop({ default: 0 })
+  workHoursPerMonth: number;
 
   @Prop({ required: true })
   password: string;
@@ -29,6 +41,9 @@ export class User {
 
   @Prop({ default: true })
   isApproved: boolean;
+
+  @Prop({ default: true })
+  isNotified: boolean;
 
   @Prop()
   refreshToken: string;

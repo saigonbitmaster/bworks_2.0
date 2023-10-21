@@ -29,7 +29,7 @@ const PostedJob = (props) => {
   const headers = [
     { key: "_id", name: "Month" },
    /*  { key: "numberOfPostedJobs", name: "Posted jobs" }, */
-    { key: "numberOfBids", name: "Attended applications" },
+    { key: "numberOfBids", name: "Submitted applications" },
     { key: "sumBidsAmounts", name: "Sum bid amounts ($Ada)" },
     { key: "numberOfPaidJobs", name: "Paid jobs" },
     { key: "numberOfCompletedJobs", name: "Completed jobs" },

@@ -23,7 +23,7 @@ const CardWithIcon = (props: Props) => {
     <Card
       sx={{
         mt: 2,
-        minHeight: 870,
+        minHeight: 890,
         display: "flex",
         flexDirection: "column",
         flex: "1",

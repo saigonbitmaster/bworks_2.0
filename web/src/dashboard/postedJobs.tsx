@@ -48,7 +48,7 @@ const PostedJob = (props) => {
     >
       <List sx={{ display }}>
         {postedjobs?.map((record: any) => (
-          <>
+          <React.Fragment key={record.id}>
             <ListItem
               key={record.id}
               alignItems="center"
@@ -82,7 +82,6 @@ const PostedJob = (props) => {
             </ListItem>
 
             <ListItem
-              key={record.id + 1}
               sx={{ m: 0, p: 0.6 }}
               /*    button
               component={Link}
@@ -94,7 +93,7 @@ const PostedJob = (props) => {
               </ListItemText>
               <LinkBidField record={record} />
             </ListItem>
-          </>
+          </React.Fragment>
         ))}
       </List>
       <Box flexGrow={1}>&nbsp;</Box>

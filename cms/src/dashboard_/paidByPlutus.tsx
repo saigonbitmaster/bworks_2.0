@@ -13,7 +13,7 @@ const PaidByPlutus = (props: Props) => {
     <CardWithIcon
       to="/plutustxs"
       icon={DollarIcon}
-      title="Paid by plutus"
+      title="Paid through smart contracts"
       subtitle={`${numberOfJobs} jobs, ${totalAmount} Ada`}
     />
   );

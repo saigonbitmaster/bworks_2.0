@@ -10,6 +10,28 @@ interface myProps extends NumberFieldProps {
   threshold?: number;
 }
 
+const Currency = (props) => {
+  const job = props.job || {};
+  const color = props.color || null;
+
+  const {
+    data: currency,
+    isLoading,
+    error,
+  } = useGetOne("currencies", { id: job.currencyId });
+
+  return (
+    <NumberField
+      {...props}
+      sx={{ color }}
+      locales="us-US"
+      options={
+        currency?.name ? { style: "currency", currency: currency.name } : {}
+      }
+    />
+  );
+};
+
 //use: <ColoredNumberField source="value" threshold={1000} />
 const ColoredNumberField = (props: myProps) => {
   const record = useRecordContext(props);
@@ -21,42 +43,20 @@ const ColoredNumberField = (props: myProps) => {
     error: jobError,
   } = useGetOne("postjobs", { id: record.jobId });
 
-  const {
-    data: currency,
-    isLoading,
-    error,
-  } = useGetOne("currencies", { id: job?.currencyId });
-
-  //currency must be ADA, USD or Ada, usd
-  const currencyName = error ? null : isLoading ? null : currency.name;
-
   if (
     !record ||
     !record.jobId ||
     !props.source ||
     jobLoading ||
     jobError ||
-    isLoading ||
-    error
+    !job
   ) {
     return null;
   }
   return record[props.source] > threshold ? (
-    <NumberField
-      {...props}
-      sx={{ color: "red" }}
-      locales="us-US"
-      options={
-        currencyName ? { style: "currency", currency: currencyName } : {}
-      }
-    />
+    <Currency {...props} color="red" job={job} />
   ) : (
-    <NumberField
-      {...props}
-      options={
-        currencyName ? { style: "currency", currency: currencyName } : {}
-      }
-    />
+    <Currency {...props} job={job} />
   );
 };
 

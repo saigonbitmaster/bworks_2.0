@@ -13,10 +13,13 @@ import {
   ReferenceArrayInput,
   SelectArrayInput,
   DateTimeInput,
+  minValue,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
+import moment from "moment";
 
+const oneWeekLate = moment().add(7, "days").format("YYYY-MM-DD");
 const CreateScreen = () => (
   <Create redirect="list">
     <SimpleForm>
@@ -67,7 +70,7 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job expire date"
-            defaultValue={new Date()}
+            defaultValue={moment().add(7, "days").toDate()}
           />
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
@@ -76,7 +79,7 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job deadline"
-            defaultValue={new Date()}
+            defaultValue={moment().add(7, "days").toDate()}
           />
         </Grid>
         <Grid item md={12} />
@@ -99,7 +102,11 @@ const CreateScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
-          <RichTextInput source="description" fullWidth label="Job description"/>
+          <RichTextInput
+            source="description"
+            fullWidth
+            label="Job description"
+          />
         </Grid>
       </Grid>
     </SimpleForm>

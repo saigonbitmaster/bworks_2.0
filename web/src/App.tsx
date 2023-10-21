@@ -106,6 +106,8 @@ const App = () => {
           zIndex: 100,
           width: 250,
           backgroundColor: "transparent",
+          overflowY: "hidden",
+          overflowX: "hidden",
         }}
       >
         @ {new Date().getFullYear()} Built on Cardano <br />

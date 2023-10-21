@@ -9,6 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  BarChart,
+  Bar,
+  Cell,
 } from "recharts";
 
 import FormGroup from "@mui/material/FormGroup";
@@ -39,7 +42,11 @@ const PaymentChart = () => {
   const dataProvider = useDataProvider();
   React.useEffect(() => {
     dataProvider
-      .customMethod("customapis/getmonthlyplutustxsreport", { filter: {queryType: "jsk"} }, "GET")
+      .customMethod(
+        "customapis/getmonthlyplutustxsreport",
+        { filter: { queryType: "jsk" } },
+        "GET"
+      )
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
@@ -88,11 +95,11 @@ const PaymentChart = () => {
         />
       </FormGroup>
       <CardContent>
-        <div style={{ width: "100%", height: 310 }}>
+        <div style={{ width: "100%", height: 327 }}>
           <ResponsiveContainer>
-            <AreaChart
+            <BarChart
               width={730}
-              height={310}
+              height={327}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >
@@ -136,10 +143,23 @@ const PaymentChart = () => {
                 fillOpacity={1}
                 fill="url(#colorUv)"
               />
+
+              <Bar
+                name={dataKeys.y1Name}
+                dataKey={dataKeys.y1}
+                fill="#ffc658"
+              />
+              <Bar
+                name={dataKeys.y2Name}
+                dataKey={dataKeys.y2}
+                stackId="a"
+                fill="#8884d8"
+              />
+
               <Legend
                 wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
               />
-            </AreaChart>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

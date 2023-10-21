@@ -9,9 +9,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  BarChart,
-  Bar,
-  Cell,
 } from "recharts";
 
 import { useDataProvider } from "react-admin";
@@ -31,11 +28,7 @@ const PostedJobChart = () => {
 
   React.useEffect(() => {
     dataProvider
-      .customMethod(
-        "customapis/getmonthlyjobreport",
-        { filter: { queryType: "emp" } },
-        "GET"
-      )
+      .customMethod("public/jobdashboard", { filter: {} }, "GET")
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
@@ -43,18 +36,29 @@ const PostedJobChart = () => {
   return (
     <Card>
       <CardHeader
-        title="Hiring statistic"
+        title="Posted jobs"
         titleTypographyProps={{ variant: "subtitle1" }}
+        sx={{ pb: 0 }}
       />
-      <CardContent>
-        <div style={{ width: "100%", height: 327 }}>
+      <CardContent sx={{ p: 0 }}>
+        <div style={{ width: "100%", height: 265 }}>
           <ResponsiveContainer>
-            <BarChart
-              width={730}
-              height={327}
+            <AreaChart
+              width={700}
+              height={265}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >
+              <defs>
+                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                </linearGradient>
+              </defs>
               <XAxis
                 tick={{ fontSize: 15 }}
                 dataKey="shortYear"
@@ -72,7 +76,7 @@ const PostedJobChart = () => {
                 type="monotone"
                 name="Posted jobs"
                 dataKey="numberOfPostedJobs"
-                stroke="#8884d8"
+                stroke="#82ca9d"
                 fillOpacity={1}
                 fill="url(#colorUv)"
               />
@@ -80,37 +84,14 @@ const PostedJobChart = () => {
                 type="monotone"
                 name="Submitted applications"
                 dataKey="numberOfBids"
-                stroke="#82ca9d"
+                stroke="#8884d8"
                 fillOpacity={1}
                 fill="url(#colorPv)"
-              />
-              <Bar
-                dataKey="numberOfPostedJobs"
-                fill="#ffc658"
-                name="Posted jobs"
-              />
-              <Bar
-                dataKey="numberOfBids"
-                stackId="a"
-                fill="#8884d8"
-                name="Submitted applications"
-              />
-              <Bar
-                dataKey="numberOfCompletedJobs"
-                stackId="a"
-                fill="#82ca9d"
-                name="Selected applications"
-              />
-              <Bar
-                dataKey="numberOfPaidJobs"
-                stackId="a"
-                fill="#4db6ac"
-                name="Paid jobs"
               />
               <Legend
                 wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
               />
-            </BarChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

@@ -77,6 +77,7 @@ export default function VerticalLinearStepper(props) {
                     record={step}
                     source="jobSeekerId"
                     reference="users"
+                    link="show"
                   >
                     <TextField source="fullName" />
                   </ReferenceField>

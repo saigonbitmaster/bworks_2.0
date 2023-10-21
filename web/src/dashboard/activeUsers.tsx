@@ -24,13 +24,6 @@ const ActiveUsers = (props: Props) => {
   const { jobSeekers = 0, employers = 0 } = props;
   const translate = useTranslate();
 
-  const aMonthAgo = subDays(new Date(), 30);
-  aMonthAgo.setDate(aMonthAgo.getDate() - 30);
-  aMonthAgo.setHours(0);
-  aMonthAgo.setMinutes(0);
-  aMonthAgo.setSeconds(0);
-  aMonthAgo.setMilliseconds(0);
-
   return (
     <CardWithIcon
       to="/users"

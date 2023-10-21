@@ -9,6 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  BarChart,
+  Bar,
+  Cell,
 } from "recharts";
 
 import { useDataProvider } from "react-admin";
@@ -40,15 +43,15 @@ const PostedJobChart = () => {
   return (
     <Card>
       <CardHeader
-        title="Posted jobs"
+        title="Search job statistic"
         titleTypographyProps={{ variant: "subtitle1" }}
       />
       <CardContent>
-        <div style={{ width: "100%", height: 310 }}>
+        <div style={{ width: "100%", height: 327 }}>
           <ResponsiveContainer>
-            <AreaChart
+            <BarChart
               width={730}
-              height={310}
+              height={327}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >
@@ -75,26 +78,33 @@ const PostedJobChart = () => {
               <YAxis tick={{ fontSize: 15 }} />
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
-              <Area
-                type="monotone"
-                name="Interested jobs"
+              <Bar
                 dataKey="numberOfPostedJobs"
-                stroke="#8884d8"
-                fillOpacity={1}
-                fill="url(#colorUv)"
+                fill="#ffc658"
+                name="Interested jobs"
               />
-              <Area
-                type="monotone"
-                name="Attended applications"
+              <Bar
                 dataKey="numberOfBids"
-                stroke="#82ca9d"
-                fillOpacity={1}
-                fill="url(#colorPv)"
+                stackId="a"
+                fill="#8884d8"
+                name="Submitted applications"
+              />
+              <Bar
+                dataKey="numberOfCompletedJobs"
+                stackId="a"
+                fill="#82ca9d"
+                name="Selected applications"
+              />
+              <Bar
+                dataKey="numberOfPaidJobs"
+                stackId="a"
+                fill="#4db6ac"
+                name="Paid jobs"
               />
               <Legend
                 wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
               />
-            </AreaChart>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

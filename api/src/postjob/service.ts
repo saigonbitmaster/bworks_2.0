@@ -113,8 +113,15 @@ export class PostJobService {
   async getJobReports(queryType: string, userId: string): Promise<any> {
     const aggregateScript = jobScript(queryType, userId);
     const result = await this.model.aggregate(aggregateScript);
+
+    //count posted jobs from current users as the aggregated script count only jobs with bids
+    const count = await this.model.find({ employerId: userId }).count().exec();
+
     if (result && result.length) {
-      return result[0];
+      const _result = result[0];
+      //add total jobs
+      _result.totalPostedJobs = count;
+      return _result;
     }
 
     return {};
@@ -261,7 +268,7 @@ export class PostJobService {
       //filter jobs matched job seekers skills
       if (query.filter.matchRate) {
         const operator = Object.keys(query.filter.matchRate)[0];
-        console.log(query.filter.matchRate, operator);
+
         if (operator === '$gte') {
           _data = _data.filter(
             (i) => i.matchRate >= query.filter.matchRate[operator],

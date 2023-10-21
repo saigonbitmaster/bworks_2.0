@@ -95,7 +95,6 @@ if requested user is not either employer or job seeker remove description (apply
     @Param('messageId') messageId: string,
     @Req() request,
   ) {
-    console.log(messageId);
     return await this.service.deleteMessage(
       id,
       messageId,

@@ -130,7 +130,7 @@ export class UserService {
     userId = null,
   ): Promise<User> {
     const user = await this.model.findById(id);
-    console.log(user);
+    console.log(updateUserDto);
     if (user._id.toString() !== userId) {
       return;
     }
