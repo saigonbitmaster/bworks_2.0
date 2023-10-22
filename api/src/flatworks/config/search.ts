@@ -1,5 +1,5 @@
 const empSearchConfig = () => {
-  const baseUrl = process.env.EMP_SEARCH_BASE_URL;
+  const baseUrl = process.env.APP_BASE_URL;
   return {
     baseUrl,
     priority: [
@@ -32,7 +32,7 @@ const empSearchConfig = () => {
 };
 
 const jskSearchConfig = () => {
-  const baseUrl = process.env.JSK_SEARCH_BASE_URL;
+  const baseUrl = process.env.APP_BASE_URL;
   return {
     baseUrl,
     priority: [
@@ -63,6 +63,7 @@ const jskSearchConfig = () => {
     ],
   };
 };
+
 const cmsSearchConfig = () => [
   {
     subUrl: 'postjobs',

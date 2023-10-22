@@ -80,6 +80,7 @@ const PaymentChart = () => {
       <CardHeader
         title="Payment TXs"
         titleTypographyProps={{ variant: "subtitle1" }}
+        sx={{ mb: 0, pb: 0 }}
       />
       <FormGroup sx={{ ml: 2 }}>
         <FormControlLabel
@@ -94,12 +95,12 @@ const PaymentChart = () => {
           label={label}
         />
       </FormGroup>
-      <CardContent>
-        <div style={{ width: "100%", height: 327 }}>
+      <CardContent sx={{ mt: 0, pt: 0 }}>
+        <div style={{ width: "100%", height: 340 }}>
           <ResponsiveContainer>
             <BarChart
               width={730}
-              height={327}
+              height={340}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

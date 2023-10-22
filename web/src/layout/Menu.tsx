@@ -25,6 +25,7 @@ import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRen
 import SubMenu from "./SubMenu";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
+import Divider from "@mui/material/Divider";
 
 type MenuName =
   | "postJobs"
@@ -64,7 +65,7 @@ const Menu = ({ dense = false }: MenuProps) => {
       }}
     >
       <DashboardMenuItem />
-
+      <Divider />
       <SubMenu
         handleToggle={() => handleToggle("postJobs")}
         isOpen={state.postJobs}
@@ -91,6 +92,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+
       <SubMenu
         handleToggle={() => handleToggle("jobSeeker")}
         isOpen={state.jobSeeker}
@@ -123,6 +125,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+
       <SubMenu
         handleToggle={() => handleToggle("manageFund")}
         isOpen={state.manageFund}
@@ -150,6 +153,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+
       <SubMenu
         handleToggle={() => handleToggle("reports")}
         isOpen={state.reports}
@@ -196,6 +200,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+
       <MenuItemLink
         to="/jobtasks"
         state={{ _scrollToTop: true }}
@@ -205,6 +210,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         leftIcon={<ListAltOutlinedIcon />}
         dense={dense}
       />
+
       <SubMenu
         handleToggle={() => handleToggle("tools")}
         isOpen={state.tools}
@@ -240,6 +246,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+
       <SubMenu
         handleToggle={() => handleToggle("settings")}
         isOpen={state.settings}

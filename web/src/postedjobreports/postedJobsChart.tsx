@@ -45,13 +45,14 @@ const PostedJobChart = () => {
       <CardHeader
         title="Hiring statistic"
         titleTypographyProps={{ variant: "subtitle1" }}
+        sx={{ mb: 0, pb: 0 }}
       />
-      <CardContent>
-        <div style={{ width: "100%", height: 327 }}>
+      <CardContent sx={{ mt: 0, pt: 0 }}>
+        <div style={{ width: "100%", height: 358 }}>
           <ResponsiveContainer>
             <BarChart
               width={730}
-              height={327}
+              height={358}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

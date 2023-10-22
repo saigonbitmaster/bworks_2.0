@@ -22,40 +22,9 @@ export class SearchService {
     private readonly userService: UserService,
   ) {}
 
-  /*
-  [
-  {
-    subUrl: 'postjobs',
-    serviceName: 'postJobService',
-    text: 'Found posted jobs',
-  },
-
-  {
-    subUrl: 'jobbids',
-    serviceName: 'jobBidService',
-    text: 'Found applications',
-  },
-
-  {
-    subUrl: 'users',
-    serviceName: 'userService',
-    text: 'Found users',
-  },
-  {
-    subUrl: 'skills',
-    serviceName: 'skillService',
-    text: 'Found work skills',
-  },
-  {
-    subUrl: 'plutustxs',
-    serviceName: 'PlutusTxService',
-    text: 'Found plutus payment transactions',
-  },
-];
-  */
-
+  //return number of rows
   async findAllCms(filter): Promise<any> {
-    const baseUrl = process.env.CMS_SEARCH_BASE_URL;
+    const baseUrl = process.env.CMS_BASE_URL;
     const configs = cmsSearchConfig();
     const text = filter.text;
     const results = [];
@@ -94,10 +63,11 @@ export class SearchService {
     };
   }
 
+  //return number of rows
   async findAllApp(filter, userId): Promise<any> {
     const text = filter.text;
     const results = [];
-    const baseUrl = process.env.APP_SEARCH_BASE_URL;
+    const baseUrl = process.env.APP_BASE_URL;
 
     const configs = appSearchConfig(userId);
     await Promise.all(
@@ -136,6 +106,7 @@ export class SearchService {
     };
   }
 
+  //return all rows
   async findAllEmp(filter): Promise<any> {
     const config = empSearchConfig();
 
@@ -223,6 +194,7 @@ export class SearchService {
     };
   }
 
+  //return all rows
   async findAllJsk(filter): Promise<any> {
     const config = jskSearchConfig();
     const text = filter.text;

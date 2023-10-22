@@ -9,6 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  BarChart,
+  Bar,
+  Cell,
 } from "recharts";
 
 import { useDataProvider } from "react-admin";
@@ -38,26 +41,17 @@ const PostedJobChart = () => {
       <CardHeader
         title="Posted jobs"
         titleTypographyProps={{ variant: "subtitle1" }}
+        sx={{ mb: 0, pb: 0 }}
       />
-      <CardContent>
-        <div style={{ width: "100%", height: 230 }}>
+      <CardContent sx={{ mt: 0, pt: 0 }}>
+        <div style={{ width: "100%", height: 245 }}>
           <ResponsiveContainer>
-            <AreaChart
+            <BarChart
               width={700}
-              height={230}
+              height={245}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >
-              <defs>
-                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-                </linearGradient>
-              </defs>
               <XAxis
                 tick={{ fontSize: 15 }}
                 dataKey="shortYear"
@@ -87,10 +81,22 @@ const PostedJobChart = () => {
                 fillOpacity={1}
                 fill="url(#colorPv)"
               />
+
+              <Bar
+                name="Posted jobs"
+                dataKey="numberOfPostedJobs"
+                fill="#ffc658"
+              />
+              <Bar
+                name="Submitted applications"
+                dataKey="numberOfBids"
+                fill="#8884d8"
+              />
+
               <Legend
                 wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
               />
-            </AreaChart>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

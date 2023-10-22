@@ -86,12 +86,12 @@ const Menu = ({ dense = false }: MenuProps) => {
         />
       </SubMenu>
       <MenuItemLink
-        to="/jobtasks"
+        to="/users"
         state={{ _scrollToTop: true }}
-        primaryText={translate(`resources.jobtasks.name`, {
+        primaryText={translate(`resources.users.name`, {
           smart_count: 2,
         })}
-        leftIcon={<ListAltOutlinedIcon />}
+        leftIcon={<PeopleOutlinedIcon />}
         dense={dense}
       />
 
@@ -112,6 +112,16 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+      <MenuItemLink
+        to="/jobtasks"
+        state={{ _scrollToTop: true }}
+        primaryText={translate(`resources.jobtasks.name`, {
+          smart_count: 2,
+        })}
+        leftIcon={<ListAltOutlinedIcon />}
+        dense={dense}
+      />
+
       <SubMenu
         handleToggle={() => handleToggle("reports")}
         isOpen={state.reports}
@@ -208,15 +218,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-        <MenuItemLink
-          to="/users"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.users.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<PeopleOutlinedIcon />}
-          dense={dense}
-        />
+
         <MenuItemLink
           to="/skills"
           state={{ _scrollToTop: true }}

@@ -87,7 +87,7 @@ const PaymentChart = () => {
         <div
           style={{
             width: "100%",
-            height: 295,
+            height: 335,
             display: "flex",
             flexDirection: "row",
           }}
@@ -103,7 +103,6 @@ const PaymentChart = () => {
                 outerRadius={120}
                 fill="#8884d8"
                 dataKey="value"
-                
               >
                 {data1.map((entry, index) => (
                   <Cell
