@@ -8,6 +8,7 @@ import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { JobBidService } from '../jobbid/service';
 import { MailService } from '../mail/mail.service';
 import { UserService } from '../user/user.service';
+import { EventsService } from '../events/service';
 
 import {
   plutusDashboardScript,
@@ -23,6 +24,7 @@ export class PlutusTxService {
     private jobBidService: JobBidService,
     private mailService: MailService,
     private userService: UserService,
+    private eventsService: EventsService,
   ) {}
 
   async getMonthlyPlutusTxsReport(queryType, userId): Promise<any> {
@@ -152,10 +154,25 @@ export class PlutusTxService {
     }
 
     //return
-    return await new this.model({
+    const result = await new this.model({
       ...createPlutusTxDto,
       createdAt: new Date(),
     }).save();
+
+    //event notify to job seeker & trusted partner
+    this.eventsService.sendMessage(jobSeeker._id.toString(), 'notification', {
+      type: 'payment',
+      message: result._id.toString(),
+      userType: 'jobSeeker',
+    });
+
+    this.eventsService.sendMessage(result.unlockUserId, 'notification', {
+      type: 'payment',
+      message: result._id.toString(),
+      userType: 'trustedPartner',
+    });
+
+    return result;
   }
 
   async update(
@@ -174,7 +191,7 @@ export class PlutusTxService {
         completedAt: new Date(),
       });
 
-      //notify employer & job seeker
+      //email notify employer & job seeker
       const employer = await this.userService.findById(currentRecord.empId);
       const jobSeeker = await this.userService.findById(currentRecord.jskId);
       this.mailService.paymentUpdate(
@@ -186,6 +203,19 @@ export class PlutusTxService {
         employer,
         false,
       );
+
+      //event notify to job seeker & employer
+      this.eventsService.sendMessage(jobSeeker._id.toString(), 'notification', {
+        type: 'payment',
+        message: currentRecord._id.toString(),
+        userType: 'jobSeeker',
+      });
+
+      this.eventsService.sendMessage(employer._id.toString(), 'notification', {
+        type: 'payment',
+        message: currentRecord._id.toString(),
+        userType: 'employer',
+      });
     }
 
     return await this.model.findByIdAndUpdate(id, updatePlutusTxDto).exec();

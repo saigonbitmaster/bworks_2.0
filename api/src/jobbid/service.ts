@@ -12,6 +12,7 @@ import { PostJobService } from '../postJob/service';
 import { MessageDto } from './dto/message.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { MailService } from '../mail/mail.service';
+import { EventsService } from '../events/service';
 
 @Injectable()
 export class JobBidService {
@@ -20,6 +21,7 @@ export class JobBidService {
     private readonly userService: UserService,
     private readonly postJobService: PostJobService,
     private readonly mailService: MailService,
+    private readonly eventsService: EventsService,
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
@@ -181,6 +183,15 @@ export class JobBidService {
 
     //notify employer
     this.mailService.applyNotify(employer, result);
+
+    //event notify to employer
+    const userType = 'employer';
+    this.eventsService.sendMessage(employer._id.toString(), 'notification', {
+      type: 'job',
+      message: result._id.toString(),
+      userType,
+    });
+
     return result;
   }
 
@@ -205,19 +216,40 @@ export class JobBidService {
         : isCompleted !== undefined
         ? (updateData.isCompleted = isCompleted)
         : null;
+
       //notify if the application is selected
       if (!record.isSelected && isSelected) {
         const jobSeeker = await this.userService.findById(record.jobSeekerId);
         this.mailService.applicationSelected(jobSeeker, record);
       }
 
+      //employer update event notify to job seeker
+      const eventUserId = record.jobSeekerId;
+      const userType = 'jobSeeker';
+      this.eventsService.sendMessage(eventUserId, 'notification', {
+        type: 'job',
+        message: record._id.toString(),
+        userType,
+      });
+
       return await this.model
         .findByIdAndUpdate(id, { isSelected, isSignedTx, isCompleted })
         .exec();
     }
+
     if (record.jobSeekerId !== userId) {
       throw new Error('This is not your record');
     }
+
+    //jsk update event notify to employer
+    const eventUserId = record.employerId;
+    const userType = 'employer';
+    this.eventsService.sendMessage(eventUserId, 'notification', {
+      type: 'job',
+      message: record._id.toString(),
+      userType,
+    });
+
     return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
   }
 
@@ -229,6 +261,17 @@ export class JobBidService {
     const jobBid = await this.model.findById(id);
     const user = await this.userService.findById(userId);
     if (userId !== jobBid.employerId && userId !== jobBid.jobSeekerId) return;
+
+    //notify to receiver
+    const eventUserId =
+      jobBid.employerId === userId ? jobBid.jobSeekerId : jobBid.employerId;
+    const userType = jobBid.employerId === userId ? 'jobSeeker' : 'employer';
+    this.eventsService.sendMessage(eventUserId, 'notification', {
+      type: 'message',
+      message: jobBid._id,
+      userType,
+    });
+
     const messages = jobBid.messages
       ? [
           ...jobBid.messages,

@@ -10,6 +10,7 @@ import { UserModule } from '../user/user.module';
 import { PostJobModule } from '../postJob/module';
 import { JobBidControllerCms } from './controller.cms';
 import { MailModule } from '../mail/mail.module';
+import { EventModule } from '../events/module';
 
 @Global()
 @Module({
@@ -22,6 +23,7 @@ import { MailModule } from '../mail/mail.module';
     UserModule,
     PostJobModule,
     MailModule,
+    EventModule,
   ],
   exports: [JobBidService],
 })

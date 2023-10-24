@@ -1,5 +1,11 @@
 import * as React from "react";
-import { AppBar, Logout, UserMenu, useTranslate } from "react-admin";
+import {
+  AppBar,
+  Logout,
+  UserMenu,
+  DateField,
+  useDataProvider,
+} from "react-admin";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -23,57 +29,102 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import Typography from "@mui/material/Typography";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-
-const ConfigurationMenu = React.forwardRef((props, ref) => {
-  const translate = useTranslate();
-  return (
-    <MenuItem
-      component={Link}
-      // @ts-ignore
-      ref={ref}
-      {...props}
-      to="/configuration"
-    >
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
-      <ListItemText>{translate("pos.configuration")}</ListItemText>
-    </MenuItem>
-  );
-});
+import PaidIcon from "@mui/icons-material/Paid";
+import { useNavigate } from "react-router-dom";
 
 const CustomUserMenu = () => {
+  const dataProvider = useDataProvider();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+
+  //close drawer when click outside the component
+  const useOutsideAlerter = (ref) => {
+    React.useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setOpen(false);
+        }
+      }
+      // add the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // remove the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  };
+
+  const wrapperRef = React.useRef(null);
+  useOutsideAlerter(wrapperRef);
+
+  const [messages, setMessages] = React.useState([]);
+  const authorizationToken = localStorage.getItem("accessToken");
+
+  React.useEffect(() => {
+    const api = `http://localhost:3000/events/jobbids?access_token=${authorizationToken}`;
+    const es = new EventSource(api);
+
+    // Listen to API to receive realtime events. Effect will run every time server send message
+    es.addEventListener("notification", (e) => {
+      const message = JSON.parse(e.data);
+      setMessages(message);
+    });
+  }, []);
+
+  /*
+close drawer & delete a clicked event, navigate to item screen
+*/
+  const onClick = (event) => {
+    setOpen(false);
+    dataProvider
+      .customMethod(`events/remove/${event.id}`, { filter: {} }, "GET")
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
+
+    if (event.type === "job" || event.type === "message") {
+      if (event.userType === "employer") {
+        navigate(`/jobbids/${event.message}/show`);
+      }
+      if (event.userType === "jobSeeker") {
+        navigate(`/jobbidsjsk/${event.message}/show`);
+      }
+    }
+    if (event.type === "payment") {
+      const filter = JSON.stringify({ _id: event.message });
+      navigate(`/plutustxs?filter=${filter}`);
+    }
+  };
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 300 }}
+      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 350 }}
       role="presentation"
     >
       <List>
-        {[
-          "Applications is selected ",
-          "Applications ABC got new message",
-          "Applications is selected",
-          "Applications ABC got new message",
-        ].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
+        {messages.map((text, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton onClick={() => onClick(text)}>
               <ListItemIcon sx={{ minWidth: 30 }}>
-                {index % 2 === 0 ? (
+                {text.type === "job" ? (
                   <CheckBoxIcon fontSize="small" />
+                ) : text.type === "payment" ? (
+                  <PaidIcon></PaidIcon>
                 ) : (
                   <MailIcon fontSize="small" />
                 )}
               </ListItemIcon>
               <ListItemText
-                primary={<Typography variant="body2">{text}</Typography>}
+                primary={
+                  <Typography variant="body2">
+                    {text.type === "message"
+                      ? "New message"
+                      : text.type === "payment"
+                      ? "New payment update"
+                      : "New job update"}
+                  </Typography>
+                }
               />
-              <Typography variant="body2">{new Date().toString()}</Typography>
+              <DateField record={text} source="date" showTime />
             </ListItemButton>
           </ListItem>
         ))}
@@ -82,18 +133,22 @@ const CustomUserMenu = () => {
   );
 
   return (
-    <>
+    <Box ref={wrapperRef} sx={{ display: "flex", flexDirection: "row" }}>
       <UserMenu>
-        {/*   <ConfigurationMenu /> */}
         <Logout />
       </UserMenu>
 
       <Badge
         color="info"
-        badgeContent={99}
+        badgeContent={messages.length || 0}
         sx={{
-          "& .MuiBadge-badge": { fontSize: 10, height: 16, minWidth: 15 },
-          mr: 0.1,
+          "& .MuiBadge-badge": {
+            fontSize: 10,
+            height: 15,
+            minWidth: 15,
+            mt: 0.5,
+            mr: 0.1,
+          },
         }}
       >
         <IconButton
@@ -109,12 +164,12 @@ const CustomUserMenu = () => {
 
       <Drawer
         variant="persistent"
-        open={open}
+        open={open && messages.length > 0}
         anchor="right"
         onClose={() => {}}
         PaperProps={{
           sx: {
-            minWidth: 300,
+            minWidth: 370,
             height: "auto",
             mt: 6,
             mr: 0,
@@ -123,9 +178,10 @@ const CustomUserMenu = () => {
       >
         {list("top")}
       </Drawer>
-    </>
+    </Box>
   );
 };
+
 const CustomAppBar = (props: any) => {
   const isLargeEnough = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.up("sm")
@@ -139,7 +195,6 @@ const CustomAppBar = (props: any) => {
     >
       {isLargeEnough && <Logo />}
       {isLargeEnough && <Box component="span" sx={{ flex: 1 }} />}
-
       {isLargeEnough && <Box component="span" sx={{ flex: 1 }} />}
       {isLargeEnough && <Box component={SearchAppBar} />}
     </AppBar>
@@ -147,96 +202,3 @@ const CustomAppBar = (props: any) => {
 };
 
 export default CustomAppBar;
-
-/*
-
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
-
-export default function TemporaryDrawer() {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
-
-  const toggleDrawer =
-    (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-
-      setState({ ...state, [anchor]: open });
-    };
-
-  const list = (anchor: Anchor) => (
-    <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
-  return (
-    <div>
-      {(['left', 'right', 'top', 'bottom'] as const).map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <Drawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
-    </div>
-  );
-}
-*/

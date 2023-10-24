@@ -22,6 +22,7 @@ import { RolesGuard } from '../flatworks/roles/roles.guard';
 
 import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
+import { EventAuthGuard } from './events-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -42,7 +43,7 @@ export class AuthController {
     return this.authService.adminLogin(req.user);
   }
 
-  @UseGuards(RefreshTokenGuard)
+  @UseGuards(EventAuthGuard)
   @Get('profile')
   @Public()
   getProfile(@Request() req) {

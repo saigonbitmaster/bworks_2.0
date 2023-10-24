@@ -74,6 +74,18 @@ export interface Message {
   createdAt: Date;
   id: string;
 }
+/*
+ const event = {
+      type: 'job' || 'payment' || 'message';
+      userType: 'employer' || 'jobSeeker', -> to notify to employer or job seeker
+      message: 'jobBidId' || 'plutusTxId',
+    };
+*/
+export interface Event {
+  type: string;
+  userType?: string;
+  message: string;
+}
 
 export interface TypeSkill {
   name: string;

@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     dataProvider
-      .customMethod("public/dashboardcards", { filter: {} }, "GET")
+      .customMethod("customapis/dashboardcards", { filter: {} }, "GET")
       .then((result) => setDashBoardCardData(result.data))
       .catch((error) => console.error(error));
   }, []);

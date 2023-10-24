@@ -20,7 +20,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import * as lodash from 'lodash';
 import { queryTransform } from '../flatworks/utils/getlist';
 
-@UseGuards(JwtAuthGuard)
 @Controller('customapis')
 export class CustomController {
   constructor(
@@ -28,6 +27,26 @@ export class CustomController {
     private readonly postJobService: PostJobService,
     private readonly publicService: PublicService,
   ) {}
+
+  //dashboard apis
+  @Get('dashboardcards')
+  async getDashboardData(@Response() res: any) {
+    const result = await this.publicService.getDashboardData();
+    return res.json(result);
+  }
+
+  //plutus dashboard chart
+  @Get('dashboardplutus')
+  async _getDashboardPlutus(@Response() res: any) {
+    const result = await this.plutusTxService.getPlutusDashboard();
+    return res.json(result);
+  }
+  //job dashboard chart
+  @Get('jobdashboard')
+  async _getDashboardJob(@Response() res: any) {
+    const result = await this.postJobService.getJobDashboard();
+    return res.json(result);
+  }
 
   //current user, jobs statistic
   @Get('userstatistic')

@@ -43,7 +43,7 @@ const PaymentChart = () => {
 
   React.useEffect(() => {
     dataProvider
-      .customMethod("public/dashboardplutus", { filter: {} }, "GET")
+      .customMethod("customapis/dashboardplutus", { filter: {} }, "GET")
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
