@@ -20,6 +20,7 @@ import {
   FilterButton,
   UrlField,
   RichTextField,
+  useListSortContext,
 } from "react-admin";
 import RateField from "../components/rateField";
 import Button from "@mui/material/Button";
@@ -30,6 +31,10 @@ import Typography from "@mui/material/Typography";
 import RefreshButton from "../components/refreshButton";
 import ShowButton from "../components/showButton";
 import MessagesCount from "../components/messagesCount";
+import Divider from "@mui/material/Divider";
+import { TableHead, TableRow, TableCell } from "@mui/material";
+import { DatagridHeaderProps, FieldProps } from "react-admin";
+import ButtonBase from "@mui/material/ButtonBase";
 
 const JobListActions = () => (
   <TopToolbar>
@@ -208,6 +213,60 @@ const ListScreen = () => {
     );
   };
 
+  const DatagridHeader = ({ children }: DatagridHeaderProps) => {
+    const { sort, setSort } = useListSortContext();
+    const inverseOrder = (sort: string) => (sort === "ASC" ? "DESC" : "ASC");
+    const handleChangeSort = (field) => {
+      if (field) {
+        setSort({
+          field,
+          order: field === sort.field ? inverseOrder(sort.order) : "ASC",
+        });
+      }
+    };
+
+    return (
+      <TableHead sx={{ fontWeight: "bold" }}>
+        <TableRow>
+          <TableCell align="center" colSpan={7} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong> APPLICATIONs </strong>
+            </Divider>
+          </TableCell>
+          <TableCell align="center" colSpan={3} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong>JOBs</strong>
+            </Divider>
+          </TableCell>
+          <TableCell align="center" colSpan={6} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong>ACTIONs</strong>
+            </Divider>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell sx={{ pt: 0 }}></TableCell>
+          {/* empty cell to account for the select row checkbox in the body */}
+          {React.Children.map(children, (child) =>
+            React.isValidElement<FieldProps>(child) ? (
+              <TableCell
+                key={child.props.source}
+                sx={{ textAlign: "left", pt: 0 }}
+                onClick={() => {
+                  handleChangeSort(child.props.source);
+                }}
+              >
+                <ButtonBase disableRipple sx={{ typography: "subtitle2" }}>
+                  <strong> {child.props.label || child.props.source} </strong>
+                </ButtonBase>
+              </TableCell>
+            ) : null
+          )}
+        </TableRow>
+      </TableHead>
+    );
+  };
+
   return (
     <List
       empty={false}
@@ -224,17 +283,9 @@ const ListScreen = () => {
         bulkActionButtons={false}
         expand={<BidPanel />}
         rowClick={rowClick}
+        header={DatagridHeader}
       >
         <TextField source="name" label="Application" />
-
-        <ReferenceField
-          reference="postJobs"
-          source="jobId"
-          label="Job name"
-          link={"show"}
-        >
-          <TextField source="name" />
-        </ReferenceField>
 
         <ReferenceField
           reference="users"
@@ -247,12 +298,30 @@ const ListScreen = () => {
         <CurrencyNumberField
           source="bidValue"
           threshold={10000}
-          label="Requested amount"
+          label="Requested ($)"
+          textAlign="left"
         />
 
+        <DateField source="completeDate" showTime label="Committed deadline" />
         <RateField source="rate" label="Matching rate" />
+        <DateField source="createdAt" showTime />
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Job name"
+          link={"show"}
+        >
+          <TextField source="name" />
+        </ReferenceField>
 
-        <DateField source="completeDate" showTime label="Applied deadline" />
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Budget ($)"
+          link={false}
+        >
+          <FunctionField render={(record) => `ADA ${record.budget}`} />
+        </ReferenceField>
 
         <ReferenceField
           reference="postJobs"
@@ -262,7 +331,7 @@ const ListScreen = () => {
         >
           <DateField source="expectDate" showTime />
         </ReferenceField>
-        <DateField source="createdAt" showTime />
+
         <SelectButton />
 
         <FunctionField

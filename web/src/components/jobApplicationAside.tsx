@@ -66,10 +66,10 @@ export default function JobAppSteps(props) {
     >
       <Paper
         elevation={0}
-        sx={{ padding: "1em", boxShadow: "none", border: "none" }}
+        sx={{ padding: "1em", pt: 0, pb: 0, boxShadow: "none", border: "none" }}
       >
-        <Typography variant="h6" gutterBottom>
-          {label}
+        <Typography variant="subtitle1" gutterBottom>
+          <strong> {label}</strong>
         </Typography>
         <Stepper orientation="vertical">
           {jobBids.data.length > 0 &&

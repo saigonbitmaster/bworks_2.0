@@ -26,6 +26,13 @@ import SubMenu from "./SubMenu";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
 import Divider from "@mui/material/Divider";
+import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
+import WorkHistoryOutlinedIcon from "@mui/icons-material/WorkHistoryOutlined";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
+import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
+import InputOutlinedIcon from '@mui/icons-material/InputOutlined';
+import PlagiarismOutlinedIcon from '@mui/icons-material/PlagiarismOutlined';
+
 
 type MenuName =
   | "postJobs"
@@ -70,7 +77,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         handleToggle={() => handleToggle("postJobs")}
         isOpen={state.postJobs}
         name="pos.menu.postJobs"
-        icon={<DoneAllOutlinedIcon />}
+        icon={<WorkHistoryOutlinedIcon />}
         dense={dense}
       >
         <MenuItemLink
@@ -79,7 +86,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           primaryText={translate(`resources.postJobs.name`, {
             smart_count: 2,
           })}
-          leftIcon={<GradingOutlinedIcon />}
+          leftIcon={<FactCheckOutlinedIcon />}
           dense={dense}
         />
         <MenuItemLink
@@ -88,7 +95,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           primaryText={translate(`resources.jobBids.name`, {
             smart_count: 2,
           })}
-          leftIcon={<FormatListNumberedOutlinedIcon />}
+          leftIcon={<PlagiarismOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>
@@ -97,7 +104,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         handleToggle={() => handleToggle("jobSeeker")}
         isOpen={state.jobSeeker}
         name="pos.menu.jobSeeker"
-        icon={<DoneAllOutlinedIcon />}
+        icon={<ManageSearchOutlinedIcon />}
         dense={dense}
       >
         <MenuItemLink
@@ -112,7 +119,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           primaryText={translate(`resources.postJobsJsk.name`, {
             smart_count: 2,
           })}
-          leftIcon={<GradingOutlinedIcon />}
+          leftIcon={<FormatListNumberedOutlinedIcon />}
           dense={dense}
         />
         <MenuItemLink
@@ -121,7 +128,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           primaryText={translate(`resources.jobBidsJsk.name`, {
             smart_count: 2,
           })}
-          leftIcon={<FormatListNumberedOutlinedIcon />}
+          leftIcon={<InputOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>

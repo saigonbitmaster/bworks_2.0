@@ -74,7 +74,14 @@ const ListScreen = () => {
           filter={{ queryType: "user", status: { $ne: "completed" } }}
           filters={jobFilters}
         >
-          <Datagrid bulkActionButtons={false}>
+          <Datagrid
+            bulkActionButtons={false}
+            sx={{
+              "& .RaDatagrid-headerCell": {
+                fontWeight: "bold",
+              },
+            }}
+          >
             <TextField source="name" />
             <ReferenceField
               reference="jobbids"
@@ -92,8 +99,8 @@ const ListScreen = () => {
             <DateField source="startDate" showTime />
             <DateField source="deadline" showTime />
 
-            <EditButton />
-            <DeleteButton />
+            <EditButton label="" sx={{ minWidth: 0 }} />
+            <DeleteButton label="" sx={{ minWidth: 0 }} />
           </Datagrid>
         </List>
       </Paper>
@@ -122,7 +129,14 @@ const ListScreen = () => {
           resource="jobtasks"
           filter={{ queryType: "user", status: "completed" }}
         >
-          <Datagrid bulkActionButtons={false}>
+          <Datagrid
+            bulkActionButtons={false}
+            sx={{
+              "& .RaDatagrid-headerCell": {
+                fontWeight: "bold",
+              },
+            }}
+          >
             <TextField source="name" />
             <ReferenceField
               reference="jobbids"
@@ -140,8 +154,8 @@ const ListScreen = () => {
             <DateField source="startDate" showTime />
             <DateField source="deadline" showTime />
 
-            <EditButton />
-            <DeleteButton />
+            <EditButton label="" sx={{ minWidth: 0 }} />
+            <DeleteButton label="" sx={{ minWidth: 0 }} />
           </Datagrid>
         </List>
       </Paper>

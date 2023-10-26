@@ -22,7 +22,10 @@ import {
   BooleanInput,
   FilterButton,
   useNotify,
+  useListSortContext,
+  FunctionField,
 } from "react-admin";
+
 import RateField from "../components/rateField";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
@@ -31,7 +34,10 @@ import Button from "@mui/material/Button";
 import ShowButton from "../components/showButton";
 import MessagesCount from "../components/messagesCount";
 import { Box } from "@mui/material";
-
+import Divider from "@mui/material/Divider";
+import { TableHead, TableRow, TableCell } from "@mui/material";
+import { DatagridHeaderProps, FieldProps } from "react-admin";
+import ButtonBase from "@mui/material/ButtonBase";
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
@@ -145,6 +151,62 @@ const ListScreen = () => {
       </Button>
     );
   };
+
+  const DatagridHeader = ({ children }: DatagridHeaderProps) => {
+    const { sort, setSort } = useListSortContext();
+    const inverseOrder = (sort: string) => (sort === "ASC" ? "DESC" : "ASC");
+    const handleChangeSort = (field) => {
+      if (field) {
+        setSort({
+          field,
+          order: field === sort.field ? inverseOrder(sort.order) : "ASC",
+        });
+      }
+    };
+
+    return (
+      <TableHead sx={{ fontWeight: "bold" }}>
+        <TableRow>
+          <TableCell align="center" colSpan={7} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong> APPLICATIONs </strong>
+            </Divider>
+          </TableCell>
+          <TableCell align="center" colSpan={4} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong>JOBs</strong>
+            </Divider>
+          </TableCell>
+          <TableCell align="center" colSpan={6} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong>ACTIONs</strong>
+            </Divider>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell sx={{ pt: 0 }}></TableCell>
+          <TableCell sx={{ pt: 0 }}></TableCell>
+          {/* empty cell to account for the select row checkbox in the body */}
+          {React.Children.map(children, (child) =>
+            React.isValidElement<FieldProps>(child) ? (
+              <TableCell
+                key={child.props.source}
+                sx={{ textAlign: "left", pt: 0 }}
+                onClick={() => {
+                  handleChangeSort(child.props.source);
+                }}
+              >
+                <ButtonBase disableRipple sx={{ typography: "subtitle2" }}>
+                  <strong> {child.props.label || child.props.source} </strong>
+                </ButtonBase>
+              </TableCell>
+            ) : null
+          )}
+        </TableRow>
+      </TableHead>
+    );
+  };
+
   return (
     <List
       empty={false}
@@ -157,36 +219,56 @@ const ListScreen = () => {
       actions={<JobListActions />}
       filter={{ queryType: "jobSeeker" }}
     >
-      <Datagrid expand={<BidPanel />}>
+      <Datagrid expand={<BidPanel />} header={DatagridHeader}>
         <TextField source="name" label="Application" />
-        <ReferenceField reference="postjobsjsk" source="jobId" link={"show"}>
-          <TextField source="name" />
-        </ReferenceField>
-        <ReferenceField reference="users" source="employerId" link={"show"}>
-          <TextField source="fullName" />
-        </ReferenceField>
 
         <CurrencyNumberField
           source="bidValue"
           threshold={10000}
-          label="Requested amount"
+          label="Requested ($)"
         />
 
         <DateField source="completeDate" showTime label="Your deadline" />
+
+        <RateField source="rate" label="Matching rate" />
+        <DateField source="createdAt" showTime label="Submitted at" />
+        <ReferenceField
+          reference="postjobsjsk"
+          source="jobId"
+          link={"show"}
+          label="Job"
+        >
+          <TextField source="name" />
+        </ReferenceField>
+        <ReferenceField
+          reference="users"
+          source="employerId"
+          link={"show"}
+          label="Employer"
+        >
+          <TextField source="fullName" />
+        </ReferenceField>
+
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Budget ($)"
+          link={false}
+        >
+          <FunctionField render={(record) => `ADA ${record.budget}`} />
+        </ReferenceField>
         <ReferenceField
           reference="postjobsjsk"
           source="jobId"
           label="Job deadline"
           link={false}
         >
-          <DateField source="expectDate" showTime />
+          <DateField source="expectDate" showTime label="Job deadline" />
         </ReferenceField>
-        <RateField source="rate" label="Matching rate" />
-        <DateField source="createdAt" showTime label="Submitted at" />
-        <BooleanField source="isSelected" />
+        <BooleanField source="isSelected" label="Is selected" />
         <JobDoneButton source="jobDone" label="Job done" />
-        <BooleanField source="isCompleted" label="Confirmed Complete" />
-        <BooleanField source="isPaid" />
+        <BooleanField source="isCompleted" label="Confirmed complete" />
+        <BooleanField source="isPaid" label="Is paid" />
         <EditButton />
         <MessagesCount></MessagesCount>
         <ShowButton />

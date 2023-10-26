@@ -17,6 +17,7 @@ import {
   useRecordContext,
   UrlField,
   BooleanInput,
+  useListSortContext,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/sumBidsField";
@@ -28,6 +29,10 @@ import MatchUsers from "../components/matchedUsers";
 import MatchedUsersField from "../components/matchedUsersField";
 import RefreshButton from "../components/refreshButton";
 import ShowJob from "../components/showButton";
+import Divider from "@mui/material/Divider";
+import { TableHead, TableRow, TableCell } from "@mui/material";
+import { DatagridHeaderProps, FieldProps } from "react-admin";
+import ButtonBase from "@mui/material/ButtonBase";
 
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
@@ -61,6 +66,57 @@ const JobPanel = () => {
 };
 
 const ListScreen = () => {
+  
+  const DatagridHeader = ({ children }: DatagridHeaderProps) => {
+    const { sort, setSort } = useListSortContext();
+    const inverseOrder = (sort: string) => (sort === "ASC" ? "DESC" : "ASC");
+    const handleChangeSort = (field) => {
+      if (field) {
+        setSort({
+          field,
+          order: field === sort.field ? inverseOrder(sort.order) : "ASC",
+        });
+      }
+    };
+
+    return (
+      <TableHead sx={{ fontWeight: "bold" }}>
+        <TableRow>
+          <TableCell align="center" colSpan={8} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong>JOBs</strong>
+            </Divider>
+          </TableCell>
+          <TableCell align="center" colSpan={2} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong>APPLICATIONs</strong>
+            </Divider>
+          </TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell sx={{ pt: 0 }}></TableCell>
+          <TableCell sx={{ pt: 0 }}></TableCell>
+          {/* empty cell to account for the select row checkbox in the body */}
+          {React.Children.map(children, (child) =>
+            React.isValidElement<FieldProps>(child) ? (
+              <TableCell
+                key={child.props.source}
+                sx={{ textAlign: "left", pt: 0 }}
+                onClick={() => {
+                  handleChangeSort(child.props.source);
+                }}
+              >
+                <ButtonBase disableRipple sx={{ typography: "subtitle2" }}>
+                  <strong> {child.props.label || child.props.source} </strong>
+                </ButtonBase>
+              </TableCell>
+            ) : null
+          )}
+        </TableRow>
+      </TableHead>
+    );
+  };
+
   const [record, setRecord] = React.useState(null);
   const rowClick = (id, resource, record) => {
     setRecord(record);
@@ -87,12 +143,19 @@ const ListScreen = () => {
         actions={<JobListActions />}
         aside={<JobAppSteps record={record} queryType="employer"></JobAppSteps>}
       >
-        <Datagrid rowClick={rowClick} expand={<JobPanel />}>
-          <TextField source="name" label="Job name" />
-          <CurrencyNumberField source="budget" threshold={10000} />
-          <ReferenceField reference="users" source="employerId" link={"show"}>
-            <TextField source="fullName" />
-          </ReferenceField>
+        <Datagrid
+          rowClick={rowClick}
+          expand={<JobPanel />}
+          header={DatagridHeader}
+        >
+          <TextField source="name" label="Job" />
+          <CurrencyNumberField
+            source="budget"
+            threshold={10000}
+            label="Budget"
+            textAlign="left"
+          />
+
           <ReferenceArrayField
             reference="skills"
             source="skills"
@@ -102,10 +165,10 @@ const ListScreen = () => {
               <ChipField source="name" />
             </SingleFieldList>
           </ReferenceArrayField>
-          <BooleanField source="isApproved" label="Approval" />
 
-          <DateField source="expireDate" showTime />
-          <DateField source="createdAt" showTime />
+          <DateField source="expireDate" showTime label="Expire date" />
+          <DateField source="createdAt" showTime label="Posted at" />
+          <BooleanField source="isApproved" label="Approval" />
           <MatchedUsersField label="Matched users" source="matchUsers" />
 
           <LinkBidField />
