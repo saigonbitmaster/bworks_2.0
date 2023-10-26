@@ -70,7 +70,7 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
-        empty={<></>}
+        empty={false}
         emptyWhileLoading
         filters={filters}
         perPage={25}

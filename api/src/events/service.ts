@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { Event } from '../flatworks/types/types';
-
-type EventType = 'notification' | 'data' | 'progress';
+import { Event, EventType } from '../flatworks/types/types';
+import { esWriteData, esWriteHeader } from '../flatworks/utils/event.source';
 
 @Injectable()
 export class EventsService {
@@ -12,63 +11,49 @@ export class EventsService {
 
   constructor() {
     this.users = new Map();
-    this.data = new Map(); //{id: uuid, useId: abc, message: jobBidId || plutusTxId, userType: employer || jobSeeker}
+    this.data = new Map();
   }
+
+  /*
+  server sent event services to notify users on: new message, job bid change, payment actions.
+  - create user server event source connections
+  - write, remove user events to user connections
+  - close  user connections
+  */
 
   addUser(userId: string, res: Response) {
-    this.users.set(userId, res);
-    //  this.data.set(userId, []);
-    console.log(`events: User ${userId} is connected`);
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      Connection: 'keep-alive',
-      'Cache-Control': 'no-cache',
-      'X-Accel-Buffering': 'no',
-      'Access-Control-Allow-Origin': '*',
-    });
-
-    //return current events data at first time user connect
-    const _userData = this.data.get(userId) || [];
-    const userData = JSON.stringify(_userData);
-
-    return res.write(`event: notification\ndata: ${userData} \n\n`);
+    this.users.set(userId, esWriteHeader(res));
+    const userData = this.data.get(userId) || [];
+    return esWriteData(res, 'notification', userData);
   }
 
-  sendMessage(userId: string, type: EventType, event: Event) {
+  addEvent(userId: string, type: EventType, event: Event) {
     if (!userId || !event.message) return;
     const res = this.users.get(userId);
-    const _userData = this.data.get(userId) || [];
-    this.data.set(userId, [
-      ..._userData,
+    const userData = [
       {
         ...event,
         id: uuidv4(),
         date: new Date(),
       },
-    ]);
+      ...(this.data.get(userId) || []),
+    ];
+    this.data.set(userId, userData);
+    return esWriteData(res, 'notification', userData);
+  }
 
-    const userData = JSON.stringify(this.data.get(userId));
-    if (res) {
-      res.write(`event: ${type}\ndata: ${userData} \n\n`);
-    }
+  deleteEvent(userId, eventId) {
+    if (!userId || !eventId) return;
+    const userData = (this.data.get(userId) || []).filter(
+      (item) => item.id !== eventId,
+    );
+    this.data.set(userId, userData);
+    const res = this.users.get(userId);
+    return esWriteData(res, 'notification', userData);
   }
 
   removeUser(userId: string) {
+    if (!userId) return;
     this.users.delete(userId);
-    console.log(`events User ${userId} is disconnected`);
-  }
-
-  removeEvent(userId, id) {
-    const _userData = this.data.get(userId) || [];
-    const userData = _userData.filter((item) => item.id !== id);
-    this.data.set(userId, userData);
-
-    const res = this.users.get(userId);
-    //update new data to browser
-    if (res) {
-      return res.write(
-        `event: notification\ndata: ${JSON.stringify(userData)} \n\n`,
-      );
-    }
   }
 }

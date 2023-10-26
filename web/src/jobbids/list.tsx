@@ -210,7 +210,7 @@ const ListScreen = () => {
 
   return (
     <List
-      empty={<></>}
+      empty={false}
       emptyWhileLoading
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
@@ -236,8 +236,13 @@ const ListScreen = () => {
           <TextField source="name" />
         </ReferenceField>
 
-        <ReferenceField reference="users" source="jobSeekerId" link={"show"}>
-          <TextField source="fullName" />
+        <ReferenceField
+          reference="users"
+          source="jobSeekerId"
+          link={"show"}
+          label="Applicant"
+        >
+          <TextField source="fullName" label="Applicant" />
         </ReferenceField>
         <CurrencyNumberField
           source="bidValue"

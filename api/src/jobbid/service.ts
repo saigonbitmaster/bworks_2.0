@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  forwardRef,
+  Inject,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateJobBidDto } from './dto/create.dto';
@@ -19,7 +24,8 @@ export class JobBidService {
   constructor(
     @InjectModel(JobBid.name) private readonly model: Model<JobBidDocument>,
     private readonly userService: UserService,
-    private readonly postJobService: PostJobService,
+    @Inject(forwardRef(() => PostJobService))
+    private postJobService: PostJobService,
     private readonly mailService: MailService,
     private readonly eventsService: EventsService,
   ) {}
@@ -50,6 +56,7 @@ export class JobBidService {
     }
 
     const count = await this.model.find(query.filter).count().exec();
+
     const data = await this.model
       .find(query.filter)
       .sort(query.sort)
@@ -76,18 +83,18 @@ export class JobBidService {
 
     const _data = data.map((item) => {
       const job = jobs.find(
-        (jobItem) => jobItem._doc._id.toString() === item.jobId,
+        (jobItem) => jobItem?._doc._id.toString() === item.jobId,
       );
 
       const jobSeeker = jobSeekers.find(
-        (jobItem) => jobItem._doc._id.toString() === item.jobSeekerId,
+        (jobItem) => jobItem?._doc._id.toString() === item.jobSeekerId,
       );
 
       const rate = rankJobBid(
-        jobSeeker._doc.skills || [],
-        job._doc.skills || [],
-        job._doc.minBidValue || 0,
-        job._doc.budget || 0,
+        jobSeeker?._doc.skills || [],
+        job?._doc.skills || [],
+        job?._doc.minBidValue || 0,
+        job?._doc.budget || 0,
         item.bidValue || 0,
         item.hasPrototype || false,
       );
@@ -167,6 +174,9 @@ export class JobBidService {
     jobSeekerId: string,
   ): Promise<JobBid> {
     const postJob = await this.postJobService.findOne(createJobBidDto.jobId);
+    if (postJob.employerId === jobSeekerId) {
+      throw new BadRequestException('This is your posted job');
+    }
     const employer = await this.userService.findById(postJob.employerId);
 
     let result;
@@ -186,7 +196,7 @@ export class JobBidService {
 
     //event notify to employer
     const userType = 'employer';
-    this.eventsService.sendMessage(employer._id.toString(), 'notification', {
+    this.eventsService.addEvent(employer._id.toString(), 'notification', {
       type: 'job',
       message: result._id.toString(),
       userType,
@@ -201,9 +211,19 @@ export class JobBidService {
     userId: string,
   ): Promise<JobBid> {
     const record: JobBidDocument = await this.model.findById(id).exec();
+
+    if (userId !== record.jobSeekerId && userId !== record.employerId) {
+      throw new BadRequestException('This is not your job application');
+    }
     //selected bid will not able to change the requested budget
-    if (record.isSelected) {
-      delete updateJobBidDto['bidValue'];
+    if (
+      record.isSelected &&
+      updateJobBidDto.bidValue &&
+      record.bidValue !== updateJobBidDto.bidValue
+    ) {
+      throw new BadRequestException(
+        'Can not change requested amount($) for a selected application',
+      );
     }
     //emp has right to select, complete & update sign tx for the bid only
     if (record.employerId === userId) {
@@ -226,7 +246,7 @@ export class JobBidService {
       //employer update event notify to job seeker
       const eventUserId = record.jobSeekerId;
       const userType = 'jobSeeker';
-      this.eventsService.sendMessage(eventUserId, 'notification', {
+      this.eventsService.addEvent(eventUserId, 'notification', {
         type: 'job',
         message: record._id.toString(),
         userType,
@@ -237,14 +257,10 @@ export class JobBidService {
         .exec();
     }
 
-    if (record.jobSeekerId !== userId) {
-      throw new Error('This is not your record');
-    }
-
     //jsk update event notify to employer
     const eventUserId = record.employerId;
     const userType = 'employer';
-    this.eventsService.sendMessage(eventUserId, 'notification', {
+    this.eventsService.addEvent(eventUserId, 'notification', {
       type: 'job',
       message: record._id.toString(),
       userType,
@@ -266,7 +282,7 @@ export class JobBidService {
     const eventUserId =
       jobBid.employerId === userId ? jobBid.jobSeekerId : jobBid.employerId;
     const userType = jobBid.employerId === userId ? 'jobSeeker' : 'employer';
-    this.eventsService.sendMessage(eventUserId, 'notification', {
+    this.eventsService.addEvent(eventUserId, 'notification', {
       type: 'message',
       message: jobBid._id,
       userType,
@@ -333,7 +349,7 @@ export class JobBidService {
       throw new Error('This is not your record');
     }
     if (record.isSelected) {
-      throw new Error('Can not delete the selected application');
+      throw new BadRequestException('Can not delete a selected application');
     }
 
     return await this.model.findByIdAndDelete(id).exec();

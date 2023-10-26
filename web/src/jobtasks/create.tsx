@@ -42,7 +42,7 @@ const CreateScreen = () => (
           </ReferenceInput>
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <SelectInput source="status" choices={statusChoices} required/>
+          <SelectInput source="status" choices={statusChoices} required />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={6} lg={5} xl={3}>
@@ -53,7 +53,12 @@ const CreateScreen = () => (
           />
         </Grid>
         <Grid item xs={12} md={6} lg={5} xl={3}>
-          <DateTimeInput source="deadline" fullWidth required/>
+          <DateTimeInput
+            source="deadline"
+            defaultValue={new Date()}
+            fullWidth
+            required
+          />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} lg={10} xl={6}>

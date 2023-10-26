@@ -46,11 +46,11 @@ const PostedJobChart = () => {
         sx={{ pb: 0 }}
       />
       <CardContent sx={{ p: 0 }}>
-        <div style={{ width: "100%", height: 265 }}>
+        <div style={{ width: "100%", height: 255 }}>
           <ResponsiveContainer>
             <BarChart
               width={700}
-              height={265}
+              height={255}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >

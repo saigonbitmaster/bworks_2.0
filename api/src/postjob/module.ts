@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { PostJobService } from './service';
 import { PostJobController } from './controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User, UserSchema } from '../user/schemas/user.schema';
 import { UserModule } from '../user/user.module';
 import { SkillModule } from '../skill/module';
+import { JobBidModule } from '../jobbid/module';
 
 @Module({
   providers: [PostJobService, JwtService],
@@ -16,6 +17,7 @@ import { SkillModule } from '../skill/module';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     UserModule,
     SkillModule,
+    forwardRef(() => JobBidModule),
   ],
   exports: [PostJobService],
 })

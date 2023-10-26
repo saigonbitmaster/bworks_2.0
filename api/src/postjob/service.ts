@@ -1,5 +1,10 @@
 import { SkillService } from './../skill/service';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePostJobDto } from './dto/create.dto';
@@ -15,6 +20,7 @@ import {
 import * as moment from 'moment';
 import { UserService } from '../user/user.service';
 import { rankSkills } from '../flatworks/logics/rank';
+import { JobBidService } from '../jobbid/service';
 
 @Injectable()
 export class PostJobService {
@@ -23,6 +29,8 @@ export class PostJobService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly userService: UserService,
     private readonly skillService: SkillService,
+    @Inject(forwardRef(() => JobBidService))
+    private jobBidService: JobBidService,
   ) {}
 
   async getMonthlyJobReport(queryType, userId): Promise<any> {
@@ -367,9 +375,16 @@ export class PostJobService {
   }
   async delete(id: string, userId: string): Promise<PostJob> {
     const record: PostJob = await this.model.findById(id).exec();
+
     if (record.employerId !== userId) {
-      throw new Error('This is not your record');
+      throw new BadRequestException('This is not your posted job!');
     }
+
+    const jobBids = await this.jobBidService.count({ jobId: id });
+    if (jobBids > 0) {
+      throw new BadRequestException('Can not delete a job has applications');
+    }
+
     return await this.model.findByIdAndDelete(id).exec();
   }
 

@@ -64,7 +64,7 @@ export default function JobAppSteps(props) {
         sx={{ padding: "0em", boxShadow: "none", border: "none" }}
       >
         <Stepper orientation="vertical" connector={<></>}>
-          {record.messages.length > 0 &&
+          {record.messages?.length > 0 &&
             record.messages.map((step, index) => (
               <Step key={index} active={true}>
                 <StepLabel>

@@ -21,6 +21,7 @@ import {
   useUpdate,
   BooleanInput,
   FilterButton,
+  useNotify,
 } from "react-admin";
 import RateField from "../components/rateField";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
@@ -29,6 +30,7 @@ import RefreshButton from "../components/refreshButton";
 import Button from "@mui/material/Button";
 import ShowButton from "../components/showButton";
 import MessagesCount from "../components/messagesCount";
+import { Box } from "@mui/material";
 
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
@@ -110,11 +112,20 @@ const ListScreen = () => {
     const record = useRecordContext();
     const diff = { jobDone: !record.jobDone };
     const refresh = useRefresh();
-    const [update, { isLoading, error }] = useUpdate("jobbidsjsk", {
-      id: record.id,
-      data: diff,
-      previousData: record,
-    });
+    const notify = useNotify();
+    const [update, { isLoading, error }] = useUpdate(
+      "jobbidsjsk",
+      {
+        id: record.id,
+        data: diff,
+        previousData: record,
+      },
+      {
+        onError: (error) => {
+          notify(`${error}`, { type: "warning" });
+        },
+      }
+    );
 
     const handleClick = () => {
       update();
@@ -134,10 +145,9 @@ const ListScreen = () => {
       </Button>
     );
   };
-
   return (
     <List
-      empty={<></>}
+      empty={false}
       emptyWhileLoading
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
@@ -155,6 +165,14 @@ const ListScreen = () => {
         <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
+
+        <CurrencyNumberField
+          source="bidValue"
+          threshold={10000}
+          label="Requested amount"
+        />
+
+        <DateField source="completeDate" showTime label="Your deadline" />
         <ReferenceField
           reference="postjobsjsk"
           source="jobId"
@@ -163,15 +181,8 @@ const ListScreen = () => {
         >
           <DateField source="expectDate" showTime />
         </ReferenceField>
-        <CurrencyNumberField
-          source="bidValue"
-          threshold={10000}
-          label="Requested amount"
-        />
-
-        <DateField source="completeDate" showTime label="Your deadline" />
         <RateField source="rate" label="Matching rate" />
-        <DateField source="createdAt" showTime />
+        <DateField source="createdAt" showTime label="Submitted at" />
         <BooleanField source="isSelected" />
         <JobDoneButton source="jobDone" label="Job done" />
         <BooleanField source="isCompleted" label="Confirmed Complete" />

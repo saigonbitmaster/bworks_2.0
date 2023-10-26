@@ -64,7 +64,7 @@ const ListScreen = () => {
   return (
     <Box display="flex">
       <List
-        empty={<></>}
+        empty={false}
         emptyWhileLoading
         resource="postjobsjsk"
         filters={filters}
@@ -103,7 +103,7 @@ const ListScreen = () => {
               <ChipField source="name" />
             </SingleFieldList>
           </ReferenceArrayField>
-          <BooleanField source="isApproved" label="Approval" />
+
           <RateField source="matchRate" label="Your match" />
           <DateField source="expireDate" showTime />
           <DateField source="createdAt" showTime />

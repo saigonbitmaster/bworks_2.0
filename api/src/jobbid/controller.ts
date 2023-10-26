@@ -42,7 +42,7 @@ if requested user is not either employer or job seeker remove description (apply
           { jobSeekerId: userId },
           { employerId: userId },
         ])
-      : (mongooseQuery.select = { description: 0 });
+      : (mongooseQuery.select = { description: 0, messages: 0 });
 
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);

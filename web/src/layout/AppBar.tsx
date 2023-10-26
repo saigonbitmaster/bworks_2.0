@@ -36,6 +36,7 @@ const CustomUserMenu = () => {
   const dataProvider = useDataProvider();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   //close drawer when click outside the component
   const useOutsideAlerter = (ref) => {
@@ -61,7 +62,7 @@ const CustomUserMenu = () => {
   const authorizationToken = localStorage.getItem("accessToken");
 
   React.useEffect(() => {
-    const api = `http://localhost:3000/events/jobbids?access_token=${authorizationToken}`;
+    const api = `${apiUrl}/events/submit?access_token=${authorizationToken}`;
     const es = new EventSource(api);
 
     // Listen to API to receive realtime events. Effect will run every time server send message
@@ -77,7 +78,7 @@ close drawer & delete a clicked event, navigate to item screen
   const onClick = (event) => {
     setOpen(false);
     dataProvider
-      .customMethod(`events/remove/${event.id}`, { filter: {} }, "GET")
+      .customMethod(`events/delete/${event.id}`, { filter: {} }, "GET")
       .then((result) => console.log(result))
       .catch((error) => console.error(error));
 

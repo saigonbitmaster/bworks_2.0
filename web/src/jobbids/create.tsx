@@ -26,7 +26,7 @@ const CreateScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <NumberInput source="bidValue" fullWidth required />
+          <NumberInput source="bidValue" fullWidth required defaultValue={5} />
         </Grid>
 
         <Grid item xs={12} md={4} lg={3} xl={2}>

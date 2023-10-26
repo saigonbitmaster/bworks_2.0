@@ -32,6 +32,7 @@ export class PostJobController {
     mongooseQuery.filter.queryType == 'employer'
       ? (mongooseQuery.filter.employerId = userId)
       : null;
+
     const result = await this.service.findAll(mongooseQuery, userId);
     return formatRaList(res, result);
   }

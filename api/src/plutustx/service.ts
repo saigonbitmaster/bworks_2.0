@@ -160,13 +160,13 @@ export class PlutusTxService {
     }).save();
 
     //event notify to job seeker & trusted partner
-    this.eventsService.sendMessage(jobSeeker._id.toString(), 'notification', {
+    this.eventsService.addEvent(jobSeeker._id.toString(), 'notification', {
       type: 'payment',
       message: result._id.toString(),
       userType: 'jobSeeker',
     });
 
-    this.eventsService.sendMessage(result.unlockUserId, 'notification', {
+    this.eventsService.addEvent(result.unlockUserId, 'notification', {
       type: 'payment',
       message: result._id.toString(),
       userType: 'trustedPartner',
@@ -205,13 +205,13 @@ export class PlutusTxService {
       );
 
       //event notify to job seeker & employer
-      this.eventsService.sendMessage(jobSeeker._id.toString(), 'notification', {
+      this.eventsService.addEvent(jobSeeker._id.toString(), 'notification', {
         type: 'payment',
         message: currentRecord._id.toString(),
         userType: 'jobSeeker',
       });
 
-      this.eventsService.sendMessage(employer._id.toString(), 'notification', {
+      this.eventsService.addEvent(employer._id.toString(), 'notification', {
         type: 'payment',
         message: currentRecord._id.toString(),
         userType: 'employer',

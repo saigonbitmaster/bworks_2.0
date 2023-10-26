@@ -20,12 +20,20 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 
-
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const jobFilters = [
   <TextInput label="Search" source="textSearch" alwaysOn />,
-  <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
-    <AutocompleteInput filterToQuery={filterToQuery} optionText="name" label="Application" />
+  <ReferenceInput
+    source="jobBidId"
+    reference="jobbids"
+    filter={{ queryType: "user" }}
+    alwaysOn
+  >
+    <AutocompleteInput
+      filterToQuery={filterToQuery}
+      optionText="name"
+      label="Application"
+    />
   </ReferenceInput>,
 ];
 
@@ -58,6 +66,7 @@ const ListScreen = () => {
         </Box>
 
         <List
+          empty={false}
           perPage={25}
           sort={{ field: "createdAt", order: "desc" }}
           hasCreate
@@ -106,6 +115,7 @@ const ListScreen = () => {
         </Box>
 
         <List
+          empty={false}
           perPage={25}
           sort={{ field: "createdAt", order: "desc" }}
           hasCreate={false}

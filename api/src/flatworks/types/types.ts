@@ -1,3 +1,8 @@
+/*
+Type is  not extendable
+Interface is  extendable
+*/
+
 export interface GitCommit {
   id: string;
   message: string;
@@ -101,3 +106,13 @@ export enum Role {
   Admin = 'admin',
   User = 'user',
 }
+
+export type EventType = 'notification' | 'data' | 'progress' | 'error';
+
+export const EventHeader = {
+  'Content-Type': 'text/event-stream',
+  Connection: 'keep-alive',
+  'Cache-Control': 'no-cache',
+  'X-Accel-Buffering': 'no',
+  'Access-Control-Allow-Origin': '*',
+};

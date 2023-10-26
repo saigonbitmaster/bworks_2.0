@@ -64,7 +64,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           }),
       }}
     >
-      <DashboardMenuItem />
+      <DashboardMenuItem sx={{ textTransform: "uppercase" }} />
       <Divider />
       <SubMenu
         handleToggle={() => handleToggle("postJobs")}

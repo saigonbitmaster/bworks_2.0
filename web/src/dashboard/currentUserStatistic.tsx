@@ -12,6 +12,10 @@ const PostedJobChart = () => {
     gotApplications: 0,
     submittedJobs: 0,
     gotJobs: 0,
+    completeJobs: 0,
+    paidJobs: 0,
+    employerCompleteJobs: 0,
+    employerPaidJobs: 0,
   });
   const dataProvider = useDataProvider();
 
@@ -32,9 +36,14 @@ const PostedJobChart = () => {
             </strong>
           </Typography>
           <Typography variant="caption" display={"block"}>
-            Posted jobs: {data?.postedJobs || null}, Got applications:
-            {data?.gotApplications || null}, Applied jobs:
-            {data?.submittedJobs || null}, Got jobs: {data?.gotJobs || null}
+            Posted jobs: {data?.postedJobs || 0}, Got applications:{" "}
+            {data?.gotApplications || 0}, Got complete jobs{" "}
+            {data?.employerCompleteJobs || 0}, Paid out:
+            {data?.employerPaidJobs || 0}
+            <br />
+            Applied jobs: {data?.submittedJobs || 0}, Got jobs:{" "}
+            {data?.gotJobs || 0}, Complete jobs: {data?.completeJobs || 0}
+            ,Received payments: {data?.paidJobs || 0}
           </Typography>
         </CardContent>
       </Card>

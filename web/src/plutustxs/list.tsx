@@ -94,6 +94,7 @@ const ListScreen = () => {
 
   return (
     <List
+      empty={false}
       perPage={25}
       sort={{ field: "lockDate", order: "DESC" }}
       resource="plutustxs"
@@ -105,13 +106,19 @@ const ListScreen = () => {
       actions={<ListActions></ListActions>}
     >
       <Datagrid bulkActionButtons={false}>
-        <ReferenceField source="name" reference="postjobs" label="Job">
+        <ReferenceField
+          source="name"
+          reference="postjobsjsk"
+          label="Job"
+          link={false}
+        >
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField
           source="jobBidId"
           reference="jobbids"
           label="Job application"
+          link={false}
         >
           <TextField source="name" />
         </ReferenceField>

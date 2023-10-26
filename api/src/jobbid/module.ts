@@ -1,4 +1,4 @@
-import { Module, Global } from '@nestjs/common';
+import { Module, Global, forwardRef } from '@nestjs/common';
 import { JobBidService } from './service';
 import { JobBidController } from './controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -21,7 +21,7 @@ import { EventModule } from '../events/module';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: PostJob.name, schema: PostJobSchema }]),
     UserModule,
-    PostJobModule,
+    forwardRef(() => PostJobModule),
     MailModule,
     EventModule,
   ],

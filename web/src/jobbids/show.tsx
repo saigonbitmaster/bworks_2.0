@@ -118,7 +118,7 @@ const ShowScreen = (props) => {
             </Grid>
             <Grid item xs={12} md={4} lg={3} xl={2}>
               <Typography variant="subtitle2">
-                <strong> Job seeker </strong>
+                <strong> Applicant </strong>
               </Typography>
               <ReferenceField
                 source="jobSeekerId"

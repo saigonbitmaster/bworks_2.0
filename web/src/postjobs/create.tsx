@@ -20,6 +20,7 @@ import { RichTextInput } from "ra-input-rich-text";
 import moment from "moment";
 
 const oneWeekLate = moment().add(7, "days").format("YYYY-MM-DD");
+
 const CreateScreen = () => (
   <Create redirect="list">
     <SimpleForm>

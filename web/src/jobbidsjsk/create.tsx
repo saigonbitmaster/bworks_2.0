@@ -59,6 +59,7 @@ const CreateScreen = (props) => {
               fullWidth
               required
               label="Requested budget (Ada)"
+              defaultValue={5}
             />
           </Grid>
           <Grid item md={12} />
