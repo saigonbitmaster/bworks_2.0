@@ -43,6 +43,9 @@ export class JobBid {
   @Prop({ default: false })
   isSignedTx: boolean;
 
+  @Prop()
+  plutusTxId: string;
+
   @Prop({ default: true })
   isApproved: boolean;
 
@@ -59,6 +62,9 @@ export class JobBid {
   messages?: Message[];
 
   @Prop()
+  extraText: string;
+
+  @Prop()
   description: string;
 
   @Prop()
@@ -70,6 +76,34 @@ export class JobBid {
 
 const JobBidSchema = SchemaFactory.createForClass(JobBid);
 JobBidSchema.plugin(uniqueValidator);
-JobBidSchema.index({ name: 'text', jobSeekerId: 1, employerId: 1 });
+JobBidSchema.index(
+  {
+    name: 'text',
+    description: 'text',
+  },
+  {
+    weights: {
+      name: 1,
+      description: 1,
+    },
+    name: 'textIndex',
+  },
+);
 
+JobBidSchema.index(
+  {
+    employerId: 1,
+  },
+  {
+    name: 'employerId',
+  },
+);
+JobBidSchema.index(
+  {
+    jobSeekerId: 1,
+  },
+  {
+    name: 'jobSeekerId',
+  },
+);
 export { JobBidSchema };

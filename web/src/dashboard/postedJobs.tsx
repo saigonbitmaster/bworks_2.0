@@ -98,7 +98,7 @@ const PostedJob = (props) => {
       </List>
       <Box flexGrow={1}>&nbsp;</Box>
       <Button
-        sx={{ borderRadius: 0, mb: 5 }}
+        sx={{ borderRadius: 0, m: 0, p: 0 }}
         component={Link}
         to="/postjobsjsk"
         size="small"

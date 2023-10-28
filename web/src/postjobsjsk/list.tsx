@@ -122,7 +122,7 @@ const ListScreen = () => {
         emptyWhileLoading
         resource="postjobsjsk"
         filters={filters}
-        perPage={25}
+        perPage={10}
         sort={{ field: "createdAt", order: "desc" }}
         hasCreate
         sx={{
@@ -153,12 +153,14 @@ const ListScreen = () => {
             source="budget"
             threshold={10000}
             textAlign="left"
+            label="Budget ($)"
           />
           <ReferenceField
             reference="users"
             source="employerId"
             link={"show"}
             textAlign="left"
+            label="Employer"
           >
             <TextField source="fullName" />
           </ReferenceField>
@@ -173,8 +175,8 @@ const ListScreen = () => {
           </ReferenceArrayField>
 
           <RateField source="matchRate" label="Your match" />
-          <DateField source="expireDate" showTime />
-          <DateField source="createdAt" showTime />
+          <DateField source="expireDate" showTime label="Expire date" />
+          <DateField source="createdAt" showTime label="Created at" />
           <LinkBidField queryType={null} />
           <ApplyButton />
           <ShowJob />

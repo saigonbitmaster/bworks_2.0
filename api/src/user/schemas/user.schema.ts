@@ -68,11 +68,22 @@ export class User {
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
-UserSchema.index({
-  username: 'text',
-  fullName: 'text',
-  email: 'text',
-  description: 'text',
-});
+UserSchema.index(
+  {
+    username: 'text',
+    fullName: 'text',
+    email: 'text',
+    description: 'text',
+  },
+  {
+    weights: {
+      username: 1,
+      fullName: 1,
+      email: 1,
+      description: 1,
+    },
+    name: 'textIndex',
+  },
+);
 
 export { UserSchema };

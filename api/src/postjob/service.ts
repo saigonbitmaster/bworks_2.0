@@ -21,6 +21,7 @@ import * as moment from 'moment';
 import { UserService } from '../user/user.service';
 import { rankSkills } from '../flatworks/logics/rank';
 import { JobBidService } from '../jobbid/service';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class PostJobService {

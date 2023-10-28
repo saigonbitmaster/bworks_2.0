@@ -10,7 +10,9 @@ import {
   ArrayField,
 } from "react-admin";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+const filters = [
+  <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
+];
 
 const ListScreen = () => {
   return (

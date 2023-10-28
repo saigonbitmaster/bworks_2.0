@@ -10,11 +10,13 @@ export class BaseJobBidDto {
   isSelected: boolean;
   isSignedTx: boolean;
   jobDone: boolean;
+  plutusTxId: string;
   isPaid: boolean;
   hasPrototype: boolean;
   prototypeLink: string;
   isCompleted: boolean;
   messages: Message[];
   isApproved: boolean;
+  extraText: string;
   description: string;
 }

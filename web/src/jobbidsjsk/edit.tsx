@@ -101,7 +101,7 @@ const EditScreen = () => (
           <RichTextInput
             source="description"
             fullWidth
-            label="Message to employer"
+            label="Application letter"
           />
         </Grid>
       </Grid>

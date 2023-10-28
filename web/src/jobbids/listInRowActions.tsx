@@ -3,53 +3,63 @@ import {
   List,
   Datagrid,
   TextField,
-  EditButton,
   DateField,
-  NumberField,
+  ExportButton,
   ReferenceField,
   TextInput,
   BooleanField,
-  SelectInput,
-  ReferenceInput,
-  TopToolbar,
-  ExportButton,
-  CreateButton,
+  useUpdate,
   useRecordContext,
+  useRefresh,
+  FunctionField,
+  TopToolbar,
+  ReferenceInput,
   useGetOne,
   AutocompleteInput,
-  useRefresh,
-  useUpdate,
   BooleanInput,
   FilterButton,
-  useNotify,
+  UrlField,
+  RichTextField,
   useListSortContext,
-  FunctionField,
 } from "react-admin";
-
 import RateField from "../components/rateField";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import { stringify } from "query-string";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
 import RefreshButton from "../components/refreshButton";
-import Button from "@mui/material/Button";
 import ShowButton from "../components/showButton";
 import MessagesCount from "../components/messagesCount";
-import { Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { TableHead, TableRow, TableCell } from "@mui/material";
 import { DatagridHeaderProps, FieldProps } from "react-admin";
 import ButtonBase from "@mui/material/ButtonBase";
-import ApplicationAsideJsk from "../components/applicationAsideJsk";
+import Aside from "../components/applicationAside";
+
+const JobListActions = () => (
+  <TopToolbar>
+    <FilterButton></FilterButton>
+    <ExportButton />
+    <RefreshButton baseUrl="/jobbids"></RefreshButton>
+  </TopToolbar>
+);
 
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
-  <ReferenceInput source="jobId" reference="postjobs" alwaysOn>
+  <ReferenceInput
+    source="jobId"
+    reference="postjobs"
+    filter={{ queryType: "employer" }}
+    alwaysOn
+  >
     <AutocompleteInput
+      sx={{ width: 300 }}
       filterToQuery={filterToQuery}
       fullWidth
       optionText="name"
-      label="Search a job"
-      sx={{ width: 300 }}
+      label="Select a job"
     />
   </ReferenceInput>,
 
@@ -75,6 +85,88 @@ const filters = [
   />,
 ];
 
+const SelectButton = () => {
+  const record = useRecordContext();
+  const diff = { isSelected: !record.isSelected };
+  const refresh = useRefresh();
+  const [update, { isLoading, error }] = useUpdate("jobbids", {
+    id: record.id,
+    data: diff,
+    previousData: record,
+  });
+
+  const handleClick = () => {
+    update();
+  };
+
+  React.useEffect(() => {
+    refresh();
+  }, [isLoading, error]);
+
+  return (
+    <Button
+      variant="text"
+      disabled={record.isSignedTx || record.isPaid}
+      onClick={handleClick}
+      /*  startIcon={
+        record.isSelected ? <ClearOutlinedIcon /> : <DoneOutlinedIcon />
+      } */
+    >
+      {record.isSelected ? "deselect" : "select"}
+    </Button>
+  );
+};
+
+const CompletedButton = (props) => {
+  const record = useRecordContext();
+  const diff = { isCompleted: !record.isCompleted };
+  const refresh = useRefresh();
+  const [update, { isLoading, error }] = useUpdate("jobbids", {
+    id: record.id,
+    data: diff,
+    previousData: record,
+  });
+
+  const handleClick = () => {
+    update();
+  };
+
+  React.useEffect(() => {
+    refresh();
+  }, [isLoading, error]);
+
+  return (
+    <Button
+      variant="text"
+      disabled={record.isPaid || !record.isSelected}
+      onClick={handleClick}
+    >
+      {record.isCompleted ? "Mark incomplete" : "Mark complete"}
+    </Button>
+  );
+};
+
+const SignButton = (props) => {
+  const record = useRecordContext();
+  return (
+    <Button
+      sx={{ borderRadius: 0 }}
+      component={Link}
+      to={{
+        pathname: "/smartcontract",
+        search: stringify({
+          jobbidid: JSON.stringify(record.id),
+        }),
+      }}
+      size="small"
+      color="primary"
+      disabled={props.disabled}
+    >
+      Sign Plutus TX
+    </Button>
+  );
+};
+
 const ListScreen = () => {
   const [record, setRecord] = React.useState(null);
   const rowClick = (id, resource, record) => {
@@ -94,69 +186,31 @@ const ListScreen = () => {
       <>
         {record.description && (
           <>
-            <div dangerouslySetInnerHTML={{ __html: record.description }} />
+            <Typography variant="caption" gutterBottom>
+              <strong>Application letter</strong>
+            </Typography>
+            <RichTextField record={record} source="description" />
+          </>
+        )}
+        {record.hasPrototype && record.prototypeLink && (
+          <>
+            <Typography variant="subtitle2" gutterBottom display="inline">
+              Prototype url:{" "}
+            </Typography>
+            <UrlField record={record} source="prototypeLink" target="_blank" />
           </>
         )}
 
         {!isLoading && !error && job.description && (
           <>
-            <Typography variant="caption" gutterBottom>
+            <Typography variant="caption" display="block" sx={{ mt: 2 }}>
               <strong> Job description</strong>
             </Typography>
 
-            <div dangerouslySetInnerHTML={{ __html: job.description }} />
+            <RichTextField record={job} source="description" />
           </>
         )}
       </>
-    );
-  };
-
-  const JobCreateButton = () => <CreateButton label="Apply a job" />;
-
-  const JobListActions = () => (
-    <TopToolbar>
-      <FilterButton />
-      <JobCreateButton />
-      <ExportButton />
-      <RefreshButton baseUrl="/jobbidsjsk"></RefreshButton>
-    </TopToolbar>
-  );
-
-  const JobDoneButton = (props) => {
-    const record = useRecordContext();
-    const diff = { jobDone: !record.jobDone };
-    const refresh = useRefresh();
-    const notify = useNotify();
-    const [update, { isLoading, error }] = useUpdate(
-      "jobbidsjsk",
-      {
-        id: record.id,
-        data: diff,
-        previousData: record,
-      },
-      {
-        onError: (error) => {
-          notify(`${error}`, { type: "warning" });
-        },
-      }
-    );
-
-    const handleClick = () => {
-      update();
-    };
-
-    React.useEffect(() => {
-      refresh();
-    }, [isLoading, error]);
-
-    return (
-      <Button
-        variant="text"
-        disabled={record.isPaid || !record.isSelected}
-        onClick={handleClick}
-      >
-        {record.jobDone ? "Mark in progress" : "Mark job done"}
-      </Button>
     );
   };
 
@@ -180,14 +234,13 @@ const ListScreen = () => {
               <strong> APPLICATIONs </strong>
             </Divider>
           </TableCell>
-          <TableCell align="center" colSpan={4} sx={{ border: "none", pb: 0 }}>
+          <TableCell align="center" colSpan={3} sx={{ border: "none", pb: 0 }}>
             <Divider>
               <strong>JOBs</strong>
             </Divider>
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell sx={{ pt: 0 }}></TableCell>
           <TableCell sx={{ pt: 0 }}></TableCell>
           {/* empty cell to account for the select row checkbox in the body */}
           {React.Children.map(children, (child) =>
@@ -209,27 +262,34 @@ const ListScreen = () => {
       </TableHead>
     );
   };
-
   return (
     <List
       empty={false}
       emptyWhileLoading
-      perPage={10}
+      perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
-      hasCreate
-      resource="jobbidsjsk"
+      hasCreate={false}
+      resource="jobbids"
+      filter={{ queryType: "employer", isApproved: true }}
       filters={filters}
       actions={<JobListActions />}
-      filter={{ queryType: "jobSeeker" }}
-      aside={<ApplicationAsideJsk record={record} />}
     >
       <Datagrid
+        bulkActionButtons={false}
         expand={<BidPanel />}
-        header={DatagridHeader}
         rowClick={rowClick}
+        header={DatagridHeader}
       >
         <TextField source="name" label="Application" />
 
+        <ReferenceField
+          reference="users"
+          source="jobSeekerId"
+          link={"show"}
+          label="Applicant"
+        >
+          <TextField source="fullName" label="Applicant" />
+        </ReferenceField>
         <CurrencyNumberField
           source="bidValue"
           threshold={10000}
@@ -237,25 +297,16 @@ const ListScreen = () => {
           textAlign="left"
         />
 
-        <DateField source="completeDate" showTime label="Your deadline" />
-
+        <DateField source="completeDate" showTime label="Committed deadline" />
         <RateField source="rate" label="Matching rate" />
         <DateField source="createdAt" showTime label="Submitted at" />
         <ReferenceField
-          reference="postjobsjsk"
+          reference="postJobs"
           source="jobId"
+          label="Job name"
           link={"show"}
-          label="Job"
         >
           <TextField source="name" />
-        </ReferenceField>
-        <ReferenceField
-          reference="users"
-          source="employerId"
-          link={"show"}
-          label="Employer"
-        >
-          <TextField source="fullName" />
         </ReferenceField>
 
         <ReferenceField
@@ -266,17 +317,27 @@ const ListScreen = () => {
         >
           <FunctionField render={(record) => `ADA ${record.budget}`} />
         </ReferenceField>
+
         <ReferenceField
-          reference="postjobsjsk"
+          reference="postJobs"
           source="jobId"
           label="Job deadline"
           link={false}
         >
-          <DateField source="expectDate" showTime label="Job deadline" />
+          <DateField source="expectDate" showTime />
         </ReferenceField>
 
+        <SelectButton />
+
+        <FunctionField
+          render={(record) => (
+            <SignButton disabled={record.isSignedTx || !record.isSelected} />
+          )}
+        />
+        <BooleanField source="jobDone" label="Job done" />
+        <CompletedButton label="Confirm complete" />
+        <BooleanField source="isPaid" label="Paid" />
         <MessagesCount></MessagesCount>
-        <EditButton />
         <ShowButton />
       </Datagrid>
     </List>

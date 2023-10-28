@@ -4,9 +4,14 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { useCreate, useUpdate } from "react-admin";
 import { Box } from "@mui/material";
-import { useGetOne } from "react-admin";
+import {
+  useGetOne,
+  useRefresh,
+  useDelete,
+  useCreate,
+  useUpdate,
+} from "react-admin";
 import ProcessBar from "../components/processBar";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -66,6 +71,11 @@ const Wallet = (props) => {
     lovelaceLocked: null,
   };
   let API = null;
+
+  const [
+    deleteOne,
+    { data: deleteData, isLoading: deleteLoading, error: deleteError },
+  ] = useDelete();
 
   const [state, setState] = React.useState(initState);
 
@@ -162,6 +172,15 @@ const Wallet = (props) => {
     });
   };
 
+  const { data, total, isLoading, error } = useGetList("wallets", {
+    pagination: { page: 1, perPage: 10 },
+    filter: { username: localStorage.getItem("username") },
+  });
+  let wallet;
+  if (!isLoading && !error && total) {
+    wallet = data[0];
+  }
+
   React.useEffect(() => {
     getWallets();
   }, []);
@@ -183,18 +202,17 @@ const Wallet = (props) => {
     pKeyHashBech32: "",
   });
 
-  const { data, total, isLoading, error } = useGetList("wallets", {
-    pagination: { page: 1, perPage: 10 },
-    filter: { username: localStorage.getItem("username") },
-  });
-  let wallet;
-  if (!isLoading && !error) {
-    wallet = data[0];
-  }
-
   const [create, setCreate] = React.useState(false);
 
   React.useEffect(() => {
+    !wallet &&
+      setWalletState({
+        hasWallet: false,
+        address: "",
+        pKeyHash: "",
+        pKeyHashBech32: "",
+      });
+
     wallet &&
       setWalletState({
         hasWallet: true,
@@ -206,27 +224,40 @@ const Wallet = (props) => {
 
   const onClick = () => {
     !walletState.hasWallet && setCreate(!create);
+    if (walletState.hasWallet && wallet) {
+      deleteOne("wallets", { id: wallet?.id });
+    }
   };
-  const filter = {
-    queryType: "address",
-    value: walletState.address,
-  };
-  //change to username when update ra-nest-rest to save username to localStorage
 
   let walletData = {
     address: manualChecked ? manualAddress : state.usedAddress,
     username: localStorage.getItem("username"),
   };
-  const [createWallet, { isLoading: createIsLoading, error: createError }] =
-    useCreate();
+
+  const [
+    createWallet,
+    { data: createData, isLoading: createIsLoading, error: createError },
+  ] = useCreate();
 
   const [
     update,
     { data: updateData, isLoading: updateIsLoading, error: updateError },
   ] = useUpdate();
 
+  const raRefresh = useRefresh();
+  React.useEffect(() => {
+    raRefresh();
+  }, [
+    updateData,
+    createData,
+    updateError,
+    createError,
+    deleteData,
+    deleteError,
+  ]);
+
   const handleClick = () => {
-    wallet.id
+    wallet?.id
       ? update("wallets", {
           id: wallet.id,
           data: walletData,
@@ -282,7 +313,7 @@ const Wallet = (props) => {
         >
           <Button
             onClick={onClick}
-            disabled={createIsLoading}
+            disabled={createIsLoading || !walletState.hasWallet} //not create wallet at this version
             sx={{ alignSelf: "flex-start", marginRight: 1 }}
             startIcon={
               create ? (
@@ -335,15 +366,15 @@ const Wallet = (props) => {
             setManualAddress(event.target.value);
           }}
         />
-        {walletState.address !== state.usedAddress && (
-          <Button
-            variant="text"
-            sx={{ marginTop: 3, marginLeft: 0, width: 150 }}
-            onClick={() => handleClick()}
-          >
-            Use this Wallet
-          </Button>
-        )}
+
+        <Button
+          disabled={walletState.address === state.usedAddress || !manualChecked}
+          variant="text"
+          sx={{ marginTop: 3, marginLeft: 0, width: 150 }}
+          onClick={() => handleClick()}
+        >
+          Use this Wallet
+        </Button>
       </Box>
     </Box>
   );

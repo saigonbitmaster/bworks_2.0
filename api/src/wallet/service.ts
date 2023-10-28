@@ -82,7 +82,11 @@ export class WalletService {
       .exec();
   }
 
-  async delete(id: string): Promise<Wallet> {
+  async delete(id: string, userId: string): Promise<Wallet> {
+    const wallet = await this.findByUser(userId);
+    if (wallet.userId !== userId || !userId) {
+      throw new Error('Not your wallet');
+    }
     return await this.model.findByIdAndDelete(id).exec();
   }
 }

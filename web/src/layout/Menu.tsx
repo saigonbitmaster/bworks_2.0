@@ -30,9 +30,8 @@ import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
 import WorkHistoryOutlinedIcon from "@mui/icons-material/WorkHistoryOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
-import InputOutlinedIcon from '@mui/icons-material/InputOutlined';
-import PlagiarismOutlinedIcon from '@mui/icons-material/PlagiarismOutlined';
-
+import InputOutlinedIcon from "@mui/icons-material/InputOutlined";
+import PlagiarismOutlinedIcon from "@mui/icons-material/PlagiarismOutlined";
 
 type MenuName =
   | "postJobs"

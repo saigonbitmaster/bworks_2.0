@@ -253,7 +253,11 @@ export class JobBidService {
       });
 
       return await this.model
-        .findByIdAndUpdate(id, { isSelected, isSignedTx, isCompleted })
+        .findByIdAndUpdate(
+          id,
+          { isSelected, isSignedTx, isCompleted },
+          { new: true },
+        )
         .exec();
     }
 
@@ -265,8 +269,11 @@ export class JobBidService {
       message: record._id.toString(),
       userType,
     });
-
-    return await this.model.findByIdAndUpdate(id, updateJobBidDto).exec();
+    //jsk is not allow to update isSelected, isCompleted
+    const { isSelected, isCompleted, ..._updateJobBidDto } = updateJobBidDto;
+    return await this.model
+      .findByIdAndUpdate(id, _updateJobBidDto, { new: true })
+      .exec();
   }
 
   async createMessage(

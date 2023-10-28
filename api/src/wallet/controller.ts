@@ -67,7 +67,8 @@ export class WalletController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return await this.service.delete(id);
+  async delete(@Param('id') id: string, @Req() request) {
+    const userId = lodash.get(request, 'user.userId', null);
+    return await this.service.delete(id, userId);
   }
 }

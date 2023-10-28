@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePlutusTxDto } from './dto/create.dto';
@@ -153,24 +153,33 @@ export class PlutusTxService {
       );
     }
 
-    //return
-    const result = await new this.model({
-      ...createPlutusTxDto,
-      createdAt: new Date(),
-    }).save();
+    let result;
+    try {
+      result = await new this.model({
+        ...createPlutusTxDto,
+        createdAt: new Date(),
+      }).save();
 
-    //event notify to job seeker & trusted partner
-    this.eventsService.addEvent(jobSeeker._id.toString(), 'notification', {
-      type: 'payment',
-      message: result._id.toString(),
-      userType: 'jobSeeker',
-    });
+      //update jobBid
+      this.jobBidService.updateByBackgroundJob(result.jobBidId, {
+        plutusTxId: result._id.toString(),
+      });
 
-    this.eventsService.addEvent(result.unlockUserId, 'notification', {
-      type: 'payment',
-      message: result._id.toString(),
-      userType: 'trustedPartner',
-    });
+      //event notify to job seeker & trusted partner
+      this.eventsService.addEvent(jobSeeker._id.toString(), 'notification', {
+        type: 'payment',
+        message: result._id.toString(),
+        userType: 'jobSeeker',
+      });
+
+      this.eventsService.addEvent(result.unlockUserId, 'notification', {
+        type: 'payment',
+        message: result._id.toString(),
+        userType: 'trustedPartner',
+      });
+    } catch (error) {
+      throw new BadRequestException('Can not insert plutusTx record');
+    }
 
     return result;
   }

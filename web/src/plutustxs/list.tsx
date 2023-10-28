@@ -105,7 +105,14 @@ const ListScreen = () => {
       filters={filters}
       actions={<ListActions></ListActions>}
     >
-      <Datagrid bulkActionButtons={false}>
+      <Datagrid
+        bulkActionButtons={false}
+        sx={{
+          "& .RaDatagrid-headerCell": {
+            fontWeight: "bold",
+          },
+        }}
+      >
         <ReferenceField
           source="name"
           reference="postjobsjsk"

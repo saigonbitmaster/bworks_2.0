@@ -35,6 +35,7 @@ import Divider from "@mui/material/Divider";
 import { TableHead, TableRow, TableCell } from "@mui/material";
 import { DatagridHeaderProps, FieldProps } from "react-admin";
 import ButtonBase from "@mui/material/ButtonBase";
+import Aside from "../components/applicationAside";
 
 const JobListActions = () => (
   <TopToolbar>
@@ -233,14 +234,9 @@ const ListScreen = () => {
               <strong> APPLICATIONs </strong>
             </Divider>
           </TableCell>
-          <TableCell align="center" colSpan={3} sx={{ border: "none", pb: 0 }}>
+          <TableCell align="center" colSpan={4} sx={{ border: "none", pb: 0 }}>
             <Divider>
               <strong>JOBs</strong>
-            </Divider>
-          </TableCell>
-          <TableCell align="center" colSpan={6} sx={{ border: "none", pb: 0 }}>
-            <Divider>
-              <strong>ACTIONs</strong>
             </Divider>
           </TableCell>
         </TableRow>
@@ -266,18 +262,18 @@ const ListScreen = () => {
       </TableHead>
     );
   };
-
   return (
     <List
       empty={false}
       emptyWhileLoading
-      perPage={25}
+      perPage={10}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate={false}
       resource="jobbids"
       filter={{ queryType: "employer", isApproved: true }}
       filters={filters}
       actions={<JobListActions />}
+      aside={<Aside record={record} />}
     >
       <Datagrid
         bulkActionButtons={false}
@@ -304,11 +300,11 @@ const ListScreen = () => {
 
         <DateField source="completeDate" showTime label="Committed deadline" />
         <RateField source="rate" label="Matching rate" />
-        <DateField source="createdAt" showTime />
+        <DateField source="createdAt" showTime label="Submitted at" />
         <ReferenceField
           reference="postJobs"
           source="jobId"
-          label="Job name"
+          label="Job"
           link={"show"}
         >
           <TextField source="name" />
@@ -332,7 +328,15 @@ const ListScreen = () => {
           <DateField source="expectDate" showTime />
         </ReferenceField>
 
-        <SelectButton />
+        <ReferenceField
+          reference="postJobs"
+          source="jobId"
+          label="Posted at"
+          link={false}
+        >
+          <DateField source="createdAt" showTime />
+        </ReferenceField>
+        {/*      <SelectButton />
 
         <FunctionField
           render={(record) => (
@@ -341,9 +345,9 @@ const ListScreen = () => {
         />
         <BooleanField source="jobDone" label="Job done" />
         <CompletedButton label="Confirm complete" />
-        <BooleanField source="isPaid" />
+        <BooleanField source="isPaid" label="Paid" /> */}
         <MessagesCount></MessagesCount>
-        <ShowButton />
+        {/*   <ShowButton /> */}
       </Datagrid>
     </List>
   );

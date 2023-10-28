@@ -38,8 +38,6 @@ import Divider from "@mui/material/Divider";
 import { TableHead, TableRow, TableCell } from "@mui/material";
 import { DatagridHeaderProps, FieldProps } from "react-admin";
 import ButtonBase from "@mui/material/ButtonBase";
-import ApplicationAsideJsk from "../components/applicationAsideJsk";
-
 const filterToQuery = (searchText) => ({ textSearch: searchText });
 const filters = [
   <TextInput label="Search" source="textSearch" alwaysOn sx={{ width: 300 }} />,
@@ -76,12 +74,6 @@ const filters = [
 ];
 
 const ListScreen = () => {
-  const [record, setRecord] = React.useState(null);
-  const rowClick = (id, resource, record) => {
-    setRecord(record);
-    return null;
-  };
-
   const BidPanel = () => {
     const record = useRecordContext();
     const {
@@ -185,6 +177,11 @@ const ListScreen = () => {
               <strong>JOBs</strong>
             </Divider>
           </TableCell>
+          <TableCell align="center" colSpan={6} sx={{ border: "none", pb: 0 }}>
+            <Divider>
+              <strong>ACTIONs</strong>
+            </Divider>
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell sx={{ pt: 0 }}></TableCell>
@@ -214,20 +211,15 @@ const ListScreen = () => {
     <List
       empty={false}
       emptyWhileLoading
-      perPage={10}
+      perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
       hasCreate
       resource="jobbidsjsk"
       filters={filters}
       actions={<JobListActions />}
       filter={{ queryType: "jobSeeker" }}
-      aside={<ApplicationAsideJsk record={record} />}
     >
-      <Datagrid
-        expand={<BidPanel />}
-        header={DatagridHeader}
-        rowClick={rowClick}
-      >
+      <Datagrid expand={<BidPanel />} header={DatagridHeader}>
         <TextField source="name" label="Application" />
 
         <CurrencyNumberField
@@ -274,7 +266,10 @@ const ListScreen = () => {
         >
           <DateField source="expectDate" showTime label="Job deadline" />
         </ReferenceField>
-
+        <BooleanField source="isSelected" label="Selected" />
+        <JobDoneButton source="jobDone" label="Job done" />
+        <BooleanField source="isCompleted" label="Confirmed complete" />
+        <BooleanField source="isPaid" label="Paid" />
         <MessagesCount></MessagesCount>
         <EditButton />
         <ShowButton />

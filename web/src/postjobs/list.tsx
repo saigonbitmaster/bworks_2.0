@@ -66,7 +66,6 @@ const JobPanel = () => {
 };
 
 const ListScreen = () => {
-  
   const DatagridHeader = ({ children }: DatagridHeaderProps) => {
     const { sort, setSort } = useListSortContext();
     const inverseOrder = (sort: string) => (sort === "ASC" ? "DESC" : "ASC");
@@ -129,7 +128,7 @@ const ListScreen = () => {
         empty={false}
         emptyWhileLoading
         filters={filters}
-        perPage={25}
+        perPage={10}
         sort={{ field: "createdAt", order: "desc" }}
         hasCreate
         filter={{ queryType: "employer", isApproved: true }}
@@ -152,7 +151,7 @@ const ListScreen = () => {
           <CurrencyNumberField
             source="budget"
             threshold={10000}
-            label="Budget"
+            label="Budget ($)"
             textAlign="left"
           />
 
