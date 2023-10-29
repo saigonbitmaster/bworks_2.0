@@ -140,7 +140,7 @@ export const ShowScreen = () => (
 
       <UserProfile></UserProfile>
 
-      <DateField source="createdAt" />
+      <DateField source="createdAt" label="Sign up at" />
     </SimpleShowLayout>
   </Show>
 );

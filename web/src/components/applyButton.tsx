@@ -16,6 +16,7 @@ const ApplyButton = (props) => {
     return <p style={{ color: "red" }}>Error!</p>;
   }
 
+  const label = props.text || "Apply";
   return record ? (
     <Button
       sx={{ borderRadius: 0 }}
@@ -30,7 +31,7 @@ const ApplyButton = (props) => {
       color="primary"
       disabled={data?.length > 0}
     >
-      {data?.length > 0 ? "Applied" : "Apply"}
+      {data?.length > 0 ? "Applied" : label}
     </Button>
   ) : null;
 };

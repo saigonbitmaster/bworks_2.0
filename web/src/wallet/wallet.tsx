@@ -11,6 +11,7 @@ import {
   useDelete,
   useCreate,
   useUpdate,
+  useNotify,
 } from "react-admin";
 import ProcessBar from "../components/processBar";
 import CloseIcon from "@mui/icons-material/Close";
@@ -243,10 +244,23 @@ const Wallet = (props) => {
     update,
     { data: updateData, isLoading: updateIsLoading, error: updateError },
   ] = useUpdate();
-
+  const notify = useNotify();
   const raRefresh = useRefresh();
   React.useEffect(() => {
     raRefresh();
+
+    createError &&
+      notify((createError as any).message || "Create error", {
+        type: "warning",
+      });
+    updateError &&
+      notify((updateError as any).message || "Update error", {
+        type: "warning",
+      });
+    deleteError &&
+      notify((deleteError as any).message || "Delete error", {
+        type: "warning",
+      });
   }, [
     updateData,
     createData,
@@ -368,7 +382,7 @@ const Wallet = (props) => {
         />
 
         <Button
-          disabled={walletState.address === state.usedAddress || !manualChecked}
+          disabled={walletState.address === state.usedAddress && !manualChecked}
           variant="text"
           sx={{ marginTop: 3, marginLeft: 0, width: 150 }}
           onClick={() => handleClick()}

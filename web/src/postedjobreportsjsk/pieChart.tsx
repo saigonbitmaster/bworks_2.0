@@ -29,17 +29,17 @@ const PaymentChart = () => {
   }, []);
 
   const data1 = [
-    { name: "Complete jobs", value: data2.numberOfCompletedJobs },
+    { name: "Complete jobs", value: data2.numberOfCompletedJobs || 0 },
     {
       name: "Pending jobs",
-      value: data2.numberOfPostedJobs - data2.numberOfCompletedJobs,
+      value: data2.numberOfPostedJobs - data2.numberOfCompletedJobs || 0,
     },
   ];
   const data = [
-    { name: "Selected applications", value: data2.numberOfSelectedBids },
+    { name: "Selected applications", value: data2.numberOfSelectedBids || 0 },
     {
       name: "UnSelected applications",
-      value: data2.numberOfBids - data2.numberOfSelectedBids,
+      value: data2.numberOfBids - data2.numberOfSelectedBids || 0,
     },
   ];
   const COLORS = ["#0088FE", "#FF8042"];
@@ -79,15 +79,27 @@ const PaymentChart = () => {
         titleTypographyProps={{ variant: "subtitle1" }}
         subheader={
           <Typography variant="subtitle2" gutterBottom>
-            {`Applied jobs: ${data2.numberOfPostedJobs}, Submitted applications: ${data2.numberOfBids}, Selected applications: ${data2.numberOfSelectedBids}, Complete jobs: ${data2.numberOfCompletedJobs}`}
+            {`Applied jobs: ${
+              data2.numberOfPostedJobs || 0
+            }, Submitted applications: ${
+              data2.numberOfBids || 0
+            }, Selected applications: ${
+              data2.numberOfSelectedBids || 0
+            }, Complete jobs: ${data2.numberOfCompletedJobs || 0}`}
           </Typography>
         }
       />
-      <CardContent>
+      <CardContent
+        sx={{
+          "&:last-child": {
+            paddingBottom: 1,
+          },
+        }}
+      >
         <div
           style={{
             width: "100%",
-            height: 320,
+            height: 335,
             display: "flex",
             flexDirection: "row",
           }}

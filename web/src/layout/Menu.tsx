@@ -44,17 +44,30 @@ type MenuName =
 const Menu = ({ dense = false }: MenuProps) => {
   const [state, setState] = useState({
     postJobs: true,
+    jobSeeker: true,
     manageFund: true,
     reports: true,
     settings: false,
     tools: false,
-    jobSeeker: true,
   });
   const translate = useTranslate();
   const [open] = useSidebarState();
 
   const handleToggle = (menu: MenuName) => {
-    setState((state) => ({ ...state, [menu]: !state[menu] }));
+    // setState({ ...state, [menu]: !state[menu] });
+
+    //keep open max 5 menus
+    const menus = Object.keys(state).map((key) => ({
+      menu: key,
+      status: state[key],
+    }));
+
+    if (menus.filter((menu) => menu.status === true).length === 5) {
+      const closeMenu = menus.find((i) => i.status === true).menu;
+      setState({ ...state, [menu]: !state[menu], [closeMenu]: false });
+      return;
+    }
+    setState({ ...state, [menu]: !state[menu] });
   };
 
   return (

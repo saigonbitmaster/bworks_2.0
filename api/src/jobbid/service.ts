@@ -334,7 +334,11 @@ export class JobBidService {
     const messages = jobBid.messages;
 
     const message = messages.find((i) => i.id === messageId);
-    if (message.userId !== userId || !message) return;
+    if (message.userId !== userId || !message) {
+      throw new BadRequestException(
+        'Can not delete, This is not your own message',
+      );
+    }
 
     return await this.model
       .findByIdAndUpdate(id, {

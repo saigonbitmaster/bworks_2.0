@@ -29,13 +29,13 @@ import { stringify } from "query-string";
 import CurrencyNumberField from "../components/currencyNumberFieldBid";
 import Typography from "@mui/material/Typography";
 import RefreshButton from "../components/refreshButton";
-import ShowButton from "../components/showButton";
 import MessagesCount from "../components/messagesCount";
 import Divider from "@mui/material/Divider";
 import { TableHead, TableRow, TableCell } from "@mui/material";
 import { DatagridHeaderProps, FieldProps } from "react-admin";
 import ButtonBase from "@mui/material/ButtonBase";
 import Aside from "../components/applicationAside";
+import ShowButton from "../components/showButton";
 
 const JobListActions = () => (
   <TopToolbar>
@@ -347,7 +347,7 @@ const ListScreen = () => {
         <CompletedButton label="Confirm complete" />
         <BooleanField source="isPaid" label="Paid" /> */}
         <MessagesCount></MessagesCount>
-        {/*   <ShowButton /> */}
+        <ShowButton label="View" />
       </Datagrid>
     </List>
   );

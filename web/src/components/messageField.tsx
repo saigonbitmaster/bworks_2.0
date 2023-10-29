@@ -21,6 +21,7 @@ import {
   useCreate,
   useRefresh,
   useDataProvider,
+  useNotify,
 } from "react-admin";
 import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
@@ -30,9 +31,10 @@ import { stringify } from "query-string";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function JobAppSteps(props) {
+export default function MessageField(props) {
   const record = useRecordContext() || { messages: [], id: "" };
   const refresh = useRefresh();
+  const notify = useNotify();
   const dataProvider = useDataProvider();
 
   const onClick = (messageId) => {
@@ -45,7 +47,9 @@ export default function JobAppSteps(props) {
       .then((result) => {
         refresh();
       })
-      .catch((error) => {});
+      .catch((error) => {
+        notify(error.message, { type: "warning" });
+      });
 
     ///messages/:id/:messageId
   };

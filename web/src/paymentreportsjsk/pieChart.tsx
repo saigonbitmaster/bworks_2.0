@@ -26,17 +26,17 @@ const PaymentChart = () => {
   }, []);
 
   const data1 = [
-    { name: "Unlock Txs", value: data2.numberOfUnlockedTxs },
+    { name: "Unlock Txs", value: data2.numberOfUnlockedTxs || 0 },
     {
       name: "Pending Txs",
-      value: data2.numberOfLockTxs - data2.numberOfUnlockedTxs,
+      value: data2.numberOfLockTxs - data2.numberOfUnlockedTxs || 0,
     },
   ];
   const data = [
-    { name: "Unlocked amounts", value: data2.sumUnlockedAmounts },
+    { name: "Unlocked amounts", value: data2.sumUnlockedAmounts || 0 },
     {
       name: "Pending amounts",
-      value: data2.sumLockedAmounts - data2.sumUnlockedAmounts,
+      value: data2.sumLockedAmounts - data2.sumUnlockedAmounts || 0,
     },
   ];
   const COLORS = ["#0088FE", "#FF8042"];
@@ -76,15 +76,25 @@ const PaymentChart = () => {
         titleTypographyProps={{ variant: "subtitle1" }}
         subheader={
           <Typography variant="subtitle2" gutterBottom>
-            {`Lock Txs: ${data2.numberOfLockTxs}, Unlock Txs: ${data2.numberOfUnlockedTxs}, Locked amounts: ${data2.sumLockedAmounts}, Unlocked amounts: ${data2.sumUnlockedAmounts}`}
+            {`Lock Txs: ${data2.numberOfLockTxs || 0}, Unlock Txs: ${
+              data2.numberOfUnlockedTxs || 0
+            }, Locked amounts: ${
+              data2.sumLockedAmounts || 0
+            }, Unlocked amounts: ${data2.sumUnlockedAmounts || 0}`}
           </Typography>
         }
       />
-      <CardContent>
+      <CardContent
+        sx={{
+          "&:last-child": {
+            paddingBottom: 1,
+          },
+        }}
+      >
         <div
           style={{
             width: "100%",
-            height: 300,
+            height: 315,
             display: "flex",
             flexDirection: "row",
           }}

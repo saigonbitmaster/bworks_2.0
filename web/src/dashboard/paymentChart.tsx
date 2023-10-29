@@ -88,11 +88,11 @@ const PaymentChart = () => {
         />
       </FormGroup>
       <CardContent sx={{ p: 0 }}>
-        <div style={{ width: "100%", height: 260 }}>
+        <div style={{ width: "100%", height: 277 }}>
           <ResponsiveContainer>
             <BarChart
               width={700}
-              height={260}
+              height={277}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >
