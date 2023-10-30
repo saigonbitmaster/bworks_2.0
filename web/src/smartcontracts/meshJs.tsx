@@ -47,6 +47,13 @@ const SmartContracts = () => {
     });
   }, [connected, wallet]);
 
+  //lock datum
+  const currentDate = dayjs();
+  const [datum, setDatum] = React.useState({
+    publicKeyHash: "no datum",
+    deadline: currentDate,
+  });
+
   const initContract = {
     selected: "",
     contracts: [],
@@ -179,7 +186,9 @@ const SmartContracts = () => {
   }, [userWallets, unlockUsers.selected]);
 
   React.useEffect(() => {
-    setDatum({ ...datum, publicKeyHash: userPKH });
+    unlockPartner === "other" && setDatum({ ...datum, publicKeyHash: userPKH });
+
+    console.log(3, datum, unlockPartner);
   }, [userPKH]);
 
   React.useEffect(() => {
@@ -276,12 +285,6 @@ const SmartContracts = () => {
       });
     }
   };
-  //lock datum
-  const currentDate = dayjs();
-  const [datum, setDatum] = React.useState({
-    publicKeyHash: "",
-    deadline: currentDate,
-  });
 
   const handleChangeLockAda = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmountToLock(parseInt(event.target.value));
@@ -318,6 +321,20 @@ const SmartContracts = () => {
     const scriptAddr = contract.contracts.find(
       (item) => item.id === contract.selected
     ).address;
+
+    const validateMessage = !scriptAddr
+      ? "No smart contract address, please select a smart contract"
+      : !datum.publicKeyHash
+      ? "No datum public key hash, please select a unlock user with wallet"
+      : !wallet || !connected
+      ? "No connected wallet, please connect wallet first"
+      : null;
+
+    if (!scriptAddr || !datum.publicKeyHash || !wallet || !connected) {
+      setNotification({ ...notification, message: validateMessage });
+      return;
+    }
+
     const d: Data = {
       alternative: 0,
       fields: [datum.publicKeyHash, 10],

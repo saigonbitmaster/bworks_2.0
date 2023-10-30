@@ -9,6 +9,8 @@ import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import ProcessBar from "./processBar";
+import lodash from "lodash";
 
 /*
 props = {
@@ -22,12 +24,32 @@ props = {
   usedAddress: ''
 }
 */
+
 export default function ConnectWallet(props) {
   const wallets = props.wallets || [];
   const walletIsEnabled = props.walletIsEnabled;
   const selected = wallets.find((item) => item.selected === true)?.name;
+  const [showProcessBar, setShowProcessBar] = React.useState(true);
+  const [processBarLabel, setProcessBarLabel] = React.useState(
+    "Fetching installed wallets ..."
+  );
+
+  setTimeout(() => {
+    setProcessBarLabel(`Found ${wallets.length} wallets`);
+  }, 4000);
+
+  setTimeout(() => {
+    setProcessBarLabel(`Fetching completed`);
+  }, 5000);
+
+  setTimeout(() => {
+    setShowProcessBar(false);
+  }, 7000);
+
   return (
-    <Box sx={{ m: 3, ml: 0, display: "flex", flex: 1, flexDirection: "column" }}>
+    <Box
+      sx={{ m: 3, ml: 0, display: "flex", flex: 1, flexDirection: "column" }}
+    >
       <Typography
         variant="body2"
         color="text.secondary"
@@ -42,14 +64,18 @@ export default function ConnectWallet(props) {
             control={
               <Checkbox
                 checked={item.selected}
-                onChange={props.handleChange}
+                onChange={lodash.debounce(props.handleChange, 1000)}
                 name={item.name}
+                disabled={showProcessBar}
               />
             }
             label={item.name}
           />
         ))}
       </Box>
+
+      {showProcessBar && <ProcessBar label={processBarLabel}></ProcessBar>}
+
       <Card variant="outlined">
         <CardHeader
           avatar={<AccountBalanceWalletOutlinedIcon fontSize="large" />}

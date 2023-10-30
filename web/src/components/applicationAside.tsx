@@ -96,7 +96,7 @@ export default function JobAppSteps(props) {
         sx={{ padding: "1em", pt: 1, pb: 0, boxShadow: "none", border: "none" }}
       >
         <Typography variant="subtitle1">
-          <strong> Work progress </strong>
+          <strong> Application progress</strong>
         </Typography>
         <Typography variant="subtitle1">{record.name}</Typography>
         <Stepper orientation="vertical" activeStep={activeStep} sx={{ mb: 2 }}>

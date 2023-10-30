@@ -49,13 +49,14 @@ export class WalletService {
   ): Promise<Wallet> {
     const address = createWalletDto.address;
     const info = (await this.parseAddress(address)) as any;
+    console.log(info);
 
     try {
       return await new this.model({
         ...createWalletDto,
         createdAt: new Date(),
-        pKeyHash: info.spending_key_hash,
-        pKeyHashBech32: info.spending_key_hash_bech32,
+        pKeyHash: info.pKeyHash,
+        pKeyHashBech32: info.pKeyHashBech32,
         userId,
       }).save();
     } catch (err) {
@@ -85,8 +86,8 @@ export class WalletService {
       return await this.model
         .findByIdAndUpdate(id, {
           ...updateWalletDto,
-          pKeyHash: info.spending_key_hash,
-          pKeyHashBech32: info.spending_key_hash_bech32,
+          pKeyHash: info.pKeyHash,
+          pKeyHashBech32: info.pKeyHashBech32,
         })
         .exec();
     } catch (err) {

@@ -80,7 +80,7 @@ const Wallet = (props) => {
 
   const [state, setState] = React.useState(initState);
 
-  const [manualChecked, setManualChecked] = React.useState(true);
+  const [manualChecked, setManualChecked] = React.useState(false);
 
   const handleManualChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setManualChecked(event.target.checked);
@@ -271,6 +271,19 @@ const Wallet = (props) => {
   ]);
 
   const handleClick = () => {
+    if (!walletData) {
+      notify("No wallet data to update", {
+        type: "warning",
+      });
+      return;
+    }
+
+    if (walletData.address === wallet?.address) {
+      notify("Nothing change. You currently use this address", {
+        type: "warning",
+      });
+      return;
+    }
     wallet?.id
       ? update("wallets", {
           id: wallet.id,
@@ -328,12 +341,12 @@ const Wallet = (props) => {
           <Button
             onClick={onClick}
             disabled={createIsLoading || !walletState.hasWallet} //not create wallet at this version
-            sx={{ alignSelf: "flex-start", marginRight: 1 }}
+            sx={{ alignSelf: "flex-start", marginRight: 1, color: "red" }}
             startIcon={
               create ? (
                 <CloseIcon />
               ) : walletState.hasWallet ? (
-                <DeleteIcon />
+                <DeleteIcon sx={{ color: "red" }} />
               ) : (
                 <AddIcon />
               )

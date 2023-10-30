@@ -347,7 +347,7 @@ const ListScreen = () => {
         <CompletedButton label="Confirm complete" />
         <BooleanField source="isPaid" label="Paid" /> */}
         <MessagesCount></MessagesCount>
-        <ShowButton label="View" />
+        <ShowButton />
       </Datagrid>
     </List>
   );

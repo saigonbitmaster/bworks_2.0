@@ -207,11 +207,13 @@ export default function SmartContract(props) {
               id="standard-basic"
               label="Datum PublicKeyHash"
               variant="standard"
-              value={datum.publicKeyHash}
-              onChange={handleChangePublicKeyHash}
-              disabled={
-                unlockPartner === "bworks" || unlockPartner === "employer"
+              value={
+                datum.publicKeyHash
+                  ? datum.publicKeyHash
+                  : "Selected unlock user has no wallet"
               }
+              onChange={handleChangePublicKeyHash}
+              disabled={unlockPartner === "bworks" || unlockPartner === "other"}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker

@@ -5,8 +5,13 @@ import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
 import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
 
-function WalletProgress(props: CircularProgressProps) {
+interface MyProps extends CircularProgressProps {
+  label?: string;
+}
+
+function WalletProgress(props: MyProps) {
   return (
     <Box sx={{ position: "relative" }}>
       <CircularProgress
@@ -36,18 +41,23 @@ function WalletProgress(props: CircularProgressProps) {
         thickness={2}
         {...props}
       />
+      {props.label && (
+        <Typography sx={{ display: "inline", ml: 1 }} variant="caption">
+          {props.label}
+        </Typography>
+      )}
     </Box>
   );
 }
 
-export default function ProgressBar() {
+export default function ProgressBar(props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <WalletProgress />
-      <br />
+      <WalletProgress label={props.label || null} />
+
       <LinearProgress
         color="secondary"
-        sx={{ height: 2, color: "orange", width: "50%" }}
+        sx={{ height: 2, color: "orange", width: "25%", mb: 1 }}
       />
     </Box>
   );
