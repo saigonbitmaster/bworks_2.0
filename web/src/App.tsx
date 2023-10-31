@@ -31,6 +31,7 @@ import skills from "./skills";
 import { PostedJobReportJsk } from "./postedjobreportsjsk";
 import { PaymentReportJsk } from "./paymentreportsjsk";
 import { QueryClient } from "react-query";
+import Register from "./components/register";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -84,6 +85,9 @@ const App = () => {
           <Route path="/paymentreportjsk" element={<PaymentReportJsk />} />
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/userSettings" element={<UserSettings />} />
+        </CustomRoutes>
+        <CustomRoutes noLayout>
+          <Route path="/register" element={<Register />} />
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobbids" {...jobbids} />

@@ -19,7 +19,6 @@ const passwordValidate = (password) => {
 
 //dateValidate(date, 7, late) -> validate if input date is more than 1 week late from now
 const dateValidate = (date) => {
-  alert (1)
   const momentObj = moment(date.toString());
   const oneWeekLate = moment().add(7, "days");
   if (momentObj.isAfter(oneWeekLate)) {
