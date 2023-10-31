@@ -6,7 +6,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
-import { validatePassword } from '../flatworks/utils/common';
+import {
+  validatePassword,
+  validateUsername,
+  trimUsername,
+  trimFullName,
+} from '../flatworks/utils/common';
 
 @Injectable()
 export class UserService {
@@ -130,16 +135,34 @@ export class UserService {
     userId = null,
   ): Promise<User> {
     const user = await this.model.findById(id);
-    console.log(updateUserDto);
     if (user._id.toString() !== userId) {
       return;
     }
 
+    if (!validateUsername(updateUserDto.username)) {
+      throw new BadRequestException(
+        'Username must not contain reserved keywords cms, admin, bworks',
+      );
+    }
+
+    if (!validateUsername(updateUserDto.fullName)) {
+      throw new BadRequestException(
+        'Full name must not contain reserved keywords cms, admin, bworks',
+      );
+    }
+
     delete updateUserDto['roles'];
     delete updateUserDto['password'];
+    if (updateUserDto.fullName) {
+      updateUserDto.fullName = trimFullName(updateUserDto.fullName);
+    }
+    if (updateUserDto.username) {
+      updateUserDto.username = trimUsername(updateUserDto.username);
+    }
 
     return await this.model.findByIdAndUpdate(id, updateUserDto).exec();
   }
+
   /*
 cms services
 */

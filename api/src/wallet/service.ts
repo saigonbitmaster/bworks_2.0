@@ -49,7 +49,6 @@ export class WalletService {
   ): Promise<Wallet> {
     const address = createWalletDto.address;
     const info = (await this.parseAddress(address)) as any;
-    console.log(info);
 
     try {
       return await new this.model({
@@ -79,7 +78,15 @@ export class WalletService {
     };
   }
 
-  async update(id: string, updateWalletDto: UpdateWalletDto): Promise<Wallet> {
+  async update(
+    id: string,
+    updateWalletDto: UpdateWalletDto,
+    userId: string,
+  ): Promise<Wallet> {
+    const wallet = await this.findByUser(userId);
+    if (wallet.userId !== userId || !userId) {
+      throw new BadRequestException('This is not your wallet');
+    }
     const info = (await this.parseAddress(updateWalletDto.address)) as any;
 
     try {
@@ -100,7 +107,7 @@ export class WalletService {
   async delete(id: string, userId: string): Promise<Wallet> {
     const wallet = await this.findByUser(userId);
     if (wallet.userId !== userId || !userId) {
-      throw new Error('Not your wallet');
+      throw new BadRequestException('This is not your wallet');
     }
     return await this.model.findByIdAndDelete(id).exec();
   }

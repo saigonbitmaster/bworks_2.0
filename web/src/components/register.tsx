@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import ButtonBase from "@mui/material/ButtonBase";
 import { useDataProvider, useNotify } from "react-admin";
 import { Link } from "react-router-dom";
+import { anyWhiteSpace, startEndWhiteSpace } from "../utils/validate";
 
 export default function Register() {
   const dataProvider = useDataProvider();
@@ -27,6 +28,8 @@ export default function Register() {
     reset,
     watch,
   } = useForm();
+
+  console.log(errors);
 
   const onSubmit = (data) => {
     const { agreedTerms, ...rest } = data;
@@ -108,6 +111,18 @@ export default function Register() {
                     value: 20,
                     message: "Username should lesser than 20 words",
                   },
+                  /*   pattern: {
+                    value: /\s/g,
+                    message:
+                      "Username must not contain a whitespace or new line",
+                  }, */
+                  validate: (value) => {
+                    let regex = /\s/g;
+                    return (
+                      !regex.test(value) ||
+                      "Username must not contain a whitespace or new line"
+                    );
+                  },
                 })}
               />
             </FormControl>
@@ -133,6 +148,13 @@ export default function Register() {
                 maxLength: {
                   value: 30,
                   message: "Full name should lesser than 30 words",
+                },
+                validate: (value) => {
+                  let regex = /(^\s+)|(\s+$)/;
+                  return (
+                    !regex.test(value) ||
+                    "Full name must not start or end with a whitespace or new line"
+                  );
                 },
               })}
             />
@@ -306,6 +328,10 @@ export default function Register() {
             {errors.password?.type === "required" && "Password is required."}{" "}
             {errors.gitLink?.type === "pattern" &&
               `${errors.gitLink?.message}.`}{" "}
+            {errors.username?.type === "validate" &&
+              `${errors.username?.message}.`}{" "}
+            {errors.fullName?.type === "validate" &&
+              `${errors.fullName?.message}.`}{" "}
             {errors.password?.type === "pattern" &&
               `${errors.password?.message}.`}{" "}
             {errors.workHoursPerMonth?.type === "min" &&

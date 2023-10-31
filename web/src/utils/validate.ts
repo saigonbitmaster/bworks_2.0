@@ -28,4 +28,35 @@ const dateValidate = (date) => {
   return "Must be 01 week late";
 };
 
-export { urlValidate, passwordValidate, dateValidate };
+//trim username all white space, new lines
+const trimUsername = (username) => {
+  return username.replace(/\s/g, "");
+};
+
+//trim full name with all whitespace and new line
+const trimFullName = (fullName) => {
+  fullName = fullName.match(/\S+/g);
+  return fullName ? fullName.join(" ") : "";
+};
+
+//detect if string contains any whitespace or new line
+const anyWhiteSpace = (username) => {
+  const regex = /\s/g;
+  return regex.test(username);
+};
+
+//detect if string contains any whitespace at beginning or end
+const startEndWhiteSpace = (fullName) => {
+  const regex = /(^\s+)|(\s+$)/;
+  return regex.test(fullName);
+};
+
+export {
+  urlValidate,
+  passwordValidate,
+  dateValidate,
+  trimUsername,
+  trimFullName,
+  anyWhiteSpace,
+  startEndWhiteSpace,
+};

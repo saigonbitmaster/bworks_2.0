@@ -9,7 +9,13 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
-import { validateEmail, validatePassword } from '../flatworks/utils/common';
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+  trimFullName,
+  trimUsername,
+} from '../flatworks/utils/common';
 import { Role } from '../flatworks/utils/roles';
 import { WalletService } from '../wallet/service';
 import { validateAddress } from '../flatworks/utils/cardano';
@@ -126,7 +132,12 @@ validate only approved users
 
   async register(registerUser: any): Promise<any> {
     //{username: abc, email: abc@gmail.com, password: ***, fullName: abc, walletAddress: abc}
+    //trim username & fullName
+    console.log(registerUser);
+    registerUser.username = trimUsername(registerUser.username);
+    registerUser.fullName = trimFullName(registerUser.fullName);
 
+    console.log(registerUser);
     const _usernames = await this.userService.findAllRaw({
       username: registerUser.username,
     });
@@ -153,6 +164,10 @@ validate only approved users
       ? 'Invalidate Cardano wallet address'
       : _wallet.length > 0
       ? 'Wallet is already in use'
+      : !validateUsername(registerUser.username)
+      ? 'Username must not contain reserved keywords: cms, admin, bworks'
+      : !validateUsername(registerUser.fullName)
+      ? 'Full name must not contain reserved keywords: cms, admin, bworks'
       : null;
 
     if (errorMessage) {

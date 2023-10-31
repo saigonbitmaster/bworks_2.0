@@ -8,16 +8,13 @@ import {
   Put,
   Response,
   Query,
-  Request,
   Req,
 } from '@nestjs/common';
 import { CreateWalletDto } from './dto/create.dto';
 import { UpdateWalletDto } from './dto/update.dto';
 import { WalletService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
-import getToken from '../flatworks/utils/token';
 import { JwtService } from '@nestjs/jwt';
-import { userJwtPayload } from '../flatworks/types/types';
 import { AddressDto } from './dto/address.dto';
 import * as lodash from 'lodash';
 
@@ -62,8 +59,10 @@ export class WalletController {
   async update(
     @Param('id') id: string,
     @Body() updateWalletDto: UpdateWalletDto,
+    @Req() request,
   ) {
-    return await this.service.update(id, updateWalletDto);
+    const userId = lodash.get(request, 'user.userId', null);
+    return await this.service.update(id, updateWalletDto, userId);
   }
 
   @Delete(':id')
