@@ -2,13 +2,9 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Input from "@mui/material/Input";
-import FilledInput from "@mui/material/FilledInput";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
@@ -16,12 +12,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import FormLabel from "@mui/material/FormLabel";
-import Divider from "@mui/material/Divider";
 import { useForm } from "react-hook-form";
 import ButtonBase from "@mui/material/ButtonBase";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { useDataProvider, useNotify } from "react-admin";
+import { Link } from "react-router-dom";
 
-export default function InputAdornments() {
+export default function Register() {
+  const dataProvider = useDataProvider();
+  const notify = useNotify();
   const {
     register,
     handleSubmit,
@@ -29,13 +27,27 @@ export default function InputAdornments() {
     reset,
     watch,
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = (data) => {
+    const { agreedTerms, ...rest } = data;
+    dataProvider
+      .customMethod("auth/register", { data: { ...rest } }, "POST")
+      .then((result) => {
+        notify(
+          "Submit successfully, please check your mail to verify your account",
+          { type: "success" }
+        );
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        notify(error.message, { type: "warning" });
+      });
+  };
 
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  console.log(errors);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -66,6 +78,7 @@ export default function InputAdornments() {
           >
             Register new account
           </Typography>
+
           <ButtonBase
             sx={{
               mr: 2,
@@ -267,6 +280,18 @@ export default function InputAdornments() {
           <Box>
             <br />
           </Box>
+          <ButtonBase
+            sx={{
+              mr: 1,
+              alignSelf: "flex-end",
+              color: "#03a9f4",
+              mb: 1,
+            }}
+            component={Link}
+            to="/"
+          >
+            Back bWorks
+          </ButtonBase>
           <Button variant="outlined" type="submit">
             SUBMIT
           </Button>

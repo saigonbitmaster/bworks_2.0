@@ -73,7 +73,8 @@ const SmartContracts = () => {
 
   React.useEffect(() => {
     if (!users.isLoading && !users.error && users.data.length > 0) {
-      const selected = users.data[0].id;
+      //select cms user as default.
+      const selected = users.data.find((item) => item.username === "cms").id;
       setUnlockUsers({ selected, unlockUsers: users.data });
     }
   }, [users.data]);
@@ -187,8 +188,6 @@ const SmartContracts = () => {
 
   React.useEffect(() => {
     unlockPartner === "other" && setDatum({ ...datum, publicKeyHash: userPKH });
-
-    console.log(3, datum, unlockPartner);
   }, [userPKH]);
 
   React.useEffect(() => {
@@ -317,7 +316,6 @@ const SmartContracts = () => {
 
   const sendAdaToPlutus = async () => {
     //public keyhash must be a valid bworks wallet address if unlock transaction will be signed by bworks.
-
     const scriptAddr = contract.contracts.find(
       (item) => item.id === contract.selected
     ).address;
