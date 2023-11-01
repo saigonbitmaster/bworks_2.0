@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User, UserSchema } from '../user/schemas/user.schema';
 import { PostJob, PostJobSchema } from '../postjob/schemas/schema';
 import { UserModule } from '../user/user.module';
-import { PostJobModule } from '../postJob/module';
+import { PostJobModule } from '../postjob/module';
 import { JobBidControllerCms } from './controller.cms';
 import { MailModule } from '../mail/mail.module';
 import { EventModule } from '../events/module';

@@ -16,15 +16,18 @@ const PostedJobChart = () => {
     paidJobs: 0,
     employerCompleteJobs: 0,
     employerPaidJobs: 0,
+    matchedJobs: 0,
   });
   const dataProvider = useDataProvider();
 
-  dataProvider
-    .customMethod("customapis/userstatistic", { filter: {} }, "GET")
-    .then((result) => {
-      setData(result.data);
-    })
-    .catch((error) => console.error(error));
+  React.useEffect(() => {
+    dataProvider
+      .customMethod("customapis/userstatistic", { filter: {} }, "GET")
+      .then((result) => {
+        setData(result.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   return (
     <Card>
@@ -42,13 +45,20 @@ const PostedJobChart = () => {
         </Typography>
 
         <Typography variant="caption" display={"block"}>
+          <i>
+            <span> {"Hiring: "}</span>
+          </i>{" "}
           Posted jobs: {data?.postedJobs || 0}, Got applications:{" "}
           {data?.gotApplications || 0}, Got complete jobs{" "}
           {data?.employerCompleteJobs || 0}, Paid out:
           {data?.employerPaidJobs || 0}
           <br />
-          Applied jobs: {data?.submittedJobs || 0}, Got jobs:{" "}
-          {data?.gotJobs || 0}, Complete jobs: {data?.completeJobs || 0}
+          <i>
+            <span> {"Job search: "}</span>
+          </i>{" "}
+          Matched jobs: {data?.matchedJobs || 0}, Applied jobs:{" "}
+          {data?.submittedJobs || 0}, Got jobs: {data?.gotJobs || 0}, Complete
+          jobs: {data?.completeJobs || 0}
           ,Received payments: {data?.paidJobs || 0}
         </Typography>
       </CardContent>

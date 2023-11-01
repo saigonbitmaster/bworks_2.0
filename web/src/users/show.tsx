@@ -38,19 +38,23 @@ const UserProfile = () => {
     paidJobs: 0,
     employerCompleteJobs: 0,
     employerPaidJobs: 0,
+    matchedJobs: 0,
   });
   const dataProvider = useDataProvider();
 
-  dataProvider
-    .customMethod(
-      "customapis/userprofile",
-      { filter: { userId: record.id } },
-      "GET"
-    )
-    .then((result) => {
-      setData(result.data);
-    })
-    .catch((error) => console.error(error));
+  React.useEffect(() => {
+    dataProvider
+      .customMethod(
+        "customapis/userprofile",
+        { filter: { userId: record.id } },
+        "GET"
+      )
+      .then((result) => {
+        setData(result.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
   // the record can be empty while loading
   if (!record) return null;
   return (
@@ -62,6 +66,9 @@ const UserProfile = () => {
           })}`
         )}
       >
+        <i>
+          <span> {"Hiring: "}</span>
+        </i>{" "}
         Posted jobs: {data?.postedJobs || 0}, Got applications:{" "}
         {data?.gotApplications || 0}, Got complete jobs:{" "}
         {data?.employerCompleteJobs || 0}, Paid out jobs:{" "}
@@ -69,8 +76,12 @@ const UserProfile = () => {
         <br />
       </Link>
       <Typography variant="subtitle2">
-        Applied jobs: {data?.submittedJobs || 0}, Got jobs: {data?.gotJobs || 0}
-        , Complete jobs: {data?.completeJobs || 0}, Received payments:{" "}
+        <i>
+          <span> {"Job search: "}</span>
+        </i>{" "}
+        Matched jobs: {data?.matchedJobs || 0}, Applied jobs:{" "}
+        {data?.submittedJobs || 0}, Got jobs: {data?.gotJobs || 0}, Complete
+        jobs: {data?.completeJobs || 0}, Received payments:{" "}
         {data?.paidJobs || 0}
       </Typography>
     </>
