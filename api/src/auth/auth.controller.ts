@@ -77,10 +77,10 @@ export class AuthController {
     try {
       await this.authService.verify(req.user);
     } catch (error) {
-      res.redirect('/verifyFailed.html');
+      res.redirect('/api/verifyFailed.html');
       return;
     }
-    res.redirect('/verifySucceed.html');
+    res.redirect('/api/verifySucceed.html');
     return;
   }
 }
