@@ -28,19 +28,21 @@ jobs:
           envkey_REACT_APP_LOGOUT_URL: ${{ vars.REACT_APP_LOGOUT_URL }}
           envkey_REACT_APP_CARDANO_SCAN_URL: ${{ vars.REACT_APP_CARDANO_SCAN_URL }}
           envkey_REACT_APP_DONATE_ADDRESS: ${{ vars.REACT_APP_DONATE_ADDRESS }}
+          envkey_REACT_APP_CARDANO_EXPLORER_MAINNET_URL: ${{ vars.REACT_APP_CARDANO_EXPLORER_MAINNET_URL }}
           directory: .
           file_name: .env
           fail_on_empty: false
-      - name: Copy .env file to jsk, emp
+      #- name: Copy .env file to jsk , emp
+      - name: Copy .env file to web
         run: |
           #cp .env cms/
-          cp .env jsk/
-          cp .env emp/
+          #cp .env jsk/
+          cp .env web/
           rm -f .env
-          echo "cat jsk/.env"
-          cat jsk/.env
-          echo "cat emp/.env"
-          cat emp/.env
+          #echo "cat jsk/.env"
+          #cat jsk/.env
+          echo "cat web/.env"
+          cat web/.env
       - name: Generate .env file for cms
         uses: SpicyPizza/create-envfile@v2.0
         with:
@@ -51,6 +53,7 @@ jobs:
           envkey_REACT_APP_LOGOUT_URL: ${{ vars.REACT_APP_LOGOUT_URL }}
           envkey_REACT_APP_CARDANO_SCAN_URL: ${{ vars.REACT_APP_CARDANO_SCAN_URL }}
           envkey_REACT_APP_DONATE_ADDRESS: ${{ vars.REACT_APP_DONATE_ADDRESS }}
+          envkey_REACT_APP_CARDANO_EXPLORER_MAINNET_URL: ${{ vars.REACT_APP_CARDANO_EXPLORER_MAINNET_URL }}
           directory: .
           file_name: .env_cms
           fail_on_empty: false

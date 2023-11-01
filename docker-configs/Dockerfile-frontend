@@ -1,4 +1,4 @@
-From node:16.14.2 as build
+From node:16.15.1-slim as build
 ENV NODE_OPTIONS=--max_old_space_size=8192
 WORKDIR /app
 COPY ./ ./
@@ -8,12 +8,9 @@ RUN yarn build-lib
 
 RUN yarn build-cms
 
-RUN yarn build-emp
-
-RUN yarn build-jsk
+RUN yarn build-web
 
 FROM nginx as frontendimage
 
 COPY --chown=nginx --from=build /app/cms/build /var/www/cms
-COPY --chown=nginx --from=build /app/emp/build /var/www/emp
-COPY --chown=nginx --from=build /app/jsk/build /var/www/jsk
+COPY --chown=nginx --from=build /app/web/build /var/www/web

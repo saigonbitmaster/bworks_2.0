@@ -14,17 +14,10 @@ jobs:
       - name: Generate .env file for docker-compose
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          #envkey_REACT_APP_IS_MAINNET: ${{ vars.REACT_APP_IS_MAINNET }}
-          #envkey_REACT_APP_LOGIN_URL: ${{ vars.REACT_APP_LOGIN_URL }}
-          #envkey_REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
-          #envkey_REACT_APP_RENEW_ACCESS_TOKEN_URL: ${{ vars.REACT_APP_RENEW_ACCESS_TOKEN_URL }}
-          #envkey_REACT_APP_LOGOUT_URL: ${{ vars.REACT_APP_LOGOUT_URL }}
-          #envkey_REACT_APP_CARDANO_SCAN_URL: ${{ vars.REACT_APP_CARDANO_SCAN_URL }}
-          #envkey_REACT_APP_DONATE_ADDRESS: ${{ vars.REACT_APP_DONATE_ADDRESS }}
           envkey_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
           envkey_BLOCKFROST_PROJECT_ID: ${{ vars.BLOCKFROST_PROJECT_ID }}
           envkey_BLOCKFROST_URL: ${{ vars.BLOCKFROST_URL }}
-          envkey_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          envkey_GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           envkey_UNLOCK_SHELL_SCRIPT_MAINNET: ${{ vars.UNLOCK_SHELL_SCRIPT_MAINNET }}
           envkey_MAIL_HOST: ${{ vars.MAIL_HOST }}
           envkey_MAIL_USER: ${{ vars.MAIL_USER }}
@@ -36,9 +29,9 @@ jobs:
           envkey_JWT_TOKEN_SECRET: ${{ secrets.JWT_TOKEN_SECRET }}
           envkey_JWT_REFRESH_TOKEN_SECRET: ${{ secrets.JWT_REFRESH_TOKEN_SECRET }}
           envkey_JWT_VERIFY_TOKEN_SECRET: ${{ secrets.JWT_VERIFY_TOKEN_SECRET }}
-          envkey_EMP_SEARCH_BASE_URL: ${{ vars.EMP_SEARCH_BASE_URL }}
-          envkey_JSK_SEARCH_BASE_URL: ${{ vars.JSK_SEARCH_BASE_URL }}
-          envkey_CMS_SEARCH_BASE_URL: ${{ vars.CMS_SEARCH_BASE_URL }}
+          envkey_APP_BASE_URL: ${{ vars.APP_BASE_URL }}
+          envkey_CMS_BASE_URL: ${{ vars.CMS_BASE_URL }}
+          envkey_CARDANO_EXPLORER_URL: ${{ vars.CARDANO_EXPLORER_URL }}
           #envkey_PWD: ${{ vars.PWD }}
           directory: .
           file_name: .env
