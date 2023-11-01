@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePlutusTxDto } from './dto/create.dto';
@@ -6,6 +6,9 @@ import { UpdatePlutusTxDto } from './dto/update.dto';
 import { PlutusTx, PlutusTxDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { JobBidService } from '../jobbid/service';
+import { MailService } from '../mail/mail.service';
+import { UserService } from '../user/user.service';
+import { EventsService } from '../events/service';
 
 import {
   plutusDashboardScript,
@@ -19,6 +22,9 @@ export class PlutusTxService {
   constructor(
     @InjectModel(PlutusTx.name) private readonly model: Model<PlutusTxDocument>,
     private jobBidService: JobBidService,
+    private mailService: MailService,
+    private userService: UserService,
+    private eventsService: EventsService,
   ) {}
 
   async getMonthlyPlutusTxsReport(queryType, userId): Promise<any> {
@@ -63,6 +69,11 @@ export class PlutusTxService {
     });
 
     return result.reverse();
+  }
+
+  //count for global app search
+  async count(filter): Promise<any> {
+    return await this.model.find(filter).count().exec();
   }
 
   async getPlutusReports(queryType: string, userId: string): Promise<any> {
@@ -129,10 +140,48 @@ export class PlutusTxService {
   }
 
   async create(createPlutusTxDto: CreatePlutusTxDto): Promise<PlutusTx> {
-    return await new this.model({
-      ...createPlutusTxDto,
-      createdAt: new Date(),
-    }).save();
+    //notify email
+    const employer = await this.userService.findById(createPlutusTxDto.empId);
+    const jobSeeker = await this.userService.findById(createPlutusTxDto.jskId);
+
+    if (createPlutusTxDto.lockedTxHash && createPlutusTxDto.jobBidId) {
+      this.mailService.paymentUpdate(
+        createPlutusTxDto,
+        jobSeeker,
+        employer,
+        true,
+      );
+    }
+
+    let result;
+    try {
+      result = await new this.model({
+        ...createPlutusTxDto,
+        createdAt: new Date(),
+      }).save();
+
+      //update jobBid
+      this.jobBidService.updateByBackgroundJob(result.jobBidId, {
+        plutusTxId: result._id.toString(),
+      });
+
+      //event notify to job seeker & trusted partner
+      this.eventsService.addEvent(jobSeeker._id.toString(), 'notification', {
+        type: 'payment',
+        message: result._id.toString(),
+        userType: 'jobSeeker',
+      });
+
+      this.eventsService.addEvent(result.unlockUserId, 'notification', {
+        type: 'payment',
+        message: result._id.toString(),
+        userType: 'trustedPartner',
+      });
+    } catch (error) {
+      throw new BadRequestException('Can not insert plutusTx record');
+    }
+
+    return result;
   }
 
   async update(
@@ -141,7 +190,7 @@ export class PlutusTxService {
     userId?: string,
   ): Promise<PlutusTx> {
     //update jobBid isPaid if the transaction is signed by right unlockUserId from browser
-    const currentRecord = await this.findOne(id);
+    const currentRecord = (await this.findOne(id)) as any;
     if (
       updatePlutusTxDto.unlockedTxHash &&
       userId === currentRecord.unlockUserId
@@ -150,7 +199,34 @@ export class PlutusTxService {
         isPaid: true,
         completedAt: new Date(),
       });
+
+      //email notify employer & job seeker
+      const employer = await this.userService.findById(currentRecord.empId);
+      const jobSeeker = await this.userService.findById(currentRecord.jskId);
+      this.mailService.paymentUpdate(
+        {
+          ...currentRecord._doc,
+          unlockedTxHash: updatePlutusTxDto.unlockedTxHash,
+        },
+        jobSeeker,
+        employer,
+        false,
+      );
+
+      //event notify to job seeker & employer
+      this.eventsService.addEvent(jobSeeker._id.toString(), 'notification', {
+        type: 'payment',
+        message: currentRecord._id.toString(),
+        userType: 'jobSeeker',
+      });
+
+      this.eventsService.addEvent(employer._id.toString(), 'notification', {
+        type: 'payment',
+        message: currentRecord._id.toString(),
+        userType: 'employer',
+      });
     }
+
     return await this.model.findByIdAndUpdate(id, updatePlutusTxDto).exec();
   }
 

@@ -11,11 +11,24 @@ const rankLanguage = (
   const matchedLangues = requiredLanguages.filter((language) =>
     gitLanguages.includes(language),
   );
+  if (requiredLanguages.length === 0) return 0;
   return (matchedLangues.length / requiredLanguages.length) * 4;
 };
 
+//max is 5 for rate field 5 stars
+const rankSkills = (
+  gitLanguages: string[],
+  requiredLanguages: string[],
+): number => {
+  const matchedLangues = requiredLanguages.filter((language) =>
+    gitLanguages.includes(language),
+  );
+  if (requiredLanguages.length === 0) return 0;
+  return (matchedLangues.length / requiredLanguages.length) * 5;
+};
+
 const rankPrice = (
-  minPrice = 0,
+  minPrice: number,
   maxPrice: number,
   placedPrice: number,
 ): number => {
@@ -30,4 +43,20 @@ const rankBid = (
   return (languageRank * 3 + priceRank) / 4 + (hasPrototype ? 1 : 0);
 };
 
-export { rankBid, rankLanguage, rankPrice };
+const rankJobBid = (
+  gitLanguages: string[],
+  requiredLanguages: string[],
+  minPrice: number,
+  maxPrice: number,
+  placedPrice: number,
+  hasPrototype: boolean,
+) => {
+  const languageRate = rankLanguage(gitLanguages, requiredLanguages);
+  const priceRate = rankPrice(minPrice, maxPrice, placedPrice);
+  return rankBid(languageRate, priceRate, hasPrototype);
+};
+
+const matchedUsers = () => {
+  
+}
+export { rankBid, rankLanguage, rankPrice, rankJobBid, rankSkills };

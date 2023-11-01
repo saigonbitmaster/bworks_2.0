@@ -1,3 +1,8 @@
+/*
+Type is  not extendable
+Interface is  extendable
+*/
+
 export interface GitCommit {
   id: string;
   message: string;
@@ -50,6 +55,7 @@ export interface userJwtPayload {
 export interface MongooseQuery {
   filter: { [key: string]: any };
   sort: { [key: string]: any };
+  select?: { [key: string]: number };
   skip: number;
   limit: number;
 }
@@ -67,6 +73,25 @@ export interface RequestUser {
   userId: string;
 }
 
+export interface Message {
+  userId: string;
+  body: string;
+  createdAt: Date;
+  id: string;
+}
+/*
+ const event = {
+      type: 'job' || 'payment' || 'message';
+      userType: 'employer' || 'jobSeeker', -> to notify to employer or job seeker
+      message: 'jobBidId' || 'plutusTxId',
+    };
+*/
+export interface Event {
+  type: string;
+  userType?: string;
+  message: string;
+}
+
 export interface TypeSkill {
   name: string;
 }
@@ -81,3 +106,13 @@ export enum Role {
   Admin = 'admin',
   User = 'user',
 }
+
+export type EventType = 'notification' | 'data' | 'progress' | 'error';
+
+export const EventHeader = {
+  'Content-Type': 'text/event-stream',
+  Connection: 'keep-alive',
+  'Cache-Control': 'no-cache',
+  'X-Accel-Buffering': 'no',
+  'Access-Control-Allow-Origin': '*',
+};

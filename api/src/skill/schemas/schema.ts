@@ -25,6 +25,18 @@ export class Skill {
 
 const SkillSchema = SchemaFactory.createForClass(Skill);
 SkillSchema.plugin(uniqueValidator);
-SkillSchema.index({ name: 'text' });
+SkillSchema.index(
+  {
+    name: 'text',
+    description: 'text',
+  },
+  {
+    weights: {
+      name: 1,
+      description: 1,
+    },
+    name: 'textIndex',
+  },
+);
 
 export { SkillSchema };

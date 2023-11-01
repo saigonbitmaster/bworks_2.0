@@ -15,6 +15,21 @@ export class User {
   @Prop()
   contact: string;
 
+  @Prop()
+  gitLink: string;
+
+  @Prop({ default: false })
+  isShowContact: boolean;
+
+  @Prop({ default: true })
+  isJobSeeker: boolean;
+
+  @Prop({ default: true })
+  isEmployer: boolean;
+
+  @Prop({ default: 0 })
+  workHoursPerMonth: number;
+
   @Prop({ required: true })
   password: string;
 
@@ -23,6 +38,12 @@ export class User {
 
   @Prop()
   fullName: string;
+
+  @Prop({ default: true })
+  isApproved: boolean;
+
+  @Prop({ default: true })
+  isNotified: boolean;
 
   @Prop()
   refreshToken: string;
@@ -46,4 +67,23 @@ export class User {
   deletedAt?: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.index(
+  {
+    username: 'text',
+    fullName: 'text',
+    email: 'text',
+    description: 'text',
+  },
+  {
+    weights: {
+      username: 1,
+      fullName: 1,
+      email: 1,
+      description: 1,
+    },
+    name: 'textIndex',
+  },
+);
+
+export { UserSchema };

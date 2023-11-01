@@ -10,6 +10,8 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { RegisterStrategy } from './register.strategy';
 import { RefreshTokenStrategy } from './refresh.strategy';
+import { EventStrategy } from './events.strategy';
+
 @Module({
   imports: [
     forwardRef(() => UserModule),
@@ -24,6 +26,7 @@ import { RefreshTokenStrategy } from './refresh.strategy';
     JwtStrategy,
     RegisterStrategy,
     RefreshTokenStrategy,
+    EventStrategy
   ],
   exports: [AuthService],
   controllers: [AuthController],

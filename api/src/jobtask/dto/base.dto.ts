@@ -3,7 +3,7 @@ export class BaseJobTaskDto {
   name: string;
   creator: string;
   updater: string;
-  jobId: string;
+  jobBidId: string;
   jobSeekerId: string;
   employerId: string;
   status: taskStatus;

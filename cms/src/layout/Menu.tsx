@@ -25,7 +25,7 @@ import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import SubMenu from "./SubMenu";
 import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
+import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
 
 type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
 
@@ -84,17 +84,16 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListNumberedOutlinedIcon />}
           dense={dense}
         />
-
-        <MenuItemLink
-          to="/jobtasks"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.jobtasks.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<ListAltOutlinedIcon />}
-          dense={dense}
-        />
       </SubMenu>
+      <MenuItemLink
+        to="/users"
+        state={{ _scrollToTop: true }}
+        primaryText={translate(`resources.users.name`, {
+          smart_count: 2,
+        })}
+        leftIcon={<PeopleOutlinedIcon />}
+        dense={dense}
+      />
 
       <SubMenu
         handleToggle={() => handleToggle("manageFund")}
@@ -113,6 +112,16 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+      <MenuItemLink
+        to="/jobtasks"
+        state={{ _scrollToTop: true }}
+        primaryText={translate(`resources.jobtasks.name`, {
+          smart_count: 2,
+        })}
+        leftIcon={<ListAltOutlinedIcon />}
+        dense={dense}
+      />
+
       <SubMenu
         handleToggle={() => handleToggle("reports")}
         isOpen={state.reports}
@@ -209,15 +218,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-          <MenuItemLink
-          to="/users"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.users.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<PeopleOutlinedIcon />}
-          dense={dense}
-        />
+
         <MenuItemLink
           to="/skills"
           state={{ _scrollToTop: true }}

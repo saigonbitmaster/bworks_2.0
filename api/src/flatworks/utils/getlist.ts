@@ -21,18 +21,19 @@ fullText search: filter: { textSearch: 'text' } -> filter: $text: { $search: 'te
 
 const queryTransform = (query): MongooseQuery => {
   const sort = {};
+  const select = {};
   query.sort
     ? (sort[JSON.parse(query.sort)[0]] =
         JSON.parse(query.sort)[1] === 'ASC' ? 1 : -1)
     : null;
-  const range = query.range ? JSON.parse(query.range) : [0, 10];
+  const range = query.range ? JSON.parse(query.range) : [0, 25];
   const [rangeStart, rangeEnd] = [...range];
   const limit = rangeEnd - rangeStart + 1;
   const skip = rangeStart;
   const filter = query.filter ? JSON.parse(query.filter) : {};
   //need to add text search for reference collections
   filter.textSearch ? (filter.$text = { $search: filter.textSearch }) : null;
-  return { filter, sort, skip, limit };
+  return { filter, sort, skip, limit, select };
 };
 
 const formatRaList = (res, result: RaList) => {

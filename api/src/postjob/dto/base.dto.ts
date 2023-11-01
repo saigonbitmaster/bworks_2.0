@@ -10,5 +10,6 @@ export class BasePostJobDto {
   tasks: string[];
   isApproved: boolean;
   currencyId: string;
+  extraText: string;
   description: string;
 }

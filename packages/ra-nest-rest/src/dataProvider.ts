@@ -49,7 +49,10 @@ import { filterTransform } from "./utils";
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
 
+  * show error message to client by return a promise reject
+  return Promise.reject(new Error("get list fail"));
  */
+
 export default (
   apiUrl: string,
   httpClient = fetchUtils.fetchJson,

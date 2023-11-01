@@ -13,13 +13,29 @@ import {
   useRecordContext,
   useRefresh,
   useUpdate,
-  TextInput
+  TextInput,
 } from "react-admin";
 import CurrencyNumberField from "../components/currencyNumberField";
 import LinkBidField from "../components/linkBidsField";
 import Button from "@mui/material/Button";
+import Steps from "../components/jobApplicationAside";
+import { Box, Drawer } from "@mui/material";
+import MatchedUsersField from "../components/matchedUsersField";
 
-const filters = [<TextInput label="Search" source="textSearch" alwaysOn />];
+const filters = [
+  <TextInput
+    label="Search"
+    source="textSearch"
+    alwaysOn
+    fullWidth
+    sx={{ width: 300 }}
+  />,
+];
+
+const JobPanel = () => {
+  const record = useRecordContext();
+  return <div dangerouslySetInnerHTML={{ __html: record.description }} />;
+};
 
 const ListScreen = () => {
   const SelectButton = (props) => {
@@ -46,23 +62,30 @@ const ListScreen = () => {
       </Button>
     );
   };
+
   return (
-    <List perPage={25}  sort={{ field: "createdAt", order: "desc" }} filters={filters}>
-      <Datagrid bulkActionButtons={false}>
+    <List
+      perPage={25}
+      sort={{ field: "createdAt", order: "desc" }}
+      filters={filters}
+      resource="postjobs/cms"
+    >
+      <Datagrid bulkActionButtons={false} expand={<JobPanel />}>
         <TextField source="name" />
         <ReferenceField reference="users" source="employerId" link={"show"}>
           <TextField source="fullName" />
         </ReferenceField>
         <DateField source="createdAt" showTime />
-        <LinkBidField />
+        <LinkBidField label="Applications" />
         <CurrencyNumberField source="budget" threshold={10000} />
         <ReferenceArrayField reference="skills" source="skills">
           <SingleFieldList>
             <ChipField source="name" />
           </SingleFieldList>
         </ReferenceArrayField>
-        <SelectButton source="isApproved" label="Approve" />
         <DateField source="expireDate" showTime />
+        <MatchedUsersField label="Matched users" source="matchUsers" />
+        <SelectButton source="isApproved" label="Approval" />
       </Datagrid>
     </List>
   );

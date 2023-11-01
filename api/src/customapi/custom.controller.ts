@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
   Req,
+  Request,
 } from '@nestjs/common';
 import { PublicService } from './public.service';
 import { PlutusTxService } from '../plutustx/service';
@@ -19,13 +20,51 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import * as lodash from 'lodash';
 import { queryTransform } from '../flatworks/utils/getlist';
 
-@UseGuards(JwtAuthGuard)
 @Controller('customapis')
 export class CustomController {
   constructor(
     private readonly plutusTxService: PlutusTxService,
     private readonly postJobService: PostJobService,
+    private readonly publicService: PublicService,
   ) {}
+
+  //dashboard apis
+  @Get('dashboardcards')
+  async getDashboardData(@Response() res: any) {
+    const result = await this.publicService.getDashboardData();
+    return res.json(result);
+  }
+
+  //plutus dashboard chart
+  @Get('dashboardplutus')
+  async _getDashboardPlutus(@Response() res: any) {
+    const result = await this.plutusTxService.getPlutusDashboard();
+    return res.json(result);
+  }
+  //job dashboard chart
+  @Get('jobdashboard')
+  async _getDashboardJob(@Response() res: any) {
+    const result = await this.postJobService.getJobDashboard();
+    return res.json(result);
+  }
+
+  //current user, jobs statistic
+  @Get('userstatistic')
+  async getDashboardUserStatistic(@Response() res: any, @Request() req) {
+    const userId = req.user.userId;
+    const result = await this.publicService.getDashboardUserStatistic(userId);
+    return res.json(result);
+  }
+
+  //current user, jobs statistic by userId {filter: {userId: abc}}
+  @Get('userprofile')
+  async userStatistic(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result = await this.publicService.getDashboardUserStatistic(
+      mongooseQuery.filter.userId,
+    );
+    return res.json(result);
+  }
 
   //get userId from access token
   @Get('userid')

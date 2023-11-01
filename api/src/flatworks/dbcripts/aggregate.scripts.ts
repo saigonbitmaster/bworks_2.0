@@ -160,7 +160,7 @@ const jobDashboardScript = (fromDate: Date, toDate: Date) => {
         numberOfBids: { $sum: '$numberOfBids' },
         sumBidsAmounts: { $sum: '$totalBidsAmount' },
         numberOfPaidJobs: { $sum: '$numberOfPaidJobs' },
-        numberOfCompletedJobs: { $sum: '$numberOfPaidJobs' },
+        numberOfCompletedJobs: { $sum: '$numberOfCompletedJobs' },
         numberOfSelectedBids: { $sum: '$numberOfSelectedBids' },
       },
     },
@@ -388,13 +388,17 @@ const jobMonthlyScript = (queryType, userId, fromDate, toDate) => {
       : {};
 
   const preserveNullAndEmptyArrays =
-    queryType === 'emp' ? false : queryType === 'jsk' ? false : true;
+    queryType === 'emp' ? true : queryType === 'jsk' ? false : true;
+
+  const employerFilter = queryType === 'emp' ? { employerId: userId } : {};
+
   const script = [
     {
       $match: {
         $and: [
           { createdAt: { $gte: fromDate } },
           { createdAt: { $lte: toDate } },
+          employerFilter,
         ],
       },
     },

@@ -26,7 +26,7 @@ export class PublicController {
     private readonly plutusTxService: PlutusTxService,
     private readonly postJobService: PostJobService,
   ) {}
-
+  /* 
   //dashboard apis
   @Get('dashboardcards')
   async getDashboardData(@Response() res: any) {
@@ -45,7 +45,7 @@ export class PublicController {
   async getDashboardJob(@Response() res: any) {
     const result = await this.postJobService.getJobDashboard();
     return res.json(result);
-  }
+  } */
 
   //homepage queries
   @Get('tokenreceivers')

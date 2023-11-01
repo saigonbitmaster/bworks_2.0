@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as uniqueValidator from 'mongoose-unique-validator';
+import { Message } from '../../flatworks/types/types';
 
 export type JobBidDocument = JobBid & Document;
 
@@ -28,6 +29,12 @@ export class JobBid {
   bidValue: number;
 
   @Prop({ default: false })
+  hasPrototype: boolean;
+
+  @Prop()
+  prototypeLink: string;
+
+  @Prop({ default: false })
   isSelected: boolean;
 
   @Prop({ default: false })
@@ -36,11 +43,26 @@ export class JobBid {
   @Prop({ default: false })
   isSignedTx: boolean;
 
+  @Prop()
+  plutusTxId: string;
+
+  @Prop({ default: true })
+  isApproved: boolean;
+
   @Prop({ default: false })
   isCompleted: boolean;
 
+  @Prop({ default: false })
+  jobDone: boolean;
+
   @Prop()
   rate?: number;
+
+  @Prop()
+  messages?: Message[];
+
+  @Prop()
+  extraText: string;
 
   @Prop()
   description: string;
@@ -54,6 +76,34 @@ export class JobBid {
 
 const JobBidSchema = SchemaFactory.createForClass(JobBid);
 JobBidSchema.plugin(uniqueValidator);
-JobBidSchema.index({ name: 'text' });
+JobBidSchema.index(
+  {
+    name: 'text',
+    description: 'text',
+  },
+  {
+    weights: {
+      name: 1,
+      description: 1,
+    },
+    name: 'textIndex',
+  },
+);
 
+JobBidSchema.index(
+  {
+    employerId: 1,
+  },
+  {
+    name: 'employerId',
+  },
+);
+JobBidSchema.index(
+  {
+    jobSeekerId: 1,
+  },
+  {
+    name: 'jobSeekerId',
+  },
+);
 export { JobBidSchema };

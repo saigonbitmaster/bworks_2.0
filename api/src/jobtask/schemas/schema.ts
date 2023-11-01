@@ -10,7 +10,7 @@ export class JobTask {
   name: string;
 
   @Prop({ required: true })
-  jobId: string;
+  jobBidId: string;
 
   @Prop({ required: true })
   status: string;

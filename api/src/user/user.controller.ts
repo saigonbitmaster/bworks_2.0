@@ -8,6 +8,7 @@ import {
   Put,
   Response,
   Request,
+  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,6 +16,7 @@ import { UserService } from './user.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
+import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
 @Controller('users')
 export class UserController {
@@ -22,7 +24,6 @@ export class UserController {
 
   //post {password: abc}
   @Post('changepassword')
-  //@Roles(Role.Admin)
   async changePassword(
     @Body() changePasswordDto: ChangePasswordDto,
     @Request() req,
@@ -32,19 +33,24 @@ export class UserController {
   }
 
   @Get()
-  async index(@Response() res: any) {
-    const result: any[] = await this.service.findAll();
-    return res
-      .set({
-        'Content-Range': 10,
-        'Access-Control-Expose-Headers': 'Content-Range',
-      })
-      .json(result);
+  async index(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result = await this.service.findAllList(mongooseQuery);
+    return formatRaList(res, result);
+  }
+
+  @Get('allusers')
+  @Roles(Role.Admin)
+  async findAllByAdmin(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result = await this.service.findAllCms(mongooseQuery);
+    return formatRaList(res, result);
   }
 
   @Get(':id')
-  async find(@Param('id') id: string) {
-    return await this.service.findById(id);
+  async find(@Param('id') id: string, @Request() req) {
+    const userId = req.user.userId;
+    return await this.service.findByIdForRest(id, userId);
   }
 
   @Post()
@@ -54,8 +60,20 @@ export class UserController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.service.update(id, updateUserDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req,
+  ) {
+    const userId = req.user.userId;
+    return await this.service.updateForRest(id, updateUserDto, userId);
+  }
+
+  //cms only
+  @Roles(Role.Admin)
+  @Put('/approve/:id')
+  async approve(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.service.approve(id, updateUserDto);
   }
 
   @Delete(':id')

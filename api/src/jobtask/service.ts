@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateJobTaskDto } from './dto/create.dto';
@@ -49,6 +49,11 @@ export class JobTaskService {
   }
 
   async delete(id: string, userId: string): Promise<JobTask> {
+    //user delete its own task only
+    const task = await this.findOne(id);
+    if (task.creator !== userId) {
+      throw new ForbiddenException('Permission Denied');
+    }
     return await this.model.findByIdAndDelete(id).exec();
   }
 }

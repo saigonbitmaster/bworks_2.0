@@ -9,6 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  BarChart,
+  Bar,
+  Cell,
 } from "recharts";
 
 import FormGroup from "@mui/material/FormGroup";
@@ -32,14 +35,18 @@ const PaymentChart = () => {
     y1: "numberOfLockTxs",
     y2: "numberOfUnlockedTxs",
     y1Name: "Lock Txs",
-    y2Name: "Unlocked Txs",
+    y2Name: "Unlock Txs",
   });
 
   const [data, setData] = React.useState(months.reverse());
   const dataProvider = useDataProvider();
   React.useEffect(() => {
     dataProvider
-      .customMethod("customapis/getmonthlyplutustxsreport", { filter: {queryType: "cms"} }, "GET")
+      .customMethod(
+        "customapis/getmonthlyplutustxsreport",
+        { filter: { queryType: "cms" } },
+        "GET"
+      )
       .then((result) => setData(result.data))
       .catch((error) => console.error(error));
   }, []);
@@ -55,7 +62,7 @@ const PaymentChart = () => {
         y1: "numberOfLockTxs",
         y2: "numberOfUnlockedTxs",
         y1Name: "Lock Txs",
-        y2Name: "Unlocked Txs",
+        y2Name: "Unlock Txs",
       });
     } else {
       setLabel("Plutus TX Amounts ($Ada)");
@@ -73,6 +80,7 @@ const PaymentChart = () => {
       <CardHeader
         title="Plutus TXs"
         titleTypographyProps={{ variant: "subtitle1" }}
+        sx={{ mb: 0, pb: 0 }}
       />
       <FormGroup sx={{ ml: 2 }}>
         <FormControlLabel
@@ -87,25 +95,15 @@ const PaymentChart = () => {
           label={label}
         />
       </FormGroup>
-      <CardContent>
-        <div style={{ width: "100%", height: 280 }}>
+      <CardContent sx={{ mt: 0, pt: 0 }}>
+        <div style={{ width: "100%", height: 337 }}>
           <ResponsiveContainer>
-            <AreaChart
+            <BarChart
               width={730}
-              height={280}
+              height={337}
               data={data}
               margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
             >
-              <defs>
-                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                </linearGradient>
-              </defs>
               <XAxis
                 tick={{ fontSize: 15 }}
                 dataKey="shortYear"
@@ -120,26 +118,21 @@ const PaymentChart = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
 
-              <Area
-                type="monotone"
+              <Bar
                 name={dataKeys.y1Name}
                 dataKey={dataKeys.y1}
-                stroke="#8884d8"
-                fillOpacity={1}
-                fill="url(#colorPv)"
+                fill="#ffc658"
               />
-              <Area
-                type="monotone"
+              <Bar
                 name={dataKeys.y2Name}
                 dataKey={dataKeys.y2}
-                stroke="#82ca9d"
-                fillOpacity={1}
-                fill="url(#colorUv)"
+                fill="#8884d8"
               />
+
               <Legend
                 wrapperStyle={{ position: "relative", marginTop: "0.1px" }}
               />
-            </AreaChart>
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

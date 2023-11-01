@@ -7,27 +7,15 @@ import {
   ListItemAvatar,
   ListItemText,
 } from "@mui/material";
-import CommentIcon from "@mui/icons-material/Comment";
 import { Link } from "react-router-dom";
 import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
-
-import {
- 
-  useGetList,
-  useTranslate,
-  TextField,
-  DateField,
-} from "react-admin";
-
+import { useGetList, useTranslate, TextField, DateField } from "react-admin";
 import { stringify } from "query-string";
 import CardWithIcon from "./cardWithIcon";
-import LinkBidField from "../components/linkBidsField";
-import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
-const text = {
-  color: "orange",
-};
-
-const Spacer = () => <span style={{ width: "3em" }} />;
+import LinkBidField from "../components/linkBidsFieldDashboard";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
+import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import moment from "moment";
 
 const PostedJob = (props) => {
   interface Props {
@@ -39,7 +27,7 @@ const PostedJob = (props) => {
   const translate = useTranslate();
   const { data: postedjobs, total } = useGetList<any>("postjobs", {
     sort: { field: "createdAt", order: "DESC" },
-    pagination: { page: 1, perPage: 8 },
+    pagination: { page: 1, perPage: 9 },
   });
 
   const display = "block";
@@ -47,36 +35,59 @@ const PostedJob = (props) => {
   return (
     <CardWithIcon
       to={{
-        pathname: "/postjobs",
+        pathname: "/postjobsjsk",
         search: stringify({
-          filter: JSON.stringify({ status: "active" }),
+          filter: JSON.stringify({ jsApproved: true }),
         }),
       }}
       icon={DynamicFeedOutlinedIcon}
       title={translate("pos.dashboard.postedJob")}
-      subtitle={`${postedJobs} jobs, ${bids} bids`}
+      subtitle={`${postedJobs} jobs, ${bids} applications`}
+      minHeight={890}
     >
       <List sx={{ display }}>
         {postedjobs?.map((record: any) => (
           <>
-            <ListItem key={record.id} alignItems="center">
-              <ListItemAvatar>
-                <AppRegistrationOutlinedIcon></AppRegistrationOutlinedIcon>
+            <ListItem
+              key={record.id}
+              alignItems="center"
+              sx={{ m: 0, p: 0.6 }}
+              component={Link}
+              to={encodeURI(
+                `/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({
+                  _id: record.id,
+                })}`
+              )}
+            >
+              <ListItemAvatar sx={{ minWidth: 30 }}>
+                {moment(record.expireDate).isAfter() ? (
+                  <DoneOutlinedIcon />
+                ) : (
+                  <ClearOutlinedIcon />
+                )}
               </ListItemAvatar>
-              <TextField record={record} source="name"></TextField>
-              <Spacer />
-              <DateField record={record} source="createdAt"></DateField>
+
+              <ListItemText>
+                <TextField record={record} source="name"></TextField>
+              </ListItemText>
+
+              <DateField
+                sx={{ mr: 0 }}
+                record={record}
+                source="expireDate"
+              ></DateField>
             </ListItem>
 
             <ListItem
               key={record.id + 1}
-              button
+              sx={{ m: 0, p: 0.6 }}
+              /*    button
               component={Link}
-              to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`}
+              to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`} */
               alignItems="flex-start"
             >
-              <ListItemText primaryTypographyProps={{ style: text }}>
-                Current bids
+              <ListItemText primaryTypographyProps={{ variant: "body2" }}>
+                Applications
               </ListItemText>
               <LinkBidField record={record} />
             </ListItem>
@@ -87,7 +98,7 @@ const PostedJob = (props) => {
       <Button
         sx={{ borderRadius: 0 }}
         component={Link}
-        to="/postjobs"
+        to="/postjobsjsk"
         size="small"
         color="primary"
       >
