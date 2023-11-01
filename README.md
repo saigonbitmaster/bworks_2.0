@@ -1,5 +1,5 @@
-
 ## Install & run dev
+
 ```
 git clone https://github.com/saigonbitmaster/bworks_2.0
 add local host dns record /etc/hosts: 127.0.0.1  bworks.bworks.app
@@ -23,7 +23,7 @@ BLOCKFROST_URL=https://cardano-testnet.blockfrost.io/api/v0
 GITHUB_TOKEN=****
 
 cd bworks_2.0
-yarn 
+yarn
 yarn build-lib
 yarn api
 yarn cms
@@ -31,21 +31,44 @@ yarn web
 ```
 
 ## Build & run app
+
 ```
 git clone https://github.com/saigonbitmaster/bworks_2.0
 cd bworks_2.0
 export NODE_OPTIONS="--max-old-space-size=8192"
-yarn 
+yarn
 yarn build-lib
 yarn build-api
 yarn build-cms
 yarn build-web
 
-frontend app after build can be run by any http server e.g nginx server
-backend app after build can be run by: node main.js or pm2
+
+```
+
+## URLs
+
+```
+https://bworks.app/web/#/ -> web app
+https://bworks.app/cms/#/ -> cms app
+https://bworks.app/api    -> api
+
+
+```
+
+## Build docker images
+
+```
+build API image
+build Nginx image
+build certBot image
+build mongo image
+build redis image
+
+
 ```
 
 ## change the API urls for frontend
+
 ```
 modify .env file variables reflect the login and API urls.
 ```
