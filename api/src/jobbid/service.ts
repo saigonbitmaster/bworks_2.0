@@ -13,7 +13,7 @@ import { User } from '../user/schemas/user.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { rankJobBid } from '../flatworks/logics/rank';
 import { UserService } from '../user/user.service';
-import { PostJobService } from '../postJob/service';
+import { PostJobService } from '../postjob/service';
 import { MessageDto } from './dto/message.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { MailService } from '../mail/mail.service';
