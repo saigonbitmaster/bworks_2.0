@@ -29,7 +29,7 @@ export class UserController {
     @Request() req,
   ) {
     const id = req.user.userId;
-    return await this.service.updatePassword(id, changePasswordDto);
+    return await this.service.changePassword(id, changePasswordDto);
   }
 
   @Get()

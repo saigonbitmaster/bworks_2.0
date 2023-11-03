@@ -14,12 +14,18 @@ import {
   SelectArrayInput,
   DateTimeInput,
   minValue,
+  AutocompleteArrayInput,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
 import moment from "moment";
 
 const oneWeekLate = moment().add(7, "days").format("YYYY-MM-DD");
+const filterToQuery = (searchText) => ({ textSearch: searchText });
+/* 
+<ReferenceArrayInput source="tag_ids" reference="tags">
+    <AutocompleteArrayInput filterToQuery={filterToQuery} />
+</ReferenceArrayInput> */
 
 const CreateScreen = () => (
   <Create redirect="list">
@@ -86,10 +92,9 @@ const CreateScreen = () => (
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
           <ReferenceArrayInput source="skills" reference="skills" fullWidth>
-            <SelectArrayInput
-              optionText="name"
-              fullWidth
-              label="Required skills"
+            <AutocompleteArrayInput
+              optionText={"name"}
+              filterToQuery={filterToQuery}
             />
           </ReferenceArrayInput>
         </Grid>

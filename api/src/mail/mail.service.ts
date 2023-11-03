@@ -15,7 +15,8 @@ mail notify send to user for cases:
 - job application is paid to bWorks smart contract
 - job application is paid to job seeker wallet or refund to employer wallet
 */
-  //register email verifyÏ
+
+  //register new account
   async send(user: any, token: string) {
     const verifyUrl = process.env.MAIL_VERIFICATION_URL;
     const url = `${verifyUrl}${token}`;
@@ -38,6 +39,28 @@ mail notify send to user for cases:
     }
 
     return result;
+  }
+
+  //reset user password
+  async resetPassword(user: any, token: string) {
+    const verifyUrl = process.env.MAIL_RESET_PASSWORD_URL;
+    const url = encodeURI(`${verifyUrl}${token}`);
+
+    try {
+      return await this.mailerService.sendMail({
+        to: user.email,
+        subject: '[bWorks] You requested reset password',
+        template: './reset',
+        context: {
+          name: user.username,
+          url,
+        },
+      });
+    } catch (e) {
+      console.log(
+        `user register: mail service error: ${user.username}, ${url}`,
+      );
+    }
   }
 
   //notify to employer when a job seeker apply to the job

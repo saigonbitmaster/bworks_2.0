@@ -12,6 +12,7 @@ import {
   trimUsername,
   trimFullName,
 } from '../flatworks/utils/common';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -73,6 +74,10 @@ export class UserService {
     return user;
   }
 
+  async findByEmail(filter = {}): Promise<UserDocument> {
+    return await this.model.findOne(filter).exec();
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     const username = createUserDto.username.toLowerCase();
     //roles is always ['user'] as created time
@@ -93,29 +98,24 @@ export class UserService {
   async count(filter): Promise<any> {
     return await this.model.find(filter).count().exec();
   }
-  async updatePassword(
+
+  async changePassword(
     id: string,
-    updateUserDto: UpdateUserDto,
+    changePasswordDto: ChangePasswordDto,
   ): Promise<User> {
-    //validate password
-    if (!validatePassword(updateUserDto.password)) {
-      throw new BadRequestException({
-        cause: new Error(),
-        description: 'Submit error',
-        message:
-          'password is must min 8 letters, with at least a symbol, upper and lower case letters and a number',
-      });
+    if (!validatePassword(changePasswordDto.password)) {
+      throw new BadRequestException(
+        'password is must min 8 letters, with at least a symbol, upper and lower case letters and a number',
+      );
     }
 
-    let _updateUserDto = updateUserDto;
-    //don't update roles
-    delete _updateUserDto['roles'];
-    if (updateUserDto.password) {
-      const saltOrRounds = 10;
-      const password = await bcrypt.hash(updateUserDto.password, saltOrRounds);
-      _updateUserDto = { ...updateUserDto, password };
-    }
-    return await this.model.findByIdAndUpdate(id, _updateUserDto).exec();
+    const saltOrRounds = 10;
+    const password = await bcrypt.hash(
+      changePasswordDto.password,
+      saltOrRounds,
+    );
+
+    return await this.model.findByIdAndUpdate(id, { password }).exec();
   }
 
   /*

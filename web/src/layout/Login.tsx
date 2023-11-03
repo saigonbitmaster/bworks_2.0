@@ -138,16 +138,35 @@ const Login = () => {
             <Box flexGrow={1} sx={{ m: 0, p: 0 }}>
               &nbsp;
             </Box>
-            <Typography
-              variant="caption"
-              display="block"
-              sx={{ textAlign: "left" }}
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                pr: "1em",
+                pt: "2em",
+              }}
             >
-              New user?{" "}
-              <span>
-                <Link to="/register">Register an account</Link>
-              </span>
-            </Typography>
+              <Typography
+                variant="caption"
+                display="inline"
+                sx={{ textAlign: "left" }}
+              >
+                <span>
+                  <Link to="/register">Register new account</Link>
+                </span>
+              </Typography>
+              <Typography
+                variant="caption"
+                display="inline"
+                sx={{ textAlign: "right" }}
+              >
+                <span>
+                  <Link to="/forgotpwd">Reset password</Link>
+                </span>
+              </Typography>
+            </Box>
           </CardActions>
         </Card>
       </Box>

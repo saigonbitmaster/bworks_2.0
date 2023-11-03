@@ -11,6 +11,7 @@ import {
   BooleanInput,
   TopToolbar,
   NumberInput,
+  AutocompleteArrayInput,
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
@@ -30,6 +31,7 @@ const EditActions = () => (
   </TopToolbar>
 );
 
+const filterToQuery = (textSearch) => ({ textSearch: textSearch });
 const EditScreen = () => {
   const dataProvider = useDataProvider();
 
@@ -111,8 +113,11 @@ const EditScreen = () => {
           </Grid>
           <Grid item md={12} />
           <Grid item xs={12} md={12} lg={8} xl={6}>
-            <ReferenceArrayInput source="skills" reference="skills">
-              <SelectArrayInput fullWidth />
+            <ReferenceArrayInput source="skills" reference="skills" fullWidth>
+              <AutocompleteArrayInput
+                optionText={"name"}
+                filterToQuery={filterToQuery}
+              />
             </ReferenceArrayInput>
           </Grid>
 

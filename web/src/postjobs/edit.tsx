@@ -11,10 +11,12 @@ import {
   DateTimeInput,
   Edit,
   ReferenceInput,
+  AutocompleteArrayInput,
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
+const filterToQuery = (searchText) => ({ textSearch: searchText });
 
 const EditScreen = () => (
   <Edit>
@@ -79,10 +81,9 @@ const EditScreen = () => (
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
           <ReferenceArrayInput source="skills" reference="skills" fullWidth>
-            <SelectArrayInput
-              optionText="name"
-              fullWidth
-              label="Required skills"
+            <AutocompleteArrayInput
+              optionText={"name"}
+              filterToQuery={filterToQuery}
             />
           </ReferenceArrayInput>
         </Grid>

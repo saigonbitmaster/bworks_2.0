@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form";
 import ButtonBase from "@mui/material/ButtonBase";
 import { useDataProvider, useNotify } from "react-admin";
 import { Link } from "react-router-dom";
-import { anyWhiteSpace, startEndWhiteSpace } from "../utils/validate";
 
 export default function Register() {
   const dataProvider = useDataProvider();
@@ -40,21 +39,28 @@ export default function Register() {
           "Submit successfully, please check your mail to verify your account",
           { type: "success" }
         );
-        console.log(result);
       })
       .catch((error) => {
-        console.log(error.message);
         notify(error.message, { type: "warning" });
       });
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  const [showRepeatPassword, setShowRepeatPassword] = React.useState(false);
+
+  const handleClickShowRepeatPassword = () =>
+    setShowRepeatPassword(!showRepeatPassword);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
+    event.preventDefault();
+  };
+
+  const preventCopyPaste = (event) => {
     event.preventDefault();
   };
 
@@ -111,13 +117,9 @@ export default function Register() {
                     value: 20,
                     message: "Username should lesser than 20 words",
                   },
-                  /*   pattern: {
-                    value: /\s/g,
-                    message:
-                      "Username must not contain a whitespace or new line",
-                  }, */
+
                   validate: (value) => {
-                    let regex = /\s/g;
+                    const regex = /\s/g;
                     return (
                       !regex.test(value) ||
                       "Username must not contain a whitespace or new line"
@@ -160,10 +162,10 @@ export default function Register() {
             />
           </FormControl>
           <FormControl sx={{ m: 1, width: 500 }} variant="standard">
-            <InputLabel>Cardano wallet address</InputLabel>
+            <InputLabel>Cardano wallet address *</InputLabel>
             <Input
               type="text"
-              {...register("walletAddress", { maxLength: 300 })}
+              {...register("walletAddress", { maxLength: 300, required: true })}
             />
           </FormControl>
           <FormControl sx={{ m: 1, width: 500 }} variant="standard">
@@ -184,6 +186,8 @@ export default function Register() {
             <InputLabel>Available hours to work per month</InputLabel>
             <Input
               type="number"
+              inputProps={{ min: 0, max: 720 }}
+              defaultValue={20}
               {...register("workHoursPerMonth", {
                 min: {
                   value: 10,
@@ -263,15 +267,19 @@ export default function Register() {
                     }
                   },
                 })}
-                type={showPassword ? "text" : "password"}
+                //not allow copy/paste on repeat password
+                onCut={preventCopyPaste}
+                onCopy={preventCopyPaste}
+                onPaste={preventCopyPaste}
+                type={showRepeatPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
+                      onClick={handleClickShowRepeatPassword}
                       onMouseDown={handleMouseDownPassword}
                     >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                      {showRepeatPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -323,6 +331,8 @@ export default function Register() {
             sx={{ m: 1, width: 500, color: "#ff9800" }}
           >
             {errors.username?.type === "required" && "Username is required."}{" "}
+            {errors.walletAddress?.type === "required" &&
+              "Cardano wallet address is required."}{" "}
             {errors.email?.type === "required" && "Email is required."}{" "}
             {errors.fullName?.type === "required" && "Full name is required."}{" "}
             {errors.password?.type === "required" && "Password is required."}{" "}
@@ -330,6 +340,7 @@ export default function Register() {
               `${errors.gitLink?.message}.`}{" "}
             {errors.username?.type === "validate" &&
               `${errors.username?.message}.`}{" "}
+            {errors.email?.type === "pattern" && `${errors.email?.message}.`}{" "}
             {errors.fullName?.type === "validate" &&
               `${errors.fullName?.message}.`}{" "}
             {errors.password?.type === "pattern" &&
