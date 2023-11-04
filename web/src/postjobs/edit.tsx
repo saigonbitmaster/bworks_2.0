@@ -16,11 +16,27 @@ import {
 
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
+import moment from "moment";
+
 const filterToQuery = (searchText) => ({ textSearch: searchText });
+
+const validate = (values) => {
+  const errors = {} as any;
+  const defaultValue = moment().add(1, "months").toString();
+
+  if (moment(values.expireDate).isBefore(defaultValue)) {
+    errors.expireDate = "Must be 1 month late";
+  }
+
+  if (moment(values.expectDate).isBefore(defaultValue)) {
+    errors.expectDate = "Must be 1 month late";
+  }
+  return errors;
+};
 
 const EditScreen = () => (
   <Edit>
-    <SimpleForm>
+    <SimpleForm validate={validate}>
       <Grid container spacing={0.5}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
           <TextInput source="name" fullWidth required label="Job name" />

@@ -13,6 +13,7 @@ import {
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
 import { useSearchParams } from "react-router-dom";
+import moment from "moment";
 
 const CreateScreen = (props) => {
   const [searchParams] = useSearchParams();
@@ -27,9 +28,25 @@ const CreateScreen = (props) => {
     return "Must be a https or http url";
   };
 
+  const validate = (values) => {
+    const errors = {} as any;
+    const now = moment().toString();
+    const regex = new RegExp("^(http|https)://");
+
+    if (moment(values.completeDate).isBefore(now)) {
+      errors.completeDate = "Must be future value";
+    }
+
+    if (values.hasPrototype && !regex.test(values.prototypeLink)) {
+      errors.prototypeLink = "Must be a https or http url";
+    }
+
+    return errors;
+  };
+
   return (
     <Create redirect="list">
-      <SimpleForm>
+      <SimpleForm validate={validate}>
         <Grid container spacing={0}>
           <Grid item xs={12} md={4} lg={3} xl={2}>
             <ReferenceInput
@@ -62,16 +79,7 @@ const CreateScreen = (props) => {
               defaultValue={5}
             />
           </Grid>
-          <Grid item md={12} />
-          <Grid item xs={12} md={4} lg={3} xl={2}>
-            <DateTimeInput
-              source="bidDate"
-              fullWidth
-              label="Submit date"
-              defaultValue={new Date()}
-              required
-            />
-          </Grid>
+
           <Grid item xs={12} md={4} lg={3} xl={2}>
             <DateTimeInput
               source="completeDate"
@@ -100,7 +108,7 @@ const CreateScreen = (props) => {
                       source="prototypeLink"
                       fullWidth
                       {...rest}
-                      validate={urlValidate}
+                      /*   validate={urlValidate} */
                       label="Prototype Url"
                     />
                   )
