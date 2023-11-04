@@ -20,14 +20,6 @@ const CreateScreen = (props) => {
   const search = searchParams.get("jobId");
   const jobId = JSON.parse(search);
 
-  const urlValidate = (url) => {
-    const regex = new RegExp("^(http|https)://");
-    if (regex.test(url)) {
-      return undefined;
-    }
-    return "Must be a https or http url";
-  };
-
   const validate = (values) => {
     const errors = {} as any;
     const now = moment().toString();

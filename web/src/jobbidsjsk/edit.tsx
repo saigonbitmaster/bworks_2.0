@@ -9,7 +9,6 @@ import {
   BooleanInput,
   FormDataConsumer,
   ReferenceInput,
-  useEditContext,
   FunctionField,
   useEditController,
 } from "react-admin";
@@ -18,14 +17,6 @@ import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
 import moment from "moment";
 import { useParams } from "react-router-dom";
-
-const urlValidate = (url) => {
-  const regex = new RegExp("^(http|https)://");
-  if (regex.test(url)) {
-    return undefined;
-  }
-  return "Must be a https or http url";
-};
 
 const EditScreen = () => {
   const { id } = useParams();
@@ -37,10 +28,10 @@ const EditScreen = () => {
 
   const validate = (values) => {
     const errors = {} as any;
-    const minDeadline = moment(record.bidDate).toString();
+    const applyDate = moment(record.bidDate).toString();
     const regex = new RegExp("^(http|https)://");
 
-    if (moment(values.completeDate).isBefore(minDeadline)) {
+    if (moment(values.completeDate).isBefore(applyDate)) {
       errors.completeDate = "Must be greater than applied date";
     }
 

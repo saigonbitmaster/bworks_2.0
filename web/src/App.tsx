@@ -34,6 +34,11 @@ import { QueryClient } from "react-query";
 import Register from "./components/register";
 import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
+import Help from "./components/help";
+import Chip from "@mui/material/Chip";
+import MdPhone from "@mui/icons-material/Phone";
+import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -87,6 +92,7 @@ const App = () => {
           <Route path="/paymentreportjsk" element={<PaymentReportJsk />} />
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/userSettings" element={<UserSettings />} />
+          <Route path="/help" element={<Help />} />
         </CustomRoutes>
         <CustomRoutes noLayout>
           <Route path="/register" element={<Register />} />
@@ -105,7 +111,7 @@ const App = () => {
       <Typography
         variant="subtitle2"
         align="left"
-        color="#d50000"
+        color="#1b5e20"
         sx={{
           position: "fixed",
           right: 0,
@@ -120,8 +126,45 @@ const App = () => {
       >
         @ {new Date().getFullYear()} Built on Cardano <br />
       </Typography>
+      <Box
+        sx={{
+          m: 0,
+          p: 0,
+          position: "fixed",
+          bottom: 0,
+          right: 0,
+          zIndex: 100,
+          width: 250,
+
+          /*  transform: "rotate(90deg)", */
+          transform: "rotate(-90deg) translate(100%, 0)",
+          transformOrigin: "right bottom",
+        }}
+      >
+        <a href="https://t.me/AskBworks" target="_blank" rel="noreferrer">
+          <Chip
+            label="Ask support"
+            icon={<MdPhone sx={{ fontSize: 15 }} />}
+            sx={{
+              backgroundColor: "transparent",
+              m: 0,
+              p: 0,
+              textColor: "#1b5e20",
+            }}
+          />
+        </a>
+      </Box>
     </MeshProvider>
   );
 };
 
 export default App;
+
+/*
+ position:sticky;
+  height:200px;
+  width:80px;
+  background:red;
+  top:200px;
+  right:0;  
+*/

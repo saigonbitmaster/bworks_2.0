@@ -83,7 +83,7 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job expire date"
-            defaultValue={moment().add(1, "months").toDate()}
+            defaultValue={moment().add(32, "days").toDate()}
           />
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
@@ -92,7 +92,7 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job deadline"
-            defaultValue={moment().add(1, "months").toDate()}
+            defaultValue={moment().add(32, "days").toDate()}
           />
         </Grid>
         <Grid item md={12} />

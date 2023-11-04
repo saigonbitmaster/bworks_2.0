@@ -23,6 +23,7 @@ import {
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import Divider from "@mui/material/Divider";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -138,6 +139,7 @@ const Login = () => {
             <Box flexGrow={1} sx={{ m: 0, p: 0 }}>
               &nbsp;
             </Box>
+            <Divider sx={{ width: "100%", mt: "1em" }} />
             <Box
               sx={{
                 width: "100%",

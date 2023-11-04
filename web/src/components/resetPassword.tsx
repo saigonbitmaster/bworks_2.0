@@ -102,7 +102,7 @@ export default function ResetPassword() {
         >
           <Typography
             variant="overline"
-            sx={{ m: 1, width: 500, textAlign: "center", fontWeight: "bold" }}
+            sx={{ m: 1, width: 460, textAlign: "center", fontWeight: "bold" }}
           >
             RESET YOUR PASSWORD
           </Typography>
@@ -126,7 +126,7 @@ export default function ResetPassword() {
               justifyContent: "center",
             }}
           >
-            <FormControl sx={{ m: 1, width: 240 }} variant="standard">
+            <FormControl sx={{ m: 1, width: 220 }} variant="standard">
               <InputLabel>New password *</InputLabel>
               <Input
                 {...register("password", {
@@ -152,7 +152,7 @@ export default function ResetPassword() {
                 }
               />
             </FormControl>
-            <FormControl sx={{ m: 1, width: 240 }} variant="standard">
+            <FormControl sx={{ m: 1, width: 220 }} variant="standard">
               <InputLabel>Repeat new password *</InputLabel>
               <Input
                 {...register("repeatPassword", {
@@ -203,7 +203,7 @@ export default function ResetPassword() {
           <Typography
             variant="caption"
             display="block"
-            sx={{ m: 1, width: 500, color: "#ff9800" }}
+            sx={{ m: 1, width: 460, color: "#ff9800" }}
           >
             {errors.password?.type === "required" && "Password is required."}{" "}
             {errors.password?.type === "pattern" &&
