@@ -34,8 +34,28 @@ const ListScreen = () => {
     >
       <Datagrid bulkActionButtons={false}>
         <TextField source="username" />
-        <TextField source="email" />
-        <UrlField source="contact" target="_blank" />
+
+        <FunctionField
+          label="Email"
+          render={(record) =>
+            record.isShowEmail ? (
+              <TextField source="email" />
+            ) : (
+              <span>Not show</span>
+            )
+          }
+        />
+        <FunctionField
+          label="Contact"
+          render={(record) =>
+            record.isShowContact ? (
+              <UrlField source="contact" target="_blank" />
+            ) : (
+              <span>Not show</span>
+            )
+          }
+        />
+
         <FunctionField
           label="User roles"
           render={(record) => (
@@ -59,6 +79,7 @@ const ListScreen = () => {
           source="workHoursPerMonth"
           label="Available per month (hours)"
         />
+          <UrlField source="gitLink" label="Git link" target="_blank" />
         <DateField source="createdAt" showTime label="Sign up at" />
         <ShowButton customLabel="View profile" />
       </Datagrid>

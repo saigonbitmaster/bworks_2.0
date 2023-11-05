@@ -38,9 +38,13 @@ export class UserService {
     //remove user'contact if it is not set to show
     const _data = (data as any).map((user) => {
       if (!user._doc.isShowContact) {
+        delete user._doc.contact;
+      }
+      if (!user._doc.isShowEmail) {
         delete user._doc.email;
         delete user._doc.contact;
       }
+
       return user;
     });
     return { count: count, data: _data };
@@ -62,9 +66,8 @@ export class UserService {
     const _user = (await this.model.findById(id).select(select).exec()) as any;
 
     if (id !== userId) {
-      _user._doc.isShowContact
-        ? null
-        : (delete _user._doc.email, delete _user._doc.contact);
+      _user._doc.isShowContact ? null : delete _user._doc.contact;
+      _user._doc.isShowEmail ? null : delete _user._doc.email;
     }
     return _user;
   }
