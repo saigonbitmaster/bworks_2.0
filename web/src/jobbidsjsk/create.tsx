@@ -77,7 +77,7 @@ const CreateScreen = (props) => {
               source="completeDate"
               fullWidth
               label="Your deadline"
-              defaultValue={new Date()}
+              defaultValue={moment().add(1, "days").toDate()}
               required
               sx={{ ml: 1 }}
             />

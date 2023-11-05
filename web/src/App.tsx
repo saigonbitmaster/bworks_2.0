@@ -38,7 +38,6 @@ import Help from "./components/help";
 import Chip from "@mui/material/Chip";
 import MdPhone from "@mui/icons-material/Phone";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -135,8 +134,6 @@ const App = () => {
           right: 0,
           zIndex: 100,
           width: 250,
-
-          /*  transform: "rotate(90deg)", */
           transform: "rotate(-90deg) translate(100%, 0)",
           transformOrigin: "right bottom",
         }}
@@ -159,12 +156,3 @@ const App = () => {
 };
 
 export default App;
-
-/*
- position:sticky;
-  height:200px;
-  width:80px;
-  background:red;
-  top:200px;
-  right:0;  
-*/

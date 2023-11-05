@@ -60,83 +60,87 @@ const SmartContractTxs = (props: Props) => {
       subtitle={`${lockTxs} locked Txs, ${unlockTxs} unlocked Txs`}
       minHeight={890}
     >
-      <List sx={{ display: isLoading ? "none" : "block" }}>
-        {plutustxs
-          ? plutustxs.map((record: any) => (
-              <React.Fragment key={record.id}>
-                <ListItem sx={{ m: 0, p: 0.8 }}>
-                  <ListItemAvatar sx={{ minWidth: 30 }}>
-                    {record.unlockedTxHash ? (
-                      <DoneOutlinedIcon />
-                    ) : (
-                      <LockClockOutlined />
-                    )}
-                  </ListItemAvatar>
-                  <ListItemText>
-                    <ReferenceField
-                      record={record}
-                      source="jobBidId"
-                      reference="jobbids"
-                      link={false}
-                    >
-                      <FunctionField
-                        render={(plutusTx: any) => (
-                          <TextField record={plutusTx} source="name" />
-                        )}
-                      />
-                    </ReferenceField>
-                  </ListItemText>
-
-                  <DateField record={record} source="createdAt"></DateField>
-                </ListItem>
-                <ListItem
-                  component={MuiLink}
-                  alignItems="center"
-                  sx={{ m: 0, p: 0.6 }}
-                >
-                  <Tooltip title={`${explorerUrl}${record.lockedTxHash}`}>
-                    <ListItemText primaryTypographyProps={{ variant: "body2" }}>
-                      <MuiLink
-                        href={`${explorerUrl}${record.lockedTxHash}`}
-                        target="_blank"
-                      >
-                        View lock Tx
-                      </MuiLink>
-                    </ListItemText>
-                  </Tooltip>
-                  <Tooltip
-                    title={
-                      record.unlockedTxHash
-                        ? `${explorerUrl}${record.unlockedTxHash}`
-                        : ""
-                    }
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        variant: "caption",
-                        color: record.unlockedTxHash ? null : "red",
-                      }}
-                    >
+      <Box sx={{ height: 750, overflow: "hidden" }}>
+        <List sx={{ display: isLoading ? "none" : "block" }}>
+          {plutustxs
+            ? plutustxs.map((record: any) => (
+                <React.Fragment key={record.id}>
+                  <ListItem sx={{ m: 0, p: 0.8 }}>
+                    <ListItemAvatar sx={{ minWidth: 30 }}>
                       {record.unlockedTxHash ? (
+                        <DoneOutlinedIcon />
+                      ) : (
+                        <LockClockOutlined />
+                      )}
+                    </ListItemAvatar>
+                    <ListItemText>
+                      <ReferenceField
+                        record={record}
+                        source="jobBidId"
+                        reference="jobbids"
+                        link={false}
+                      >
+                        <FunctionField
+                          render={(plutusTx: any) => (
+                            <TextField record={plutusTx} source="name" />
+                          )}
+                        />
+                      </ReferenceField>
+                    </ListItemText>
+
+                    <DateField record={record} source="createdAt"></DateField>
+                  </ListItem>
+                  <ListItem
+                    component={MuiLink}
+                    alignItems="center"
+                    sx={{ m: 0, p: 0.6 }}
+                  >
+                    <Tooltip title={`${explorerUrl}${record.lockedTxHash}`}>
+                      <ListItemText
+                        primaryTypographyProps={{ variant: "body2" }}
+                      >
                         <MuiLink
-                          href={`${explorerUrl}${record.unlockedTxHash}`}
+                          href={`${explorerUrl}${record.lockedTxHash}`}
                           target="_blank"
                         >
-                          View unlock Tx
+                          View lock Tx
                         </MuiLink>
-                      ) : (
-                        "Pending"
-                      )}
-                    </ListItemText>
-                  </Tooltip>
-                  <Typography variant="body2" display="block" gutterBottom>
-                    {record.amount} Ada
-                  </Typography>
-                </ListItem>
-              </React.Fragment>
-            ))
-          : null}
-      </List>
+                      </ListItemText>
+                    </Tooltip>
+                    <Tooltip
+                      title={
+                        record.unlockedTxHash
+                          ? `${explorerUrl}${record.unlockedTxHash}`
+                          : ""
+                      }
+                    >
+                      <ListItemText
+                        primaryTypographyProps={{
+                          variant: "caption",
+                          color: record.unlockedTxHash ? null : "red",
+                        }}
+                      >
+                        {record.unlockedTxHash ? (
+                          <MuiLink
+                            href={`${explorerUrl}${record.unlockedTxHash}`}
+                            target="_blank"
+                          >
+                            View unlock Tx
+                          </MuiLink>
+                        ) : (
+                          "Pending"
+                        )}
+                      </ListItemText>
+                    </Tooltip>
+                    <Typography variant="body2" display="block" gutterBottom>
+                      {record.amount} Ada
+                    </Typography>
+                  </ListItem>
+                </React.Fragment>
+              ))
+            : null}
+        </List>
+      </Box>
       <Box flexGrow={1} sx={{ m: 0, p: 0 }}>
         &nbsp;
       </Box>

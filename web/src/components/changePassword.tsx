@@ -52,7 +52,7 @@ export default function FormPropsTextFields() {
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "25ch" },
+        "& .MuiTextField-root": { m: 1, width: 230 },
       }}
       noValidate
       autoComplete="off"

@@ -22,7 +22,6 @@ import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  //post {password: abc}
   @Post('changepassword')
   async changePassword(
     @Body() changePasswordDto: ChangePasswordDto,
@@ -39,6 +38,7 @@ export class UserController {
     return formatRaList(res, result);
   }
 
+  //cms only
   @Get('allusers')
   @Roles(Role.Admin)
   async findAllByAdmin(@Response() res: any, @Query() query) {

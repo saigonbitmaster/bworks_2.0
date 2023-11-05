@@ -11,7 +11,7 @@ import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumber
 import GradingOutlinedIcon from "@mui/icons-material/GradingOutlined";
 import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
-import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ConstructionIcon from "@mui/icons-material/Construction";
 import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
 import {
@@ -235,6 +235,15 @@ const Menu = ({ dense = false }: MenuProps) => {
             smart_count: 2,
           })}
           leftIcon={<PasswordOutlinedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/settings"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.appSettings.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<SettingsOutlinedIcon />}
           dense={dense}
         />
       </SubMenu>

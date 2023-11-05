@@ -139,7 +139,7 @@ const Login = () => {
             <Box flexGrow={1} sx={{ m: 0, p: 0 }}>
               &nbsp;
             </Box>
-            <Divider sx={{ width: "100%", mt: "1em" }} />
+            <Divider sx={{ width: "100%", mt: "2em" }} />
             <Box
               sx={{
                 width: "100%",
@@ -147,7 +147,7 @@ const Login = () => {
                 flexDirection: "row",
                 justifyContent: "space-around",
                 pr: "1em",
-                pt: "2em",
+                pt: "1em",
               }}
             >
               <Typography

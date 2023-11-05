@@ -17,10 +17,10 @@ const Logo = (props: SVGProps<SVGSVGElement>) => {
         letterSpacing={0}
         wordSpacing={0}
         strokeWidth={0.265}
-        fill="#d50000"
+        fill="#1b5e20"
       >
         <text y="5" fontSize="1em">
-          BWORKs
+          bWorks
         </text>
       </g>
     </svg>
