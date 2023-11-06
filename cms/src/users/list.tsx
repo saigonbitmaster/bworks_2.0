@@ -80,6 +80,7 @@ const ListScreen = () => {
           </SingleFieldList>
         </ReferenceArrayField>
         <BooleanField source="isShowContact" />
+        <BooleanField source="isShowEmail" />
         <BooleanField source="isJobSeeker" />
         <BooleanField source="isEmployer" />
         <BooleanField source="isNotified" />

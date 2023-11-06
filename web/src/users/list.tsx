@@ -79,7 +79,7 @@ const ListScreen = () => {
           source="workHoursPerMonth"
           label="Available per month (hours)"
         />
-          <UrlField source="gitLink" label="Git link" target="_blank" />
+        <UrlField source="gitLink" label="Git link" target="_blank" />
         <DateField source="createdAt" showTime label="Sign up at" />
         <ShowButton customLabel="View profile" />
       </Datagrid>
