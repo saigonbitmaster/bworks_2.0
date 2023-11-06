@@ -29,6 +29,8 @@ jobs:
           envkey_JWT_TOKEN_SECRET: ${{ secrets.JWT_TOKEN_SECRET }}
           envkey_JWT_REFRESH_TOKEN_SECRET: ${{ secrets.JWT_REFRESH_TOKEN_SECRET }}
           envkey_JWT_VERIFY_TOKEN_SECRET: ${{ secrets.JWT_VERIFY_TOKEN_SECRET }}
+          envkey_JWT_RESET_PASSWORD_TOKEN_SECRET: ${{ secrets.JWT_RESET_PASSWORD_TOKEN_SECRET }}
+          envkey_JWT_RESET_PASSWORD_TOKEN_EXPIRE: ${{ vars.JWT_RESET_PASSWORD_TOKEN_EXPIRE }}
           envkey_APP_BASE_URL: ${{ vars.APP_BASE_URL }}
           envkey_CMS_BASE_URL: ${{ vars.CMS_BASE_URL }}
           envkey_CARDANO_EXPLORER_URL: ${{ vars.CARDANO_EXPLORER_URL }}
