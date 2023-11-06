@@ -4,26 +4,38 @@ import {
   Create,
   SimpleForm,
   TextInput,
-  DateInput,
   ReferenceInput,
   SelectInput,
   NumberInput,
   ArrayInput,
   SimpleFormIterator,
   ReferenceArrayInput,
-  SelectArrayInput,
   DateTimeInput,
-  minValue,
+  AutocompleteArrayInput,
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
 import moment from "moment";
 
-const oneWeekLate = moment().add(7, "days").format("YYYY-MM-DD");
+const filterToQuery = (searchText) => ({ textSearch: searchText });
+
+const validate = (values) => {
+  const errors = {} as any;
+  const defaultValue = moment().add(1, "months").toString();
+
+  if (moment(values.expireDate).isBefore(defaultValue)) {
+    errors.expireDate = "Must be 1 month late";
+  }
+
+  if (moment(values.expectDate).isBefore(defaultValue)) {
+    errors.expectDate = "Must be 1 month late";
+  }
+  return errors;
+};
 
 const CreateScreen = () => (
   <Create redirect="list">
-    <SimpleForm>
+    <SimpleForm validate={validate}>
       <Grid container spacing={0.5}>
         <Grid item xs={12} md={6} lg={5} xl={3}>
           <TextInput source="name" fullWidth required label="Job name" />
@@ -71,7 +83,7 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job expire date"
-            defaultValue={moment().add(7, "days").toDate()}
+            defaultValue={moment().add(32, "days").toDate()}
           />
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
@@ -80,16 +92,15 @@ const CreateScreen = () => (
             fullWidth
             required
             label="Job deadline"
-            defaultValue={moment().add(7, "days").toDate()}
+            defaultValue={moment().add(32, "days").toDate()}
           />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
           <ReferenceArrayInput source="skills" reference="skills" fullWidth>
-            <SelectArrayInput
-              optionText="name"
-              fullWidth
-              label="Required skills"
+            <AutocompleteArrayInput
+              optionText={"name"}
+              filterToQuery={filterToQuery}
             />
           </ReferenceArrayInput>
         </Grid>

@@ -10,6 +10,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { RegisterStrategy } from './register.strategy';
 import { RefreshTokenStrategy } from './refresh.strategy';
+import { ResetPasswordStrategy } from './reset-password.strategy';
 import { EventStrategy } from './events.strategy';
 
 @Module({
@@ -26,7 +27,8 @@ import { EventStrategy } from './events.strategy';
     JwtStrategy,
     RegisterStrategy,
     RefreshTokenStrategy,
-    EventStrategy
+    EventStrategy,
+    ResetPasswordStrategy,
   ],
   exports: [AuthService],
   controllers: [AuthController],

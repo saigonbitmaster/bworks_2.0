@@ -184,6 +184,7 @@ export class JobBidService {
       result = await new this.model({
         ...createJobBidDto,
         createdAt: new Date(),
+        bidDate: new Date(),
         jobSeekerId: jobSeekerId,
         employerId: postJob.employerId,
       }).save();

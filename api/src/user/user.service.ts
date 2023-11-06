@@ -12,6 +12,7 @@ import {
   trimUsername,
   trimFullName,
 } from '../flatworks/utils/common';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -37,9 +38,13 @@ export class UserService {
     //remove user'contact if it is not set to show
     const _data = (data as any).map((user) => {
       if (!user._doc.isShowContact) {
+        delete user._doc.contact;
+      }
+      if (!user._doc.isShowEmail) {
         delete user._doc.email;
         delete user._doc.contact;
       }
+
       return user;
     });
     return { count: count, data: _data };
@@ -61,9 +66,8 @@ export class UserService {
     const _user = (await this.model.findById(id).select(select).exec()) as any;
 
     if (id !== userId) {
-      _user._doc.isShowContact
-        ? null
-        : (delete _user._doc.email, delete _user._doc.contact);
+      _user._doc.isShowContact ? null : delete _user._doc.contact;
+      _user._doc.isShowEmail ? null : delete _user._doc.email;
     }
     return _user;
   }
@@ -71,6 +75,10 @@ export class UserService {
   async findOne(username: string): Promise<User> {
     const [user] = await this.model.find({ username: username }).exec();
     return user;
+  }
+
+  async findByEmail(filter = {}): Promise<UserDocument> {
+    return await this.model.findOne(filter).exec();
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -93,29 +101,24 @@ export class UserService {
   async count(filter): Promise<any> {
     return await this.model.find(filter).count().exec();
   }
-  async updatePassword(
+
+  async changePassword(
     id: string,
-    updateUserDto: UpdateUserDto,
+    changePasswordDto: ChangePasswordDto,
   ): Promise<User> {
-    //validate password
-    if (!validatePassword(updateUserDto.password)) {
-      throw new BadRequestException({
-        cause: new Error(),
-        description: 'Submit error',
-        message:
-          'password is must min 8 letters, with at least a symbol, upper and lower case letters and a number',
-      });
+    if (!validatePassword(changePasswordDto.password)) {
+      throw new BadRequestException(
+        'password is must min 8 letters, with at least a symbol, upper and lower case letters and a number',
+      );
     }
 
-    let _updateUserDto = updateUserDto;
-    //don't update roles
-    delete _updateUserDto['roles'];
-    if (updateUserDto.password) {
-      const saltOrRounds = 10;
-      const password = await bcrypt.hash(updateUserDto.password, saltOrRounds);
-      _updateUserDto = { ...updateUserDto, password };
-    }
-    return await this.model.findByIdAndUpdate(id, _updateUserDto).exec();
+    const saltOrRounds = 10;
+    const password = await bcrypt.hash(
+      changePasswordDto.password,
+      saltOrRounds,
+    );
+
+    return await this.model.findByIdAndUpdate(id, { password }).exec();
   }
 
   /*

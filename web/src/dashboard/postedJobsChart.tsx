@@ -4,8 +4,6 @@ import { PureComponent } from "react";
 import { Card, CardHeader, CardContent } from "@mui/material";
 import {
   ResponsiveContainer,
-  AreaChart,
-  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -13,7 +11,6 @@ import {
   Legend,
   BarChart,
   Bar,
-  Cell,
 } from "recharts";
 
 import { useDataProvider } from "react-admin";

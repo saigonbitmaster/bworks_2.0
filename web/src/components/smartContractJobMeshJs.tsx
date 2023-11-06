@@ -18,6 +18,7 @@ import dayjs, { Dayjs } from "dayjs";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
+import Divider from "@mui/material/Divider";
 
 //Component for inline datum
 export default function SmartContract(props) {
@@ -401,6 +402,45 @@ export default function SmartContract(props) {
       >
         {props.notification?.message}
       </Typography>
+
+      <Divider textAlign="left" sx={{ width: 500, mt: 2 }}></Divider>
+      <Typography
+        variant="subtitle1"
+        sx={{
+          ml: 0,
+          color: "#e65100",
+        }}
+      >
+        Important notes
+      </Typography>
+      {value === "1" ? (
+        <Typography
+          variant="caption"
+          sx={{
+            ml: 0,
+            color: "#ed6c02",
+            width: 500,
+            wordWrap: "break-word",
+          }}
+        >
+          Before submit the payment transaction please verify with selected
+          unlock partner: <br />
+          1. They are using Nami wallet with their bWorks account. <br />
+          2. The Datum PublicKeyHash is their wallet public key hash. <br />
+          3. Their wallet has recovery phrase and minimum Ada amount.
+        </Typography>
+      ) : (
+        <Typography
+          variant="caption"
+          sx={{
+            ml: 0,
+            color: "#ed6c02",
+          }}
+        >
+          Please verify with receiver its wallet address before submit the
+          unlock transaction.
+        </Typography>
+      )}
     </Box>
   );
 }

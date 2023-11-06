@@ -5,9 +5,7 @@ import BlurOnIcon from "@mui/icons-material/BlurOn";
 import DeselectIcon from "@mui/icons-material/Deselect";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";
 import FormatListNumberedOutlinedIcon from "@mui/icons-material/FormatListNumberedOutlined";
-import GradingOutlinedIcon from "@mui/icons-material/GradingOutlined";
 import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
@@ -29,9 +27,9 @@ import Divider from "@mui/material/Divider";
 import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
 import WorkHistoryOutlinedIcon from "@mui/icons-material/WorkHistoryOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
-import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 import InputOutlinedIcon from "@mui/icons-material/InputOutlined";
 import PlagiarismOutlinedIcon from "@mui/icons-material/PlagiarismOutlined";
+import HelpCenterOutlinedIcon from "@mui/icons-material/HelpCenterOutlined";
 
 type MenuName =
   | "postJobs"
@@ -39,6 +37,7 @@ type MenuName =
   | "reports"
   | "settings"
   | "tools"
+  | "Help"
   | "jobSeeker";
 
 const Menu = ({ dense = false }: MenuProps) => {
@@ -301,6 +300,15 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+      <MenuItemLink
+        to="/help"
+        state={{ _scrollToTop: true }}
+        primaryText={translate(`resources.help.name`, {
+          smart_count: 2,
+        })}
+        leftIcon={<HelpCenterOutlinedIcon />}
+        dense={dense}
+      />
     </Box>
   );
 };

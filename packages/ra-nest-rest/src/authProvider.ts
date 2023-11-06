@@ -18,7 +18,7 @@ const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
           json.fullName
         );
       })
-      .catch((err) => err);
+      .catch((err) => Promise.reject(err.message));
   },
   logout: async () => {
     const accessToken = localStorageManager.getItem("accessToken");

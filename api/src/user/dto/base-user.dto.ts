@@ -4,6 +4,7 @@ export class BaseUserDto {
   email: string;
   contact: string;
   gitLink: string;
+  isShowEmail: boolean;
   isShowContact: boolean;
   fullName: string;
   refreshToken: string;

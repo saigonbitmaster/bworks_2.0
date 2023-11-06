@@ -11,6 +11,7 @@ import {
   BooleanInput,
   TopToolbar,
   NumberInput,
+  AutocompleteArrayInput,
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
@@ -30,6 +31,7 @@ const EditActions = () => (
   </TopToolbar>
 );
 
+const filterToQuery = (textSearch) => ({ textSearch: textSearch });
 const EditScreen = () => {
   const dataProvider = useDataProvider();
 
@@ -68,20 +70,12 @@ const EditScreen = () => {
           <Grid item md={12} />
           <Grid item xs={12} md={6} lg={5} xl={3}>
             <BooleanInput
-              source="isShowContact"
-              fullWidth
-              label="Agree to show contact"
-            />
-          </Grid>
-          <Grid item xs={12} md={6} lg={5} xl={3}>
-            <BooleanInput
               source="isNotified"
               fullWidth
               label="Receive notification"
             />
           </Grid>
           <Grid item md={12} />
-
           <Grid item xs={12} md={6} lg={5} xl={3}>
             <BooleanInput source="isEmployer" fullWidth label="Is employer" />
           </Grid>
@@ -93,6 +87,23 @@ const EditScreen = () => {
             />
           </Grid>
           <Grid item md={12} />
+
+          <Grid item xs={12} md={6} lg={5} xl={3}>
+            <BooleanInput
+              source="isShowContact"
+              fullWidth
+              label="Agree to show contact to other"
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={5} xl={3}>
+            <BooleanInput
+              source="isShowEmail"
+              fullWidth
+              label="Agree to show email to other"
+            />
+          </Grid>
+          <Grid item md={12} />
+
           <Grid item xs={12} md={6} lg={5} xl={3}>
             <TextInput
               source="gitLink"
@@ -107,12 +118,17 @@ const EditScreen = () => {
               source="workHoursPerMonth"
               sx={{ mt: 0 }}
               label="Available work hours per month"
+              fullWidth
             />
           </Grid>
           <Grid item md={12} />
           <Grid item xs={12} md={12} lg={8} xl={6}>
-            <ReferenceArrayInput source="skills" reference="skills">
-              <SelectArrayInput fullWidth />
+            <ReferenceArrayInput source="skills" reference="skills" fullWidth>
+              <AutocompleteArrayInput
+                label="Work skills"
+                optionText={"name"}
+                filterToQuery={filterToQuery}
+              />
             </ReferenceArrayInput>
           </Grid>
 

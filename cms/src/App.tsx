@@ -26,7 +26,7 @@ import ParseAddress from "./tools/parseAddress";
 import ChangePassword from "./components/changePassword";
 import users from "./users";
 import Typography from "@mui/material/Typography";
-
+import settings from "./settings";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -66,7 +66,6 @@ const App = () => {
           <Route path="/paymentreport" element={<PaymentReport />} />
           <Route path="/parseaddress" element={<ParseAddress />} />
           <Route path="/changepassword" element={<ChangePassword />} />
-
         </CustomRoutes>
         <Resource name="postjobs" {...postjobs} />
         <Resource name="jobtasks" {...jobtasks} />
@@ -77,6 +76,7 @@ const App = () => {
         <Resource name="adminWallets" {...adminWallets} />
         <Resource name="skills" {...skills} />
         <Resource name="users" {...users} />
+        <Resource name="settings" {...settings} />
       </Admin>
       <Typography
         variant="subtitle2"
@@ -84,7 +84,7 @@ const App = () => {
         color="orange"
         sx={{ position: "fixed", right: 0, bottom: 10, left: 10, zIndex: 100 }}
       >
-        @ {new Date().getFullYear()} Built on Cardano <br/>
+        @ {new Date().getFullYear()} Built on Cardano <br />
       </Typography>
     </MeshProvider>
   );

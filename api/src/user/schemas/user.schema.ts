@@ -21,6 +21,9 @@ export class User {
   @Prop({ default: false })
   isShowContact: boolean;
 
+  @Prop({ default: false })
+  isShowEmail: boolean;
+
   @Prop({ default: true })
   isJobSeeker: boolean;
 

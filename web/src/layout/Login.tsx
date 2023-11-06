@@ -23,6 +23,7 @@ import {
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import Divider from "@mui/material/Divider";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -138,16 +139,36 @@ const Login = () => {
             <Box flexGrow={1} sx={{ m: 0, p: 0 }}>
               &nbsp;
             </Box>
-            <Typography
-              variant="caption"
-              display="block"
-              sx={{ textAlign: "left" }}
+            <Divider sx={{ width: "100%", mt: "2em" }} />
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                pr: "1em",
+                pt: "1em",
+              }}
             >
-              New user?{" "}
-              <span>
-                <Link to="/register">Register an account</Link>
-              </span>
-            </Typography>
+              <Typography
+                variant="caption"
+                display="inline"
+                sx={{ textAlign: "left" }}
+              >
+                <span>
+                  <Link to="/register">Register new account</Link>
+                </span>
+              </Typography>
+              <Typography
+                variant="caption"
+                display="inline"
+                sx={{ textAlign: "right" }}
+              >
+                <span>
+                  <Link to="/forgotpwd">Reset password</Link>
+                </span>
+              </Typography>
+            </Box>
           </CardActions>
         </Card>
       </Box>

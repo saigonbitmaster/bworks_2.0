@@ -19,10 +19,6 @@ import moment from "moment";
 import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
 
 const PostedJob = (props) => {
-  interface Props {
-    postedJobs: number;
-    bids: number;
-  }
   const { postedJobs = 0, bids = 0 } = props;
 
   const translate = useTranslate();
@@ -30,8 +26,6 @@ const PostedJob = (props) => {
     sort: { field: "createdAt", order: "DESC" },
     pagination: { page: 1, perPage: 9 },
   });
-
-  const display = "block";
 
   return (
     <CardWithIcon
@@ -46,56 +40,58 @@ const PostedJob = (props) => {
       subtitle={`${postedJobs} jobs, ${bids} applications`}
       minHeight={890}
     >
-      <List sx={{ display }}>
-        {postedjobs?.map((record: any) => (
-          <React.Fragment key={record.id}>
-            <ListItem
-              key={record.id}
-              alignItems="center"
-              sx={{ m: 0, p: 0.8 }}
-              component={Link}
-              to={encodeURI(
-                `/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({
-                  _id: record.id,
-                })}`
-              )}
-            >
-              <ListItemAvatar sx={{ minWidth: 30 }}>
-                {record.budget > 10000 ? (
-                  <GradeOutlinedIcon />
-                ) : moment(record.expireDate).isAfter() ? (
-                  <DoneOutlinedIcon />
-                ) : (
-                  <ClearOutlinedIcon />
+      <Box sx={{ height: 750, overflow: "hidden" }}>
+        <List sx={{ display: "block" }}>
+          {postedjobs?.map((record: any) => (
+            <React.Fragment key={record.id}>
+              <ListItem
+                key={record.id}
+                alignItems="center"
+                sx={{ m: 0, p: 0.8 }}
+                component={Link}
+                to={encodeURI(
+                  `/postjobsjsk/?displayedFilters={}&filter=${JSON.stringify({
+                    _id: record.id,
+                  })}`
                 )}
-              </ListItemAvatar>
+              >
+                <ListItemAvatar sx={{ minWidth: 30 }}>
+                  {record.budget > 10000 ? (
+                    <GradeOutlinedIcon />
+                  ) : moment(record.expireDate).isAfter() ? (
+                    <DoneOutlinedIcon />
+                  ) : (
+                    <ClearOutlinedIcon />
+                  )}
+                </ListItemAvatar>
 
-              <ListItemText>
-                <TextField record={record} source="name"></TextField>
-              </ListItemText>
+                <ListItemText>
+                  <TextField record={record} source="name"></TextField>
+                </ListItemText>
 
-              <DateField
-                sx={{ mr: 0 }}
-                record={record}
-                source="expireDate"
-              ></DateField>
-            </ListItem>
+                <DateField
+                  sx={{ mr: 0 }}
+                  record={record}
+                  source="expireDate"
+                ></DateField>
+              </ListItem>
 
-            <ListItem
-              sx={{ m: 0, p: 0.6 }}
-              /*    button
+              <ListItem
+                sx={{ m: 0, p: 0.6 }}
+                /*    button
               component={Link}
               to={`/jobbids/?filter=${JSON.stringify({ jobId: record.id })}`} */
-              alignItems="flex-start"
-            >
-              <ListItemText primaryTypographyProps={{ variant: "body2" }}>
-                Applications
-              </ListItemText>
-              <LinkBidField record={record} />
-            </ListItem>
-          </React.Fragment>
-        ))}
-      </List>
+                alignItems="flex-start"
+              >
+                <ListItemText primaryTypographyProps={{ variant: "body2" }}>
+                  Applications
+                </ListItemText>
+                <LinkBidField record={record} />
+              </ListItem>
+            </React.Fragment>
+          ))}
+        </List>
+      </Box>
       <Box flexGrow={1}>&nbsp;</Box>
       <Button
         sx={{ borderRadius: 0, m: 0, p: 0 }}
