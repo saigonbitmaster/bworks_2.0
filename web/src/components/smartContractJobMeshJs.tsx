@@ -427,7 +427,7 @@ export default function SmartContract(props) {
           unlock partner: <br />
           1. They are using Nami wallet with their bWorks account. <br />
           2. The Datum PublicKeyHash is their wallet public key hash. <br />
-          3. Their wallet has recovery phrase.
+          3. Their wallet has recovery phrase and minimum Ada amount.
         </Typography>
       ) : (
         <Typography
