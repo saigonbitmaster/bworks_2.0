@@ -25,7 +25,7 @@ services:
       - bworksnet
 
   nginx:
-    image: FRONTEND_MAINNET_TAG
+    image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-mainnet-2.0.5
     #image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:frontend-testnet
     #image: jackchuong/itl:bworks-frontend-testnet
     container_name: nginx
@@ -68,7 +68,7 @@ services:
       - bworksnet
 
   api:
-    image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-mainnet-2.0.4
+    image: API_MAINNET_TAG
     #image: 121427815363.dkr.ecr.ap-southeast-1.amazonaws.com/bworks:api-testnet
     #image: jackchuong/itl:bworks-api-testnet
     container_name: api
