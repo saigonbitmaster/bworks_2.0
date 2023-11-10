@@ -8,6 +8,7 @@ import {
   Put,
   Response,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateTokenReceiverDto } from './dto/create.token-receiver.dto';
 import { UpdateTokenReceiverDto } from './dto/update.token-receiver.dto';
@@ -18,6 +19,8 @@ import { UpdateCampaignDto } from './dto/update.campaign.dto';
 import { PlutusTxService } from '../plutustx/service';
 import * as moment from 'moment';
 import { PostJobService } from '../postjob/service';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { HomePageAuthGuard } from '../auth/home-page-auth.guard';
 
 @Controller('public')
 export class PublicController {
@@ -26,28 +29,27 @@ export class PublicController {
     private readonly plutusTxService: PlutusTxService,
     private readonly postJobService: PostJobService,
   ) {}
-  /* 
-  //dashboard apis
-  @Get('dashboardcards')
-  async getDashboardData(@Response() res: any) {
-    const result = await this.service.getDashboardData();
+
+  //job report for homepage
+  @Get('jobreports')
+  @Public()
+  async getJobReport(@Response() res: any) {
+    const result = await this.postJobService.getJobReports(null, null);
+    console.log(result);
     return res.json(result);
   }
 
-  //plutus dashboard chart
-  @Get('dashboardplutus')
+  //payment report for homepage
+  @Get('plutusreports')
+  @Public()
   async getDashboardPlutus(@Response() res: any) {
-    const result = await this.plutusTxService.getPlutusDashboard();
+    const result = await this.plutusTxService.getPlutusReports(null, null);
+    console.log(result);
     return res.json(result);
   }
-  //job dashboard chart
-  @Get('jobdashboard')
-  async getDashboardJob(@Response() res: any) {
-    const result = await this.postJobService.getJobDashboard();
-    return res.json(result);
-  } */
 
   //homepage queries
+
   @Get('tokenreceivers')
   async indexTokenReceiver(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
@@ -60,7 +62,9 @@ export class PublicController {
     return await this.service.findTokenReceiverById(id);
   }
 
+  @UseGuards(HomePageAuthGuard)
   @Post('tokenreceivers')
+  @Public()
   async createTokenReceiver(
     @Body() createTokenReceiverDto: CreateTokenReceiverDto,
   ) {

@@ -6,17 +6,14 @@ import {
   Response,
   Query,
   Put,
-  UseGuards,
   Body,
 } from '@nestjs/common';
 import { JobBidService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
 import { UpdateJobBidDto } from './dto/update.dto';
 
-@UseGuards(JwtAuthGuard)
 @Roles(Role.Admin)
 @Controller('jobbidscms')
 export class JobBidControllerCms {
@@ -34,8 +31,6 @@ export class JobBidControllerCms {
     return await this.service.findOneCms(id);
   }
 
-  //cms only
-  @Roles(Role.Admin)
   @Put('/approve/:id')
   async approve(
     @Param('id') id: string,
