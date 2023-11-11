@@ -9,6 +9,7 @@ import {
   Response,
   Query,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create.dto';
 import { UpdateMessageDto } from './dto/update.dto';
@@ -23,13 +24,14 @@ import { HomePageAuthGuard } from '../auth/home-page-auth.guard';
 export class MessageController {
   constructor(private readonly service: MessageService) {}
 
+  @Roles(Role.Admin)
   @Get()
   async index(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);
   }
-
+  @Roles(Role.Admin)
   @Get(':id')
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);
@@ -39,9 +41,11 @@ export class MessageController {
   @Post()
   @Public()
   async create(@Body() createMessageDto: CreateMessageDto) {
+    return new BadRequestException('ABC');
     return await this.service.create(createMessageDto);
   }
 
+  @Roles(Role.Admin)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -50,6 +54,7 @@ export class MessageController {
     return await this.service.update(id, updateMessageDto);
   }
 
+  @Roles(Role.Admin)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return await this.service.delete(id);
