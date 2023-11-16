@@ -30,6 +30,7 @@ import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import InputOutlinedIcon from "@mui/icons-material/InputOutlined";
 import PlagiarismOutlinedIcon from "@mui/icons-material/PlagiarismOutlined";
 import HelpCenterOutlinedIcon from "@mui/icons-material/HelpCenterOutlined";
+import { useMediaQuery, Theme, useTheme } from "@mui/material";
 
 type MenuName =
   | "postJobs"
@@ -41,6 +42,10 @@ type MenuName =
   | "jobSeeker";
 
 const Menu = ({ dense = false }: MenuProps) => {
+  //large screen or smaller open only 3 menus
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("lg"));
+  const maxOpenMenus = matches ? 3 : 4;
+
   const [state, setState] = useState({
     postJobs: true,
     jobSeeker: true,
@@ -53,15 +58,12 @@ const Menu = ({ dense = false }: MenuProps) => {
   const [open] = useSidebarState();
 
   const handleToggle = (menu: MenuName) => {
-    // setState({ ...state, [menu]: !state[menu] });
-
-    //keep open max 5 menus
     const menus = Object.keys(state).map((key) => ({
       menu: key,
       status: state[key],
     }));
 
-    if (menus.filter((menu) => menu.status === true).length === 5) {
+    if (menus.filter((menu) => menu.status === true).length === maxOpenMenus) {
       const closeMenu = menus.find((i) => i.status === true).menu;
       setState({ ...state, [menu]: !state[menu], [closeMenu]: false });
       return;

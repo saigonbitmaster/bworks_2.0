@@ -41,7 +41,6 @@ export class MessageController {
   @Post()
   @Public()
   async create(@Body() createMessageDto: CreateMessageDto) {
-    return new BadRequestException('ABC');
     return await this.service.create(createMessageDto);
   }
 

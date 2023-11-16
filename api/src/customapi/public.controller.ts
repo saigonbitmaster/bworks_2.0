@@ -71,20 +71,8 @@ export class PublicController {
     return await this.service.createTokenReceiver(createTokenReceiverDto);
   }
 
-  @Put('tokenreceivers/:id')
-  async updateTokenReceiver(
-    @Param('id') id: string,
-    @Body() updateTokenReceiverDto: UpdateTokenReceiverDto,
-  ) {
-    return await this.service.updateTokenReceiver(id, updateTokenReceiverDto);
-  }
-
-  @Delete('tokenreceivers/:id')
-  async deleteTokenReceiver(@Param('id') id: string) {
-    return await this.service.deleteTokenReceiver(id);
-  }
-
   @Get('campaigns')
+  @Public()
   async indexCampaign(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
     const result = await this.service.findAllCampaign(mongooseQuery);
@@ -92,25 +80,8 @@ export class PublicController {
   }
 
   @Get('campaigns/:id')
+  @Public()
   async findCampaignById(@Param('id') id: string) {
     return await this.service.findCampaignById(id);
-  }
-
-  @Post('campaigns')
-  async createCampaign(@Body() createCampaignDto: CreateCampaignDto) {
-    return await this.service.createCampaign(createCampaignDto);
-  }
-
-  @Put('campaigns/:id')
-  async updateCampaign(
-    @Param('id') id: string,
-    @Body() updateCampaignDto: UpdateCampaignDto,
-  ) {
-    return await this.service.updateCampaign(id, updateCampaignDto);
-  }
-
-  @Delete('campaigns/:id')
-  async deleteCampaign(@Param('id') id: string) {
-    return await this.service.deleteCampaign(id);
   }
 }

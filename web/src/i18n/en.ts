@@ -22,12 +22,12 @@ const customEnglishMessages: TranslationMessages = {
       allPlutusTxs: "See all payment TXs",
     },
     menu: {
-      postJobs: "Hiring",
+      postJobs: "Hire developers",
       reports: "Reports",
       manageFund: "Payment",
       tools: "Tools",
       settings: "Settings",
-      jobSeeker: "Job search",
+      jobSeeker: "Apply for jobs",
     },
   },
   resources: {

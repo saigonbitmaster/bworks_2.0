@@ -41,11 +41,18 @@ const customEnglishMessages: TranslationMessages = {
       manageFund: "Cardano",
       tools: "Tools",
       settings: "Settings",
+      operations: "Operations",
     },
   },
   resources: {
     changePassword: {
       name: "Change password",
+    },
+    contacts: {
+      name: "Communications",
+    },
+    campaigns: {
+      name: "Promotions",
     },
     appSettings: {
       name: "App settings",

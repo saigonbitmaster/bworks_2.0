@@ -22,11 +22,13 @@ import jobtasks from "./jobtasks";
 import { PostedJobReport } from "./postedjobreports";
 import { PaymentReport } from "./paymentreports";
 import skills from "./skills";
+import messages from "./messages";
 import ParseAddress from "./tools/parseAddress";
 import ChangePassword from "./components/changePassword";
 import users from "./users";
 import Typography from "@mui/material/Typography";
 import settings from "./settings";
+import promotions from "./promotions";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -77,12 +79,22 @@ const App = () => {
         <Resource name="skills" {...skills} />
         <Resource name="users" {...users} />
         <Resource name="settings" {...settings} />
+        <Resource name="messages" {...messages} />
+        <Resource name="customapis/campaigns" {...promotions} />
       </Admin>
       <Typography
         variant="subtitle2"
         align="left"
-        color="orange"
-        sx={{ position: "fixed", right: 0, bottom: 10, left: 10, zIndex: 100 }}
+        color="#1b5e20"
+        sx={{
+          position: "fixed",
+          right: 0,
+          bottom: 10,
+          left: 10,
+          zIndex: 100,
+          backgroundColor: "white",
+          overflowY: "hidden",
+        }}
       >
         @ {new Date().getFullYear()} Built on Cardano <br />
       </Typography>

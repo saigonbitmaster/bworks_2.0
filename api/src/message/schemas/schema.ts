@@ -12,6 +12,9 @@ export class Message {
   @Prop({ required: true })
   message: string;
 
+  @Prop({ required: true })
+  messageType: string;
+
   @Prop()
   completedAt?: Date;
 
