@@ -35,6 +35,7 @@ jobs:
           envkey_CMS_BASE_URL: ${{ vars.CMS_BASE_URL }}
           envkey_CARDANO_EXPLORER_URL: ${{ vars.CARDANO_EXPLORER_URL }}
           envkey_MAIL_RESET_PASSWORD_URL: ${{ vars.MAIL_RESET_PASSWORD_URL }}
+          envkey_JWT_HOME_PAGE_TOKEN_SECRET: ${{ secrets.JWT_HOME_PAGE_TOKEN_SECRET }}
           #envkey_PWD: ${{ vars.PWD }}
           directory: .
           file_name: .env
