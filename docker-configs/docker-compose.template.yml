@@ -46,7 +46,8 @@ services:
       - bworksnet
 
   homepage:
-    image: jackchuong/itl:bworks-homepage-rundirect
+    #image: jackchuong/itl:bworks-homepage-rundirect
+    image: BWORKS_HOMEPAGE_TAG
     container_name: homepage
     restart: always
     #ports:
