@@ -17,6 +17,7 @@ import { ResetPasswordUserDto } from '../user/dto/reset-password-user.dto';
 import { ChangePasswordDto } from '../user/dto/change-password.dto';
 import { Public } from '../flatworks/roles/public.api.decorator';
 import { EventAuthGuard } from './events-auth.guard';
+import { HomePageAuthGuard } from './home-page-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -37,7 +38,7 @@ export class AuthController {
     return this.authService.adminLogin(req.user);
   }
 
-  @UseGuards(EventAuthGuard)
+  @UseGuards(HomePageAuthGuard)
   @Get('profile')
   @Public()
   getProfile(@Request() req) {

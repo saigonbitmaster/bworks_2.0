@@ -21,22 +21,16 @@ const ListScreen = () => {
     <List
       perPage={25}
       sort={{ field: "date", order: "desc" }}
-      hasCreate={true}
-      resource="skills"
+      hasCreate={false}
+      resource="messages"
       filter={{}}
       filters={filters}
     >
       <Datagrid>
-        <TextField source="name" />
-
-        <ArrayField source="keys">
-          <SingleFieldList>
-            <ChipField source="name" size="small" />
-          </SingleFieldList>
-        </ArrayField>
-        <RichTextField source="description" />
+        <TextField source="email" />
+        <TextField source="messageType" />
+        <TextField source="message" />
         <DateField source="createdAt" />
-        <EditButton />
       </Datagrid>
     </List>
   );

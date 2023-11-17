@@ -5,9 +5,6 @@ import {
   TextField,
   EditButton,
   TextInput,
-  ArrayField,
-  SingleFieldList,
-  ChipField,
   RichTextField,
   DateField,
 } from "react-admin";
@@ -22,18 +19,12 @@ const ListScreen = () => {
       perPage={25}
       sort={{ field: "date", order: "desc" }}
       hasCreate={true}
-      resource="skills"
+      resource="customapis/campaigns"
       filter={{}}
       filters={filters}
     >
       <Datagrid>
         <TextField source="name" />
-
-        <ArrayField source="keys">
-          <SingleFieldList>
-            <ChipField source="name" size="small" />
-          </SingleFieldList>
-        </ArrayField>
         <RichTextField source="description" />
         <DateField source="createdAt" />
         <EditButton />

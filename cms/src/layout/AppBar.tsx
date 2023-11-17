@@ -1,4 +1,4 @@
-    import * as React from "react";
+import * as React from "react";
 import { AppBar, Logout, UserMenu, useTranslate } from "react-admin";
 import { Link } from "react-router-dom";
 import {
@@ -32,7 +32,7 @@ const ConfigurationMenu = React.forwardRef((props, ref) => {
 });
 const CustomUserMenu = () => (
   <UserMenu>
-    <ConfigurationMenu />
+    {/*   <ConfigurationMenu /> */}
     <Logout />
   </UserMenu>
 );

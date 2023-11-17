@@ -27,6 +27,7 @@ export class SettingController {
 
   @Get()
   async getAll(@Response() res: any, @Query() query) {
+    console.log(query);
     const mongooseQuery = queryTransform(query);
     const result = await this.service.findAll(mongooseQuery);
     return formatRaList(res, result);

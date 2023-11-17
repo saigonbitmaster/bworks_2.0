@@ -184,7 +184,6 @@ export class PublicService {
     createTokenReceiverDto: CreateTokenReceiverDto,
   ): Promise<TokenReceiver> {
     const activeCampaign = await this.findOneCampaign({ isActive: true });
-
     const isAddress = await validateAddress(createTokenReceiverDto.address);
     const isEmail = validateEmail(createTokenReceiverDto.email);
     if (!isEmail) {

@@ -118,7 +118,7 @@ const App = () => {
           left: 10,
           zIndex: 100,
           width: 250,
-          backgroundColor: "transparent",
+          backgroundColor: "white",
           overflowY: "hidden",
           overflowX: "hidden",
         }}
@@ -143,7 +143,7 @@ const App = () => {
             label="Ask support"
             icon={<MdPhone sx={{ fontSize: 15 }} />}
             sx={{
-              backgroundColor: "transparent",
+              backgroundColor: "white",
               m: 0,
               p: 0,
               textColor: "#1b5e20",

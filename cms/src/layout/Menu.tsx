@@ -27,27 +27,47 @@ import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRen
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
 
-type MenuName = "postJobs" | "manageFund" | "reports" | "settings" | "tools";
+type MenuName =
+  | "postJobs"
+  | "manageFund"
+  | "reports"
+  | "settings"
+  | "tools"
+  | "operations";
 
 const Menu = ({ dense = false }: MenuProps) => {
   const [state, setState] = useState({
     postJobs: true,
+    operations: true,
     manageFund: true,
     reports: true,
     settings: true,
-    tools: true,
+    tools: false,
   });
   const translate = useTranslate();
   const [open] = useSidebarState();
 
   const handleToggle = (menu: MenuName) => {
-    setState((state) => ({ ...state, [menu]: !state[menu] }));
+    // setState({ ...state, [menu]: !state[menu] });
+
+    //keep open max 4 menus
+    const menus = Object.keys(state).map((key) => ({
+      menu: key,
+      status: state[key],
+    }));
+
+    if (menus.filter((menu) => menu.status === true).length === 4) {
+      const closeMenu = menus.find((i) => i.status === true).menu;
+      setState({ ...state, [menu]: !state[menu], [closeMenu]: false });
+      return;
+    }
+    setState({ ...state, [menu]: !state[menu] });
   };
 
   return (
     <Box
       sx={{
-        width: open ? 220 : 50,
+        width: open ? 250 : 50,
         marginTop: 1,
         marginBottom: 1,
         transition: (theme) =>
@@ -85,6 +105,33 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+      <SubMenu
+        handleToggle={() => handleToggle("operations")}
+        isOpen={state.postJobs}
+        name="pos.menu.operations"
+        icon={<DoneAllOutlinedIcon />}
+        dense={dense}
+      >
+        <MenuItemLink
+          to="/messages"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.contacts.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<GradingOutlinedIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/customapis/campaigns"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.campaigns.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<FormatListNumberedOutlinedIcon />}
+          dense={dense}
+        />
+      </SubMenu>
+
       <MenuItemLink
         to="/users"
         state={{ _scrollToTop: true }}
@@ -194,8 +241,8 @@ const Menu = ({ dense = false }: MenuProps) => {
         />
       </SubMenu>
       <SubMenu
-        handleToggle={() => handleToggle("tools")}
-        isOpen={state.tools}
+        handleToggle={() => handleToggle("settings")}
+        isOpen={state.settings}
         name="pos.menu.settings"
         icon={<ConstructionIcon />}
         dense={dense}

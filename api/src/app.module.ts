@@ -24,6 +24,7 @@ import { RolesGuard } from './flatworks/roles/roles.guard';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { EventModule } from './events/module';
 import { SettingModule } from './setting/module';
+import { MessageModule } from './message/module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { SettingModule } from './setting/module';
     MailModule,
     EventModule,
     SettingModule,
+    MessageModule,
   ],
   providers: [
     {

@@ -10,6 +10,7 @@ export class ResetPasswordStrategy extends PassportStrategy(
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromUrlQueryParameter('access_token'),
+      ignoreExpiration: false,
       secretOrKey: process.env.JWT_RESET_PASSWORD_TOKEN_SECRET,
     });
   }

@@ -12,6 +12,7 @@ import { RegisterStrategy } from './register.strategy';
 import { RefreshTokenStrategy } from './refresh.strategy';
 import { ResetPasswordStrategy } from './reset-password.strategy';
 import { EventStrategy } from './events.strategy';
+import { HomePageStrategy } from './home-page.strategy';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { EventStrategy } from './events.strategy';
     RefreshTokenStrategy,
     EventStrategy,
     ResetPasswordStrategy,
+    HomePageStrategy,
   ],
   exports: [AuthService],
   controllers: [AuthController],

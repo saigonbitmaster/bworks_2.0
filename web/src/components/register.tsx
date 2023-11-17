@@ -16,8 +16,13 @@ import { useForm } from "react-hook-form";
 import ButtonBase from "@mui/material/ButtonBase";
 import { useDataProvider, useNotify } from "react-admin";
 import { Link } from "react-router-dom";
+import { useMediaQuery, Theme } from "@mui/material";
 
 export default function Register() {
+  const isXSmall = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down("sm")
+  );
+
   const dataProvider = useDataProvider();
   const notify = useNotify();
   const {
@@ -64,6 +69,7 @@ export default function Register() {
     event.preventDefault();
   };
 
+  const padding = isXSmall ? 15 : 0;
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box
@@ -79,6 +85,8 @@ export default function Register() {
           sx={{
             display: "flex",
             flexDirection: "column",
+            //for mobile
+            pl: padding,
           }}
         >
           <Typography
