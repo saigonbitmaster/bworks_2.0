@@ -2,20 +2,18 @@ import { stringify } from "query-string";
 import { fetchUtils, DataProvider } from "ra-core";
 import { filterTransform } from "./utils";
 /**
- * Maps react-admin queries to a REST API
+ * Maps react-admin frontend queries to a PAAS REST APIs
  *
  * This REST dialect is similar to the one of FakeRest
  *
- * @see https://github.com/marmelab/FakeRest
- *
  * @example
  *
- * getList     => GET http://my.api.url/posts?sort=['title','ASC']&range=[0, 24]
- * getOne      => GET http://my.api.url/posts/123
- * getMany     => GET http://my.api.url/posts?filter={id:[123,456,789]}
- * update      => PUT http://my.api.url/posts/123
- * create      => POST http://my.api.url/posts
- * delete      => DELETE http://my.api.url/posts/123
+ * getList     => GET https://paas.bworks.app/api/resources?sort=['title','ASC']&range=[0, 24]
+ * getOne      => GET https://paas.bworks.app/api/resources/123
+ * getMany     => GET https://paas.bworks.app/api/resources?filter={id:[123,456,789]}
+ * update      => PUT https://paas.bworks.app/api/resources/123
+ * create      => POST https://paas.bworks.app/api/resources
+ * delete      => DELETE https://paas.bworks.app/api/resources/123
  *
  * @example
  *
@@ -26,7 +24,7 @@ import { filterTransform } from "./utils";
  * import { PostList } from './posts';
  *
  * const App = () => (
- *     <Admin dataProvider={simpleRestProvider('http://path.to.my.api/')}>
+ *     <Admin dataProvider={simpleRestProvider('https://paas.bworks.app/api/')}>
  *         <Resource name="posts" list={PostList} />
  *     </Admin>
  * );
@@ -45,12 +43,10 @@ import { filterTransform } from "./utils";
     .catch((error) => console.error(error));
 
  * dataProvider
-    .customMethod("todos", { data: { title: "title01" } }, "POST")
+    .customMethod("todos", { data: { title: "title" } }, "POST")
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
-
-  * show error message to client by return a promise reject
-  return Promise.reject(new Error("get list fail"));
+  * "Access-Control-Allow-Origin": "*" to disable CORS
  */
 
 export default (
@@ -79,9 +75,10 @@ export default (
             headers: new Headers({
               Range: `${resource}=${rangeStart}-${rangeEnd}`,
               Authorization: `Bearer ${token}`,
+              "Access-Control-Allow-Origin": "*",
             }),
           }
-        : {};
+        : { "Access-Control-Allow-Origin": "*" };
 
     return httpClient(url, options).then(({ headers, json }) => {
       if (!headers.has(countHeader)) {
@@ -210,6 +207,22 @@ export default (
     ).then((responses) => ({ data: responses.map(({ json }) => json.id) }));
   },
 
+
+  create: (resource, params) => {
+    const token = localStorage.getItem("accessToken");
+    const options = {
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+      }),
+    };
+    return httpClient(`${apiUrl}/${resource}`, {
+      method: "POST",
+      body: JSON.stringify(params.data),
+      ...options,
+    }).then(({ json }) => ({ data: { ...json, id: json._id } }));
+  },
+
+  /* 
   create: (resource, params) => {
     const token = localStorage.getItem("accessToken");
     const options = {
@@ -223,7 +236,7 @@ export default (
       ...options,
     }).then(({ json }) => ({ data: { ...params.data, id: json._id } }));
   },
-
+ */
   delete: (resource, params) => {
     const token = localStorage.getItem("accessToken");
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
@@ -256,7 +269,10 @@ export default (
   customMethod: (resource, params, method) => {
     const token = localStorage.getItem("accessToken");
     const options = {
-      headers: new Headers({ Authorization: `Bearer ${token}` }),
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+        "Access-Control-Allow-Origin": "*",
+      }),
     };
     if (method === "GET") {
       const query = {

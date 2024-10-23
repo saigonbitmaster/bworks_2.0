@@ -7,6 +7,10 @@ node_modules
 note.txt
 test.ts
 test.js
+testData1.txt
+testData2.txt
+formatData.ts
+test.txt
 #jsk/src/jobtasks
 #api/src/jobtask
 #packages/*

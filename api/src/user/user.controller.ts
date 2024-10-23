@@ -22,14 +22,13 @@ import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  //post {password: abc}
   @Post('changepassword')
   async changePassword(
     @Body() changePasswordDto: ChangePasswordDto,
     @Request() req,
   ) {
     const id = req.user.userId;
-    return await this.service.updatePassword(id, changePasswordDto);
+    return await this.service.changePassword(id, changePasswordDto);
   }
 
   @Get()
@@ -39,6 +38,7 @@ export class UserController {
     return formatRaList(res, result);
   }
 
+  //cms only
   @Get('allusers')
   @Roles(Role.Admin)
   async findAllByAdmin(@Response() res: any, @Query() query) {

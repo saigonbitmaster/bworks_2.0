@@ -145,6 +145,24 @@ export class PublicService {
       isPaid: true,
     });
 
+    const matchedJobs = (
+      await this.postJobService.findAll(
+        {
+          filter: {
+            matchRate: { $gte: 1 },
+            queryType: 'jobSeeker',
+            isApproved: true,
+            expireDate: { $gte: '2023-11-01T05:11:22.220Z' },
+          },
+          sort: { createdAt: -1 },
+          skip: 0,
+          limit: 0,
+          select: { _id: 1 },
+        },
+        userId,
+      )
+    ).count;
+
     return {
       postedJobs,
       gotApplications,
@@ -154,6 +172,7 @@ export class PublicService {
       paidJobs,
       employerCompleteJobs,
       employerPaidJobs,
+      matchedJobs,
     };
   }
 
@@ -165,7 +184,6 @@ export class PublicService {
     createTokenReceiverDto: CreateTokenReceiverDto,
   ): Promise<TokenReceiver> {
     const activeCampaign = await this.findOneCampaign({ isActive: true });
-
     const isAddress = await validateAddress(createTokenReceiverDto.address);
     const isEmail = validateEmail(createTokenReceiverDto.email);
     if (!isEmail) {

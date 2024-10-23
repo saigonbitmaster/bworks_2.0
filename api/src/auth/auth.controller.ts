@@ -5,24 +5,19 @@ import {
   Controller,
   Get,
   Response,
-  ForbiddenException,
   Body,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './local-auth.guard';
-import { JwtAuthGuard } from './jwt-auth.guard';
 import { RefreshTokenGuard } from './refresh-auth.guard';
-import { UserService } from '../user/user.service';
 import { RegisterAuthGuard } from './register-auth.guard';
+import { ResetPasswordAuthGuard } from './reset-password-auth.guard';
 import { RegisterUserDto } from '../user/dto/register-user.dto';
-import { ApiBearerAuth, ApiBasicAuth } from '@nestjs/swagger';
+import { ResetPasswordUserDto } from '../user/dto/reset-password-user.dto';
+import { ChangePasswordDto } from '../user/dto/change-password.dto';
 import { Public } from '../flatworks/roles/public.api.decorator';
-import { RolesGuard } from '../flatworks/roles/roles.guard';
-
-import { Roles } from '../flatworks/roles/roles.decorator';
-import { Role } from '../flatworks/types/types';
 import { EventAuthGuard } from './events-auth.guard';
+import { HomePageAuthGuard } from './home-page-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -43,7 +38,7 @@ export class AuthController {
     return this.authService.adminLogin(req.user);
   }
 
-  @UseGuards(EventAuthGuard)
+  @UseGuards(HomePageAuthGuard)
   @Get('profile')
   @Public()
   getProfile(@Request() req) {
@@ -77,10 +72,29 @@ export class AuthController {
     try {
       await this.authService.verify(req.user);
     } catch (error) {
-      res.redirect('/verifyFailed.html');
+      res.redirect('/api/verifyFailed.html');
       return;
     }
-    res.redirect('/verifySucceed.html');
+    res.redirect('/api/verifySucceed.html');
     return;
+  }
+
+  @Post('forgotpwd')
+  @Public()
+  async requestResetPassword(
+    @Body() resetPasswordUserDto: ResetPasswordUserDto,
+  ) {
+    return await this.authService.requestResetPassword(resetPasswordUserDto);
+  }
+
+  @UseGuards(ResetPasswordAuthGuard)
+  @Post('resetpwd')
+  @Public()
+  async resetPassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Request() req,
+  ) {
+    const userId = req.user['userId'];
+    return await this.authService.resetPassword(changePasswordDto, userId);
   }
 }

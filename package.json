@@ -11,8 +11,8 @@
   "main": "index.js",
   "scripts": {
     "api": "cd api && yarn start",
-    "cms": "cd cms && yarn start",
-    "web": "cd web && yarn start",
+    "cms": "cd cms && yarn dev",
+    "web": "cd web && yarn dev",
     "build-lib": "cd packages/ra-nest-rest && yarn build",
     "build-cms": "cd cms && yarn build",
     "build-web": "cd web && yarn build",

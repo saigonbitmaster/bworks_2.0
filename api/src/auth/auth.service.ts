@@ -9,10 +9,17 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { MailService } from '../mail/mail.service';
-import { validateEmail, validatePassword } from '../flatworks/utils/common';
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+  trimFullName,
+  trimUsername,
+} from '../flatworks/utils/common';
 import { Role } from '../flatworks/utils/roles';
 import { WalletService } from '../wallet/service';
 import { validateAddress } from '../flatworks/utils/cardano';
+import { ChangePasswordDto } from '../user/dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,16 +35,26 @@ validate only approved users
 */
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.userService.findOne(username);
+    if (!user) {
+      throw new BadRequestException(
+        'User is not registered yet. Please register new account to start',
+      );
+    }
     if (!user.isApproved) {
-      return;
+      throw new BadRequestException(
+        'User is not approved yet. Please contact bWorks support for detail',
+      );
     }
     const isMatch = await bcrypt.compare(pass, user.password);
 
-    if (user && isMatch) {
-      const { password, ...result } = user;
-      return result;
+    if (!isMatch) {
+      throw new BadRequestException(
+        'Password is invalid, please try another one',
+      );
     }
-    return null;
+
+    const { password, ...result } = user;
+    return result;
   }
 
   //generate token for register user
@@ -126,7 +143,11 @@ validate only approved users
 
   async register(registerUser: any): Promise<any> {
     //{username: abc, email: abc@gmail.com, password: ***, fullName: abc, walletAddress: abc}
+    //trim username & fullName
+    registerUser.username = trimUsername(registerUser.username);
+    registerUser.fullName = trimFullName(registerUser.fullName);
 
+    console.log(registerUser);
     const _usernames = await this.userService.findAllRaw({
       username: registerUser.username,
     });
@@ -153,6 +174,10 @@ validate only approved users
       ? 'Invalidate Cardano wallet address'
       : _wallet.length > 0
       ? 'Wallet is already in use'
+      : !validateUsername(registerUser.username)
+      ? 'Username must not contain reserved keywords: cms, admin, bworks'
+      : !validateUsername(registerUser.fullName)
+      ? 'Full name must not contain reserved keywords: cms, admin, bworks'
       : null;
 
     if (errorMessage) {
@@ -172,8 +197,49 @@ validate only approved users
     };
 
     const emailToken = await this.createToken(payload);
-    console.log('email token', emailToken);
     return this.mailService.send(registerUser, emailToken);
+  }
+
+  //generate token for register user
+  async createResetPasswordToken(payload: any) {
+    return this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_RESET_PASSWORD_TOKEN_SECRET,
+      expiresIn: process.env.JWT_RESET_PASSWORD_TOKEN_EXPIRE,
+    });
+  }
+
+  async requestResetPassword(registerUser: any): Promise<any> {
+    const user = await this.userService.findByEmail({
+      email: registerUser.email,
+    });
+
+    const errorMessage = !validateEmail(registerUser.email)
+      ? 'Not a valid email address'
+      : !user
+      ? 'User does not exist'
+      : !user.isApproved
+      ? 'Blocked user, please contact support for detail'
+      : null;
+
+    if (errorMessage) {
+      throw new BadRequestException(errorMessage);
+    }
+
+    const payload = {
+      sub: user._id.toString(),
+      username: user.username,
+      email: user.email,
+    };
+
+    const resetPasswordToken = await this.createResetPasswordToken(payload);
+    return this.mailService.resetPassword(user, resetPasswordToken);
+  }
+
+  async resetPassword(
+    changePasswordDto: ChangePasswordDto,
+    userId: string,
+  ): Promise<any> {
+    return this.userService.changePassword(userId, changePasswordDto);
   }
 
   async verify(user: any): Promise<any> {

@@ -13,7 +13,7 @@ import { User } from '../user/schemas/user.schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { rankJobBid } from '../flatworks/logics/rank';
 import { UserService } from '../user/user.service';
-import { PostJobService } from '../postJob/service';
+import { PostJobService } from '../postjob/service';
 import { MessageDto } from './dto/message.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { MailService } from '../mail/mail.service';
@@ -184,6 +184,7 @@ export class JobBidService {
       result = await new this.model({
         ...createJobBidDto,
         createdAt: new Date(),
+        bidDate: new Date(),
         jobSeekerId: jobSeekerId,
         employerId: postJob.employerId,
       }).save();
@@ -334,7 +335,11 @@ export class JobBidService {
     const messages = jobBid.messages;
 
     const message = messages.find((i) => i.id === messageId);
-    if (message.userId !== userId || !message) return;
+    if (message.userId !== userId || !message) {
+      throw new BadRequestException(
+        'Can not delete, This is not your own message',
+      );
+    }
 
     return await this.model
       .findByIdAndUpdate(id, {

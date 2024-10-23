@@ -30,10 +30,11 @@ export class AdminWalletService {
     return await this.model.findById(id).exec();
   }
 
+  /* 
   async findByUser(userId: string): Promise<AdminWallet> {
     return await this.model.findOne({ userId }).exec();
   }
-
+ 
   async create(
     createAdminWalletDto: CreateAdminWalletDto,
   ): Promise<AdminWallet> {
@@ -57,5 +58,5 @@ export class AdminWalletService {
 
   async delete(id: string): Promise<AdminWallet> {
     return await this.model.findByIdAndDelete(id).exec();
-  }
+  } */
 }
