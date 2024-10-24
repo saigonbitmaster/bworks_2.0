@@ -21,6 +21,11 @@ BLOCKFROST_PROJECT_ID=****
 BLOCKFROST_URL=https://cardano-testnet.blockfrost.io/api/v0
 #GitHub
 GITHUB_TOKEN=****
+#PAAS
+USE_PAAS_SMART_CONTRACT=true 
+PAAS_SMART_CONTRACT_ID=66374d040da0bf446cda98c6
+PAAS_ACCESS_TOKEN=***
+PAAS_PLUTUSTXS_URL=https://paas.bworks.app/api/plutustxs
 
 cd bworks_2.0
 yarn
