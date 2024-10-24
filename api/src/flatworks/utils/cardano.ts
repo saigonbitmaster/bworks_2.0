@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 import { AddressUtxoType } from '../types/types';
 import { CheckWalletType } from '../types/types';
 import { inspectAddress } from 'cardano-addresses';
+import { KoiosProvider } from '@meshsdk/core';
 
 const AddressUtxo = (
   address: string,
@@ -75,4 +76,24 @@ const validateAddress = async (address: string) => {
   return isAddress;
 };
 
-export { AddressUtxo, TxsUtxo, CheckWallet, CreateWallet, validateAddress };
+const fetchUtxo = async (scriptAddress, asset, lockedTxHash) => {
+  const isMainnet = process.env.IS_MAINNET === 'true';
+  const cardanoNetwork = isMainnet ? 'api' : 'preprod';
+  try {
+    const koios = new KoiosProvider(cardanoNetwork);
+    const utxos = await koios.fetchAddressUTxOs(scriptAddress, asset);
+    const utxo = utxos.find((item) => item.input.txHash === lockedTxHash);
+    return utxo;
+  } catch (e) {
+    return null;
+  }
+};
+
+export {
+  AddressUtxo,
+  TxsUtxo,
+  CheckWallet,
+  CreateWallet,
+  validateAddress,
+  fetchUtxo,
+};

@@ -17,6 +17,7 @@ import { PlutusTxService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import * as lodash from 'lodash';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import axios from 'axios';
 
 @UseGuards(JwtAuthGuard)
 @Controller('plutustxs')
@@ -53,6 +54,35 @@ export class PlutusTxController {
 
   @Post()
   async create(@Body() createPlutusTxDto: CreatePlutusTxDto) {
+    //update to PAAS plutusTXs
+    if (process.env.USE_PAAS_SMART_CONTRACT === 'true') {
+      const paasPlutusTxsUrl = process.env.PAAS_PLUTUSTXS_URL;
+      const paasAccessToken = process.env.PAAS_ACCESS_TOKEN;
+      const paasSmartContractId = process.env.PAAS_SMART_CONTRACT_ID;
+      axios
+        .post(
+          paasPlutusTxsUrl,
+          {
+            ...createPlutusTxDto,
+            datum: [createPlutusTxDto.datumUnlockPublicKeyHash],
+            smartContractId: paasSmartContractId,
+          },
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${paasAccessToken}`,
+            },
+          },
+        )
+        .then((response) => {
+          console.log('inserted to PAAS');
+        })
+        .catch((error) => {
+          console.log('Insert to PAAS error', error);
+        });
+    }
+
     return await this.service.create(createPlutusTxDto);
   }
 
@@ -63,6 +93,34 @@ export class PlutusTxController {
     @Req() request,
     @Body() updatePlutusTxDto: UpdatePlutusTxDto,
   ) {
+    //update to PAAS
+    if (process.env.USE_PAAS_SMART_CONTRACT === 'true') {
+      const paasPlutusTxsUrl = process.env.PAAS_PLUTUSTXS_URL;
+      const paasAccessToken = process.env.PAAS_ACCESS_TOKEN;
+      const plutuxTx = await this.service.findOne(id);
+      axios
+        .put(
+          `${paasPlutusTxsUrl}/unlock/${plutuxTx?.lockedTxHash}`,
+          {
+            unlockedTxHash: updatePlutusTxDto.unlockedTxHash,
+            redeemer: [],
+          },
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${paasAccessToken}`,
+            },
+          },
+        )
+        .then((response) => {
+          console.log('Updated to PAAS');
+        })
+        .catch((error) => {
+          console.log('Update to PAAS error', error);
+        });
+    }
+
     return await this.service.update(
       id,
       updatePlutusTxDto,
