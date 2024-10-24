@@ -176,7 +176,7 @@ const SmartContracts = () => {
     if (
       !userWallets.isLoading &&
       !userWallets.error &&
-      userWallets.data.length > 0
+      userWallets.data?.length > 0
     ) {
       const pKeyHash = userWallets.data.find(
         (wallet) => wallet.userId === unlockUsers.selected
@@ -246,6 +246,41 @@ const SmartContracts = () => {
   const handleContractChange = (event: SelectChangeEvent) => {
     setContract({ ...contract, selected: event.target.value });
   };
+
+  const [utxo, setUtxo] = React.useState(null);
+
+  React.useEffect(() => {
+    const currentContract = contract.contracts.find(
+      (item) => item.id === contract.selected
+    );
+    const scriptAddr = currentContract?.address;
+
+    const lockedPlutusTx = plutusTxs.plutusTxs.find(
+      (item) => item.id === plutusTxs.selected
+    );
+
+    async function getUtxo(scriptAddress, lockedTxHash) {
+      dataProvider
+        .customMethod(
+          "public/findutxo",
+          {
+            filter: {
+              scriptAddress,
+              asset: "lovelace",
+              lockedTxHash,
+            },
+          },
+          "GET"
+        )
+        .then((result) => setUtxo(result.data))
+        .catch((error) => console.error(error));
+    }
+
+    if (scriptAddr && lockedPlutusTx)
+      getUtxo(scriptAddr, lockedPlutusTx.lockedTxHash);
+  }, [contract, plutusTxs]);
+
+  console.log(utxo);
 
   const handleJobBidChange = (event: SelectChangeEvent) => {
     setJobBids({ ...jobBids, selected: event.target.value });
@@ -423,7 +458,7 @@ const SmartContracts = () => {
   };
 
   const redeemAdaFromPlutus = async () => {
-    async function _getAssetUtxo({ scriptAddress, asset, lockedTxHash }) {
+    /*   async function _getAssetUtxo({ scriptAddress, asset, lockedTxHash }) {
       const koios = new KoiosProvider(cardanoNetwork);
       const utxos = await koios.fetchAddressUTxOs(scriptAddr, asset);
       let utxo = utxos.find((item) => item.input.txHash === lockedTxHash);
@@ -446,10 +481,21 @@ const SmartContracts = () => {
       asset: "lovelace",
       lockedTxHash: lockedPlutusTx.lockedTxHash,
     });
+ */
 
+    const currentContract = contract.contracts.find(
+      (item) => item.id === contract.selected
+    );
+    const scriptAddr = currentContract?.address;
+
+    const lockedPlutusTx = plutusTxs.plutusTxs.find(
+      (item) => item.id === plutusTxs.selected
+    );
     const address = await wallet.getChangeAddress();
 
-    console.log(cardanoNetwork, currentContract, address, utxo);
+    console.log(cardanoNetwork, address, utxo);
+    const r = { data: { alternative: 0, fields: [] } };
+
     const collateralUtxos = await wallet.getCollateral();
     if (!utxo || !receiveAddress.address || !address) {
       setNotification({
@@ -474,7 +520,7 @@ const SmartContracts = () => {
             code: currentContract.code,
             version: currentContract.version,
           },
-          datum: utxo,
+          redeemer: r,
         })
         .sendValue(receiveAddress.address, utxo) // address is recipient address
         .setCollateral(collateralUtxos) //this is option, we either set or not set still works

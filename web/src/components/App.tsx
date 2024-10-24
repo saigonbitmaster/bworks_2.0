@@ -30,7 +30,7 @@ import jobbidsjsk from "./jobbidsjsk";
 import skills from "./skills";
 import { PostedJobReportJsk } from "./postedjobreportsjsk";
 import { PaymentReportJsk } from "./paymentreportsjsk";
-import { QueryClient } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
 import Register from "./components/register";
 import ForgotPassword from "./components/forgotPassword";
 import ResetPassword from "./components/resetPassword";
@@ -61,15 +61,6 @@ const i18nProvider = polyglotI18nProvider((locale) => {
   return englishMessages;
 }, "en");
 
-//cache
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 1000, // 5 minutes
-    },
-  },
-});
-
 const App = () => {
   return (
     <MeshProvider>
@@ -83,7 +74,6 @@ const App = () => {
         i18nProvider={i18nProvider}
         disableTelemetry
         theme={lightTheme}
-        queryClient={queryClient}
       >
         <CustomRoutes>
           <Route path="/configuration" element={<Configuration />} />
