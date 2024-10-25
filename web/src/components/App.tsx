@@ -53,6 +53,7 @@ const _authProvider = authProvider(
 );
 const restProvider = dataProvider(apiUrl);
 
+
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
     return import("./i18n/fr").then((messages) => messages.default);
@@ -60,6 +61,18 @@ const i18nProvider = polyglotI18nProvider((locale) => {
   // Always fallback on english
   return englishMessages;
 }, "en");
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      structuralSharing: false,
+    },
+    mutations: {
+      retryDelay: 100,
+    },
+  },
+});
 
 const App = () => {
   return (
@@ -74,6 +87,7 @@ const App = () => {
         i18nProvider={i18nProvider}
         disableTelemetry
         theme={lightTheme}
+        queryClient={queryClient}
       >
         <CustomRoutes>
           <Route path="/configuration" element={<Configuration />} />

@@ -1,4 +1,4 @@
-    import * as React from "react";
+import * as React from "react";
 import { AppBar, Logout, UserMenu, useTranslate } from "react-admin";
 import { Link } from "react-router-dom";
 import {
@@ -12,9 +12,6 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import Logo from "./Logo";
 import SearchAppBar from "./search";
-
-
-import { useTheme } from '@mui/material/styles';
 
 const ConfigurationMenu = React.forwardRef((props, ref) => {
   const translate = useTranslate();
@@ -35,17 +32,15 @@ const ConfigurationMenu = React.forwardRef((props, ref) => {
 });
 const CustomUserMenu = () => (
   <UserMenu>
-    <ConfigurationMenu />
+    {/*   <ConfigurationMenu /> */}
     <Logout />
   </UserMenu>
 );
 
 const CustomAppBar = (props: any) => {
- 
-  const theme = useTheme();
-  const isLargeEnough = useMediaQuery(theme.breakpoints.up('sm'));
-
-
+  const isLargeEnough = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.up("sm")
+  );
   return (
     <AppBar
       {...props}
@@ -63,4 +58,3 @@ const CustomAppBar = (props: any) => {
 };
 
 export default CustomAppBar;
-

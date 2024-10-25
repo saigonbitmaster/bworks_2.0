@@ -56,7 +56,7 @@ const SmartContractTxs = (props: Props) => {
     <CardWithIcon
       to="/plutustxs"
       icon={GradingIcon}
-      title="dApp TXs"
+      title="Smart contract TXs"
       subtitle={`${lockTxs} locked Txs, ${unlockTxs} unlocked Txs`}
       minHeight={890}
     >

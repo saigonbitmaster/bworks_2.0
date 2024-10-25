@@ -1,15 +1,14 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
-import PostedJobs from "./publishedContract";
+import PostedJobs from "./postedJobs";
 import ActiveUsers from "./activeUsers";
 import SmartContractTxs from "./smartContractTXs";
-import PaidByPlutus from "./dAppTxs";
-import PostedJobsChart from "./publishedContractChart";
-import PaymentChart from "./dAppTxChart";
+import PaidByPlutus from "./paidByPlutus";
+import PostedJobsChart from "./postedJobsChart";
+import PaymentChart from "./paymentChart";
 import { useDataProvider } from "react-admin";
 import UserStatistic from "./currentUserStatistic";
 import Typography from "@mui/material/Typography";
-import { useTheme } from "@mui/material/styles";
 
 const styles = {
   flex: { display: "flex" },
@@ -24,16 +23,16 @@ const VerticalSpacer = () => <span style={{ height: "1em" }} />;
 
 const Dashboard = () => {
   const [dashBoardCardData, setDashBoardCardData] = React.useState({
-    dAppTxs: {
-      dAppTxs: 0,
+    paidByPlutus: {
+      numberOfJobs: 0,
       totalAmount: 0,
     },
     activeUsers: {
-      contractDevs: 0,
-      dAppDevs: 0,
+      jobSeekers: 0,
+      employers: 0,
     },
-    publishedContracts: { publishedContracts: 0, approvedContracts: 0 },
-    lockAndUnlockTxs: {
+    postedJobs: { postedJobs: 0, bids: 0 },
+    plutusTxs: {
       lockTxs: 0,
       unlockTxs: 0,
     },
@@ -47,21 +46,22 @@ const Dashboard = () => {
       .catch((error) => console.error(error));
   }, []);
 
-  const theme = useTheme();
-  const isXSmall = useMediaQuery(theme.breakpoints.down("sm"));
-  const isSmall = useMediaQuery(theme.breakpoints.down("lg"));
+  const isXSmall = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down("sm")
+  );
+  const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down("lg"));
 
   return isXSmall ? (
     <div>
       <div style={styles.flexColumn as CSSProperties}>
         <PaidByPlutus
-          dAppTxs={dashBoardCardData.dAppTxs.dAppTxs}
-          totalAmount={dashBoardCardData.dAppTxs.totalAmount}
+          numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+          totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
         />
         <VerticalSpacer />
         <SmartContractTxs
-          lockTxs={dashBoardCardData.lockAndUnlockTxs.lockTxs}
-          unlockTxs={dashBoardCardData.lockAndUnlockTxs.unlockTxs}
+          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
         />
         <VerticalSpacer />
         <PostedJobsChart />
@@ -72,13 +72,13 @@ const Dashboard = () => {
       <div style={styles.singleCol}></div>
       <div style={styles.flex}>
         <PostedJobs
-          postedJobs={dashBoardCardData.publishedContracts.publishedContracts}
-          bids={dashBoardCardData.publishedContracts.approvedContracts}
+          postedJobs={dashBoardCardData.postedJobs.postedJobs}
+          bids={dashBoardCardData.postedJobs.bids}
         />
         <Spacer />
         <SmartContractTxs
-          lockTxs={dashBoardCardData.lockAndUnlockTxs.lockTxs}
-          unlockTxs={dashBoardCardData.lockAndUnlockTxs.unlockTxs}
+          lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+          unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
         />
       </div>
       <div style={styles.singleCol}>
@@ -97,13 +97,13 @@ const Dashboard = () => {
         <div style={styles.leftCol}>
           <div style={styles.flex}>
             <PaidByPlutus
-              dAppTxs={dashBoardCardData.dAppTxs.dAppTxs}
-              totalAmount={dashBoardCardData.dAppTxs.totalAmount}
+              numberOfJobs={dashBoardCardData.paidByPlutus.numberOfJobs}
+              totalAmount={dashBoardCardData.paidByPlutus.totalAmount}
             />
             <Spacer />
             <ActiveUsers
-              jobSeekers={dashBoardCardData.activeUsers.dAppDevs}
-              employers={dashBoardCardData.activeUsers.contractDevs}
+              jobSeekers={dashBoardCardData.activeUsers.jobSeekers}
+              employers={dashBoardCardData.activeUsers.employers}
             />
           </div>
 
@@ -113,19 +113,20 @@ const Dashboard = () => {
           <div style={styles.singleCol}>
             <PaymentChart />
           </div>
+          <div style={styles.singleCol}>
+            <UserStatistic></UserStatistic>
+          </div>
         </div>
         <div style={styles.rightCol}>
           <div style={styles.flex}>
             <PostedJobs
-              postedJobs={
-                dashBoardCardData.publishedContracts.publishedContracts
-              }
-              bids={dashBoardCardData.publishedContracts.approvedContracts}
+              postedJobs={dashBoardCardData.postedJobs.postedJobs}
+              bids={dashBoardCardData.postedJobs.bids}
             />
             <Spacer />
             <SmartContractTxs
-              lockTxs={dashBoardCardData.lockAndUnlockTxs.lockTxs}
-              unlockTxs={dashBoardCardData.lockAndUnlockTxs.unlockTxs}
+              lockTxs={dashBoardCardData.plutusTxs.lockTxs}
+              unlockTxs={dashBoardCardData.plutusTxs.unlockTxs}
             />
           </div>
         </div>

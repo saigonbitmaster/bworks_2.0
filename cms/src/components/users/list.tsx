@@ -15,7 +15,6 @@ import {
   NumberField,
   ArrayField,
   useListContext,
-  ReferenceManyField,
 } from "react-admin";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
@@ -66,27 +65,26 @@ const ListScreen = () => {
       filters={filters}
       perPage={25}
       sort={{ field: "createdAt", order: "desc" }}
-      hasCreate={false}
+      hasCreate
     >
       <Datagrid>
         <TextField source="username" />
-        <TextField source="fullName" />
-        <TextField source="authType" />
-        <BooleanField source="isdAppDev" label="dApp developer" />
-        <BooleanField
-          source="isSmartContractDev"
-          label="Smart contract developer"
-        />
-        <ReferenceManyField
-          reference="contracts"
-          target="author"
-          label="Published contracts"
-        >
-          <Datagrid bulkActionButtons={false}>
-            <TextField source="name" />
-            <DateField source="createdAt" />
-          </Datagrid>
-        </ReferenceManyField>
+        <ArrayField source="roles">
+          <Roles />
+        </ArrayField>
+        <TextField source="email" />
+        <TextField source="contact" />
+        <ReferenceArrayField reference="skills" source="skills">
+          <SingleFieldList>
+            <ChipField source="name" />
+          </SingleFieldList>
+        </ReferenceArrayField>
+        <BooleanField source="isShowContact" />
+        <BooleanField source="isShowEmail" />
+        <BooleanField source="isJobSeeker" />
+        <BooleanField source="isEmployer" />
+        <BooleanField source="isNotified" />
+        <NumberField source="workHoursPerMonth" />
         <DateField source="createdAt" showTime />
         <ApproveButton label="Approval" />
       </Datagrid>

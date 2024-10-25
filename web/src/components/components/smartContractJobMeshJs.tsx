@@ -98,7 +98,7 @@ export default function SmartContract(props) {
                 paddingTop: 0,
                 paddingLeft: 0,
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
                 justifyContent: "flex-start",
               }}
             >
@@ -221,6 +221,7 @@ export default function SmartContract(props) {
                 label="Datum Deadline"
                 value={datum.deadline}
                 onChange={props.handleChangeDate}
+                sx={{ width: 500 }}
                 renderInput={(params) => (
                   <TextField {...params} sx={{ width: 500, p: 0 }} />
                 )}
@@ -252,7 +253,7 @@ export default function SmartContract(props) {
                 paddingTop: 0,
                 paddingLeft: 0,
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
                 justifyContent: "flex-start",
               }}
             >

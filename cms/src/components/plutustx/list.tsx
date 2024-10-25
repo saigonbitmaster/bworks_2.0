@@ -14,38 +14,79 @@ import {
   FunctionField,
   ReferenceInput,
   AutocompleteInput,
-  TextInput,
 } from "react-admin";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 
 const ListScreen = () => {
-  const isMainnet = process.env.NEXT_PUBLIC_IS_MAINNET;
+  const isMainnet = process.env.REACT_APP_IS_MAINNET;
 
   const explorerUrl = isMainnet
-    ? process.env.NEXT_PUBLIC_CARDANO_EXPLORER_MAINNET_URL
-    : process.env.NEXT_PUBLIC_CARDANO_EXPLORER_PREPROD_URL;
+    ? process.env.REACT_APP_CARDANO_EXPLORER_MAINNET_URL
+    : process.env.REACT_APP_CARDANO_EXPLORER_PREPROD_URL;
   const unlockUri = isMainnet ? "queues/unlockMainnet" : "queues/unlock";
   console.log(unlockUri);
+  const UnlockButton = () => {
+    const record = useRecordContext();
+    const {
+      data: jobBid,
+      isLoading,
+      error,
+    } = useGetOne("jobbids", { id: record.jobBidId });
+
+    const dataProvider = useDataProvider();
+    const handleClick = () => {
+      dataProvider
+        .customMethod(
+          unlockUri,
+          {
+            data: {
+              jobBidId: record.jobBidId,
+              scriptTxHash: record.lockedTxHash,
+            },
+          },
+          "POST"
+        )
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+    };
+
+    return (
+      <Button variant="text" disabled={record.isUnlocked} onClick={handleClick}>
+        {jobBid?.isCompleted ? "Pay to jobSeeker" : "Return to employer"}
+      </Button>
+    );
+  };
 
   const filterToQuery = (searchText) => ({ textSearch: searchText });
   const filters = [
+    <ReferenceInput source="name" reference="postjobs" alwaysOn>
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        optionText="name"
+        label="Search a job"
+        fullWidth
+        sx={{ width: 300 }}
+      />
+    </ReferenceInput>,
+    <ReferenceInput source="jobBidId" reference="jobbids" alwaysOn>
+      <AutocompleteInput
+        filterToQuery={filterToQuery}
+        fullWidth
+        optionText="name"
+        label="Search a job application"
+        sx={{ width: 300 }}
+      />
+    </ReferenceInput>,
     <ReferenceInput source="unlockUserId" reference="users" alwaysOn>
       <AutocompleteInput
         filterToQuery={filterToQuery}
         fullWidth
         optionText="username"
-        label="Search by user"
+        label="Search a unlock user"
         sx={{ width: 300 }}
       />
     </ReferenceInput>,
-    <TextInput
-      label="Text search"
-      source="textSearch"
-      alwaysOn
-      fullWidth
-      sx={{ width: 300 }}
-    />,
   ];
   return (
     <List
@@ -58,40 +99,34 @@ const ListScreen = () => {
       filters={filters}
     >
       <Datagrid bulkActionButtons={false}>
-        <FunctionField
-          label="Lock TxHash"
-          render={(record) =>
-            record.lockedTxHash ? (
-              <>
-                {record.lockedTxHash && (
-                  <Link
-                    href={`${explorerUrl}${record.lockedTxHash}`}
-                    target="_blank"
-                  >
-                    View Tx
-                  </Link>
-                )}
-              </>
-            ) : (
-              <p>Transaction submission failed</p>
-            )
-          }
-        />
-        <FunctionField
-          label="Datum"
-          render={(record) => (
-            <div
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(record.datum) }}
-            />
-          )}
-        />
-        <ReferenceField source="smartContractId" reference="contracts">
+        <ReferenceField source="name" reference="postjobs" label="Job Name">
           <TextField source="name" />
         </ReferenceField>
-        <DateField source="lockDate" showTime />
-        <ReferenceField source="lockUserId" reference="users">
+
+        <ReferenceField source="jobBidId" reference="jobbids">
+          <TextField source="name" />
+        </ReferenceField>
+        <FunctionField
+          label="UnLock TxHash"
+          render={(record) => (
+            <>
+              {record.lockedTxHash && (
+                <Link
+                  href={`${explorerUrl}${record.lockedTxHash}`}
+                  target="_blank"
+                >
+                  View Tx
+                </Link>
+              )}
+            </>
+          )}
+        />
+        <ReferenceField source="unlockUserId" reference="users">
           <TextField source="username" />
         </ReferenceField>
+        <DateField source="lockDate" showTime />
+        <TextField source="lockMessage" />
+
         <FunctionField
           label="UnLock TxHash"
           render={(record) => (
@@ -107,24 +142,18 @@ const ListScreen = () => {
             </>
           )}
         />
-        <FunctionField
-          label="Redeemer"
-          render={(record) => (
-            <>
-              {record.redeemer && (
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(record.redeemer),
-                  }}
-                />
-              )}
-            </>
-          )}
-        />
+
+        <TextField source="unlockType" />
         <DateField source="unlockDate" showTime />
-        <ReferenceField source="unlockUserId" reference="users">
-          <TextField source="username" />
+        <TextField source="unlockMessage" />
+        <ReferenceField
+          source="jobBidId"
+          reference="jobbids"
+          label="Job completed"
+        >
+          <BooleanField source="isCompleted" />
         </ReferenceField>
+        <UnlockButton />
       </Datagrid>
     </List>
   );

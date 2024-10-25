@@ -4,9 +4,9 @@ import { stringify } from "query-string";
 
 const LinkBidField = (props) => {
   const record = useRecordContext(props);
-  const smartContractId = props.record?.id || record.id;
-  const { data, total, isLoading, error } = useGetList("plutustxs", {
-    filter: { smartContractId },
+  const jobId = props.record?.id || record.id;
+  const { data, total, isLoading, error } = useGetList("jobbids", {
+    filter: { jobId },
   });
   if (isLoading) {
     return <p>Loading...</p>;
@@ -18,7 +18,7 @@ const LinkBidField = (props) => {
   return record ? (
     <Link
       to={{
-        pathname: "/plutustxs",
+        pathname: "/jobbids",
         search: stringify({
           filter: JSON.stringify({ jobId: record.id }),
         }),

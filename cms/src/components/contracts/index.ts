@@ -1,11 +1,13 @@
 import Icon from "@mui/icons-material/CurrencyExchange";
 import ListScreen from "./list";
-import ShowScreen from "./show";
+import CreateScreen from "./create";
+import EditScreen from "./edit";
 
 const index = {
   list: ListScreen,
-  show: ShowScreen,
   icon: Icon,
+  create: CreateScreen,
+  edit: EditScreen,
 };
 
 export default index;

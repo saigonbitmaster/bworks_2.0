@@ -36,7 +36,7 @@ const ActiveUsers = (props: Props) => {
       to="/users"
       icon={CustomerIcon}
       title="Active users"
-      subtitle={`${jobSeekers} dApp developers, ${employers} contract developers`}
+      subtitle={`${jobSeekers} job seekers, ${employers} employers`}
     ></CardWithIcon>
   );
 };
