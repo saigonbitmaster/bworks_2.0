@@ -29,6 +29,7 @@ import users from "./users";
 import Typography from "@mui/material/Typography";
 import settings from "./settings";
 import promotions from "./promotions";
+import "@meshsdk/react/styles.css";
 
 const loginUrl = process.env.NEXT_PUBLIC_LOGIN_URL;
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;

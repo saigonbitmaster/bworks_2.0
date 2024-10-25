@@ -38,6 +38,7 @@ import Help from "./components/help";
 import Chip from "@mui/material/Chip";
 import MdPhone from "@mui/icons-material/Phone";
 import Box from "@mui/material/Box";
+import "@meshsdk/react/styles.css";
 
 const loginUrl = process.env.NEXT_PUBLIC_LOGIN_URL;
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
