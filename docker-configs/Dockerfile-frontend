@@ -12,5 +12,5 @@ RUN yarn build-web
 
 FROM nginx as frontendimage
 
-COPY --chown=nginx --from=build /app/cms/build /var/www/cms
-COPY --chown=nginx --from=build /app/web/build /var/www/web
+COPY --chown=nginx --from=build /app/cms/out /var/www/cms
+COPY --chown=nginx --from=build /app/web/out /var/www/web
