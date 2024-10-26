@@ -21,14 +21,14 @@ jobs:
       - name: Generate .env file for web
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_REACT_APP_IS_MAINNET: ${{ vars.REACT_APP_IS_MAINNET }}
-          envkey_REACT_APP_LOGIN_URL: ${{ vars.REACT_APP_LOGIN_URL }}
-          envkey_REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
-          envkey_REACT_APP_RENEW_ACCESS_TOKEN_URL: ${{ vars.REACT_APP_RENEW_ACCESS_TOKEN_URL }}
-          envkey_REACT_APP_LOGOUT_URL: ${{ vars.REACT_APP_LOGOUT_URL }}
-          envkey_REACT_APP_CARDANO_SCAN_URL: ${{ vars.REACT_APP_CARDANO_SCAN_URL }}
-          envkey_REACT_APP_DONATE_ADDRESS: ${{ vars.REACT_APP_DONATE_ADDRESS }}
-          envkey_REACT_APP_CARDANO_EXPLORER_MAINNET_URL: ${{ vars.REACT_APP_CARDANO_EXPLORER_MAINNET_URL }}
+          envkey_NEXT_PUBLIC_IS_MAINNET: ${{ vars.NEXT_PUBLIC_IS_MAINNET }}
+          envkey_NEXT_PUBLIC_LOGIN_URL: ${{ vars.NEXT_PUBLIC_LOGIN_URL }}
+          envkey_NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          envkey_NEXT_PUBLIC_RENEW_ACCESS_TOKEN_URL: ${{ vars.NEXT_PUBLIC_RENEW_ACCESS_TOKEN_URL }}
+          envkey_NEXT_PUBLIC_LOGOUT_URL: ${{ vars.NEXT_PUBLIC_LOGOUT_URL }}
+          envkey_NEXT_PUBLIC_CARDANO_SCAN_URL: ${{ vars.NEXT_PUBLIC_CARDANO_SCAN_URL }}
+          #envkey_REACT_APP_DONATE_ADDRESS: ${{ vars.REACT_APP_DONATE_ADDRESS }}
+          envkey_NEXT_PUBLIC_CARDANO_EXPLORER_MAINNET_URL: ${{ vars.NEXT_PUBLIC_CARDANO_EXPLORER_MAINNET_URL }}
           directory: .
           file_name: .env
           fail_on_empty: false
@@ -46,14 +46,14 @@ jobs:
       - name: Generate .env file for cms
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_REACT_APP_IS_MAINNET: ${{ vars.REACT_APP_IS_MAINNET }}
-          envkey_REACT_APP_LOGIN_URL: ${{ vars.REACT_APP_LOGIN_URL_CMS }}
-          envkey_REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
-          envkey_REACT_APP_RENEW_ACCESS_TOKEN_URL: ${{ vars.REACT_APP_RENEW_ACCESS_TOKEN_URL }}
-          envkey_REACT_APP_LOGOUT_URL: ${{ vars.REACT_APP_LOGOUT_URL }}
-          envkey_REACT_APP_CARDANO_SCAN_URL: ${{ vars.REACT_APP_CARDANO_SCAN_URL }}
-          envkey_REACT_APP_DONATE_ADDRESS: ${{ vars.REACT_APP_DONATE_ADDRESS }}
-          envkey_REACT_APP_CARDANO_EXPLORER_MAINNET_URL: ${{ vars.REACT_APP_CARDANO_EXPLORER_MAINNET_URL }}
+          envkey_NEXT_PUBLIC_IS_MAINNET: ${{ vars.NEXT_PUBLIC_IS_MAINNET }}
+          envkey_NEXT_PUBLIC_LOGIN_URL: ${{ vars.NEXT_PUBLIC_LOGIN_URL_CMS }}
+          envkey_NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          envkey_NEXT_PUBLIC_RENEW_ACCESS_TOKEN_URL: ${{ vars.NEXT_PUBLIC_RENEW_ACCESS_TOKEN_URL }}
+          envkey_NEXT_PUBLIC_LOGOUT_URL: ${{ vars.NEXT_PUBLIC_LOGOUT_URL }}
+          envkey_NEXT_PUBLIC_CARDANO_SCAN_URL: ${{ vars.NEXT_PUBLIC_CARDANO_SCAN_URL }}
+          envkey_NEXT_PUBLIC_WALLET_LOGIN_URL: ${{ vars.NEXT_PUBLIC_WALLET_LOGIN_URL }}
+          envkey_NEXT_PUBLIC_CARDANO_EXPLORER_MAINNET_URL: ${{ vars.NEXT_PUBLIC_CARDANO_EXPLORER_MAINNET_URL }}
           directory: .
           file_name: .env_cms
           fail_on_empty: false
