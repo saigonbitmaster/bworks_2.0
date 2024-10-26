@@ -36,7 +36,11 @@ jobs:
           envkey_CARDANO_EXPLORER_URL: ${{ vars.CARDANO_EXPLORER_URL }}
           envkey_MAIL_RESET_PASSWORD_URL: ${{ vars.MAIL_RESET_PASSWORD_URL }}
           envkey_JWT_HOME_PAGE_TOKEN_SECRET: ${{ secrets.JWT_HOME_PAGE_TOKEN_SECRET }}
-          #envkey_PWD: ${{ vars.PWD }}
+          envkey_IS_MAINNET: ${{ vars.IS_MAINNET }}
+          envkey_USE_PAAS_SMART_CONTRACT: ${{ vars.USE_PAAS_SMART_CONTRACT }}
+          envkey_PAAS_SMART_CONTRACT_ID: ${{ vars.PAAS_SMART_CONTRACT_ID }}
+          envkey_PAAS_ACCESS_TOKEN: ${{ secrets.PAAS_ACCESS_TOKEN }}
+          envkey_PAAS_PLUTUSTXS_URL: ${{ vars.PAAS_PLUTUSTXS_URL }}
           directory: .
           file_name: .env
           fail_on_empty: false
